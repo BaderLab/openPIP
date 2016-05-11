@@ -1,0 +1,45 @@
+<?php
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="`interaction`")
+ */
+class Interaction
+{
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+	
+	/**
+	 * @ORM\Column(type="integer", length=100)
+	 */
+	protected $protein_id_1;
+	
+	/**
+	 * @ORM\Column(type="integer", length=100)
+	 */
+	protected $protein_id_2;
+	
+	/**
+	 * @ORM\Column(type="integer", length=100)
+	 */
+	protected $score;
+	
+	/**
+	 * @ORM\Column(type="integer", length=100)
+	 */
+	protected $binding_start;
+	
+	/**
+	 * @ORM\Column(type="integer", length=100)
+	 */
+	protected $binding_end;
+}
+?>
