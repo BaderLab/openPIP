@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Master_Table list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Source</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for master_Table in master_Tables %}
+            <tr>
+                <td><a href="{{ path('admin_master_table_show', { 'id': master_Table.id }) }}">{{ master_Table.id }}</a></td>
+                <td>{{ master_Table.name }}</td>
+                <td>{{ master_Table.source }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_master_table_show', { 'id': master_Table.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_master_table_edit', { 'id': master_Table.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_master_table_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

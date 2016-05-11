@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Domain list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Description</th>
+                <th>Sequence</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for domain in domains %}
+            <tr>
+                <td><a href="{{ path('admin_domain_show', { 'id': domain.id }) }}">{{ domain.id }}</a></td>
+                <td>{{ domain.type }}</td>
+                <td>{{ domain.name }}</td>
+                <td>{{ domain.start }}</td>
+                <td>{{ domain.end }}</td>
+                <td>{{ domain.description }}</td>
+                <td>{{ domain.sequence }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_domain_show', { 'id': domain.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_domain_edit', { 'id': domain.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_domain_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

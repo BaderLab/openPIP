@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Support_Information</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ support_Information.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ support_Information.name }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ support_Information.description }}</td>
+            </tr>
+            <tr>
+                <th>Value</th>
+                <td>{{ support_Information.value }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_support_information_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_support_information_edit', { 'id': support_Information.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
