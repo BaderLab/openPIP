@@ -37,7 +37,7 @@ class Interaction
     
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection|Domain[]
-     * @ORM\ManyToMany(targetEntity="Dataset", mappedBy="interactions")
+     * @ORM\ManyToMany(targetEntity="Domain", mappedBy="interactions")
      */
     private $domains;
     

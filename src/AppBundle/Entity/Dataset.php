@@ -20,7 +20,7 @@ class Dataset
 	protected $id;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="interaction" , inversedBy="datasets")
+	 * @ORM\ManyToMany(targetEntity="Interaction" , inversedBy="datasets")
 	 * @ORM\JoinTable(name="interaction_dataset",
 	 *      joinColumns={
 	 *      		@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")
@@ -33,7 +33,7 @@ class Dataset
 	private $interactions;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="file" , inversedBy="datasets")
+	 * @ORM\ManyToMany(targetEntity="File" , inversedBy="datasets")
 	 * @ORM\JoinTable(name="dataset_file",
 	 *      joinColumns={
 	 *      		@ORM\JoinColumn(name="files_id", referencedColumnName="id")

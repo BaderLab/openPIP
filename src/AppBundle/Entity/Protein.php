@@ -18,7 +18,7 @@ class Protein
 	protected $id;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="interaction" , inversedBy="proteins")
+	 * @ORM\ManyToMany(targetEntity="Interaction" , inversedBy="proteins")
 	 * @ORM\JoinTable(name="interaction_protein",
 	 *      joinColumns={
 	 *      		@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")
@@ -31,7 +31,7 @@ class Protein
 	private $interactions;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="domain" , inversedBy="proteins")
+	 * @ORM\ManyToMany(targetEntity="Domain" , inversedBy="proteins")
 	 * @ORM\JoinTable(name="domain_protein",
 	 *      joinColumns={
 	 *      		@ORM\JoinColumn(name="domain_id", referencedColumnName="id")
@@ -43,9 +43,24 @@ class Protein
 	 */
 	private $domains;
 	
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Master_Table" , inversedBy="proteins")
+	 * @ORM\JoinTable(name="master_table_protein",
+	 *      joinColumns={
+	 *      		@ORM\JoinColumn(name="master_table_id", referencedColumnName="id")
+	 *      	},
+	 *      inverseJoinColumns={
+	 *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
+	 *      	}
+	 * 		)
+	 */
+	private $master_tables;
+	
 	public function __construct() {
 		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->master_tables = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	/**

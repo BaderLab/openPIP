@@ -18,7 +18,7 @@ class Domain
 	protected $id;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="interaction" , inversedBy="domains")
+	 * @ORM\ManyToMany(targetEntity="Interaction" , inversedBy="domains")
 	 * @ORM\JoinTable(name="interaction_domain",
 	 *      joinColumns={
 	 *      		@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")

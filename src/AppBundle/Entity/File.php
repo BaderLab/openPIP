@@ -18,7 +18,7 @@ class File
 	protected $id;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="domain" , inversedBy="files")
+	 * @ORM\ManyToMany(targetEntity="Domain" , inversedBy="files")
 	 * @ORM\JoinTable(name="domain_file",
 	 *      joinColumns={
 	 *      		@ORM\JoinColumn(name="domain_id", referencedColumnName="id")
@@ -35,6 +35,12 @@ class File
 	 * @ORM\ManyToMany(targetEntity="File", mappedBy="datasets")
 	 */
 	private $datasets;
+	
+	public function __construct()
+	{
+		$this->datasets = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
+	}
 
 	/**
 	 * @ORM\Column(type="string", length=100)

@@ -18,7 +18,7 @@ class Organism
 	protected $id;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="domain" , inversedBy="organisms")
+	 * @ORM\ManyToMany(targetEntity="Domain" , inversedBy="organisms")
 	 * @ORM\JoinTable(name="domain_organism",
 	 *      joinColumns={
 	 *      		@ORM\JoinColumn(name="domain_id", referencedColumnName="id")
@@ -29,6 +29,24 @@ class Organism
 	 * 		)
 	 */
 	private $domains;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Master_Table" , inversedBy="organisms")
+	 * @ORM\JoinTable(name="master_table_organism",
+	 *      joinColumns={
+	 *      		@ORM\JoinColumn(name="master_table_id", referencedColumnName="id")
+	 *      	},
+	 *      inverseJoinColumns={
+	 *      		@ORM\JoinColumn(name="organism_id", referencedColumnName="id")
+	 *      	}
+	 * 		)
+	 */
+	private $master_tables;
+	
+	public function __construct() {
+		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->master_tables = new \Doctrine\Common\Collections\ArrayCollection();
+	}
 	
 	/**
 	 * @ORM\Column(type="string", length=100)

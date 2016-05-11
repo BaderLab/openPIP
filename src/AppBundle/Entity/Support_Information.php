@@ -18,17 +18,17 @@ class Support_Information
 	protected $id;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="interaction" , inversedBy="support_interactions")
+	 * @ORM\ManyToMany(targetEntity="Interaction" , inversedBy="support_informations")
 	 * @ORM\JoinTable(name="interaction_support_information",
 	 *      joinColumns={
 	 *      		@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")
 	 *      	},
 	 *      inverseJoinColumns={
-	 *      		@ORM\JoinColumn(name="support_interaction_id", referencedColumnName="id")
+	 *      		@ORM\JoinColumn(name="support_information_id", referencedColumnName="id")
 	 *      	}
 	 * 		)
 	 */
-	private $support_interactions;
+	private $interactions;
 	
 	public function __construct() {
 		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
