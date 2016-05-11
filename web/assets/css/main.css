@@ -1,0 +1,15 @@
+@CHARSET "ISO-8859-1";
+
+h1 {
+	color: #5cb85c;
+}
+
+header {
+	
+	border-bottom: solid 1px #000000; 
+}
+#login{
+	width: 40%;
+	margin: 10% auto;
+	text-align: center;
+}
