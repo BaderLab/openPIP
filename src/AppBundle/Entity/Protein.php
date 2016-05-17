@@ -28,7 +28,7 @@ class Protein
      *      	}
      * 		)
 	 */
-	private $interactions;
+	public $interactions;
 	
 	/**
 	 * @ORM\ManyToMany(targetEntity="Domain" , inversedBy="proteins")
@@ -41,7 +41,7 @@ class Protein
 	 *      	}
 	 * 		)
 	 */
-	private $domains;
+	public $domains;
 	
 	
 	/**
@@ -55,7 +55,7 @@ class Protein
 	 *      	}
 	 * 		)
 	 */
-	private $master_tables;
+	public $master_tables;
 	
 	public function __construct() {
 		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();

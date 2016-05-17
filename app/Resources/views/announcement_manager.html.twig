@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../../assets/css/main.css">
+{% endblock %}
+{% block content %}
+<header>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a id="tor_ibin_header" class="navbar-brand" href="#">TOR-IBIN Admin</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li class="active"><a href="#">Announcements</a></li>
+	      <li><a href="#">Data</a></li>
+	      <li><a href="#">Files</a></li>  
+	    </ul>
+	  </div>
+	</nav>
+</header>
+<main>
+    <div id="announcement_upload"  class="hidden large">
+		<div id="announcement_upload_form">
+		    {{ form_start(form) }}
+		    	<div class="hidden">
+					{{ form_widget(form.date)}}
+				</div>
+		    	<div class="row">
+		    		<div class="col-sm-9">
+						{{ form_widget(form.title) }}
+					</div>
+					<div class="col-sm-3">
+						{{ form_widget(form.show) }}
+						{{ form_widget(form.show_on_home_page) }}
+					</div>	
+				</div>
+				<div class="row">
+		        	{{ form_widget(form.text) }}
+		        </div>	
+				<div class="row" style='margin-top: 2%;'>
+					<button id="cancel_announcement" class="btn btn-danger" style="float: right; ">Cancel</button>
+			        <input type="submit" class="btn btn-success" style="float: right; margin-right: 10px;" value="Add Anouncement" />
+			    </div>
+		    {{ form_end(form) }}
+		</div>
+    </div>
+	<div class="container">
+		<div class="row">
+			<button id="new_announcement" class="btn btn-success">New Announcement</button>
+		</div>
+		<div class="row">
+			<div id="announcement_display">
+				<div class="container">
+		    		{% for announcement in announcements %}
+		    			<div class="row">
+							<div class="container announcement">
+								<div class="row">
+									<div class="announcement_header">
+										<div class="col-sm-10">
+					            			<div class="announcement_title">
+						            			<h4>{{ announcement.title }}</h4>
+											</div>
+										</div>
+										<div class="col-sm-2">
+											<div class="announcement_date"> 
+							                	{% if announcement.date %}{{ announcement.date|date('Y-m-d') }}{% endif %}
+							                </div>
+							            </div>
+									</div>
+								</div>	
+								<div class="row">		
+				                	<div class="announcement_text">
+										{{ announcement.text | raw }}
+									</div>
+						        </div>
+						        <div class="row">
+						        	<div class="col-sm-11">
+					        			<div class="announcement_show"> 
+						                	{% if announcement.showonhomepage %}<input type="checkbox" style="cursor: default; margin-right: 6px;" disabled="disabled" checked>Show{% else %}<input type="checkbox" style="cursor: default; margin-right: 6px;" disabled="disabled">Show{% endif %}
+						                </div>
+									</div>
+					                <div class="col-sm-1">
+						                <a href="{{ path('admin_announcement_edit', { 'id': announcement.id }) }}">Edit</a>
+									</div>
+						     	</div>
+						     </div>
+						</div>
+		        	{% endfor %}
+		        </div>
+			</div>
+		</div>
+	</div>
+</main>
+
+{% block javascripts %}
+{{ tinymce_init() }}
+<script src="../../../assets/js/jquery-2.1.4.min.js"></script>
+<script src="../../../assets/js/bootstrap.min.js"></script>
+<script src="../../../assets/js/main.js"></script>
+{% endblock %}
+{% endblock %}

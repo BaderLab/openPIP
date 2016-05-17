@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <h1>Protein edit</h1>
+    <h1>Announcement edit</h1>
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
@@ -10,7 +10,7 @@
 
     <ul>
         <li>
-            <a href="{{ path('admin_protein_index') }}">Back to the list</a>
+            <a href="{{ path('admin_announcement_index') }}">Back to the list</a>
         </li>
         <li>
             {{ form_start(delete_form) }}

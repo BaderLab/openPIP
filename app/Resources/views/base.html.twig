@@ -8,9 +8,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="favicon.ico">
+	{% block stylesheets %}{% endblock %}
 
-	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="assets/css/main.css">
 
     <title>{% block title %}{% endblock %}</title>
 
@@ -26,8 +25,7 @@
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="assets/js/jquery-2.1.4.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
+
 {% block javascripts %}{% endblock %}
 </body>
 </html>

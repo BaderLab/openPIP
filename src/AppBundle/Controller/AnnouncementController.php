@@ -16,14 +16,10 @@ use AppBundle\Form\AnnouncementType;
  */
 class AnnouncementController extends Controller
 {
-	
-	
-	
-	
     /**
      * Lists all Announcement entities.
      *
-     * @Route("/", name="admin_announcements_index")
+     * @Route("/", name="admin_announcement_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -40,7 +36,7 @@ class AnnouncementController extends Controller
     /**
      * Creates a new Announcement entity.
      *
-     * @Route("/new", name="admin_announcements_new")
+     * @Route("/new", name="admin_announcement_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -54,7 +50,7 @@ class AnnouncementController extends Controller
             $em->persist($announcement);
             $em->flush();
 
-            return $this->redirectToRoute('admin_announcements_show', array('id' => $announcement->getId()));
+            return $this->redirectToRoute('admin_announcement_show', array('id' => $announcement->getId()));
         }
 
         return $this->render('announcement/new.html.twig', array(
@@ -66,7 +62,7 @@ class AnnouncementController extends Controller
     /**
      * Finds and displays a Announcement entity.
      *
-     * @Route("/{id}", name="admin_announcements_show")
+     * @Route("/{id}", name="admin_announcement_show")
      * @Method("GET")
      */
     public function showAction(Announcement $announcement)
@@ -82,7 +78,7 @@ class AnnouncementController extends Controller
     /**
      * Displays a form to edit an existing Announcement entity.
      *
-     * @Route("/{id}/edit", name="admin_announcements_edit")
+     * @Route("/{id}/edit", name="admin_announcement_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Announcement $announcement)
@@ -96,7 +92,7 @@ class AnnouncementController extends Controller
             $em->persist($announcement);
             $em->flush();
 
-            return $this->redirectToRoute('admin_announcements_edit', array('id' => $announcement->getId()));
+            return $this->redirectToRoute('admin_announcement_edit', array('id' => $announcement->getId()));
         }
 
         return $this->render('announcement/edit.html.twig', array(
@@ -109,7 +105,7 @@ class AnnouncementController extends Controller
     /**
      * Deletes a Announcement entity.
      *
-     * @Route("/{id}", name="admin_announcements_delete")
+     * @Route("/{id}", name="admin_announcement_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Announcement $announcement)
@@ -123,7 +119,7 @@ class AnnouncementController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('admin_announcements_index');
+        return $this->redirectToRoute('admin_announcement_index');
     }
 
     /**
@@ -136,7 +132,7 @@ class AnnouncementController extends Controller
     private function createDeleteForm(Announcement $announcement)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('admin_announcements_delete', array('id' => $announcement->getId())))
+            ->setAction($this->generateUrl('admin_announcement_delete', array('id' => $announcement->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;

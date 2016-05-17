@@ -35,6 +35,8 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     cache:  false
+    form_themes:
+    - 'bootstrap_3_layout.html.twig'
     
 # Doctrine Configuration
 doctrine:
@@ -76,3 +78,8 @@ assetic:
     use_controller: '%kernel.debug%'
     filters:
         cssrewrite: ~
+        
+stfalcon_tinymce:
+    selector: ".tinymce"
+    include_jquery: true
+    tinymce_jquery: true

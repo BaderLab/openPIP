@@ -29,7 +29,7 @@ security:
                 provider: fos_userbundle
                 csrf_provider: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
                 always_use_default_target_path: true
-                default_target_path: /admin
+                default_target_path: /admin/announcement_manager
             
             
             logout:       true

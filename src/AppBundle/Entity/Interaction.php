@@ -17,17 +17,19 @@ class Interaction
 	 */
 	protected $id;
 
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection|Protein[]
-     * @ORM\ManyToMany(targetEntity="Protein", mappedBy="interactions")
-     */
-    private $proteins;
+
 	
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection|Support_Information[]
      * @ORM\ManyToMany(targetEntity="Support_Information", mappedBy="interactions")
      */
     private $support_informations;
+    
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection|Protein[]
+     * @ORM\ManyToMany(targetEntity="Protein", mappedBy="interactions")
+     */
+    private $proteins;
     
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection|Dataset[]

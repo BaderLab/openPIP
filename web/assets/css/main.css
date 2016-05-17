@@ -4,12 +4,90 @@ h1 {
 	color: #5cb85c;
 }
 
-header {
-	
-	border-bottom: solid 1px #000000; 
+.container {
+    width: 90%;
 }
+
 #login{
 	width: 40%;
 	margin: 10% auto;
 	text-align: center;
 }
+
+.navbar-default .navbar-brand{
+    color: #5cb85c;
+}
+
+#announcement_display{
+	
+	border: 1px solid #ccc;
+	height: 600px;
+	overflow: auto;
+}
+
+.announcement{
+	
+	width: 90%;
+	min-height: 200px;
+	margin: 20px auto;
+	border: 1px solid #ccc;
+	
+}
+
+.announcement_header{
+	
+	width: 100%;
+	height: 40px;
+	padding: 1%;
+	background: #ffd2a0;
+	
+}
+
+.announcement_header h4{
+	margin: 0px;
+}
+
+.announcement_text{
+	
+	min-height: 130px;
+	padding: 2%;
+}
+
+.announcement_show{
+	
+	margin-bottom: 10px;
+}
+
+#announcement_upload_form{
+	border: 1px solid #ccc;
+	padding: 20px;
+	background: #ffffff;
+	z-index: 2;
+}
+
+#new_announcement{
+	
+	margin: 20px;
+}
+
+.hidden{
+    display: none;
+}
+
+.large{
+    background-color: rgba(0,0,0,0.65);
+    position:fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    margin: 0px;
+    padding: 10% 15%;
+    height: 100%;
+    z-index: 1;
+}
+
+.checkbox{
+	
+	margin-top: 0px;
+}
+

@@ -32,7 +32,7 @@ class File
 	
 	/**
 	 * @var \Doctrine\Common\Collections\ArrayCollection|Dataset[]
-	 * @ORM\ManyToMany(targetEntity="File", mappedBy="datasets")
+	 * @ORM\ManyToMany(targetEntity="Dataset", mappedBy="files")
 	 */
 	private $datasets;
 	
