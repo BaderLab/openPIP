@@ -25,7 +25,11 @@
 		"friendsofsymfony/user-bundle" : "~2.0@dev",
 		"symfony/assetic-bundle" : "^2.8",
 		"vich/uploader-bundle" : "^0.14.0",
-		"stfalcon/tinymce-bundle": "1.0"
+		"stfalcon/tinymce-bundle" : "1.0",
+		"oneup/uploader-bundle" : "~1.4",
+		"punkave/symfony2-file-uploader-bundle" : "dev-master",
+		"symfony/dom-crawler" : "3.1.*",
+		"symfony/css-selector": "^3.1"
 	},
 	"require-dev" : {
 		"sensio/generator-bundle" : "~3.0",

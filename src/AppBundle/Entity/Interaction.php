@@ -38,8 +38,8 @@ class Interaction
     private $datasets;
     
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection|Domain[]
-     * @ORM\ManyToMany(targetEntity="Domain", mappedBy="interactions")
+     * @ORM\ManyToOne(targetEntity="Domain", inversedBy="interactions")
+     * @ORM\JoinColumn(name="domain_id", referencedColumnName="id")
      */
     private $domains;
     
@@ -189,5 +189,127 @@ class Interaction
     public function getBindingEnd()
     {
         return $this->binding_end;
+    }
+
+    /**
+     * Add support_informations
+     *
+     * @param \AppBundle\Entity\Support_Information $supportInformations
+     * @return Interaction
+     */
+    public function addSupportInformation(\AppBundle\Entity\Support_Information $supportInformations)
+    {
+        $this->support_informations[] = $supportInformations;
+
+        return $this;
+    }
+
+    /**
+     * Remove support_informations
+     *
+     * @param \AppBundle\Entity\Support_Information $supportInformations
+     */
+    public function removeSupportInformation(\AppBundle\Entity\Support_Information $supportInformations)
+    {
+        $this->support_informations->removeElement($supportInformations);
+    }
+
+    /**
+     * Get support_informations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSupportInformations()
+    {
+        return $this->support_informations;
+    }
+
+    /**
+     * Add proteins
+     *
+     * @param \AppBundle\Entity\Protein $proteins
+     * @return Interaction
+     */
+    public function addProtein(\AppBundle\Entity\Protein $proteins)
+    {
+        $this->proteins[] = $proteins;
+
+        return $this;
+    }
+
+    /**
+     * Remove proteins
+     *
+     * @param \AppBundle\Entity\Protein $proteins
+     */
+    public function removeProtein(\AppBundle\Entity\Protein $proteins)
+    {
+        $this->proteins->removeElement($proteins);
+    }
+
+    /**
+     * Get proteins
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProteins()
+    {
+        return $this->proteins;
+    }
+
+    /**
+     * Add datasets
+     *
+     * @param \AppBundle\Entity\Dataset $datasets
+     * @return Interaction
+     */
+    public function addDataset(\AppBundle\Entity\Dataset $datasets)
+    {
+        $this->datasets[] = $datasets;
+
+        return $this;
+    }
+
+    /**
+     * Remove datasets
+     *
+     * @param \AppBundle\Entity\Dataset $datasets
+     */
+    public function removeDataset(\AppBundle\Entity\Dataset $datasets)
+    {
+        $this->datasets->removeElement($datasets);
+    }
+
+    /**
+     * Get datasets
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDatasets()
+    {
+        return $this->datasets;
+    }
+
+    /**
+     * Set domains
+     *
+     * @param \AppBundle\Entity\Domain $domains
+     * @return Interaction
+     */
+    public function setDomains(\AppBundle\Entity\Domain $domains = null)
+    {
+        $this->domains = $domains;
+
+        return $this;
+    }
+
+    /**
+     * Get domains
+     *
+     * @return \AppBundle\Entity\Domain 
+     */
+    public function getDomains()
+    {
+        return $this->domains;
     }
 }

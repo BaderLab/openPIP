@@ -91,3 +91,9 @@ h1 {
 	margin-top: 0px;
 }
 
+.upload_table{
+	border: 1px solid #ccc;
+	height: 600px;
+	overflow: auto;
+	padding: 20px;
+}

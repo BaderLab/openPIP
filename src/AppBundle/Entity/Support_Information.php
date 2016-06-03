@@ -105,4 +105,60 @@ class Support_Information
     {
         return $this->description;
     }
+
+    /**
+     * Set value
+     *
+     * @param string $value
+     * @return Support_Information
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return string 
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Add interactions
+     *
+     * @param \AppBundle\Entity\Interaction $interactions
+     * @return Support_Information
+     */
+    public function addInteraction(\AppBundle\Entity\Interaction $interactions)
+    {
+        $this->interactions[] = $interactions;
+
+        return $this;
+    }
+
+    /**
+     * Remove interactions
+     *
+     * @param \AppBundle\Entity\Interaction $interactions
+     */
+    public function removeInteraction(\AppBundle\Entity\Interaction $interactions)
+    {
+        $this->interactions->removeElement($interactions);
+    }
+
+    /**
+     * Get interactions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInteractions()
+    {
+        return $this->interactions;
+    }
 }

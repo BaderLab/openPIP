@@ -17,17 +17,10 @@ class Domain
 	 */
 	protected $id;
 
-	/**
-	 * @ORM\ManyToMany(targetEntity="Interaction" , inversedBy="domains")
-	 * @ORM\JoinTable(name="interaction_domain",
-	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")
-	 *      	},
-	 *      inverseJoinColumns={
-	 *      		@ORM\JoinColumn(name="domain_id", referencedColumnName="id")
-	 *      	}
-	 * 		)
-	 */
+   /**
+     * @ORM\OneToMany(targetEntity="Interaction", mappedBy="domain")
+     */
+
 	private $interactions;
 	
 	/**
@@ -42,14 +35,14 @@ class Domain
 	 */
 	private $organisms;
 	
-	/**
-	 * @var \Doctrine\Common\Collections\ArrayCollection|Protein[]
-	 * @ORM\ManyToMany(targetEntity="Protein", mappedBy="domains")
-	 */
-	private $proteins;
+    /**
+     * @ORM\ManyToOne(targetEntity="Protein", inversedBy="identifiers")
+     * @ORM\JoinColumn(name="protein_id", referencedColumnName="id")
+     */
+	protected $protein;
 	
 	public function __construct() {
-		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
+
 		$this->files = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->organisms = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->proteins = new \Doctrine\Common\Collections\ArrayCollection();
@@ -232,5 +225,127 @@ class Domain
     public function getSequence()
     {
         return $this->sequence;
+    }
+
+    /**
+     * Add interactions
+     *
+     * @param \AppBundle\Entity\Interaction $interactions
+     * @return Domain
+     */
+    public function addInteraction(\AppBundle\Entity\Interaction $interactions)
+    {
+        $this->interactions[] = $interactions;
+
+        return $this;
+    }
+
+    /**
+     * Remove interactions
+     *
+     * @param \AppBundle\Entity\Interaction $interactions
+     */
+    public function removeInteraction(\AppBundle\Entity\Interaction $interactions)
+    {
+        $this->interactions->removeElement($interactions);
+    }
+
+    /**
+     * Get interactions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInteractions()
+    {
+        return $this->interactions;
+    }
+
+    /**
+     * Add files
+     *
+     * @param \AppBundle\Entity\File $files
+     * @return Domain
+     */
+    public function addFile(\AppBundle\Entity\File $files)
+    {
+        $this->files[] = $files;
+
+        return $this;
+    }
+
+    /**
+     * Remove files
+     *
+     * @param \AppBundle\Entity\File $files
+     */
+    public function removeFile(\AppBundle\Entity\File $files)
+    {
+        $this->files->removeElement($files);
+    }
+
+    /**
+     * Get files
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
+
+    /**
+     * Add organisms
+     *
+     * @param \AppBundle\Entity\Organism $organisms
+     * @return Domain
+     */
+    public function addOrganism(\AppBundle\Entity\Organism $organisms)
+    {
+        $this->organisms[] = $organisms;
+
+        return $this;
+    }
+
+    /**
+     * Remove organisms
+     *
+     * @param \AppBundle\Entity\Organism $organisms
+     */
+    public function removeOrganism(\AppBundle\Entity\Organism $organisms)
+    {
+        $this->organisms->removeElement($organisms);
+    }
+
+    /**
+     * Get organisms
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrganisms()
+    {
+        return $this->organisms;
+    }
+
+    /**
+     * Set protein
+     *
+     * @param \AppBundle\Entity\Protein $protein
+     * @return Domain
+     */
+    public function setProtein(\AppBundle\Entity\Protein $protein = null)
+    {
+        $this->protein = $protein;
+
+        return $this;
+    }
+
+    /**
+     * Get protein
+     *
+     * @return \AppBundle\Entity\Protein 
+     */
+    public function getProtein()
+    {
+        return $this->protein;
     }
 }

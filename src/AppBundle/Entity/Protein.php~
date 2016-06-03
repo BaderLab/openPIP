@@ -18,6 +18,49 @@ class Protein
 	protected $id;
 	
 	/**
+	 * @ORM\ManyToMany(targetEntity="Interaction" , inversedBy="proteins")
+	 * @ORM\JoinTable(name="interaction_protein",
+	 *      joinColumns={
+	 *      		@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")
+	 *      	},
+     *      inverseJoinColumns={
+     *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
+     *      	}
+     * 		)
+	 */
+	public $interactions;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Organism" , inversedBy="proteins")
+	 * @ORM\JoinTable(name="organism_protein",
+	 *      joinColumns={
+	 *      		@ORM\JoinColumn(name="organism_id", referencedColumnName="id")
+	 *      	},
+	 *      inverseJoinColumns={
+	 *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
+	 *      	}
+	 * 		)
+	 */
+	public $organisms;
+	
+   /**
+     * @ORM\OneToMany(targetEntity="Domain", mappedBy="protein")
+     */
+	public $domains;
+	
+   /**
+     * @ORM\OneToMany(targetEntity="Identifier", mappedBy="protein")
+     */
+    public $identifiers;
+	
+	
+	public function __construct() {
+		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->identifiers = new \Doctrine\Common\Collections\ArrayCollection();
+	}
+	
+	/**
 	 * @ORM\Column(type="string", length=100)
 	 */
 	protected $name;
@@ -38,6 +81,106 @@ class Protein
 	protected $description;
 	
 	
-}
 
-?>
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Protein
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set sequence
+     *
+     * @param string $sequence
+     * @return Protein
+     */
+    public function setSequence($sequence)
+    {
+        $this->sequence = $sequence;
+
+        return $this;
+    }
+
+    /**
+     * Get sequence
+     *
+     * @return string 
+     */
+    public function getSequence()
+    {
+        return $this->sequence;
+    }
+
+    /**
+     * Set gene_name
+     *
+     * @param string $geneName
+     * @return Protein
+     */
+    public function setGeneName($geneName)
+    {
+        $this->gene_name = $geneName;
+
+        return $this;
+    }
+
+    /**
+     * Get gene_name
+     *
+     * @return string 
+     */
+    public function getGeneName()
+    {
+        return $this->gene_name;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Protein
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+}

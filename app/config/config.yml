@@ -11,6 +11,7 @@ parameters:
 framework:
     #esi:             ~
     #translator:      { fallbacks: ["%locale%"] }
+    translator: ~
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -37,7 +38,9 @@ twig:
     cache:  false
     form_themes:
     - 'bootstrap_3_layout.html.twig'
-    
+    globals:
+        kernelRootDir: "%kernel.root_dir%"
+        
 # Doctrine Configuration
 doctrine:
     dbal:
@@ -83,3 +86,8 @@ stfalcon_tinymce:
     selector: ".tinymce"
     include_jquery: true
     tinymce_jquery: true
+    
+oneup_uploader:
+    mappings:
+        gallery:
+            frontend: blueimp # or any uploader you use in the frontend

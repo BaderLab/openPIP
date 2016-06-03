@@ -19,28 +19,29 @@ class Announcement
 	protected $id;
 
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * 
+	 * @ORM\Column(name="`title`", type="string", length=100)
 	 */
 	protected $title;
 
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(name="`text`", type="string", length=4000)
 	 */
 	protected $text;
 	
 	/**
-	 * @ORM\Column(type="datetime")
+	 * @ORM\Column(name="`date`", type="datetime")
 	 */
 	protected $date;
 
 	/**
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(name="`show`", type="boolean")
 	 */
 	protected $show;
 
 
 	/**
-	 * @ORM\Column(type="boolean")
+	 * @ORM\Column(name="`show_on_home_page`", type="boolean")
 	 */
 	protected $show_on_home_page;
 
@@ -145,5 +146,28 @@ class Announcement
     public function getShowOnHomePage()
     {
         return $this->show_on_home_page;
+    }
+
+    /**
+     * Set text
+     *
+     * @param string $text
+     * @return Announcement
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+
+    /**
+     * Get text
+     *
+     * @return string 
+     */
+    public function getText()
+    {
+        return $this->text;
     }
 }

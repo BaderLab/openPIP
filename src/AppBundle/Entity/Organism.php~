@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="`announcement`")
+ * @ORM\Table(name="`organism`")
  */
 class Organism
 {
@@ -16,6 +16,38 @@ class Organism
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
 	protected $id;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Domain" , inversedBy="organisms")
+	 * @ORM\JoinTable(name="domain_organism",
+	 *      joinColumns={
+	 *      		@ORM\JoinColumn(name="domain_id", referencedColumnName="id")
+	 *      	},
+	 *      inverseJoinColumns={
+	 *      		@ORM\JoinColumn(name="organism_id", referencedColumnName="id")
+	 *      	}
+	 * 		)
+	 */
+	private $domains;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Protein" , inversedBy="organisms")
+	 * @ORM\JoinTable(name="protein_organism",
+	 *      joinColumns={
+	 *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
+	 *      	},
+	 *      inverseJoinColumns={
+	 *      		@ORM\JoinColumn(name="organism_id", referencedColumnName="id")
+	 *      	}
+	 * 		)
+	 */
+	private $proteins;
+	
+	
+	public function __construct() {
+		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->proteins = new \Doctrine\Common\Collections\ArrayCollection();
+	}
 	
 	/**
 	 * @ORM\Column(type="string", length=100)

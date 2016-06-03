@@ -143,4 +143,70 @@ class Dataset
     {
         return $this->description;
     }
+
+    /**
+     * Add interactions
+     *
+     * @param \AppBundle\Entity\Interaction $interactions
+     * @return Dataset
+     */
+    public function addInteraction(\AppBundle\Entity\Interaction $interactions)
+    {
+        $this->interactions[] = $interactions;
+
+        return $this;
+    }
+
+    /**
+     * Remove interactions
+     *
+     * @param \AppBundle\Entity\Interaction $interactions
+     */
+    public function removeInteraction(\AppBundle\Entity\Interaction $interactions)
+    {
+        $this->interactions->removeElement($interactions);
+    }
+
+    /**
+     * Get interactions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInteractions()
+    {
+        return $this->interactions;
+    }
+
+    /**
+     * Add files
+     *
+     * @param \AppBundle\Entity\File $files
+     * @return Dataset
+     */
+    public function addFile(\AppBundle\Entity\File $files)
+    {
+        $this->files[] = $files;
+
+        return $this;
+    }
+
+    /**
+     * Remove files
+     *
+     * @param \AppBundle\Entity\File $files
+     */
+    public function removeFile(\AppBundle\Entity\File $files)
+    {
+        $this->files->removeElement($files);
+    }
+
+    /**
+     * Get files
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFiles()
+    {
+        return $this->files;
+    }
 }

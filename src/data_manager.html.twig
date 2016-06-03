@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
+	<!-- blueimp Gallery styles -->
+	<link rel="stylesheet" href="//blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+	<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+	<link rel="stylesheet" href="../../../../vendor/jqueryfileuploader/css/jquery.fileupload.css">
+	<link rel="stylesheet" href="../../../../vendor/jqueryfileuploader/css/jquery.fileupload-ui.css">
+	<link rel="stylesheet" href="../../../assets/css/main.css">
+{% endblock %}
+{% block content %}
+<header>
+	<div id="upload_directory" hidden>{{ upload_directory }}</div>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a id="tor_ibin_header" class="navbar-brand" href="#">TOR-IBIN Admin</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="{{ path('announcement_manager') }}">Home</a></li>
+	      <li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+	      <li class="active"><a href="{{ path('data_manager') }}">Data</a></li>
+	      <li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>  
+	    </ul>
+	  </div>
+	</nav>
+</header>
+<main>
+</main>
+{% endblock %}
+{% block javascripts %}
+{% endblock %}

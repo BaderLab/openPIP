@@ -31,36 +31,33 @@ class Protein
 	public $interactions;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="Domain" , inversedBy="proteins")
-	 * @ORM\JoinTable(name="domain_protein",
+	 * @ORM\ManyToMany(targetEntity="Organism" , inversedBy="proteins")
+	 * @ORM\JoinTable(name="organism_protein",
 	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="domain_id", referencedColumnName="id")
+	 *      		@ORM\JoinColumn(name="organism_id", referencedColumnName="id")
 	 *      	},
 	 *      inverseJoinColumns={
 	 *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
 	 *      	}
 	 * 		)
 	 */
+	public $organisms;
+	
+   /**
+     * @ORM\OneToMany(targetEntity="Domain", mappedBy="protein")
+     */
 	public $domains;
 	
+   /**
+     * @ORM\OneToMany(targetEntity="Identifier", mappedBy="protein")
+     */
+    public $identifiers;
 	
-	/**
-	 * @ORM\ManyToMany(targetEntity="Master_Table" , inversedBy="proteins")
-	 * @ORM\JoinTable(name="master_table_protein",
-	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="master_table_id", referencedColumnName="id")
-	 *      	},
-	 *      inverseJoinColumns={
-	 *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
-	 *      	}
-	 * 		)
-	 */
-	public $master_tables;
 	
 	public function __construct() {
 		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->master_tables = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->identifiers = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	/**
@@ -185,5 +182,137 @@ class Protein
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Add interactions
+     *
+     * @param \AppBundle\Entity\Interaction $interactions
+     * @return Protein
+     */
+    public function addInteraction(\AppBundle\Entity\Interaction $interactions)
+    {
+        $this->interactions[] = $interactions;
+
+        return $this;
+    }
+
+    /**
+     * Remove interactions
+     *
+     * @param \AppBundle\Entity\Interaction $interactions
+     */
+    public function removeInteraction(\AppBundle\Entity\Interaction $interactions)
+    {
+        $this->interactions->removeElement($interactions);
+    }
+
+    /**
+     * Get interactions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInteractions()
+    {
+        return $this->interactions;
+    }
+
+    /**
+     * Add organisms
+     *
+     * @param \AppBundle\Entity\Organism $organisms
+     * @return Protein
+     */
+    public function addOrganism(\AppBundle\Entity\Organism $organisms)
+    {
+        $this->organisms[] = $organisms;
+
+        return $this;
+    }
+
+    /**
+     * Remove organisms
+     *
+     * @param \AppBundle\Entity\Organism $organisms
+     */
+    public function removeOrganism(\AppBundle\Entity\Organism $organisms)
+    {
+        $this->organisms->removeElement($organisms);
+    }
+
+    /**
+     * Get organisms
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrganisms()
+    {
+        return $this->organisms;
+    }
+
+    /**
+     * Add domains
+     *
+     * @param \AppBundle\Entity\Domain $domains
+     * @return Protein
+     */
+    public function addDomain(\AppBundle\Entity\Domain $domains)
+    {
+        $this->domains[] = $domains;
+
+        return $this;
+    }
+
+    /**
+     * Remove domains
+     *
+     * @param \AppBundle\Entity\Domain $domains
+     */
+    public function removeDomain(\AppBundle\Entity\Domain $domains)
+    {
+        $this->domains->removeElement($domains);
+    }
+
+    /**
+     * Get domains
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDomains()
+    {
+        return $this->domains;
+    }
+
+    /**
+     * Add identifiers
+     *
+     * @param \AppBundle\Entity\Identifier $identifiers
+     * @return Protein
+     */
+    public function addIdentifier(\AppBundle\Entity\Identifier $identifiers)
+    {
+        $this->identifiers[] = $identifiers;
+
+        return $this;
+    }
+
+    /**
+     * Remove identifiers
+     *
+     * @param \AppBundle\Entity\Identifier $identifiers
+     */
+    public function removeIdentifier(\AppBundle\Entity\Identifier $identifiers)
+    {
+        $this->identifiers->removeElement($identifiers);
+    }
+
+    /**
+     * Get identifiers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIdentifiers()
+    {
+        return $this->identifiers;
     }
 }

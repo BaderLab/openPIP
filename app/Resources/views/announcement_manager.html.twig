@@ -12,9 +12,10 @@
 	      <a id="tor_ibin_header" class="navbar-brand" href="#">TOR-IBIN Admin</a>
 	    </div>
 	    <ul class="nav navbar-nav">
-	      <li class="active"><a href="#">Announcements</a></li>
-	      <li><a href="#">Data</a></li>
-	      <li><a href="#">Files</a></li>  
+	      <li><a href="{{ path('announcement_manager') }}">Home</a></li>
+	      <li class="active"><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+	      <li><a href="{{ path('data_manager') }}">Data</a></li>
+	      <li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li> 
 	    </ul>
 	  </div>
 	</nav>

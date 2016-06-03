@@ -31,21 +31,22 @@ class Organism
 	private $domains;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="Master_Table" , inversedBy="organisms")
-	 * @ORM\JoinTable(name="master_table_organism",
+	 * @ORM\ManyToMany(targetEntity="Protein" , inversedBy="organisms")
+	 * @ORM\JoinTable(name="protein_organism",
 	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="master_table_id", referencedColumnName="id")
+	 *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
 	 *      	},
 	 *      inverseJoinColumns={
 	 *      		@ORM\JoinColumn(name="organism_id", referencedColumnName="id")
 	 *      	}
 	 * 		)
 	 */
-	private $master_tables;
+	private $proteins;
+	
 	
 	public function __construct() {
 		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->master_tables = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->proteins = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	/**
@@ -169,5 +170,71 @@ class Organism
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Add domains
+     *
+     * @param \AppBundle\Entity\Domain $domains
+     * @return Organism
+     */
+    public function addDomain(\AppBundle\Entity\Domain $domains)
+    {
+        $this->domains[] = $domains;
+
+        return $this;
+    }
+
+    /**
+     * Remove domains
+     *
+     * @param \AppBundle\Entity\Domain $domains
+     */
+    public function removeDomain(\AppBundle\Entity\Domain $domains)
+    {
+        $this->domains->removeElement($domains);
+    }
+
+    /**
+     * Get domains
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDomains()
+    {
+        return $this->domains;
+    }
+
+    /**
+     * Add proteins
+     *
+     * @param \AppBundle\Entity\Protein $proteins
+     * @return Organism
+     */
+    public function addProtein(\AppBundle\Entity\Protein $proteins)
+    {
+        $this->proteins[] = $proteins;
+
+        return $this;
+    }
+
+    /**
+     * Remove proteins
+     *
+     * @param \AppBundle\Entity\Protein $proteins
+     */
+    public function removeProtein(\AppBundle\Entity\Protein $proteins)
+    {
+        $this->proteins->removeElement($proteins);
+    }
+
+    /**
+     * Get proteins
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProteins()
+    {
+        return $this->proteins;
     }
 }

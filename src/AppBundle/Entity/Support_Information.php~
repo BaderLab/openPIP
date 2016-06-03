@@ -18,6 +18,24 @@ class Support_Information
 	protected $id;
 
 	/**
+	 * @ORM\ManyToMany(targetEntity="Interaction" , inversedBy="support_informations")
+	 * @ORM\JoinTable(name="interaction_support_information",
+	 *      joinColumns={
+	 *      		@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")
+	 *      	},
+	 *      inverseJoinColumns={
+	 *      		@ORM\JoinColumn(name="support_information_id", referencedColumnName="id")
+	 *      	}
+	 * 		)
+	 */
+	private $interactions;
+	
+	public function __construct() {
+		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
+	}
+	
+	
+	/**
 	 * @ORM\Column(type="string", length=100)
 	 */
 	protected $name;
@@ -26,7 +44,65 @@ class Support_Information
 	 * @ORM\Column(type="string", length=100)
 	 */
 	protected $description;
+	
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $value;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Support_Information
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Support_Information
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
 }
-
-
-?>
