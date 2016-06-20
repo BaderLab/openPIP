@@ -7,3 +7,7 @@ fos_user:
 oneup_uploader:
     resource: .
     type: uploader
+
+user_logout:
+   pattern:   /logout
+   

@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../../assets/css/main.css">
+	<link rel="stylesheet" href="../../../assets/css/search.css">
+{% endblock %}
+
+{% block title %}TOR-IBIN | Results{% endblock %}
+
+{% block content %}
+<header>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header tor_ibin_header">
+	    	<img  alt="" src="../../../assets/images/tor_ibin_logo.png" class="logo left">
+	        <h5 class="nav-header">TOR-IBIN Admin</h5>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="{{ path('home') }}">Home</a></li>
+	      <li class="active"><a href="{{ path('search') }}">Search</a></li>
+	      <li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+	      <li><a href="{{ path('data_manager') }}">Data</a></li>
+	      <li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li> 
+	    </ul>
+	    <ul class="nav navbar-nav right">
+	      <li><a href="{{ path('user_logout') }}">Logout</a></li>
+	    </ul>
+	  </div>
+	</nav>
+</header>
+<main>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8">		
+				<div id='cy' >
+				</div>
+			</div>		
+		</div>
+		<div class="row">
+		    <h1>Interaction list</h1>
+		    <table>
+		        <thead>
+		            <tr>
+		                <th>Interactor 1</th>
+		                <th>Interactor 2</th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		        {% for interaction in interaction_array %}
+		            <tr>
+			        	{% for interactor in interaction %}
+				            <td>{{ interactor }}</td>
+			            {% endfor %}
+		            </tr>
+		        {% endfor %}
+		        </tbody>
+		    </table>
+		    <a href="{{ path('search') }}">Back to Search</a>
+		</div>
+	</div>
+ 
+</main>
+
+{% block javascripts %}
+{{ tinymce_init() }}
+<script src="../../../assets/js/jquery-2.1.4.min.js"></script>
+<script src="../../../assets/js/bootstrap.min.js"></script>
+<script src="../../../assets/js/cytoscape.min.js"></script>
+<script src="../../../assets/js/cytoscape-qtip.js"></script>
+<script src="../../../assets/js/jquery.qtip.js"></script>
+<script src="../../../assets/js/main.js"></script>
+
+<script>
+
+alert('2');
+var jsonVar = '{"domain" : "1"}';
+$.getJSON(jsonVar, function(result){
+	var domainsString = result.domain;
+	alert('domainsString');
+});
+</script>
+{% endblock %}
+{% endblock %}

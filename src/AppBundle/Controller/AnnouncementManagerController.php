@@ -39,9 +39,19 @@ class AnnouncementManagerController extends Controller
 		
 		$em = $this->getDoctrine()->getManager();
 	
-		$announcements = $em->getRepository('AppBundle:Announcement')->findAll();
-		$announcements = array_reverse($announcements);
+
 		
+
+		$query = $em->createQuery(
+				'SELECT i
+			    FROM AppBundle:Announcement i
+			    WHERE i.show = :show
+			    ORDER BY i.show ASC'
+		)->setParameter('show', '1');
+
+		$announcements = $query->getResult();
+		
+		$announcements = array_reverse($announcements);
 		
 		
 		return $this->render('announcement_manager.html.twig', array(

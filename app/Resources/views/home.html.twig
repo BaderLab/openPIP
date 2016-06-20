@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../../assets/css/main.css">
+	<link rel="stylesheet" href="../../../assets/css/home.css">
+{% endblock %}
+
+{% block title %}TOR-IBIN | Home{% endblock %}
+
+{% block content %}
+<header>
+	<nav class="navbar navbar-default home_header">
+		<img  alt="" src="../../../assets/images/home_logo.png" class="logo left">
+		<h3><strong>TOR-IBIN: The Online Resource for </br> Interface - Based Interaction Networks</strong></h3>
+	</nav>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header tor_ibin_header">
+	        <h5 class="nav-header">TOR-IBIN Admin</h5>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li class="active"><a href="{{ path('home') }}">Home</a></li>
+	      <li><a href="{{ path('search') }}">Search</a></li>
+	      <li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+	      <li><a href="{{ path('data_manager') }}">Data</a></li>
+	      <li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li> 
+	    </ul>
+	    <ul class="nav navbar-nav right">
+	      <li><a href="{{ path('user_logout') }}">Logout</a></li>
+	    </ul>
+	  </div>
+	  <div class="shadow"></div>
+	</nav>
+</header>
+<main>
+<img  alt="" src="../../../assets/images/background_img_2.png" class="background_img">
+<div class="panel panel-default right_col">
+    <div class="panel-heading" style="background-color: #5cb85c; color: #ffffff;">
+    	<strong>Announcements and News</strong>
+	</div>
+	<div class="panel-body announcement_panel">
+		{% for announcement in announcements %}
+    		<div class="row">
+				<div class="container announcement">
+					<div class="row">
+						<div class="announcement_header">
+		            		<div class="announcement_title">
+			            		<h4>{{ announcement.title }}</h4>
+							</div>
+						</div>
+					</div>
+					<div class="row">	
+						<div class="announcement_date"> 
+		             		<p><em>{% if announcement.date %}{{ announcement.date|date('Y-m-d') }}{% endif %}</em></p>
+				        </div>	
+					</div>		
+					<div class="row">		
+	                	<div class="announcement_text">
+							{{ announcement.text | raw }}
+						</div>
+		        	</div>
+			        <div class="row">
+			        	<div class="read_more">
+							<a href='announce/'>Read more...</a>
+						</div>
+			        </div>
+		     	</div>
+			</div>
+       	{% endfor %}
+	 </div>
+</div>
+<div class="left_col">
+	<div class="container">
+		<div class="row">
+				<ul class='frontpage-headline'>
+					<li class='lefty'>
+					<span class='title'>Organisms</span><br/><span class='value'>{{ organism_count }}</span>
+					</li>
+					<li class='centery'>
+					<span class='title'>Proteins</span><br/><span class='value'>{{ protein_count }}</span>
+					</li>
+					<li class='centery'>
+					<span class='title'>Interactions</span><br/><span class='value'>{{ interaction_count }}</span>
+					</li>
+					<li class='righty'>
+					<span class='title'>Domains</span><br/><span class='value'>{{ domain_count }}</span>
+					</li>
+				</ul>
+		</div>
+		<div class="row">
+			<div class="about">
+				<span class="about_content"><p><strong>TOR-IBIN is an online resource for gathering and storing the published interface-based (IB) protein-protein 
+				interaction networks (IN) predicted using any PPI prediction method. TOR-IBIN aims to make these networks
+				available in a central repository with unified format and comprehensive search functions that maximize the 
+				use of these data.</strong></p></span>
+			</div>
+		</div>		
+	</div>
+</div>
+</main>
+
+{% block javascripts %}
+{{ tinymce_init() }}
+<script src="../../../assets/js/jquery-2.1.4.min.js"></script>
+<script src="../../../assets/js/bootstrap.min.js"></script>
+<script src="../../../assets/js/main.js"></script>
+{% endblock %}
+{% endblock %}

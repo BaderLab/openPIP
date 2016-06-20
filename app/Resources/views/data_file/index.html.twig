@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Data_File list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Path</th>
+                <th>Method</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for data_File in data_Files %}
+            <tr>
+                <td><a href="{{ path('admin_data_file_show', { 'id': data_File.id }) }}">{{ data_File.id }}</a></td>
+                <td>{{ data_File.name }}</td>
+                <td>{{ data_File.path }}</td>
+                <td>{{ data_File.method }}</td>
+                <td>{{ data_File.description }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_data_file_show', { 'id': data_File.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_data_file_edit', { 'id': data_File.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_data_file_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -27,10 +27,13 @@ security:
                 provider: fos_userbundle
                 csrf_provider: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
                 always_use_default_target_path: true
-
+                default_target_path: /admin/announcement_manager/
+                check_path: /login_check
             
             
-            logout:       true
+            logout:
+                path:   /logout
+                target: /login
             anonymous:    true
             # activate different ways to authenticate
             # http_basic: ~
@@ -43,3 +46,4 @@ security:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: IS_AUTHENTICATED_REMEMBERED }

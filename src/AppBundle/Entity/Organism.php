@@ -21,10 +21,10 @@ class Organism
 	 * @ORM\ManyToMany(targetEntity="Domain" , inversedBy="organisms")
 	 * @ORM\JoinTable(name="domain_organism",
 	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="domain_id", referencedColumnName="id")
+	 *      		@ORM\JoinColumn(name="organism_id", referencedColumnName="id")
 	 *      	},
 	 *      inverseJoinColumns={
-	 *      		@ORM\JoinColumn(name="organism_id", referencedColumnName="id")
+	 *      		@ORM\JoinColumn(name="domain_id", referencedColumnName="id")
 	 *      	}
 	 * 		)
 	 */
@@ -34,10 +34,10 @@ class Organism
 	 * @ORM\ManyToMany(targetEntity="Protein" , inversedBy="organisms")
 	 * @ORM\JoinTable(name="protein_organism",
 	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
+	 *      		@ORM\JoinColumn(name="organism_id", referencedColumnName="id")
 	 *      	},
 	 *      inverseJoinColumns={
-	 *      		@ORM\JoinColumn(name="organism_id", referencedColumnName="id")
+	 *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
 	 *      	}
 	 * 		)
 	 */
@@ -50,22 +50,27 @@ class Organism
 	}
 	
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
-	protected $name;
+	protected $taxid_id;
 	
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=true)
+	 */
+	protected $common_name;
+	
+	/**
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $class;
 	
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $scientfic_name;
 	
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $description;
 
@@ -236,5 +241,53 @@ class Organism
     public function getProteins()
     {
         return $this->proteins;
+    }
+
+    /**
+     * Set taxidId
+     *
+     * @param string $taxidId
+     *
+     * @return Organism
+     */
+    public function setTaxidId($taxidId)
+    {
+        $this->taxid_id = $taxidId;
+
+        return $this;
+    }
+
+    /**
+     * Get taxidId
+     *
+     * @return string
+     */
+    public function getTaxidId()
+    {
+        return $this->taxid_id;
+    }
+
+    /**
+     * Set commonName
+     *
+     * @param string $commonName
+     *
+     * @return Organism
+     */
+    public function setCommonName($commonName)
+    {
+        $this->common_name = $commonName;
+
+        return $this;
+    }
+
+    /**
+     * Get commonName
+     *
+     * @return string
+     */
+    public function getCommonName()
+    {
+        return $this->common_name;
     }
 }

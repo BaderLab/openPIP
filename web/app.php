@@ -1,5 +1,7 @@
-<?php
 
+<?php
+umask(0002);
+set_time_limit(0);
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -1,0 +1,52 @@
+/*
+    styles.css
+    Author: Hussam Fetyan
+    This file provides styling to the calculator.
+*/
+
+
+body{
+    font-family: arial, sans-serif;
+}
+
+table{
+    border: 5px solid black;
+    margin: 100px auto;
+    padding: 5px 5px 0 5px;
+}
+
+table td{
+    font-size: .8em;
+    padding: 5px;
+    text-align: center;
+    width: 50px;
+}
+
+td.display{
+    border: 2px solid grey;
+    font-size: 0.98em;
+    line-height: 1.25em;
+}
+
+table td input{
+    padding: 6px 0px;
+    width: 100%;
+}
+
+span{
+    display: block;
+    font-size: 1.10em;
+    letter-spacing: .10em;
+}
+
+.first-ln{
+    text-align: left;
+}
+
+.second-ln{
+    text-align: right;
+}
+
+Select{
+    height: 100%;
+}

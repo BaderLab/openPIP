@@ -1,7 +1,26 @@
 @CHARSET "ISO-8859-1";
 
+
+
 h1 {
 	color: #5cb85c;
+}
+
+h4 {
+	
+	color: #333333;
+	margin: 0px;
+}
+
+.tor_ibin_header h5{
+	margin: 0px;
+	color: #5cb85c;
+}
+
+.logo{
+	
+	vertical-align: middle;
+	margin: 10px;
 }
 
 .container {
@@ -18,60 +37,43 @@ h1 {
     color: #5cb85c;
 }
 
-#announcement_display{
-	
-	border: 1px solid #ccc;
-	height: 600px;
-	overflow: auto;
+.navbar-default:hover{
+    color: #5cb85c;
 }
 
-.announcement{
-	
-	width: 90%;
-	min-height: 200px;
-	margin: 20px auto;
-	border: 1px solid #ccc;
+.nav-brand:hover{
+	color: #5cb85c;
+}
+
+
+.nav-header{
+	color: #5cb85c;
+	float: left;
+    height: 50px;
+    padding: 15px 15px;
+    font-size: 18px;
+    line-height: 20px;
+    cursor: default;
 	
 }
 
-.announcement_header{
-	
+.navbar {
+    border-radius: 0px;
+}
+
+.shadow{
+	height: 1px;
 	width: 100%;
-	height: 40px;
-	padding: 1%;
-	background: #ffd2a0;
-	
-}
+	background: #CCCCCC;
 
-.announcement_header h4{
-	margin: 0px;
-}
-
-.announcement_text{
-	
-	min-height: 130px;
-	padding: 2%;
-}
-
-.announcement_show{
-	
-	margin-bottom: 10px;
-}
-
-#announcement_upload_form{
-	border: 1px solid #ccc;
-	padding: 20px;
-	background: #ffffff;
-	z-index: 2;
-}
-
-#new_announcement{
-	
-	margin: 20px;
 }
 
 .hidden{
     display: none;
+}
+
+.footer{
+	background: #e7e7e7;
 }
 
 .large{
@@ -93,7 +95,38 @@ h1 {
 
 .upload_table{
 	border: 1px solid #ccc;
-	height: 600px;
+	height: 500px;
 	overflow: auto;
 	padding: 20px;
 }
+
+.list-group-item.active {
+    background-color: #f0f0f0;
+    border-color: #dddddd;
+    color: #555;
+}
+.list-group-item.active:hover {
+    background-color: #f0f0f0;
+    border-color: #dddddd;
+    color: #555;
+}
+
+.list-group-item:hover {
+    background-color: #ffffff;
+    color: #555;
+}
+
+.right {
+	float: right;
+}
+
+.left {
+	float: left;
+}
+
+.panel-body{
+	height: 200px;
+	
+}
+
+

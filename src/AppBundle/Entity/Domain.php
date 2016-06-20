@@ -21,13 +21,8 @@ class Domain
      * @ORM\OneToMany(targetEntity="Interaction", mappedBy="domain")
      */
 
-	private $interactions;
-	
-	/**
-	 * @var \Doctrine\Common\Collections\ArrayCollection|File[]
-	 * @ORM\ManyToMany(targetEntity="File", mappedBy="domains")
-	 */
-	private $files;
+
+	private $data_files;
 	
 	/**
 	 * @var \Doctrine\Common\Collections\ArrayCollection|Organism[]
@@ -43,7 +38,7 @@ class Domain
 	
 	public function __construct() {
 
-		$this->files = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->data_files = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->organisms = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->proteins = new \Doctrine\Common\Collections\ArrayCollection();
 	}

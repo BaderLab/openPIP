@@ -23,45 +23,45 @@ class Dataset
 	 * @ORM\ManyToMany(targetEntity="Interaction" , inversedBy="datasets")
 	 * @ORM\JoinTable(name="interaction_dataset",
 	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")
+	 *      		@ORM\JoinColumn(name="dataset_id", referencedColumnName="id")
 	 *      	},
 	 *      inverseJoinColumns={
-	 *      		@ORM\JoinColumn(name="dataset_id", referencedColumnName="id")
+	 *      		@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")
 	 *      	}
 	 * 		)
 	 */
-	private $interactions;
+	public $interactions;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="File" , inversedBy="datasets")
-	 * @ORM\JoinTable(name="dataset_file",
+	 * @ORM\ManyToMany(targetEntity="Data_File" , inversedBy="datasets")
+	 * @ORM\JoinTable(name="dataset_data_file",
 	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="files_id", referencedColumnName="id")
+	 *      		@ORM\JoinColumn(name="data_file_id", referencedColumnName="id")
 	 *      	},
 	 *      inverseJoinColumns={
 	 *      		@ORM\JoinColumn(name="dataset_id", referencedColumnName="id")
 	 *      	}
 	 * 		)
 	 */
-	private $files;
+	public $data_files;
 	
 	public function __construct() {
 		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->files = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->data_files = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $name;
 	
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $reference;
 	
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $description;
 
@@ -178,35 +178,35 @@ class Dataset
     }
 
     /**
-     * Add files
+     * Add data_files
      *
-     * @param \AppBundle\Entity\File $files
+     * @param \AppBundle\Entity\Data_File $data_files
      * @return Dataset
      */
-    public function addFile(\AppBundle\Entity\File $files)
+    public function addDataFile(\AppBundle\Entity\Data_File $data_files)
     {
-        $this->files[] = $files;
+        $this->data_files[] = $data_files;
 
         return $this;
     }
 
     /**
-     * Remove files
+     * Remove data_files
      *
-     * @param \AppBundle\Entity\File $files
+     * @param \AppBundle\Entity\Data_File $data_files
      */
-    public function removeFile(\AppBundle\Entity\File $files)
+    public function removeDataFile(\AppBundle\Entity\Data_File $data_files)
     {
-        $this->files->removeElement($files);
+        $this->data_files->removeElement($data_files);
     }
 
     /**
-     * Get files
+     * Get data_files
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getFiles()
+    public function getDataFiles()
     {
-        return $this->files;
+        return $this->data_files;
     }
 }

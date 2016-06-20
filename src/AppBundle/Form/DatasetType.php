@@ -19,7 +19,7 @@ class DatasetType extends AbstractType
             ->add('reference')
             ->add('description')
             ->add('interactions')
-            ->add('files')
+            ->add('data_files')
         ;
     }
     

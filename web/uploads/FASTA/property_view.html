@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--    property_view.html
+        Author: Hussam Fetyan
+        This file displays the details of a property available for rent
+        -->
+<html lang="en">
+
+<head>
+    <title>Property ID 1</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/property_view_style.css" type="text/css" />
+    <noscript>Please note that JavaScript is required to enlarge photos on this web page<br />
+        If your browser is blocking JavaScript, you need to set it to allow JavaScript.
+    </noscript>
+</head>
+
+<body>
+
+    <p id="container" class="hidden"><img id="enlarged" src="" alt="large view of property picture" />
+        <span>
+        <input id="close_btn" type="button" value="close" />
+        </span>
+    </p>
+    <aside>
+        <h1>Property Images</h1>
+        <p>Click on an image to enlarge it</p>
+        <p><img id="pic_1" src="images/pic-01.jpg" alt="" /></p>
+        <p><img id="pic_2" src="images/pic-02.jpg" alt="" /></p>
+        <p><img id="pic_3" src="images/pic-03.jpg" alt="" /></p>
+        <p><img id="pic_4" src="images/pic-04.jpg" alt="" /></p>
+    </aside>
+
+    <div id="wrapper">
+        <header>
+            <h1>Property Available for Rent</h1>
+        </header>
+        <section>
+            <h2>Property Specifics</h2>
+            <table>
+                <tr>
+                    <td>Property Type</td>
+                    <td>Single House</td>
+                </tr>
+                <tr>
+                    <td>Date Listed</td>
+                    <td>10/02/2016</td>
+                </tr>
+                <tr>
+                    <td>Asking Price</td>
+                    <td>1500 $</td>
+                </tr>
+                <tr>
+                    <td>Days since listing</td>
+                    <td id="days">5</td>
+                </tr>
+                <tr>
+                    <td>Hours since listing</td>
+                    <td id="hours">15</td>
+                </tr>
+                <tr>
+                    <td>Minutes since listing</td>
+                    <td id="mins">56</td>
+                </tr>
+                <tr>
+                    <td>Seconds since listing</td>
+                    <td id="sec">10</td>
+                </tr>
+            </table>
+        </section>
+        <section>
+            <h2>Property Description</h2>
+            <p>A fake house that will surprise you<br />
+                Prepare To Be Amazed!<br />
+                This beautiful house is available for LEASE or rent.<br />
+                It has a great location in the Hamilton area near McMaster University.
+                The house is a gorgeous brand new house, it has three bedrooms and 2 bathrooms.
+                It's close to all aminities including McMaster Hospital, McMaster University, Fortinos,
+                all major shopping centres in the area and minutes away from the bus stop.
+                Furnished with quality laminate floors throughout.
+                Its kitchen is amazing with stainless steel appliances and granite counter tops.
+                Dining room is large and just needs to be filled up with dining table and chairs.
+                Large master bedroom with luxuries ensuite.
+                Huge garage that can fit two cars.
+                We are asking $1800 per month + utilities. However the price is negotiable.
+                We can't lease this house for less than a year period.
+                We have to perform Credit check before signing the contract.
+                Not intended to solicit buyers under contract</p>
+        </section>
+        <section>
+            <h2>Actions</h2>
+            <p>
+                <input type="button" value="Rent this property" />
+                <input type="button" value="Make an offer" />
+            </p>
+        </section>
+        <Footer>
+            <p>This service is provided to you by Property Fake Rental Agency</p>
+            <p>Phone number: 000 000 000</p>
+            <p>Contact us at email: fakeaddress@somefakehost.com</p>
+            <address>12345 Fake St. * Fake City * Fake Province</address>
+        </Footer>
+    </div>
+    <script type="text/javascript" src="js/property_view.js"></script>
+</body>
+
+</html>

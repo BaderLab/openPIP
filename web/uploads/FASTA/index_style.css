@@ -1,0 +1,28 @@
+/*  index_style.css
+    Author: Hussam Fetyan
+    This file provides style sheets for
+    the welcome page of the property rental website
+*/
+
+ul {
+    list-style-type: none;
+    padding: 0px;
+}
+
+li{
+    background-color: #60C37C;
+    width: 200px;
+    padding: 0;
+    margin: 40px auto 0px;
+}
+
+li:hover{
+    background-color: #3F4040;
+}
+
+li a{
+    color: #F1F1F1;
+    font-size: 1.5em;
+    line-height: 2em;
+    text-decoration: none;
+}

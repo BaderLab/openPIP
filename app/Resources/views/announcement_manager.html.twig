@@ -3,19 +3,28 @@
 {% block stylesheets %}
 	<link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../../../assets/css/main.css">
+	<link rel="stylesheet" href="../../../assets/css/announcement.css">
 {% endblock %}
+
+{% block title %}TOR-IBIN | Announcement{% endblock %}
+
 {% block content %}
 <header>
 	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
-	    <div class="navbar-header">
-	      <a id="tor_ibin_header" class="navbar-brand" href="#">TOR-IBIN Admin</a>
+	    <div class="navbar-header tor_ibin_header">
+	    	<img  alt="" src="../../../assets/images/tor_ibin_logo.png" class="logo left">
+	        <h5 class="nav-header">TOR-IBIN Admin</h5>
 	    </div>
 	    <ul class="nav navbar-nav">
-	      <li><a href="{{ path('announcement_manager') }}">Home</a></li>
+	      <li><a href="{{ path('home') }}">Home</a></li>
+	      <li><a href="{{ path('search') }}">Search</a></li>
 	      <li class="active"><a href="{{ path('announcement_manager') }}">Announcements</a></li>
 	      <li><a href="{{ path('data_manager') }}">Data</a></li>
 	      <li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li> 
+	    </ul>
+	    <ul class="nav navbar-nav right">
+	      <li><a href="{{ path('user_logout') }}">Logout</a></li>
 	    </ul>
 	  </div>
 	</nav>
@@ -32,7 +41,7 @@
 						{{ form_widget(form.title) }}
 					</div>
 					<div class="col-sm-3">
-						{{ form_widget(form.show) }}
+						{{ form_widget(form.show, {'attr': {'checked': 'checked'}}) }}
 						{{ form_widget(form.show_on_home_page) }}
 					</div>	
 				</div>
@@ -40,15 +49,24 @@
 		        	{{ form_widget(form.text) }}
 		        </div>	
 				<div class="row" style='margin-top: 2%;'>
-					<button id="cancel_announcement" class="btn btn-danger" style="float: right; ">Cancel</button>
-			        <input type="submit" class="btn btn-success" style="float: right; margin-right: 10px;" value="Add Anouncement" />
+					<button id="cancel_announcement" class="btn btn-danger" style="float: right; ">
+						<i class="glyphicon glyphicon-ban-circle"></i>
+						<span>Cancel</span>
+					</button>
+					<button type="submit" class="btn btn-success" style="float: right; margin-right: 10px;" ">
+						<i class="glyphicon glyphicon-plus"></i>
+						<span>Add Anouncement</span>
+					</button>
 			    </div>
 		    {{ form_end(form) }}
 		</div>
     </div>
 	<div class="container">
 		<div class="row">
-			<button id="new_announcement" class="btn btn-success">New Announcement</button>
+			<span id="new_announcement" class="btn btn-success">
+				<i class="glyphicon glyphicon-plus"></i>
+				<span>New Announcement</span>
+			</span>
 		</div>
 		<div class="row">
 			<div id="announcement_display">
@@ -65,7 +83,7 @@
 										</div>
 										<div class="col-sm-2">
 											<div class="announcement_date"> 
-							                	{% if announcement.date %}{{ announcement.date|date('Y-m-d') }}{% endif %}
+							                	<p>{% if announcement.date %}{{ announcement.date|date('Y-m-d') }}{% endif %}</p>
 							                </div>
 							            </div>
 									</div>
@@ -78,7 +96,7 @@
 						        <div class="row">
 						        	<div class="col-sm-11">
 					        			<div class="announcement_show"> 
-						                	{% if announcement.showonhomepage %}<input type="checkbox" style="cursor: default; margin-right: 6px;" disabled="disabled" checked>Show{% else %}<input type="checkbox" style="cursor: default; margin-right: 6px;" disabled="disabled">Show{% endif %}
+						                	{% if announcement.showonhomepage %}<input type="checkbox" style="cursor: default; margin-right: 6px;" disabled="disabled" checked>Shown On Homepage{% else %}<input type="checkbox" style="cursor: default; margin-right: 6px;" disabled="disabled">Shown On Homepage{% endif %}
 						                </div>
 									</div>
 					                <div class="col-sm-1">

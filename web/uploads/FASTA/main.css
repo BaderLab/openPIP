@@ -1,0 +1,90 @@
+/*  main.css
+    Author: Hussam Fetyan
+    This file provides general style sheets applicable to
+    common parts of the whole property rental website
+*/
+
+body{
+    background-color: #285672;
+    color: #F1F1F1;
+    font-family: arial, sans-serif;
+    letter-spacing: 0.1em;
+    max-width: 1300px;
+    min-width: 700px;
+}
+
+header, section{
+    padding: 25px 0px 25px 0px;
+    text-align: center;
+    border-bottom: 2px solid grey;
+}
+
+footer{
+    padding: 25px;
+    text-align: center;
+}
+
+footer *{
+    font-size: 0.9em;
+    margin: 0px;
+    padding: 5px 0px;
+    font-style: normal;
+}
+
+section p{
+    clear: both;
+    font-size: 1.2em;
+}
+
+p label, p input, p select, p textarea{
+    float: left;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 5px 0px;
+}
+
+p label{
+    text-align: right;
+    width: 45%;
+}
+
+p input, p select{
+    border: 2px solid #3F4040;
+    margin-left: 15px;
+    text-align: left;
+    width: 200px;
+}
+
+p textarea{
+    border: 2px solid #3F4040;
+    margin-left: 15px;
+    text-align: left;
+    width: 350px;
+    max-width: 50%;
+    height: 150px;
+}
+
+.submit{
+    clear: both;
+    text-align: center;
+}
+
+.button{
+    background-color: #60C37C;
+    font-size: 1em;
+    float: none;
+    text-align: center;
+    width: 150px;
+}
+
+.hidden{
+    display: none;
+}
+
+.alert_message{
+    color: red;
+    font-size: 1em;
+    margin: 0px;
+    padding: 5px 0px;
+    text-align: center;
+}

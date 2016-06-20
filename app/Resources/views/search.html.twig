@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../../assets/css/jquery-ui.min.css">
+	<link rel="stylesheet" href="../../../assets/css/main.css">
+	<link rel="stylesheet" href="../../../assets/css/search.css">
+{% endblock %}
+
+{% block title %}TOR-IBIN | Search{% endblock %}
+
+{% block content %}
+<header>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header tor_ibin_header">
+	    	<img  alt="" src="../../../assets/images/tor_ibin_logo.png" class="logo left">
+	        <h5 class="nav-header">TOR-IBIN Admin</h5>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li><a href="{{ path('home') }}">Home</a></li>
+	      <li class="active"><a href="{{ path('search') }}">Search</a></li>
+	      <li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+	      <li><a href="{{ path('data_manager') }}">Data</a></li>
+	      <li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li> 
+	    </ul>
+	    <ul class="nav navbar-nav right">
+	      <li><a href="{{ path('user_logout') }}">Logout</a></li>
+	    </ul>
+	  </div>
+	  <div class="shadow"></div>
+	</nav>
+</header>
+<main>
+	<div class="container">
+		<div class="row">
+			
+			
+				<div class="search_outer_panel">
+					<div class="search_inner_panel">
+					<div class="container">
+						<div class="row search_header">
+							<h4>Search</h4>
+						</div>
+						{{ form_start(form) }}	
+						<div class="row data_upload_content  search_panel">
+							<div class='hidden'>
+								{{ form_widget(form.naming_convention) }}
+							</div>
+							<div class="input-group input-group-lg">
+		
+									{{ form_widget(form.identifier) }}
+		
+								<span class="input-group-btn">
+					            	<button type="submit" class="btn btn-success" type="button" id="search_btn">Search</button>
+									<button class="btn btn-primary" type="button" id="advanced_btn">Advanced</button>
+							    </span>
+							</div>
+		
+						</div>
+						{{ form_end(form) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+ 
+</main>
+
+{% block javascripts %}
+{{ tinymce_init() }}
+<script src="../../../assets/js/jquery-2.1.4.min.js"></script>
+<script src="../../../assets/js/jquery-ui.min.js"></script>
+<script src="../../../assets/js/bootstrap.min.js"></script>
+<script src="../../../assets/js/main.js"></script>
+<script src="../../../assets/js/search.js"></script>
+{% endblock %}
+{% endblock %}

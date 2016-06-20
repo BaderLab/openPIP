@@ -17,30 +17,13 @@ class Protein
 	 */
 	protected $id;
 	
-	/**
-	 * @ORM\ManyToMany(targetEntity="Interaction" , inversedBy="proteins")
-	 * @ORM\JoinTable(name="interaction_protein",
-	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")
-	 *      	},
-     *      inverseJoinColumns={
-     *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
-     *      	}
-     * 		)
-	 */
-	public $interactions;
+
 	
-	/**
-	 * @ORM\ManyToMany(targetEntity="Organism" , inversedBy="proteins")
-	 * @ORM\JoinTable(name="organism_protein",
-	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="organism_id", referencedColumnName="id")
-	 *      	},
-	 *      inverseJoinColumns={
-	 *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
-	 *      	}
-	 * 		)
-	 */
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection|Organism[]
+     * @ORM\ManyToMany(targetEntity="Organism", mappedBy="proteins")
+     */
+
 	public $organisms;
 	
    /**
@@ -53,30 +36,36 @@ class Protein
      */
     public $identifiers;
 	
-	
+   /**
+     * @ORM\OneToMany(targetEntity="Interaction", mappedBy="protein")
+     */
+    public $interactions;
+    
+    
 	public function __construct() {
 		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->identifiers = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->organisms = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $name;
 	
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $sequence;
 	
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $gene_name;
 	
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $description;
 	
