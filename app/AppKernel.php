@@ -26,6 +26,7 @@ class AppKernel extends Kernel
         	new Symfony\Bundle\AsseticBundle\AsseticBundle(),
         	new Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle(),
         	new Oneup\UploaderBundle\OneupUploaderBundle(),
+        	new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
 
         );
 

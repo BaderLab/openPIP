@@ -1,6 +1,8 @@
 @CHARSET "ISO-8859-1";
+
+
 body{
-	background-color: #f8f8f8;
+	background-color: #f9f9f9;
 	min-width: 1020px;
 }
 
@@ -9,6 +11,22 @@ main{
 	
 }
 
+h3{
+	margin: 0px;
+	font-weight: bold;
+	font-size: 1.0em;
+}
+
+h4{
+	margin: 0px;
+	font-weight: bold;
+	font-size: 1.8em;
+	color: #53a753;
+}
+
+.container {
+    width: 86%;
+}
 
 .navbar{
 	margin: 0px;
@@ -43,27 +61,51 @@ main{
     border-radius: 0px;
     min-width: 804px;
 }
-
-
 .background_img{
 	position: absolute;
-    top: 24%;
-    left: 14%;
-    z-index: -1;
+    top: 14%;
+    left: 6%;
+    z-index: -50;
 }
+
+.background_img_2{
+	position: absolute;
+    top: 14%;
+    left: 6%;
+    z-index: -100;
+}
+
 
 .about_content{
 	position: relative;
-	z-index: 10000;
+	z-index: 100;
 	
 }
 
+.feature_list{
+	list-style: none;
+	padding: 0px;
+}
+
+.feature_list li{
+	list-style: none;
+	font-size: 1.4em;
+    color: #4d4d4d;
+    
+}
+
+.feature_list li p{
+	font-size: 1.0em;
+    
+}
+
+
 ul.frontpage-headline {
     display: table;
-    margin-top: 14%;
+    margin-top: 10%;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 10%;
+    margin-bottom: 6%;
     padding: 0px;
 }
 
@@ -129,6 +171,8 @@ ul.frontpage-headline li.righty {
 	
 	width: 100%;
 	z-index: 1000;
+	margin-bottom: 2%;
+	
 	
 }
 
@@ -210,3 +254,5 @@ border-radius: 0;
 ::-webkit-scrollbar-corner {
       background-color: #f2f2f2;
 } /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
+
+*

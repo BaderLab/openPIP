@@ -58,10 +58,11 @@ $(function(){
 	          }
 	      ]
 	});
-	
-	$.getJSON("../../data/data.json", function(result){
-		
+
+	$.getJSON({{}}, function(result){
+		alert("yes");
 		var domainsString = result.domains;
+		alert(domainsString);
 		var domainsArray = domainsString.split(";");
 		var proteinOfIntrestString = result.protein_of_intrest;
 		var proteinOfIntrestArray = proteinOfIntrestString.split(";");
@@ -125,18 +126,7 @@ $(function(){
 		
 	
 			//add edge data to cytoscape
-	    	cy.add([{ 
-	    		group: "edges", 
-	    		data: { 
-	    			id: edgeArray[i], 
-	    			weight: 1,
-	    			source: sourceDomainId, 
-	    			target: targetProteinId, 
-	    			interaction: sourceProteinName + '-' + targetProteinName,
-	    			domain: domainName,
-	    			mode: modeData, 
-	    			score: scoreData} 
-	    	}]);
+
 	    	
 
 		}
@@ -167,7 +157,7 @@ $(function(){
 		cy.$('.protein_of_intrest').on('click', function(event){
 
 			var target = event.cyTarget;
-			alert(target.id());
+
 			cy.$('.protein_of_intrest').on('qtip', function(event){
 				cy.$('.protein_of_intrest').qtip({
 					content: function(){ 

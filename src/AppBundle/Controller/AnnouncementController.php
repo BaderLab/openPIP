@@ -119,7 +119,7 @@ class AnnouncementController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('admin_announcement_index');
+        return $this->redirectToRoute('announcement_manager');
     }
 
     /**

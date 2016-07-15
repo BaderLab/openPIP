@@ -37,10 +37,14 @@ class DataManagerController extends Controller
         $interactions_added = 0;
         $new_proteins_added = 0;
         $new_identifier_added = 0;
-        
+        $new_organisms_added = 0;
+        $new_datasets_added = 0;
+        $new_domain_added = 0;
         
         if ($form->isSubmitted() && $form->isValid()) {
         		
+
+        	
         	/** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
         	$file = $data_File->getDataFile();
         	
@@ -59,11 +63,12 @@ class DataManagerController extends Controller
         		
         	$handle = fopen($filepath , "r");
         	
-        	
+        	$file_row = 0;
         	
         	while ($data = fgetcsv($handle, 0, "\t"))
         	{
         		
+        		if($file_row == 0){ $file_row++; continue; }
         		$interactions_added++;
         	
         		list ($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id, $interactor_A_alias, $interactor_B_alias, $interaction_detection_method,
@@ -95,6 +100,9 @@ class DataManagerController extends Controller
         		//
         		$protein_A = '';
         		$organism_A = '';
+        		
+
+        		
         		
         		//if protein exists
         		if($is_new_protein_A == false){
@@ -263,6 +271,8 @@ class DataManagerController extends Controller
 		        						catch(Exception $e) {
 		        						}
 		        						
+		        						$new_organisms_added++;
+		        						
 		        						$em->persist($organism_A);
 	        						}
 	        					} 
@@ -271,7 +281,11 @@ class DataManagerController extends Controller
         			}
         			
 
+        			//$handle = fopen('C:/Users/Miles/Desktop/test.txt', 'w');
+        			 
+        			//fwrite($handle, $feature_interactor_A);
         			
+
         			//if the identifier is from uniprot
         			if($identifier_naming_convention_interactor_A_id == 'uniprotkb'){
         			
@@ -318,6 +332,7 @@ class DataManagerController extends Controller
         						//set the gene name text for the protein
         						$protein_A->setGeneName($gene_name_text);
         			
+        						
         						$identifier_gene_name = new Identifier();
         						$identifier_gene_name->setIdentifier($gene_name_text);
         						$identifier_gene_name->setNamingConvention('gene_name');
@@ -332,7 +347,13 @@ class DataManagerController extends Controller
         			
         			$protein_A->addOrganism($organism_A);
         			$organism_A->addProtein($protein_A);
+        			
+        			
+        			
+        			
         		}
+        		
+        		
         		
         		//Protein B
         		
@@ -381,6 +402,8 @@ class DataManagerController extends Controller
         		
         			$new_identifier_added++;
         		
+        			$organisms_to_add = array();
+        			
         			//Blternate identifiers
         			if($alt_interactor_B_id != '-'){
         				 
@@ -515,6 +538,8 @@ class DataManagerController extends Controller
 		        						}
 		        						catch(Exception $e) {
 		        						}
+		        						
+		        						$new_organisms_added++;
 		        		
 		        						$em->persist($organism_B);
 	        						}
@@ -522,6 +547,10 @@ class DataManagerController extends Controller
         					}
         				}
         			}
+        			
+        			
+        			
+
 
         			//if the identifier is from uniprot
         			if($identifier_naming_convention_interactor_B_id == 'uniprotkb'){
@@ -638,11 +667,129 @@ class DataManagerController extends Controller
         						}
         						catch(Exception $e) {
         						} 
+        						
+        						$new_datasets_added++;
+        						
         						$em->persist($dataset);
         					}
         				}
         			}
         		}
+        		
+        		if($confidence_value != '-'){
+        			 
+        			$score_array = explode(':', $confidence_value);   		
+        			$score = $score_array[1];
+        			$interaction->setScore($score);
+        			 
+        		}
+        		
+        		
+        		if($feature_interactor_A != '-'){
+        			 
+        		
+        		
+        		
+        		
+        			$type = '';
+        			$name = '';
+        			$description = '';
+        			$sequence = '';
+        			$start_position = '';
+        			$end_position = '';
+        		
+        			$domain_array =  explode(";", $feature_interactor_A);
+        		
+        			foreach($domain_array as $domain){
+        				//fwrite($handle, "111 $domain 111");
+        				$_domain_array = explode(":", $domain);
+        				 
+        				//fwrite($handle, "222 $_domain_array[0] 222");
+        				//fwrite($handle, "222 $_domain_array[1] 222");
+        				 
+        		
+        				 
+        				if($_domain_array[0] == 'type'){
+        					 
+        					$type = $_domain_array[1];
+        		
+        				}elseif($_domain_array[0] == 'Name'){
+        					 
+        					$name = $_domain_array[1];
+        					 
+        				}elseif($_domain_array[0] == 'Desc'){
+        					 
+        					$description = $_domain_array[1];
+        		
+        				}elseif($_domain_array[0] == 'Sequence'){
+        					 
+        					$sequence = $_domain_array[1];
+        		
+        				}elseif($_domain_array[0] == 'coordinates'){
+        					 
+        					$coordinates = $_domain_array[1];
+        					 
+        					$coordinat_array = explode("-", $coordinates);
+        					 
+        					$start_position = $coordinat_array[0];
+        					$end_position = $coordinat_array[1];
+        		
+        				}
+        		
+        			}
+        		
+        		
+        		
+        		
+        		
+        			$is_new_domain = true;
+        		
+        			$interactor_A_domain = '';
+        		
+        			if($is_new_domain == true){
+        				 
+        				$interactor_A_domain = new Domain;
+        				$interactor_A_domain->setType($type);
+        				$interactor_A_domain->setName($name);
+        				$interactor_A_domain->setDescription($description);
+        				$interactor_A_domain->setSequence($sequence);
+        				$interactor_A_domain->setStartPosition($start_position);
+        				$interactor_A_domain->setEndPosition($end_position);
+        				$interactor_A_domain->setProtein($protein_A);
+        				 
+        				$new_domain_added++;
+        				 
+        				 
+        				$em->persist($interactor_A_domain);
+        				$protein_A->addDomain($interactor_A_domain);
+        				$em->persist($interactor_A_domain);
+        				$interaction->setDomain($interactor_A_domain);
+        			}elseif($is_new_domain == false){
+        				 
+        				$interactor_A_domain = self::getDomainFromNameAndType($name, $type);
+        				$protein_A->addDomain($interactor_A_domain);
+        				 
+        				 
+        			}
+        		
+        		
+        		
+        		}
+        		 
+        		
+        		if($feature_interactor_B != '-'){
+        			 
+        			$binding_array = explode(':', $feature_interactor_B);
+        			
+        			$coordinate_array = explode('-', $binding_array[1]);
+        			$bindingStart = $coordinate_array[0];
+        			$bindingEnd = $coordinate_array[1];
+        			$interaction->setBindingStart($bindingStart);
+        			$interaction->setBindingEnd($bindingEnd);
+        			 
+        		}
+        		
+
 
 
         		$interaction->setInteractorA($protein_A);
@@ -658,7 +805,11 @@ class DataManagerController extends Controller
        		}       
 		}
 		
+
+		
 		return $this->render('data_manager.html.twig', array(
+				'new_datasets_added' => $new_datasets_added,
+				'new_organisms_added' => $new_organisms_added,
 				'new_proteins_added' => $new_proteins_added,
 				'interactions_added' => $interactions_added,
 				'data_File' => $data_File,
@@ -686,6 +837,34 @@ class DataManagerController extends Controller
 			return true;
 		}
 	
+	}
+	
+	public function isNewDomain($type, $name, $start_position, $end_position, $protein){
+		
+		$protein_id = $protein->getId();
+		$em = $this->getDoctrine()->getManager();
+		$query = $em->createQuery(
+				"SELECT d
+							FROM AppBundle:Domain d
+							WHERE d.name = :name
+							AND d.type = :type
+							AND d.start_position = :start_position
+							AND d.end_position = :end_position			
+							AND d.protein = :protein"
+				);
+			
+		$query->setParameter('name', $name);
+		$query->setParameter('type', $type);
+		$query->setParameter('start_position', $start_position);
+		$query->setParameter('end_position', $end_position);
+		$query->setParameter('protein', $protein);
+		
+		$results = $query->getResult();
+		if($results){
+			return false;
+		}else{
+			return true;
+		}
 	}
 	
 	public function isNewOrganism($taxid_id){
@@ -745,6 +924,26 @@ class DataManagerController extends Controller
 		return $protein_id;
 		
 	}
+	
+	public function getDomainFromNameAndType($name, $type){
+		$em = $this->getDoctrine()->getManager();
+		$query = $em->createQuery(
+				"SELECT d
+							FROM AppBundle:Domain d
+							WHERE d.name = :name
+							AND d.type = :type"
+				);
+			
+		$query->setParameter('name', $name);
+		$query->setParameter('type', $type);
+		$domain_array = $query->getResult();
+	
+		$domain_object = $domain_array[0];
+	
+		return $domain_object;
+	
+	}
+	
 	
 	public function getOrganismFromTaxidId($taxid_id){
 		$em = $this->getDoctrine()->getManager();

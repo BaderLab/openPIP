@@ -18,7 +18,6 @@ class Interaction
 	protected $id;
 
 
-	
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection|Support_Information[]
      * @ORM\ManyToMany(targetEntity="Support_Information", mappedBy="interactions")
@@ -26,16 +25,16 @@ class Interaction
     private $support_informations;
     
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection|Protein[]
-     * @ORM\ManyToMany(targetEntity="Protein", mappedBy="interactions")
-     */
-    private $proteins;
-    
-    /**
      * @var \Doctrine\Common\Collections\ArrayCollection|Dataset[]
      * @ORM\ManyToMany(targetEntity="Dataset", mappedBy="interactions")
      */
     private $datasets;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Domain", inversedBy="interactions")
+     * @ORM\JoinColumn(name="domain", referencedColumnName="id")
+     */
+    protected $domain;
     
     /**
      * @ORM\ManyToOne(targetEntity="Protein", inversedBy="interactions")
@@ -53,7 +52,6 @@ class Interaction
     
     public function __construct()
     {
-    	$this->proteins = new \Doctrine\Common\Collections\ArrayCollection();
     	$this->support_informations = new \Doctrine\Common\Collections\ArrayCollection();
     	$this->datasets = new \Doctrine\Common\Collections\ArrayCollection();
 
@@ -187,38 +185,6 @@ class Interaction
         return $this->support_informations;
     }
 
-    /**
-     * Add proteins
-     *
-     * @param \AppBundle\Entity\Protein $proteins
-     * @return Interaction
-     */
-    public function addProtein(\AppBundle\Entity\Protein $proteins)
-    {
-        $this->proteins[] = $proteins;
-
-        return $this;
-    }
-
-    /**
-     * Remove proteins
-     *
-     * @param \AppBundle\Entity\Protein $proteins
-     */
-    public function removeProtein(\AppBundle\Entity\Protein $proteins)
-    {
-        $this->proteins->removeElement($proteins);
-    }
-
-    /**
-     * Get proteins
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getProteins()
-    {
-        return $this->proteins;
-    }
 
     /**
      * Add datasets
@@ -274,5 +240,53 @@ class Interaction
     public function getDomains()
     {
         return $this->domains;
+    }
+
+    /**
+     * Set interactorA
+     *
+     * @param \AppBundle\Entity\Protein $interactorA
+     *
+     * @return Interaction
+     */
+    public function setInteractorA(\AppBundle\Entity\Protein $interactorA = null)
+    {
+        $this->interactor_A = $interactorA;
+
+        return $this;
+    }
+
+    /**
+     * Get interactorA
+     *
+     * @return \AppBundle\Entity\Protein
+     */
+    public function getInteractorA()
+    {
+        return $this->interactor_A;
+    }
+
+    /**
+     * Set interactorB
+     *
+     * @param \AppBundle\Entity\Protein $interactorB
+     *
+     * @return Interaction
+     */
+    public function setInteractorB(\AppBundle\Entity\Protein $interactorB = null)
+    {
+        $this->interactor_B = $interactorB;
+
+        return $this;
+    }
+
+    /**
+     * Get interactorB
+     *
+     * @return \AppBundle\Entity\Protein
+     */
+    public function getInteractorB()
+    {
+        return $this->interactor_B;
     }
 }

@@ -16,24 +16,30 @@
 	    <div class="navbar-header tor_ibin_header">
 	    	<img  alt="" src="../../../assets/images/tor_ibin_logo.png" class="logo left">
 	        <h5 class="nav-header">TOR-IBIN Admin</h5>
-	    </div>
-	    <ul class="nav navbar-nav">
-	      <li><a href="{{ path('home') }}">Home</a></li>
-	      <li class="active"><a href="{{ path('search') }}">Search</a></li>
-	      <li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
-	      <li><a href="{{ path('data_manager') }}">Data</a></li>
-	      <li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li> 
-	    </ul>
-	    <ul class="nav navbar-nav right">
-	      <li><a href="{{ path('user_logout') }}">Logout</a></li>
-	    </ul>
+		    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		    </button>
+		 </div>  
+		 <div id="myNavbar" class="collapse navbar-collapse">
+		    <ul class="nav navbar-nav ">
+		      <li><a href="{{ path('admin_home') }}">Home</a></li>
+		      <li class="active"><a href="{{ path('search') }}">Search</a></li>
+		      <li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+		      <li><a href="{{ path('data_manager') }}">Data</a></li>
+		      <li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li> 
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+			   <li><a href="{{ path('user_logout') }}">Logout</a></li>
+		    </ul>
+		 </div>
 	  </div>
 	  <div class="shadow"></div>
 	</nav>
 </header>
 <main>
-	<div class="container">
-		<div class="row">
+		<div class="row" style="background-color: #EEEEEE;" >
 			
 			
 				<div class="search_outer_panel">
@@ -42,31 +48,88 @@
 						<div class="row search_header">
 							<h4>Search</h4>
 						</div>
-						{{ form_start(form) }}	
-						<div class="row data_upload_content  search_panel">
-							<div class='hidden'>
-								{{ form_widget(form.naming_convention) }}
+						<div class="row search_content  search_panel">
+							<div class="col-sm-3" style="padding: 0;">
+								<ul class="nav nav-pills nav-stacked" style="margin: 0;">
+								  <li class="active"><a href="#">Protein Identifier</a></li>
+								  <li><a href="#">Protein Sequence</a></li>
+								  <li><a href="#">Organism</a></li>
+								</ul>
 							</div>
-							<div class="input-group input-group-lg">
-		
-									{{ form_widget(form.identifier) }}
-		
-								<span class="input-group-btn">
-					            	<button type="submit" class="btn btn-success" type="button" id="search_btn">Search</button>
-									<button class="btn btn-primary" type="button" id="advanced_btn">Advanced</button>
-							    </span>
+							<div class="col-sm-9">
+								{{ form_start(form) }}
+									<div class='hidden'>
+										{{ form_widget(form.naming_convention) }}
+									</div>
+									
+									<div class="row" style='width: 84%;  margin: 20px;'>
+										<h4 class="left">Identifier:</h4>
+										
+										<a href='#' class='string_example example_small right' onclick='
+											$("#identifier_identifier").val("TEX11");
+											$("#organism_select").val("1");
+										'>#3</a>
+										<a href='#' class='string_example example_small right' onclick='
+											$("#identifier_identifier").val("SPRY2");
+											$("#organism_select").val("1");
+										'>#2</a>								
+										<a href='#' class='string_example example_small right' onclick='
+											$("#identifier_identifier").val("Q5JRA6-2");
+											$("#organism_select").val("1");
+										'>#1</a>
+										
+										<p class="right">Examples:</p>
+									</div>
+									<div class="row" style='margin: 20px;'>
+										<div class="input-group input-group-sm"  >							
+											{{ form_widget(form.identifier) }}
+											<span class="input-group-btn">
+								            	<button type="submit" class="btn btn-success" type="button" id="search_btn">Search</button>
+										    </span>
+										</div>
+									</div>
+									<div class="row" style='margin: 20px;'>	
+										<h4>Organism:</h4>
+									</div>	
+									<div class="row" style='margin: 20px;'>
+										<div class="input-group input-group-sm">	
+											<select id="organism_select" class="form-control organism_select" style="width: 240px;">
+												<option value="">--</option>
+												{% for organism in organism_result_array %}
+											  		<option value="{{ organism.Id }}">{{ organism.ScientficName }} ({{ organism.CommonName }})</option>
+											  	{% endfor %}
+											</select>
+						
+										</div>
+									</div>
+									<div class="row" style='margin: 20px;'>	
+										<h4>Domain:</h4>
+									</div>	
+									<div class="row" style='margin: 20px;'>
+										<div class="input-group input-group-sm">	
+											<select id="organism_select" class="form-control organism_select" style="width: 240px;">
+												<option value="">--</option>
+												{% for organism in organism_result_array %}
+											  		<option value="{{ organism.Id }}">{{ organism.ScientficName }} ({{ organism.CommonName }})</option>
+											  	{% endfor %}
+											</select>
+						
+										</div>
+									</div>	
+									</div>
+								{{ form_end(form) }}
 							</div>
-		
 						</div>
-						{{ form_end(form) }}
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+
+	<div class="shadow"></div>
+
  
 </main>
-
+{% endblock %}
 {% block javascripts %}
 {{ tinymce_init() }}
 <script src="../../../assets/js/jquery-2.1.4.min.js"></script>
@@ -74,5 +137,4 @@
 <script src="../../../assets/js/bootstrap.min.js"></script>
 <script src="../../../assets/js/main.js"></script>
 <script src="../../../assets/js/search.js"></script>
-{% endblock %}
 {% endblock %}

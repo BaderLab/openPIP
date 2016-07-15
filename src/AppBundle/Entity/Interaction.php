@@ -31,6 +31,12 @@ class Interaction
     private $datasets;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Domain", inversedBy="interactions")
+     * @ORM\JoinColumn(name="domain", referencedColumnName="id")
+     */
+    protected $domain;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Protein", inversedBy="interactions")
      * @ORM\JoinColumn(name="interactor_A", referencedColumnName="id")
      */
@@ -52,7 +58,7 @@ class Interaction
     }
     
 	/**
-	 * @ORM\Column(type="integer", length=100, nullable=true)
+	 * @ORM\Column(type="float", length=100, nullable=true)
 	 */
 	protected $score;
 	
@@ -93,7 +99,7 @@ class Interaction
     /**
      * Get score
      *
-     * @return integer 
+     * @return double 
      */
     public function getScore()
     {
@@ -213,28 +219,6 @@ class Interaction
         return $this->datasets;
     }
 
-    /**
-     * Set domains
-     *
-     * @param \AppBundle\Entity\Domain $domains
-     * @return Interaction
-     */
-    public function setDomains(\AppBundle\Entity\Domain $domains = null)
-    {
-        $this->domains = $domains;
-
-        return $this;
-    }
-
-    /**
-     * Get domains
-     *
-     * @return \AppBundle\Entity\Domain 
-     */
-    public function getDomains()
-    {
-        return $this->domains;
-    }
 
     /**
      * Set interactorA
@@ -282,5 +266,29 @@ class Interaction
     public function getInteractorB()
     {
         return $this->interactor_B;
+    }
+
+    /**
+     * Set domain
+     *
+     * @param \AppBundle\Entity\Domain $domain
+     *
+     * @return Interaction
+     */
+    public function setDomain(\AppBundle\Entity\Domain $domain = null)
+    {
+        $this->domain = $domain;
+
+        return $this;
+    }
+
+    /**
+     * Get domain
+     *
+     * @return \AppBundle\Entity\Domain
+     */
+    public function getDomain()
+    {
+        return $this->domain;
     }
 }

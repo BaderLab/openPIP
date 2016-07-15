@@ -15,6 +15,7 @@ class SearchType extends AbstractType
 	{
 		$builder
 		->add('query')
+
 		;
 	}
 

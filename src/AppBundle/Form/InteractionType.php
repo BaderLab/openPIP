@@ -18,10 +18,10 @@ class InteractionType extends AbstractType
             ->add('score')
             ->add('binding_start')
             ->add('binding_end')
-            ->add('proteins')
             ->add('support_informations')
             ->add('datasets')
-            ->add('domains')
+            ->add('interactor_A')
+            ->add('interactor_B')
         ;
     }
     

@@ -11,3 +11,6 @@ oneup_uploader:
 user_logout:
    pattern:   /logout
    
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+   

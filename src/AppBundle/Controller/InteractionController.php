@@ -12,14 +12,14 @@ use AppBundle\Form\InteractionType;
 /**
  * Interaction controller.
  *
- * @Route("/admin/interaction")
+ * @Route("/interaction")
  */
 class InteractionController extends Controller
 {
     /**
      * Lists all Interaction entities.
      *
-     * @Route("/", name="admin_interaction_index")
+     * @Route("/", name="interaction_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -36,7 +36,7 @@ class InteractionController extends Controller
     /**
      * Creates a new Interaction entity.
      *
-     * @Route("/new", name="admin_interaction_new")
+     * @Route("/new", name="interaction_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -50,7 +50,7 @@ class InteractionController extends Controller
             $em->persist($interaction);
             $em->flush();
 
-            return $this->redirectToRoute('admin_interaction_show', array('id' => $interaction->getId()));
+            return $this->redirectToRoute('interaction_show', array('id' => $interaction->getId()));
         }
 
         return $this->render('interaction/new.html.twig', array(
@@ -62,7 +62,7 @@ class InteractionController extends Controller
     /**
      * Finds and displays a Interaction entity.
      *
-     * @Route("/{id}", name="admin_interaction_show")
+     * @Route("/{id}", name="interaction_show")
      * @Method("GET")
      */
     public function showAction(Interaction $interaction)
@@ -78,7 +78,7 @@ class InteractionController extends Controller
     /**
      * Displays a form to edit an existing Interaction entity.
      *
-     * @Route("/{id}/edit", name="admin_interaction_edit")
+     * @Route("/{id}/edit", name="interaction_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Interaction $interaction)
@@ -92,7 +92,7 @@ class InteractionController extends Controller
             $em->persist($interaction);
             $em->flush();
 
-            return $this->redirectToRoute('admin_interaction_edit', array('id' => $interaction->getId()));
+            return $this->redirectToRoute('interaction_edit', array('id' => $interaction->getId()));
         }
 
         return $this->render('interaction/edit.html.twig', array(
@@ -105,7 +105,7 @@ class InteractionController extends Controller
     /**
      * Deletes a Interaction entity.
      *
-     * @Route("/{id}", name="admin_interaction_delete")
+     * @Route("/{id}", name="interaction_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Interaction $interaction)
@@ -119,7 +119,7 @@ class InteractionController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('admin_interaction_index');
+        return $this->redirectToRoute('interaction_index');
     }
 
     /**
@@ -132,7 +132,7 @@ class InteractionController extends Controller
     private function createDeleteForm(Interaction $interaction)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('admin_interaction_delete', array('id' => $interaction->getId())))
+            ->setAction($this->generateUrl('interaction_delete', array('id' => $interaction->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;

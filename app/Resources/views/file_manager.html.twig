@@ -19,18 +19,26 @@
 	    <div class="navbar-header tor_ibin_header">
 	    	<img  alt="" src="../../../assets/images/tor_ibin_logo.png" class="logo left">
 	        <h5 class="nav-header">TOR-IBIN Admin</h5>
-	    </div>
-	    <ul class="nav navbar-nav">
-	      <li><a href="{{ path('home') }}">Home</a></li>
-	      <li><a href="{{ path('search') }}">Search</a></li>
-	      <li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
-	      <li><a href="{{ path('data_manager') }}">Data</a></li>
-	      <li class="active"><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>  
-	    </ul>
-	    <ul class="nav navbar-nav right">
-	      <li><a href="{{ path('user_logout') }}">Logout</a></li>
-	    </ul>
+		    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		    </button>
+		 </div>  
+		 <div id="myNavbar" class="collapse navbar-collapse">
+		    <ul class="nav navbar-nav ">
+		      <li><a href="{{ path('admin_home') }}">Home</a></li>
+		      <li><a href="{{ path('search') }}">Search</a></li>
+		      <li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+		      <li><a href="{{ path('data_manager') }}">Data</a></li>
+		      <li class="active"><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li> 
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+			   <li><a href="{{ path('user_logout') }}">Logout</a></li>
+		    </ul>
+		 </div>
 	  </div>
+	  <div class="shadow"></div>
 	</nav>
 </header>
 <main>

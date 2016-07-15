@@ -16,17 +16,17 @@
         <tbody>
         {% for interaction in interactions %}
             <tr>
-                <td><a href="{{ path('admin_interaction_show', { 'id': interaction.id }) }}">{{ interaction.id }}</a></td>
+                <td><a href="{{ path('interaction_show', { 'id': interaction.id }) }}">{{ interaction.id }}</a></td>
                 <td>{{ interaction.score }}</td>
                 <td>{{ interaction.bindingstart }}</td>
                 <td>{{ interaction.bindingend }}</td>
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('admin_interaction_show', { 'id': interaction.id }) }}">show</a>
+                            <a href="{{ path('interaction_show', { 'id': interaction.id }) }}">show</a>
                         </li>
                         <li>
-                            <a href="{{ path('admin_interaction_edit', { 'id': interaction.id }) }}">edit</a>
+                            <a href="{{ path('interaction_edit', { 'id': interaction.id }) }}">edit</a>
                         </li>
                     </ul>
                 </td>
@@ -37,7 +37,7 @@
 
     <ul>
         <li>
-            <a href="{{ path('admin_interaction_new') }}">Create a new entry</a>
+            <a href="{{ path('interaction_new') }}">Create a new entry</a>
         </li>
     </ul>
 {% endblock %}

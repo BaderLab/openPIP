@@ -19,14 +19,13 @@
     font-size: 16px;
     line-height: 1.6;
     font-weight: 700;
-    margin: 1.4%;
+    margin: 8px;
     cursor: default;
 }
 
 
 .data_upload_panel{
 	border: 1px solid #ccc;
-	width: 600px;
 	
 }
 

@@ -15,26 +15,32 @@
 	    <div class="navbar-header tor_ibin_header">
 	    	<img  alt="" src="../../../assets/images/tor_ibin_logo.png" class="logo left">
 	        <h5 class="nav-header">TOR-IBIN Admin</h5>
-	    </div>
-	    <ul class="nav navbar-nav">
-	      <li><a href="{{ path('home') }}">Home</a></li>
-	      <li><a href="{{ path('search') }}">Search</a></li>
-	      <li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
-	      <li class="active"><a href="{{ path('data_manager') }}">Data</a></li>
-	      <li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li> 
-	    </ul>
-	    <ul class="nav navbar-nav right">
-	      <li><a href="{{ path('user_logout') }}">Logout</a></li>
-	    </ul>
+		    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		    </button>
+		 </div>  
+		 <div id="myNavbar" class="collapse navbar-collapse">
+		    <ul class="nav navbar-nav ">
+		      <li><a href="{{ path('admin_home') }}">Home</a></li>
+		      <li><a href="{{ path('search') }}">Search</a></li>
+		      <li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+		      <li class="active"><a href="{{ path('data_manager') }}">Data</a></li>
+		      <li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li> 
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+			   <li><a href="{{ path('user_logout') }}">Logout</a></li>
+		    </ul>
+		 </div>
 	  </div>
+	  <div class="shadow"></div>
 	</nav>
 </header>
 <main>
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-6">
-			
-			    <div class="row">
+			<div class="col-md-8">
 					<div class="container data_upload_panel">
 						<div class="row">
 							<div class="data_upload_header">
@@ -73,31 +79,38 @@
 						                </button>										
 									</div>		
 								</div>		
-						{{ form_end(form) }}
-				     </div>
+							{{ form_end(form) }}
+					     </div>
+					</div>
 				</div>
-			</div>
-		</div>
-			{% if interactions_added > 0 %}
-					<div class="col-sm-6">			
-					    <div class="row">
+				<div class="col-md-4">
+					{% if interactions_added > 0 %}	    
 							<div class="container data_upload_panel">
 								<div class="row">
 									<div class="data_upload_header">
 										<h4 style='background-color: #ffd2a0;'>Upload File Stats</h4>
 									</div>
 								</div>	
-								<div class="row data_upload_content">		
-				  					 <h4>Interactions Added:</h4>
-									<p>{{ interactions_added }}</p>
-									</br>
-									<h4>New Proteins Added:</h4>
-									<p>{{ new_proteins_added }}</p>
-						     </div>
-						</div>
-					</div>
+			
+								<div class="row data_upload_content">
+									<div class="col-sm-12">
+										<div class="row">		
+											<p>Interactions Added: {{ interactions_added }}</p>
+										</div>
+										<div class="row">
+											<p>New Organisms Added: {{ new_organisms_added }}</p>
+										</div>
+										<div class="row">
+											<p>New Proteins Added: {{ new_proteins_added }}</p>
+										</div>
+										<div class="row">
+											<p>New Datasets Added: {{ new_datasets_added }}</p>
+										</div>
+							     	</div>
+							    </div>	
+							</div>
+					{% endif %}
 				</div>
-			{% endif %}
 		</div>	
 	</div>
 </main>			
