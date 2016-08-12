@@ -1,12 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-	<link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="../../../assets/css/blueimp-gallery.min.css">
-	<link rel="stylesheet" href="../../../../vendor/jqueryfileuploader/css/jquery.fileupload.css">
-	<link rel="stylesheet" href="../../../../vendor/jqueryfileuploader/css/jquery.fileupload-ui.css">
-	<link rel="stylesheet" href="../../../assets/css/main.css">
-	<link rel="stylesheet" href="../../../assets/css/file_upload.css">
+
+
+	<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('bundles/jqueryfileuploader/css/jquery.fileupload.css') }}">
+	<link rel="stylesheet" href="{{ asset('bundles/jqueryfileuploader/css/jquery.fileupload-ui.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/file_upload.css') }}">
 {% endblock %}
 
 {% block title %}TOR-IBIN | File{% endblock %}
@@ -17,7 +18,8 @@
 	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <div class="navbar-header tor_ibin_header">
-	    	<img  alt="" src="../../../assets/images/tor_ibin_logo.png" class="logo left">
+	    	<img  alt="" src="{{ asset('assets/images/tor_ibin_logo.png') }}" class="logo left">
+
 	        <h5 class="nav-header">TOR-IBIN Admin</h5>
 		    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
 		        <span class="icon-bar"></span>
@@ -99,23 +101,24 @@
 	</div>
 </main>
 {% endblock %}
+
 {% block javascripts %}
-	<script src="../../../assets/js/jquery-2.1.4.min.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/vendor/jquery.ui.widget.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/tmpl.min.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/load-image.all.min.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/canvas-to-blob.min.js"></script>
-	<script src="../../../assets/js/bootstrap.min.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/jquery.blueimp-gallery.min.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/jquery.iframe-transport.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/jquery.fileupload.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/jquery.fileupload-process.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/jquery.fileupload-image.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/jquery.fileupload-audio.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/jquery.fileupload-video.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/jquery.fileupload-validate.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/jquery.fileupload-ui.js"></script>
-	<script src="../../../../vendor/jqueryfileuploader/js/main.js"></script>	
+	<script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
+	<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/vendor/jquery.ui.widget.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/tmpl.min.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/load-image.all.min.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/canvas-to-blob.min.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/blueimp-gallery.min.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/jquery.iframe-transport.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/jquery.fileupload.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/jquery.fileupload-process.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/jquery.fileupload-image.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/jquery.fileupload-audio.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/jquery.fileupload-video.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/jquery.fileupload-validate.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/jquery.fileupload-ui.js') }}"></script>
+	<script src="{{ asset('bundles/jqueryfileuploader/js/main.js') }}"></script>	
 	{% verbatim %}
 		<script id="template-upload" type="text/x-tmpl">
 			{% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -147,35 +150,35 @@
 		</script>	
 		<!-- The template to display files available for download -->
 		<script id="template-download" type="text/x-tmpl">
-		{% for (var i=0, file; file=o.files[i]; i++) { %}
-		    <tr class="template-download fade">
-		        <td>
-		            <p class="name">
-		                {% if (file.url) { %}
-		                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
-		                {% } else { %}
-		                    <span>{%=file.name%}</span>
-		                {% } %}
-		            </p>
-		            {% if (file.error) { %}
-		                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
-		            {% } %}
-		        </td>
-		        <td>
-		            <span class="size">{%=o.formatFileSize(file.size)%}</span>
-		        </td>
-		        <td>
-		            {% if (file.deleteUrl) { %}
-
-		            {% } else { %}
-		                <button class="btn btn-warning cancel">
-		                    <i class="glyphicon glyphicon-ban-circle"></i>
-		                    <span>Cancel</span>
-		                </button>
-		            {% } %}
-		        </td>
-		    </tr>
-		{% } %}
+    		{% for (var i=0, file; file=o.files[i]; i++) { %}
+    		    <tr class="template-download fade">
+    		        <td>
+    		            <p class="name">
+    		                {% if (file.url) { %}
+    		                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+    		                {% } else { %}
+    		                    <span>{%=file.name%}</span>
+    		                {% } %}
+    		            </p>
+    		            {% if (file.error) { %}
+    		                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+    		            {% } %}
+    		        </td>
+    		        <td>
+    		            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+    		        </td>
+    		        <td>
+    		            {% if (file.deleteUrl) { %}
+    
+    		            {% } else { %}
+    		                <button class="btn btn-warning cancel">
+    		                    <i class="glyphicon glyphicon-ban-circle"></i>
+    		                    <span>Cancel</span>
+    		                </button>
+    		            {% } %}
+    		        </td>
+    		    </tr>
+    		{% } %}
 		</script>
 	{% endverbatim %}
 {% endblock %}

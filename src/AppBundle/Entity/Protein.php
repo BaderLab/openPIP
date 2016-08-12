@@ -23,7 +23,6 @@ class Protein
      * @var \Doctrine\Common\Collections\ArrayCollection|Organism[]
      * @ORM\ManyToMany(targetEntity="Organism", mappedBy="proteins")
      */
-
 	public $organisms;
 	
    /**
@@ -41,12 +40,18 @@ class Protein
      */
     public $interactions;
     
+    /**
+     * @ORM\OneToMany(targetEntity="External_Link", mappedBy="protein")
+     */
+    public $external_links;
+    
     
 	public function __construct() {
 		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->identifiers = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->organisms = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->external_links = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	/**
@@ -303,5 +308,39 @@ class Protein
     public function getIdentifiers()
     {
         return $this->identifiers;
+    }
+
+    /**
+     * Add externalLink
+     *
+     * @param \AppBundle\Entity\External_Link $externalLink
+     *
+     * @return Protein
+     */
+    public function addExternalLink(\AppBundle\Entity\External_Link $externalLink)
+    {
+        $this->external_links[] = $externalLink;
+
+        return $this;
+    }
+
+    /**
+     * Remove externalLink
+     *
+     * @param \AppBundle\Entity\External_Link $externalLink
+     */
+    public function removeExternalLink(\AppBundle\Entity\External_Link $externalLink)
+    {
+        $this->external_links->removeElement($externalLink);
+    }
+
+    /**
+     * Get externalLinks
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExternalLinks()
+    {
+        return $this->external_links;
     }
 }

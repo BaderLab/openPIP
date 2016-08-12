@@ -1,6 +1,5 @@
 <?php
 namespace AppBundle\Controller;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -8,56 +7,81 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Identifier;
 use AppBundle\Form\IdentifierType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use AppBundle\Entity\Protein;
 use AppBundle\Entity\Interaction;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
+use AppBundle\Form\ChoiceList\ArrayChoiceList;
 /**
  * Search controller.
- *
- * @Route("/admin/search")
+
  */
 class SearchController extends Controller
 {
-
 	/**
 	 * Search Home
 	 *
-	 * @Route("/", name="search")
+	 * @Route("/search/", name="search")
 	 * @Method({"GET", "POST"})
 	 */
 	public function searchAction(Request $request)
 	{
-		
-		$identifier = new Identifier();
-		$form = $this->createForm('AppBundle\Form\IdentifierType', $identifier);
-		$form->handleRequest($request);
-		
-		
+	    $em = $this->getDoctrine()->getManager();
+	    $query = $em->createQuery(
+	                    "SELECT o
+				FROM AppBundle:Organism o"
+	                    );
+	    	
+	    $organism_result_array = $query->getResult();
+	    $choice_array = array('--');
+	    foreach($organism_result_array as $organism_result){
+	        $name = $organism_result->getCommonName();
+	        $scientific_name = $organism_result->getScientficName();
+	        $taxid_id = $organism_result->getTaxidId();
+	        $choice_array[$taxid_id] = $scientific_name . ' (' . $name . ')';
+	    }
+    
+	    $defaultData = array('message' => 'Type your message here');
+        $form = $this->createFormBuilder($defaultData)
+            ->add('identifier', TextType::class)
+            ->add('organism_select', ChoiceType::class, array(
+                    'choices' => $choice_array,            
+                    'attr' => array('class' => 'form-control organism_select', 'style' => "width: 240px;")))
+            ->add('domain_select', ChoiceType::class, array(
+                    'choices' => array('--'),
+                    'attr' => array('class' => 'form-control domain_select', 'style' => "width: 240px;")))
+            ->getForm();
+        $form->handleRequest($request);
 
+		
+		
+		
+		if ($form->isSubmitted()) {
 
-		
-		
-		if ($form->isSubmitted() && $form->isValid()) {
-
-		
+		   
 			$search_query = $form["identifier"]->getData();
-			return $this->redirectToRoute('search_results', array('search_term' => $search_query));
+			$organism = $form["organism_select"]->getData();
+			$domain = $form["domain_select"]->getData();
+
+			
+			$option_array = array('search_term' => $search_query);
+			
+			if($organism){
+			    $option_array['organism'] = $organism;    
+			}
+			if($domain){
+			    $option_array['domain'] = $domain;
+			}
+			
+			return $this->redirectToRoute('search_results', $option_array);
 			
 		}
 		
-		$em = $this->getDoctrine()->getManager();
-		$query = $em->createQuery(
-				"SELECT o
-				FROM AppBundle:Organism o"
-				);
-					
-		$organism_result_array = $query->getResult();
-		
 
 		
 		
-
+		
 		return $this->render('search.html.twig', array(
 				'form' => $form->createView(),
 				'organism_result_array' => $organism_result_array,
@@ -70,7 +94,7 @@ class SearchController extends Controller
 	/**
 	 * Search Results
 	 *
-	 * @Route("/search_results/{search_term}", name="search_results")
+	 * @Route("/search_results/{search_term}", name="search_results", options={"expose": true})
 	 * @Method({"GET", "POST"})
 	 */
 	public function searchResultsAction($search_term)
@@ -78,8 +102,13 @@ class SearchController extends Controller
 	
 		$search_query = $search_term;
 			
-			
-			
+		$request = $this->getRequest();
+		$search_setting_organism = $request->query->get('organism');
+		$search_setting_domain = $request->query->get('domain');
+		$search_setting_score = $request->query->get('score');
+		$search_setting_max_interactions = $request->query->get('max_interactions');
+
+		//$domain = getDomainByType($search_setting_domain);	
 		
 		$identifier_repository = $this->getDoctrine()
 		->getRepository('AppBundle:Identifier');
@@ -96,19 +125,97 @@ class SearchController extends Controller
 			
 			
 			
-			
-		
+		/*
 		$em = $this->getDoctrine()->getManager();
+		
+		$query_sql = "SELECT i FROM AppBundle:Interaction i WHERE i.interactor_A = :interactor_A";
+		
+		
+		
+		if($search_setting_score){
+		    $query_builder->andWhere('i.score >= :score');
+		    $query_builder->setParameter('score', $search_setting_score);
+		}
+		
+		if($search_setting_max_interactions){
+		    $query_builder->setMaxResults($search_setting_max_interactions);
+		}
+		
+		
+		
+		
+		
+		
 		$query = $em->createQuery(
 				"SELECT i
 				FROM AppBundle:Interaction i
-				WHERE i.interactor_A = :interactor_A"
+				WHERE i.interactor_A = :interactor_A
+		        
+		        "
+
+		                
 				);
-		
+		$query->setMaxResults($search_setting_max_interactions); 
 		$query->setParameter('interactor_A', $protein_id);
+        
+		if($search_setting_score){
+		  $query->setParameter('score', $search_setting_score);
+		}else{
+		    $query->setParameter('score', 0);
+		}
+	   	
+		
 			
 		$interaction_result_array = $query->getResult();
 			
+		*/
+	
+		$repository = $this->getDoctrine()->getManager();
+		  //->getRepository('AppBundle:Interaction');
+		
+		$query_builder = $repository->createQueryBuilder('i');
+          $query_builder->select('i');
+          $query_builder->from('AppBundle:Interaction', 'i');
+          $query_builder->where('i.interactor_A = :interactor_A');
+          $query_builder->setParameter('interactor_A', $protein_id);
+          if($search_setting_score){
+              $query_builder->andWhere('i.score >= :score');
+              $query_builder->setParameter('score', $search_setting_score);
+          
+          }
+          
+          if($search_setting_max_interactions){
+              $query_builder->setMaxResults($search_setting_max_interactions);
+          }
+          
+           $query = $query_builder->getQuery();
+		      
+           $interaction_result_array = $query->getResult();
+		
+		
+		
+		/*
+		 if($search_setting_score){
+		    $query_builder->andWhere('i.score >= :score');
+		    $query_builder->setParameter('score', $search_setting_score);
+		}
+		
+		if($search_setting_max_interactions){
+		    $query_builder->setMaxResults($search_setting_max_interactions);
+		}
+		$query_builder->setParameter('interactor_A', $protein_id);
+		
+		$query = $query_builder->getQuery();
+		
+		$interaction_result_array = $query->getResult();
+		
+		*/
+		
+		
+		
+		
+		
+		
 		$interaction_array = array();
 			
 		$domain_array = array();
@@ -116,8 +223,10 @@ class SearchController extends Controller
 		$interacting_protein_nodes_array = array();
 		$edge_array = array();
 			
-		$domain_array[] = array($protein_name);
-			
+		$domain_array[] = ' ';
+		
+		$min_interaction_score = 1;
+
 		foreach($interaction_result_array as $interaction_result){
 		
 			$interaction_id = $interaction_result->getId();
@@ -127,8 +236,15 @@ class SearchController extends Controller
 			$binding_end = $interaction_result->getBindingEnd();
 			$score = $interaction_result->getScore();
 			$domain_id = $interaction_result->getDomain();
-		
-		
+
+			if($score < $min_interaction_score){
+   
+			    $min_interaction_score = $score;
+
+			}
+
+			
+			$em = $this->getDoctrine()->getManager();
 		
 		
 			$query = $em->createQuery(
@@ -158,23 +274,24 @@ class SearchController extends Controller
 		
 				if($domain){
 					$domain_name = $domain->getName();
+					$domain_type = $domain->getType();
 					$domain_id = $domain->getId();
-					$domain_array[] = array($domain_name);
+					$domain_array[] = $domain_name;
 						
 				}else{
 					$domain_id = $interactor_A_id;
-					$domain_name = $interactor_A_name;
+					$domain_name = $interactor_A_id . '_' . $interactor_A_name;
 						
 				}
 			}else{
 					
 				$domain_id = $interactor_A_id;
-				$domain_name = $interactor_A_name;
+				$domain_name = $interactor_A_id . '_' . $interactor_A_name;
 			}
 		
 		
 		
-			$protein_of_intrest_array[] = array($interactor_A_id, $interactor_A_name, $domain_id, $domain_name);
+			$protein_of_intrest_array[] = array($interactor_A_id, $interactor_A_name, $interactor_A_gene_name, $domain_id, $domain_name, $domain_type);
 		
 		
 		
@@ -197,10 +314,44 @@ class SearchController extends Controller
 			$interactor_B_gene_name = $_interactor_B->getGeneName();
 		
 			$interactor_B_name = $_interactor_B->getName();
+			
+			$interactor_B_sequence = $_interactor_B->getSequence();
 		
 			$interactor_B_id  = $_interactor_B->getId();
+			
+			
+
+			
+			
+			
+			
+			$query = $em->createQuery(
+					"SELECT l
+				FROM AppBundle:External_Link l
+				WHERE l.protein = :protein_id"
+					);
+			
+			$query->setParameter('protein_id', $interactor_B_id);
+			$interactor_B_external_link_array = $query->getResult();
+			
+			
+			$link = array();
+			foreach($interactor_B_external_link_array as $interactor_B_external_link){
+				
+				$interactor_B_link = array();
+				$interactor_B_link[] = $interactor_B_external_link->getLink();
+				$interactor_B_link[] = $interactor_B_external_link->getLinkId();
+				$interactor_B_link[] = $interactor_B_external_link->getDatabaseName();
+				$link[] = $interactor_B_link;
+
+			}
+			
+			
 		
-			$interacting_protein_nodes_array[] = array($interactor_B_id, $interactor_B_name);
+			$interacting_protein_nodes_array[] = array($interactor_B_id, $interactor_B_name, $link, $interactor_B_gene_name);
+			
+			
+			
 		
 		
 			$edge_array[] = array($domain_id, $domain_name, $interactor_B_id, $interactor_A_name, $interactor_B_name, $score);
@@ -253,41 +404,29 @@ class SearchController extends Controller
 			$interaction_array[] = $_interaction;
 		
 		
+			
+
 		
 		}
-			
-			
-		$json_domain = array('1', '3', '2');
-		$json_protein_of_intrest = array(array('4', 'FKBP4', '1', 'SH2'), array('4', 'FKBP4', '3', 'PWZ'), array('4', 'FKBP4', '2', 'SH3'));
-		$json_interacting_protein_nodes = array(array('4', 'FKBP4'), array('234', 'FAP'), array('310', 'ESR1'), array('341', 'SIRT1'), array('354', '02-Mar'), array('423', 'TXN2'), array('442', 'RIPK3'), array('511', 'CSNK2A1'), array('598', 'PDIA2'), array('640', 'AGO2'), array('657', 'GML'), array('736', 'RPL18A'), array('801', 'RPA3'), array('824', 'RLN1'), array('940', 'HSPA8'));
-		$json_edge = array(array('1', 'SH2', '4', 'FKBP4', 'FKBP4', 'binding', '190'), array('1', 'SH2', '234', 'FKBP4', 'FAP', 'catalysis', '190'), array('1', 'SH2', '310', 'FKBP4', 'ESR1', 'inhibition', '190'), array('1', 'SH2', '341', 'FKBP4', 'SIRT1', 'ptmod', '190'), array('3', 'PWZ', '354', 'FKBP4', '02-Mar', 'reaction', '190'), array('3', 'PWZ', '423', 'FKBP4', 'TXN2', 'activation', '190'), array('3', 'PWZ', '442', 'FKBP4', 'RIPK3', 'binding', '190'), array('3', 'PWZ', '511', 'FKBP4', 'CSNK2A1', 'catalysis', '190'), array('2', 'SH3', '598', 'FKBP4', 'PDIA2', 'inhibition', '190'), array('2', 'SH3', '640', 'FKBP4', 'AGO2', 'ptmod', '190'), array('1', 'SH2', '657', 'FKBP4', 'GML', 'reaction', '190'), array('2', 'SH3', '736', 'FKBP4', 'RPL18A', 'activation', '199'), array('2', 'SH3', '801', 'FKBP4', 'RPA3', 'binding', '199'), array('3', 'PWZ', '824', 'FKBP4', 'RLN1', 'catalysis', '199'), array('1', 'SH2', '940', 'FKBP4', 'HSPA8', 'reaction', '199'));
-			
-		$json0 = json_encode(array('domain' => $json_domain, 'protein_of_intrest' => $json_protein_of_intrest, 'interacting_protein_nodes' => $json_interacting_protein_nodes, 'edge' => $json_edge));
+
+		$domain_array = array_unique($domain_array);
 		
-			
-		$json1 = json_encode(array('domain' => $domain_array));
-		$json2 = json_encode(array('protein_of_intrest' => $protein_of_intrest_array));
+		$domain_array = array_values($domain_array);
+		//$domain_array = array_map("unserialize", array_unique(array_map("serialize", $domain_array)));
 		
-		$json3 = json_encode(array('interacting_protein_nodes' => $interacting_protein_nodes_array));
-			
-		$json4 = json_encode(array('edge' => $edge_array));
-		
-			
-			
-			
-		$handle = fopen("C:/Users/Miles/Desktop/test.txt", 'w');
-			
-			
-			
-		
+
+
 		$json = json_encode(array('domain' => $domain_array, 'protein_of_intrest' => $protein_of_intrest_array, 'interacting_protein_nodes' => $interacting_protein_nodes_array, 'edge' => $edge_array));
-			
-			
-		fwrite($handle, "$json");
+				
+
+		
+		
 			
 		return $this->render('search_result.html.twig', array(
 				'interaction_array' => $interaction_array,
 				'json' => $json,
+				'search_query' => $search_query,
+		        'min_interaction_score' => $min_interaction_score,
 		));
 	
 	}
@@ -298,7 +437,7 @@ class SearchController extends Controller
 	/**
 	 * Search Home
 	 *
-	 * @Route("/autocomplete/{search_term}", name="autocomplete_search")
+	 * @Route("/search/autocomplete/{search_term}", name="autocomplete_search")
 	 * @Method({"GET", "POST"})
 	 */
 	public function autocompleteAction($search_term)
@@ -308,8 +447,6 @@ class SearchController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$identifier_repository = $em->getRepository('AppBundle:Identifier');
 		
-
-
 		$query_builder = $identifier_repository->createQueryBuilder('i')
 		->where('i.identifier LIKE :identifier_keyword');
 			
@@ -332,31 +469,113 @@ class SearchController extends Controller
 		return $response;
 		
 	}
+
+
+	
+	
+	/**
+	 * Domain Sequence
+	 *
+	 * @Route("/domain_sequence/{search_term}", name="domain_sequence", options={"expose": true}))
+	 * @Method({"GET", "POST"})
+	 */
+	public function domain_sequenceAction($search_term)
+	{
+	
+	    $em = $this->getDoctrine()->getManager();
+	
+	
+	
+	
+	    $domain_repository = $this->getDoctrine()
+	    ->getRepository('AppBundle:Domain');
+	     
+	    
+	    
+	    
+	    
+	    $domain = $domain_repository->findOneByName($search_term);
+	    $domain_sequence = $domain->getSequence();
+	    $domain_type = $domain->getType();
+	    $domain_name = $domain->getName();
+
+	
+	    return $this->render('domain_sequence.html.twig', array(
+	            'domain_sequence' => $domain_sequence,
+	            'domain_type' => $domain_type,
+	            'domain_name' => $domain_name,
+	
+	    ));
+	}
+		
+	/**
+	 * Protein Sequence
+	 *
+	 * @Route("/protein_sequence/{search_term}", name="protein_sequence", options={"expose": true}))
+	 * @Method({"GET", "POST"})
+	 */
+	public function protein_sequenceAction($search_term)
+	{
+
+	    $identifier_repository = $this->getDoctrine()
+	    ->getRepository('AppBundle:Identifier');
+	    	
+	    $identifier = $identifier_repository->findOneByIdentifier($search_term);
+	    $identifier_identifier = $identifier->getIdentifier();
+	    $identifier_naming_convention = $identifier->getNamingConvention();
+	    $protein = $identifier->getProtein();
+	    $protein_gene_name = $protein->getGeneName();
+	    $protein_id = $protein->getId();
+	    $protein_name = $protein->getName();
+	    $protein_sequence = $protein->getSequence();
+	    $protein_description = $protein->getDescription();
+	
+	    return $this->render('protein_sequence.html.twig', array(
+	            'protein_sequence' => $protein_sequence,
+	            'gene_name' => $protein_gene_name,
+	
+	    ));
+	}
+	
+	
+	
 	
 	/**
 	 * Search Home
 	 *
-	 * @Route("/json", name="json_search")
+	 * @Route("/organmism_domain/{search_term}", name="organmism_domain", options={"expose": true}))
 	 * @Method({"GET", "POST"})
 	 */
-	public function jsonResponseAction($search_term)
+	public function organmismDomainAction($search_term)
 	{
-	
-	
-		$json_domain = array('1', '3', '2');
-		$json_protein_of_intrest = array(array('4', 'FKBP4', '1', 'SH2'), array('4', 'FKBP4', '3', 'PWZ'), array('4', 'FKBP4', '2', 'SH3'));
-		$json_interacting_protein_nodes = array(array('4', 'FKBP4'), array('234', 'FAP'), array('310', 'ESR1'), array('341', 'SIRT1'), array('354', '02-Mar'), array('423', 'TXN2'), array('442', 'RIPK3'), array('511', 'CSNK2A1'), array('598', 'PDIA2'), array('640', 'AGO2'), array('657', 'GML'), array('736', 'RPL18A'), array('801', 'RPA3'), array('824', 'RLN1'), array('940', 'HSPA8'));
-		$json_edges = array(array('1', 'SH2', '4', 'FKBP4', 'FKBP4', 'binding', '190'), array('1', 'SH2', '234', 'FKBP4', 'FAP', 'catalysis', '190'), array('1', 'SH2', '310', 'FKBP4', 'ESR1', 'inhibition', '190'), array('1', 'SH2', '341', 'FKBP4', 'SIRT1', 'ptmod', '190'), array('3', 'PWZ', '354', 'FKBP4', '02-Mar', 'reaction', '190'), array('3', 'PWZ', '423', 'FKBP4', 'TXN2', 'activation', '190'), array('3', 'PWZ', '442', 'FKBP4', 'RIPK3', 'binding', '190'), array('3', 'PWZ', '511', 'FKBP4', 'CSNK2A1', 'catalysis', '190'), array('2', 'SH3', '598', 'FKBP4', 'PDIA2', 'inhibition', '190'), array('2', 'SH3', '640', 'FKBP4', 'AGO2', 'ptmod', '190'), array('1', 'SH2', '657', 'FKBP4', 'GML', 'reaction', '190'), array('2', 'SH3', '736', 'FKBP4', 'RPL18A', 'activation', '199'), array('2', 'SH3', '801', 'FKBP4', 'RPA3', 'binding', '199'), array('3', 'PWZ', '824', 'FKBP4', 'RLN1', 'catalysis', '199'), array('1', 'SH2', '940', 'FKBP4', 'HSPA8', 'reaction', '199'));
-		
-		$json = json_encode(array('domain' => $json_domain, 'protein_of_intrest' => $json_protein_of_intrest, 'interacting_protein_nodes' => $json_interacting_protein_nodes, 'edges' => $json_edges));
 
-		$response = new JsonResponse();
-		$response->setData($json);
+	    $em = $this->getDoctrine()->getManager();
 
-		return $response;
-	
+	    $repository = $em->getRepository('AppBundle:Domain');
+	    $query = $repository->createQueryBuilder('d')
+	    ->innerJoin('d.organisms', 'o')
+	    ->where('o.taxid_id = :taxid_id')
+	    ->setParameter('taxid_id', $search_term)
+	    ->getQuery();
+	    $domain_result_array = $query->getResult();
+	    
+	    $type_array = array();
+	    foreach($domain_result_array as $domain_result){
+	        
+	       $type = $domain_result->getType();
+	       $type_array[] = $type;
+	       
+	       
+	    }
+	    $type_array = array_unique($type_array);
+	    $return_array = array();
+	    foreach($type_array as $type){
+	        $return_array[] = $type;
+	    }
+	    $response = new Response(json_encode($return_array));
+	    
+
+	    return $response;
 	}
-
 }
-
 ?>

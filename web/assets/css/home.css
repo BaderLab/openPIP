@@ -235,6 +235,25 @@ border-radius: 0;
 	line-height: 1.42857143;
 }
 
+.panel{
+	margin-top: 20px;
+	
+}
+
+.home_panel{
+	width: 94%;
+	background-color: #ffffff;
+	border: 1px solid #cccccc;
+	padding: 20px;
+	margin: 20px auto 20px;
+}
+
+.db_content {
+	
+	text-align: center;
+	
+}
+
 ::-webkit-scrollbar {
       width: 4px;
 }

@@ -18,20 +18,13 @@ class Support_Information
 	protected $id;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="Interaction" , inversedBy="support_informations")
-	 * @ORM\JoinTable(name="interaction_support_information",
-	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")
-	 *      	},
-	 *      inverseJoinColumns={
-	 *      		@ORM\JoinColumn(name="support_information_id", referencedColumnName="id")
-	 *      	}
-	 * 		)
+	 * @ORM\OneToMany(targetEntity="Interaction_Support_Information", mappedBy="support_information")
 	 */
-	private $interactions;
+	private $interaction_support_informations;
+	
 	
 	public function __construct() {
-		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->interaction_support_informations = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	
@@ -41,14 +34,10 @@ class Support_Information
 	protected $name;
 
 	/**
-	 * @ORM\Column(type="string", length=100)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $description;
 	
-	/**
-	 * @ORM\Column(type="string", length=100)
-	 */
-	protected $value;
 
     /**
      * Get id
@@ -106,59 +95,39 @@ class Support_Information
         return $this->description;
     }
 
+
+
     /**
-     * Set value
+     * Add interactionSupportInformation
      *
-     * @param string $value
+     * @param \AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation
+     *
      * @return Support_Information
      */
-    public function setValue($value)
+    public function addInteractionSupportInformation(\AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation)
     {
-        $this->value = $value;
+        $this->interaction_support_informations[] = $interactionSupportInformation;
 
         return $this;
     }
 
     /**
-     * Get value
+     * Remove interactionSupportInformation
      *
-     * @return string 
+     * @param \AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation
      */
-    public function getValue()
+    public function removeInteractionSupportInformation(\AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation)
     {
-        return $this->value;
+        $this->interaction_support_informations->removeElement($interactionSupportInformation);
     }
 
     /**
-     * Add interactions
+     * Get interactionSupportInformations
      *
-     * @param \AppBundle\Entity\Interaction $interactions
-     * @return Support_Information
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function addInteraction(\AppBundle\Entity\Interaction $interactions)
+    public function getInteractionSupportInformations()
     {
-        $this->interactions[] = $interactions;
-
-        return $this;
-    }
-
-    /**
-     * Remove interactions
-     *
-     * @param \AppBundle\Entity\Interaction $interactions
-     */
-    public function removeInteraction(\AppBundle\Entity\Interaction $interactions)
-    {
-        $this->interactions->removeElement($interactions);
-    }
-
-    /**
-     * Get interactions
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getInteractions()
-    {
-        return $this->interactions;
+        return $this->interaction_support_informations;
     }
 }

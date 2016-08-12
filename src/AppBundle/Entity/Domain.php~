@@ -38,7 +38,7 @@ class Domain
 
 		$this->data_files = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->organisms = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->proteins = new \Doctrine\Common\Collections\ArrayCollection();
+
 	}
 	
 	
@@ -310,4 +310,54 @@ class Domain
     {
         return $this->protein;
     }
+
+    /**
+     * Set startPosition
+     *
+     * @param string $startPosition
+     *
+     * @return Domain
+     */
+    public function setStartPosition($startPosition)
+    {
+        $this->start_position = $startPosition;
+
+        return $this;
+    }
+
+    /**
+     * Get startPosition
+     *
+     * @return string
+     */
+    public function getStartPosition()
+    {
+        return $this->start_position;
+    }
+
+    /**
+     * Set endPosition
+     *
+     * @param string $endPosition
+     *
+     * @return Domain
+     */
+    public function setEndPosition($endPosition)
+    {
+        $this->end_position = $endPosition;
+
+        return $this;
+    }
+
+    /**
+     * Get endPosition
+     *
+     * @return string
+     */
+    public function getEndPosition()
+    {
+        return $this->end_position;
+    }
+    
+
 }

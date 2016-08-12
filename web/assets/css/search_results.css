@@ -1,0 +1,31 @@
+@CHARSET "ISO-8859-1";
+
+.row{
+	
+	margin: 0px 0px 10px;
+}
+
+.network_row{
+	
+	margin: 0px 0px 0px;
+}
+
+.clear { clear: both; }
+
+.results_panel{
+
+	width: 76%;
+
+    margin: 10px auto 10px;
+    background-color: #FFFFFF;
+	margin: auto;
+}
+
+.tab-pane{
+		min-height: 400px;
+	width: 100%;
+	border: 1px solid #ccc;
+    background-color: #FFFFFF;
+    padding-top: 3%;
+}
+

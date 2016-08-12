@@ -16,7 +16,6 @@ class IdentifierType extends AbstractType
     {
         $builder
             ->add('identifier')
-            ->add('naming_convention')
         ;
     }
     

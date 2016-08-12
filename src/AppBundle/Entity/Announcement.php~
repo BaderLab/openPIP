@@ -1,0 +1,173 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="`announcement`")
+ */
+class Announcement
+{
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+
+	/**
+	 * 
+	 * @ORM\Column(name="`title`", type="string", length=100)
+	 */
+	protected $title;
+
+	/**
+	 * @ORM\Column(name="`text`", type="string", length=4000)
+	 */
+	protected $text;
+	
+	/**
+	 * @ORM\Column(name="`date`", type="datetime")
+	 */
+	protected $date;
+
+	/**
+	 * @ORM\Column(name="`show`", type="boolean")
+	 */
+	protected $show;
+
+
+	/**
+	 * @ORM\Column(name="`show_on_home_page`", type="boolean")
+	 */
+	protected $show_on_home_page;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Announcement
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return Announcement
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set show
+     *
+     * @param boolean $show
+     * @return Announcement
+     */
+    public function setShow($show)
+    {
+        $this->show = $show;
+
+        return $this;
+    }
+
+    /**
+     * Get show
+     *
+     * @return boolean 
+     */
+    public function getShow()
+    {
+        return $this->show;
+    }
+
+    /**
+     * Set show_on_home_page
+     *
+     * @param boolean $showOnHomePage
+     * @return Announcement
+     */
+    public function setShowOnHomePage($showOnHomePage)
+    {
+        $this->show_on_home_page = $showOnHomePage;
+
+        return $this;
+    }
+
+    /**
+     * Get show_on_home_page
+     *
+     * @return boolean 
+     */
+    public function getShowOnHomePage()
+    {
+        return $this->show_on_home_page;
+    }
+
+    /**
+     * Set text
+     *
+     * @param string $text
+     * @return Announcement
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+
+    /**
+     * Get text
+     *
+     * @return string 
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+}

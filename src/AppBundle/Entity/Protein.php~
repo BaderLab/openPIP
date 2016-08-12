@@ -19,17 +19,11 @@ class Protein
 	
 
 	
-	/**
-	 * @ORM\ManyToMany(targetEntity="Organism" , inversedBy="proteins")
-	 * @ORM\JoinTable(name="organism_protein",
-	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="organism_id", referencedColumnName="id")
-	 *      	},
-	 *      inverseJoinColumns={
-	 *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
-	 *      	}
-	 * 		)
-	 */
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection|Organism[]
+     * @ORM\ManyToMany(targetEntity="Organism", mappedBy="proteins")
+     */
+
 	public $organisms;
 	
    /**
@@ -47,12 +41,18 @@ class Protein
      */
     public $interactions;
     
+    /**
+     * @ORM\OneToMany(targetEntity="External_Link", mappedBy="protein")
+     */
+    public $external_links;
+    
     
 	public function __construct() {
 		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->identifiers = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->organisms = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->external_links = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	/**

@@ -33,7 +33,7 @@ security:
             
             logout:
                 path:   /logout
-                target: /login
+                target: /home
             anonymous:    true
             # activate different ways to authenticate
             # http_basic: ~

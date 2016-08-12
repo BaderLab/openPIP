@@ -73,11 +73,6 @@ h3 {
 	margin: auto;
 }
 
-#network{
-	
-	margin: auto;
-	width: 90%;
-}
 
 .table-network{
 	
@@ -105,8 +100,7 @@ h3 {
 	
 	width: 100%;
 	height: 260px;
-	padding-top: 1%;
-	padding-left: 4%;
+	padding-top: 2%;
 
 
 }
@@ -220,20 +214,58 @@ li {
     display: block;
 }
 
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active {
+
+	color: #337ab7;
+    background-color: #dddddd;
+    
+	
+	
+	
+}
+
+.pill{
+	
+	margin: 20px;
+	font-weight: bold;
+	font-size: 140%;
+	border: 1px solid #ccc;
+	color: #5cb85c;
+	background-color: #eeeeee;
+}
 
 .data_settings{
 	
-	height: 200px;
-	width: 600px;
-	margin: auto;
+
 }
 
 #cy {
-    height: 500px;
+    height: 600px;
     width: 80%;
     left: 0;
     top: 0;
     border: 1px solid #ccc;
     margin: 20px auto 20px;
     background-color: #FFFFFF;
+}
+
+.results_panel{
+	
+	min-height: 400px;
+    width: 76%;
+
+}
+
+.footable-filtering {
+	display:none;
+}
+
+
+
+.ui-slider .ui-slider-handle {
+    height: 20px;
+    width: 40px;
+    padding-left: 5px; 
+    color: #f6931f;
+    font-weight: bold;
 }

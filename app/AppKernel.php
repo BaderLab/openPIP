@@ -5,6 +5,8 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends Kernel
 {
+
+	
 	public function __construct($environment, $debug)
 	{
 		date_default_timezone_set('Canada/Eastern');
@@ -13,6 +15,8 @@ class AppKernel extends Kernel
 	
     public function registerBundles()
     {
+    	
+    	
         $bundles = array(
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
@@ -23,10 +27,11 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
         	new FOS\UserBundle\FOSUserBundle(),
+        	new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
         	new Symfony\Bundle\AsseticBundle\AsseticBundle(),
         	new Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle(),
         	new Oneup\UploaderBundle\OneupUploaderBundle(),
-        	new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+        		
 
         );
 

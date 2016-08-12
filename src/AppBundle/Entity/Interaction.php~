@@ -17,12 +17,11 @@ class Interaction
 	 */
 	protected $id;
 
-
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection|Support_Information[]
-     * @ORM\ManyToMany(targetEntity="Support_Information", mappedBy="interactions")
-     */
-    private $support_informations;
+	/**
+	 * @ORM\OneToMany(targetEntity="Interaction_Support_Information", mappedBy="interaction")
+	 */
+	private $interaction_support_informations;
+	
     
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection|Dataset[]
@@ -52,13 +51,13 @@ class Interaction
     
     public function __construct()
     {
-    	$this->support_informations = new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->interaction_support_informations = new \Doctrine\Common\Collections\ArrayCollection();
     	$this->datasets = new \Doctrine\Common\Collections\ArrayCollection();
 
     }
     
 	/**
-	 * @ORM\Column(type="integer", length=100, nullable=true)
+	 * @ORM\Column(type="float", length=100, nullable=true)
 	 */
 	protected $score;
 	
@@ -99,7 +98,7 @@ class Interaction
     /**
      * Get score
      *
-     * @return integer 
+     * @return double 
      */
     public function getScore()
     {
@@ -219,28 +218,6 @@ class Interaction
         return $this->datasets;
     }
 
-    /**
-     * Set domains
-     *
-     * @param \AppBundle\Entity\Domain $domains
-     * @return Interaction
-     */
-    public function setDomains(\AppBundle\Entity\Domain $domains = null)
-    {
-        $this->domains = $domains;
-
-        return $this;
-    }
-
-    /**
-     * Get domains
-     *
-     * @return \AppBundle\Entity\Domain 
-     */
-    public function getDomains()
-    {
-        return $this->domains;
-    }
 
     /**
      * Set interactorA
@@ -288,5 +265,29 @@ class Interaction
     public function getInteractorB()
     {
         return $this->interactor_B;
+    }
+
+    /**
+     * Set domain
+     *
+     * @param \AppBundle\Entity\Domain $domain
+     *
+     * @return Interaction
+     */
+    public function setDomain(\AppBundle\Entity\Domain $domain = null)
+    {
+        $this->domain = $domain;
+
+        return $this;
+    }
+
+    /**
+     * Get domain
+     *
+     * @return \AppBundle\Entity\Domain
+     */
+    public function getDomain()
+    {
+        return $this->domain;
     }
 }

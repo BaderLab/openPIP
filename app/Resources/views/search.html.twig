@@ -1,140 +1,171 @@
-{% extends 'base.html.twig' %}
-
-{% block stylesheets %}
-	<link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="../../../assets/css/jquery-ui.min.css">
-	<link rel="stylesheet" href="../../../assets/css/main.css">
-	<link rel="stylesheet" href="../../../assets/css/search.css">
-{% endblock %}
-
-{% block title %}TOR-IBIN | Search{% endblock %}
-
-{% block content %}
+{% extends 'base.html.twig' %} {% block stylesheets %}
+<link rel="stylesheet"
+	href="{{ asset('assets/css/bootstrap.min.css') }}">
+<link rel="stylesheet"
+	href="{{ asset('assets/css/jquery-ui.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/search.css') }}">
+{% endblock %} {% block title %}TOR-IBIN | Search{% endblock %} {% block
+content %}
 <header>
 	<nav class="navbar navbar-default">
-	  <div class="container-fluid">
-	    <div class="navbar-header tor_ibin_header">
-	    	<img  alt="" src="../../../assets/images/tor_ibin_logo.png" class="logo left">
-	        <h5 class="nav-header">TOR-IBIN Admin</h5>
-		    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-		        <span class="icon-bar"></span>
-		        <span class="icon-bar"></span>
-		        <span class="icon-bar"></span>
-		    </button>
-		 </div>  
-		 <div id="myNavbar" class="collapse navbar-collapse">
-		    <ul class="nav navbar-nav ">
-		      <li><a href="{{ path('admin_home') }}">Home</a></li>
-		      <li class="active"><a href="{{ path('search') }}">Search</a></li>
-		      <li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
-		      <li><a href="{{ path('data_manager') }}">Data</a></li>
-		      <li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li> 
-			</ul>
-			<ul class="nav navbar-nav navbar-right">
-			   <li><a href="{{ path('user_logout') }}">Logout</a></li>
-		    </ul>
-		 </div>
-	  </div>
-	  <div class="shadow"></div>
+		<div class="container-fluid">
+			<div class="navbar-header tor_ibin_header">
+				<img alt="" src="{{ asset('assets/images/tor_ibin_logo.png') }}"
+					class="logo left">
+				<h5 class="nav-header">TOR-IBIN</h5>
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#myNavbar">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="myNavbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav ">
+					<li><a href="{{ path('home') }}">Home</a></li>
+					<li class="active"><a href="{{ path('search') }}">Search</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+    			   <li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+    		    </ul>
+			</div>
+		</div>
+		<div class="shadow"></div>
 	</nav>
 </header>
 <main>
-		<div class="row" style="background-color: #EEEEEE;" >
-			
-			
-				<div class="search_outer_panel">
-					<div class="search_inner_panel">
-					<div class="container">
-						<div class="row search_header">
-							<h4>Search</h4>
-						</div>
-						<div class="row search_content  search_panel">
-							<div class="col-sm-3" style="padding: 0;">
-								<ul class="nav nav-pills nav-stacked" style="margin: 0;">
-								  <li class="active"><a href="#">Protein Identifier</a></li>
-								  <li><a href="#">Protein Sequence</a></li>
-								  <li><a href="#">Organism</a></li>
-								</ul>
-							</div>
-							<div class="col-sm-9">
-								{{ form_start(form) }}
-									<div class='hidden'>
-										{{ form_widget(form.naming_convention) }}
-									</div>
-									
-									<div class="row" style='width: 84%;  margin: 20px;'>
-										<h4 class="left">Identifier:</h4>
-										
-										<a href='#' class='string_example example_small right' onclick='
-											$("#identifier_identifier").val("TEX11");
-											$("#organism_select").val("1");
-										'>#3</a>
-										<a href='#' class='string_example example_small right' onclick='
-											$("#identifier_identifier").val("SPRY2");
-											$("#organism_select").val("1");
-										'>#2</a>								
-										<a href='#' class='string_example example_small right' onclick='
-											$("#identifier_identifier").val("Q5JRA6-2");
-											$("#organism_select").val("1");
+<div class="row" style="background-color: #EEEEEE;">
+
+
+	<div class="search_outer_panel">
+		<div class="search_inner_panel">
+			<div class="container">
+				<div class="row search_header">
+					<h4>Search</h4>
+				</div>
+				<div class="row search_content  search_panel">
+					<div class="col-sm-2"></div>
+					<div class="col-sm-8">
+						{{ form_start(form) }}
+
+
+						<div class="row" style='width: 84%; margin: 20px;'>
+							<h4 class="left">Identifier:</h4>
+
+							<a href='#' class='string_example example_small right'
+								onclick='
+											$("#form_identifier").val("Q5JRA6-2");
+											$("#form_organism_select").val("9606").trigger("change");
+										'>#3</a> <a href='#'
+								class='string_example example_small right'
+								onclick='
+											$("#form_identifier").val("Q5JS98");
+											$("#form_organism_select").val("9606").trigger("change");
+										'>#2</a> <a href='#'
+								class='string_example example_small right'
+								onclick='
+											$("#form_identifier").val("Q5SQN1");
+											$("#form_organism_select").val("9606").trigger("change");
 										'>#1</a>
-										
-										<p class="right">Examples:</p>
-									</div>
-									<div class="row" style='margin: 20px;'>
-										<div class="input-group input-group-sm"  >							
-											{{ form_widget(form.identifier) }}
-											<span class="input-group-btn">
-								            	<button type="submit" class="btn btn-success" type="button" id="search_btn">Search</button>
-										    </span>
-										</div>
-									</div>
-									<div class="row" style='margin: 20px;'>	
-										<h4>Organism:</h4>
-									</div>	
-									<div class="row" style='margin: 20px;'>
-										<div class="input-group input-group-sm">	
-											<select id="organism_select" class="form-control organism_select" style="width: 240px;">
-												<option value="">--</option>
-												{% for organism in organism_result_array %}
-											  		<option value="{{ organism.Id }}">{{ organism.ScientficName }} ({{ organism.CommonName }})</option>
-											  	{% endfor %}
-											</select>
-						
-										</div>
-									</div>
-									<div class="row" style='margin: 20px;'>	
-										<h4>Domain:</h4>
-									</div>	
-									<div class="row" style='margin: 20px;'>
-										<div class="input-group input-group-sm">	
-											<select id="organism_select" class="form-control organism_select" style="width: 240px;">
-												<option value="">--</option>
-												{% for organism in organism_result_array %}
-											  		<option value="{{ organism.Id }}">{{ organism.ScientficName }} ({{ organism.CommonName }})</option>
-											  	{% endfor %}
-											</select>
-						
-										</div>
-									</div>	
-									</div>
-								{{ form_end(form) }}
+
+							<p class="right">Examples:</p>
+						</div>
+						<div class="row" style='margin: 20px;'>
+							<div class="input-group input-group-sm">
+								{{ form_widget(form.identifier) }} 
+								<span class="input-group-btn">
+									<button type="submit" class="btn btn-success" type="button" id="search_btn">
+										Search
+									</button>
+								</span>
+							</div>
+						</div>
+						<div class="row" style='margin: 20px;'>
+							<h4>Organism:</h4>
+						</div>
+						<div class="row" style='margin: 20px;'>
+							<div class="input-group input-group-sm">
+                                {{ form_widget(form.organism_select) }} 
+							</div>
+						</div>
+						<div class="row" style='margin: 20px;'>
+							<h4>Domain:</h4>
+						</div>
+						<div class="row" style='margin: 20px;'>
+							<div id="test"></div>
+						</div>
+						<div class="row" style='margin: 20px;'>
+							<div class="input-group input-group-sm">
+                                {{ form_widget(form.domain_select) }} 
 							</div>
 						</div>
 					</div>
+					{{ form_end(form) }}
 				</div>
 			</div>
 		</div>
+	</div>
+</div>
+</div>
 
-	<div class="shadow"></div>
+<div class="shadow"></div>
 
- 
+
 </main>
-{% endblock %}
+{% endblock %} 
+
 {% block javascripts %}
-{{ tinymce_init() }}
-<script src="../../../assets/js/jquery-2.1.4.min.js"></script>
-<script src="../../../assets/js/jquery-ui.min.js"></script>
-<script src="../../../assets/js/bootstrap.min.js"></script>
-<script src="../../../assets/js/main.js"></script>
-<script src="../../../assets/js/search.js"></script>
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script	src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+<script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>
+<script src="{{ asset('assets/js/search.js') }}"></script>
+
+<script>
+$(function() {
+	
+
+	
+	$("#form_identifier").autocomplete({
+		source: function(request, response){
+			url = 'http://beta.baderlab.org/web/app.php/admin/search/autocomplete/' + request.term;
+			
+
+			$.getJSON(url, function(data){
+				response(data);
+			});
+		},
+		minLength: 2,
+	});
+	
+	$("#form_organism_select").on( "change", function() {
+
+		var searchTerm = $("#form_organism_select").val();
+		var targetUrl = Routing.generate('organmism_domain', { search_term: searchTerm });
+	    $.ajax({url: targetUrl, success: function(results){
+	    	var results_array = $.parseJSON(results);
+	    	$('.domain_option').remove();
+	    	for (i=0;i<results_array.length;i++){
+
+	    		var domainOption = '<option class="domain_option" value="' + results_array[i] + '">' + results_array[i] + '</option>';
+
+	    		
+	    		$('#form_domain_select').append(domainOption);
+	    		$('#form_domain_select').on('change', function () {
+                    if ($( "select[id$=_role] option:selected").val() === 'new') {
+                            $('#new_role').modal('show');
+                    }
+            	});
+		    }
+
+	    	
+	    }});
+	});
+	
+});
+
+</script>
+
 {% endblock %}

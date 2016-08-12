@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block stylesheets %}
-	<link rel="stylesheet" href="../../../assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="../../../assets/css/main.css">
-	<link rel="stylesheet" href="../../../assets/css/data_upload.css">
+	<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/data_upload.css') }}">
 {% endblock %}
 
 {% block title %}TOR-IBIN | Data{% endblock %}
@@ -13,7 +13,7 @@
 	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <div class="navbar-header tor_ibin_header">
-	    	<img  alt="" src="../../../assets/images/tor_ibin_logo.png" class="logo left">
+	    	<img  alt="" src="{{ asset('assets/images/tor_ibin_logo.png') }}" class="logo left">
 	        <h5 class="nav-header">TOR-IBIN Admin</h5>
 		    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
 		        <span class="icon-bar"></span>
@@ -49,7 +49,7 @@
 						</div>	
 						<div class="row data_upload_content">		
 		                	{{ form_start(form) }}
-							    <div class="col-sm-6">
+							    <div class="col-sm-4">
 									<div class="row">
 										<input id="uploadFile" disabled="disabled" />
 									</div>
@@ -117,7 +117,8 @@
 {% endblock %}
 {% block javascripts %}
 
-<script src="../../../assets/js/jquery-2.1.4.min.js"></script>
-<script src="../../../assets/js/bootstrap.min.js"></script>
-<script src="../../../assets/js/main.js"></script>
+<script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>
+<script src="{{ asset('assets/js/data_manager.js') }}"></script>
 {% endblock %}

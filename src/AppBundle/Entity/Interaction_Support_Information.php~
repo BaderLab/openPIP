@@ -1,0 +1,48 @@
+<?php
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="`support_information`")
+ */
+class Interaction_Support_Information
+{
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Interaction", inversedBy="interaction_support_informations")
+     * @ORM\JoinColumn(name="protein_id", referencedColumnName="id")
+     */
+	protected $interaction;
+	
+	/**
+	 * @ORM\ManyToOne(targetEntity="Support_Information", inversedBy="interaction_support_informations")
+	 * @ORM\JoinColumn(name="protein_id", referencedColumnName="id")
+	 */
+	protected $support_information;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="Interaction", mappedBy="domain")
+	 */
+
+	
+	
+	public function __construct() {
+		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
+	}
+	
+	
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $value;
+}
+?>

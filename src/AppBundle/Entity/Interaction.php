@@ -17,12 +17,11 @@ class Interaction
 	 */
 	protected $id;
 
-
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection|Support_Information[]
-     * @ORM\ManyToMany(targetEntity="Support_Information", mappedBy="interactions")
-     */
-    private $support_informations;
+	/**
+	 * @ORM\OneToMany(targetEntity="Interaction_Support_Information", mappedBy="interaction")
+	 */
+	private $interaction_support_informations;
+	
     
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection|Dataset[]
@@ -52,7 +51,7 @@ class Interaction
     
     public function __construct()
     {
-    	$this->support_informations = new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->interaction_support_informations = new \Doctrine\Common\Collections\ArrayCollection();
     	$this->datasets = new \Doctrine\Common\Collections\ArrayCollection();
 
     }
@@ -290,5 +289,39 @@ class Interaction
     public function getDomain()
     {
         return $this->domain;
+    }
+
+    /**
+     * Add interactionSupportInformation
+     *
+     * @param \AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation
+     *
+     * @return Interaction
+     */
+    public function addInteractionSupportInformation(\AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation)
+    {
+        $this->interaction_support_informations[] = $interactionSupportInformation;
+
+        return $this;
+    }
+
+    /**
+     * Remove interactionSupportInformation
+     *
+     * @param \AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation
+     */
+    public function removeInteractionSupportInformation(\AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation)
+    {
+        $this->interaction_support_informations->removeElement($interactionSupportInformation);
+    }
+
+    /**
+     * Get interactionSupportInformations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInteractionSupportInformations()
+    {
+        return $this->interaction_support_informations;
     }
 }
