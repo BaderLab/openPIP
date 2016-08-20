@@ -1,37 +1,38 @@
 {% extends 'base.html.twig' %} {% block stylesheets %}
 <link rel="stylesheet" type="text/css"
-	href="{{ asset('assets/css/bootstrap.min.css') }}" />	
+	href="{{ asset('assets/css/bootstrap.min.css') }}" />
 <link rel="stylesheet" type="text/css"
-	href="{{ asset('bundles/footable/css/footable.core.css') }}" />	
+	href="{{ asset('bundles/footable/css/footable.core.css') }}" />
 <link rel="stylesheet" type="text/css"
-	href="{{ asset('bundles/footable/demos/css/footable-demos.css') }}" />	
+	href="{{ asset('bundles/footable/demos/css/footable-demos.css') }}" />
 <link rel="stylesheet" type="text/css"
-	href="{{ asset('assets/css/jquery.qtip.css') }}" />	
+	href="{{ asset('assets/css/jquery.qtip.css') }}" />
 <link rel="stylesheet" type="text/css"
-	href="{{ asset('assets/css/jquery-ui.min.css') }}">	
+	href="{{ asset('assets/css/jquery-ui.min.css') }}">
 <link rel="stylesheet" type="text/css"
-	href="{{ asset('bundles/spectrum/spectrum.css') }}" />	
+	href="{{ asset('bundles/spectrum/spectrum.css') }}" />
 <link rel="stylesheet" type="text/css"
-	href="{{ asset('assets/css/awesome-bootstrap-checkbox.css') }}" />	
+	href="{{ asset('assets/css/awesome-bootstrap-checkbox.css') }}" />
 <link rel="stylesheet" type="text/css"
-	href="{{ asset('assets/css/main.css') }}" />	
+	href="{{ asset('assets/css/main.css') }}" />
 <link rel="stylesheet" type="text/css"
-	href="{{ asset('assets/css/search.css') }}" />	
+	href="{{ asset('assets/css/search.css') }}" />
 <link rel="stylesheet" type="text/css"
 	href="{{ asset('assets/css/search_results.css') }}" />
 <link rel='shortcut icon'
 	href='{{ asset('assets/images/tor_ibin_icon.ico') }}' />
-	
-	
-{% endblock %} {% block title %}TOR-IBIN | Results{% endblock %} {%
-block content %}
+
+
+{% endblock %} {% block title %}{{ short_title }} | Results{% endblock
+%} {% block content %}
 <header>
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header tor_ibin_header">
 				<img alt="" src="{{ asset('assets/images/tor_ibin_logo.png') }}"
 					class="logo left">
-				<h5 class="nav-header">TOR-IBIN Admin</h5>
+				<h5 class="nav-header" style="color: {{ color_scheme }}">{{
+					short_title }} Admin</h5>
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
 					data-target="#myNavbar">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
@@ -46,6 +47,7 @@ block content %}
 					<li><a href="{{ path('data_manager') }}">Data</a></li>
 					<li><a
 						href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="{{ path('user_logout') }}">Logout</a></li>
@@ -64,281 +66,324 @@ block content %}
 <div class="row">
 	<div class="shadow"></div>
 	<div class="row">
-		<ul class="nav nav-pills" style="margin: auto; width: 60%;">
-			<li class="active pill"><a data-toggle="pill" href="#network">Network</a></li>
-			<li class="pill"><a data-toggle="pill" href="#downloads">Downloads</a></li>
-			<li class="pill"><a data-toggle="pill" href="#view_settings">View
-					Settings</a></li>
-			<li class="pill"><a data-toggle="pill" href="#data_settings">Data
-					Settings</a></li>
-			<li class="pill"><a data-toggle="pill" href="#stats">Stats</a></li>
+		<ul class="nav nav-pills" style="margin: auto; width: 50%;">
+			<li class="active pill"><a data-toggle="pill" href="#search_summary"
+				style="color: {{ color_scheme }}">Search Summary</a></li>
+			<li class="pill"><a data-toggle="pill" href="#network"
+				style="color: {{ color_scheme }}">Network</a></li>
+			<li class="pill"><a data-toggle="pill" href="#downloads"
+				style="color: {{ color_scheme }}">Downloads</a></li>
+			<li class="pill"><a data-toggle="pill" href="#view_settings"
+				style="color: {{ color_scheme }}">View Settings</a></li>
+			<li class="pill"><a data-toggle="pill" href="#data_settings"
+				style="color: {{ color_scheme }}">Data Settings</a></li>
 		</ul>
 	</div>
 	<div class="row">
 		<div class="results_panel">
 			<div class="tab-content" style="padding-top: 0;">
-				<div id="network" class="tab-pane fade in active">
+				<div id="search_summary" class="tab-pane fade in active">
+					<div class="search_summary">
+						<div class="container">
+							<div class="row">
+								<div class="col-sm-4">
+									<div class="row">
+										<h3 style="color: {{ color_scheme }}">Search Query</h3>
+									</div>
+									<div class="row">{{ search_query }}</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="row">
+										<h3 style="color: {{ color_scheme }}">Parameters</h3>
+									</div>
+									<div class="row">Organism: {{ search_setting_organism }}</div>
+									<div class="row">Domain: {{ search_setting_domain }}</div>
+									<div class="row">Max Number of interactions: {{
+										search_setting_max_interactions }}</div>
+									<div class="row">Minimum Interaction Score: {{
+										parameter_min_interaction_score }}</div>
 
-					<div class="container">
-						<div class="row">
-							<h3>Interactions</h3>
-						</div>
-						<div class="row">
-							<div class="col-sm-8">
-								<div class="input-group input-group-sm">
-
-									<lable for="change-page-size">Page Size:</lable>
-									<select id="change-page-size">
-										<option value="2">2</option>
-										<option value="3">3</option>
-										<option value="5">5</option>
-										<option value="10" selected>10</option>
-									</select>
+								</div>
+								<div class="col-sm-4">
+									<div class="row">
+										<h3 style="color: {{ color_scheme }}">Stats</h3>
+									</div>
+									<div class="row">Number of interactions: {{
+										number_of_interactions }}</div>
+									<div class="row">Number of Domains: {{ domain_count }}</div>
 								</div>
 							</div>
-							<div class="col-sm-4">
-								<input type="text" id="filter" placeholder="Search" />
-							</div>
 						</div>
-						{% if interaction_array|length > 0 %}
-						<table id="search_result_table" class="footable table"
-							data-filter="#filter" data-filtering="true"
-							data-filter-minimum="3">
-							<thead>
-								<tr>
-									<th>Interactor A Id</th>
-									<th>Interactor A Gene Name</th>
-									<th>Interactor B Id</th>
-									<th>Interactor B Gene Name</th>
-									<th>Score</th>
-									<th>Binding Start</th>
-									<th>Binding End</th>
-								</tr>
-							</thead>
-							<tbody>
-
-								{% for interaction in interaction_array %}
-								<tr>
-									<td>{{ interaction.interactor_A_id }}</td>
-									<td>{{ interaction.interactor_A_gene_name }}</td>
-									<td>{{ interaction.interactor_B_id }}</td>
-									<td>{{ interaction.interactor_B_gene_name }}</td>
-									<td>{{ interaction.score }}</td>
-									<td>{{ interaction.binding_start }}</td>
-									<td>{{ interaction.binding_end}}</td>
-								</tr>
-								{% endfor %}
-
-							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="5">
-										<div class="pagination pagination-centered"></div>
-									</td>
-								</tr>
-							</tfoot>
-						</table>
-						{% else %}
-						<p>No Interactions Found</p>
-						{% endif %}
-						<br class="clear" />
 					</div>
 				</div>
-				<div id="downloads" class="tab-pane fade">
+			<div id="network" class="tab-pane fade">
+
+				<div class="container" style="overflow: auto;">
+					<div class="row">
+						<h3 style="color: {{ color_scheme }}">Interactions</h3>
+					</div>
+					<div class="row">
+						<div class="col-sm-8">
+							<div class="input-group input-group-sm">
+
+								<lable for="change-page-size">Page Size:</lable>
+								<select id="change-page-size">
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="5">5</option>
+									<option value="10" selected>10</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<input type="text" id="filter" placeholder="Search" />
+						</div>
+					</div>
+					{% if interaction_array|length > 0 %}
+					<table id="search_result_table" class="footable table"
+						data-filter="#filter" data-filtering="true"
+						data-filter-minimum="3">
+						<thead>
+							<tr>
+								<th>Interactor A Gene Name</th>
+								<th>Interactor B Gene Name</th>
+								<th>Score</th>
+								<th>Binding Start</th>
+								<th>Binding End</th>
+								<th>Dataset</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							{% for interaction in interaction_array %}
+							<tr>
+								<td>{{ interaction.interactor_A_gene_name }}</td>
+								<td>{{ interaction.interactor_B_gene_name }}</td>
+								<td>{{ interaction.score }}</td>
+								<td>{{ interaction.binding_start }}</td>
+								<td>{{ interaction.binding_end }}</td>
+								<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/{{ interaction.dataset}}" target="_blank">Reference</a></td>
+							</tr>
+							{% endfor %}
+
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="5">
+									<div class="pagination pagination-centered"></div>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+					{% else %}
+					<p>No Interactions Found</p>
+					{% endif %} <br class="clear" />
+				</div>
+			</div>
+			<div id="downloads" class="tab-pane fade">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-2"></div>
+						<div class="col-sm-4">
+							<div class="row">
+								<div class="col-sm-12">
+									<h3 style="color: {{ color_scheme }}">Download Image</h3>
+								</div>
+							</div>
+							<div class="row">
+								<div class="row">
+									<div class="col-sm-4">
+										<h4>PNG:</h4>
+									</div>
+									<div class="col-sm-2">
+										<a id='png' class="png" href="" download>Download</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-4">
+										<h4>JPG:</h4>
+									</div>
+									<div class="col-sm-2">
+										<a id='jpg' class="jpg" href="" download>Download</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="row">
+								<div class="col-sm-12">
+									<h3 style="color: {{ color_scheme }}">Download Network Data</h3>
+								</div>
+							</div>
+							<div class="row">
+								<div class="row">
+									<div class="col-sm-6">
+										<h4>PSI-MI Tab 2.7:</h4>
+									</div>
+									<div class="col-sm-2">
+										<a
+											href="{{path('psi_mitab', {'search_term': search_query })}}">Download</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<h4>CSV:</h4>
+									</div>
+									<div class="col-sm-2">
+										<a href="{{path('csv', {'search_term': search_query })}}">Download</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<h4>PSI-MI XML:</h4>
+									</div>
+									<div class="col-sm-2">
+										<a
+											href="{{path('psi_mixml', {'search_term': search_query })}}">Download</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<h4>Protein Sequences in Multi-FASTA Format:</h4>
+									</div>
+									<div class="col-sm-2">
+										<a
+											href="{{path('multi_fasta', {'search_term': search_query })}}">Download</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="view_settings" class="tab-pane fade">
+				<div class="view_settings">
 					<div class="container">
 						<div class="row">
 							<div class="col-sm-2"></div>
-							<div class="col-sm-4">
+							<div class="col-sm-3">
 								<div class="row">
-									<div class="col-sm-12">
-										<h3>Download Image</h3>
+									<div class="col-sm-4">
+										<label for="view_settings_layout"> Layout </label>
+									</div>
+									<div class="col-sm-8">
+										<select id="view_settings_layout">
+											<option value="concentric">Concentric</option>
+											<option value="breadthfirst">Breadth-first</option>
+											<option value="grid">Grid</option>
+											<option value="circle">Circle</option>
+										</select>
 									</div>
 								</div>
 								<div class="row">
-									<div class="row">
-										<div class="col-sm-4">
-											<h4>PNG:</h4>
-										</div>
-										<div class="col-sm-2">
-											<a id='png' class="png" href="" download>Download</a>
-										</div>
+									<div class="col-sm-4">
+										<label for="label_checkbox">Labels</label>
 									</div>
-									<div class="row">
-										<div class="col-sm-4">
-											<h4>JPG:</h4>
-										</div>
-										<div class="col-sm-2">
-											<a id='jpg' class="jpg" href="" download>Download</a>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-sm-4">
-											<h4>SVG:</h4>
-										</div>
-										<div class="col-sm-2">
-											<a id='svg' class="svg" href="" download>Download</a>
-										</div>
+									<div class="col-sm-4">
+										<input class="styled" type="checkbox"
+											name="view_settings_labels" id="view_settings_labels"
+											checked="checked" />
 									</div>
 								</div>
 							</div>
-							<div class="col-sm-6">
-								<div class="row">
-									<div class="col-sm-12">
-										<h3>Download Network Data</h3>
-									</div>
-								</div>
-								<div class="row">
+							<div class="col-sm-5">
+								<div id="test_1">
 									<div class="row">
 										<div class="col-sm-6">
-											<h4>PSI-MI Tab 2.7:</h4>
+											<label for="protein_of_intrest_color">Protein of Intrest</label>
 										</div>
-										<div class="col-sm-2">
-											<a
-												href="{{path('psi_mitab', {'search_term': search_query })}}">Download</a>
-										</div>
-									</div>
-									<div class="row">
 										<div class="col-sm-6">
-											<h4>CSV:</h4>
+											<input type='text' id='protein_of_intrest_color' />
 										</div>
-										<div class="col-sm-2">
-											<a href="{{path('csv', {'search_term': search_query })}}">Download</a>
+										<div id="spectrum_js"></div>
+									</div>
+									{% for domain in domain_object_array %}
+									<div class='row'>
+										<div class='col-sm-6'>
+											<label>{{ domain.type }}({{ domain.name }})</label>
+
+										</div>
+										<div class='col-sm-6'>
+											<input type='text' id='input_{{ domain.name }}' />
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-sm-6">
-											<h4>PSI-MI XML:</h4>
-										</div>
-										<div class="col-sm-2">
-											<a
-												href="{{path('psi_mixml', {'search_term': search_query })}}">Download</a>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-sm-6">
-											<h4>Protein Sequences in Multi-FASTA Format:</h4>
-										</div>
-										<div class="col-sm-2">
-											<a
-												href="{{path('multi_fasta', {'search_term': search_query })}}">Download</a>
-										</div>
-									</div>
+									{% endfor %}
 								</div>
 							</div>
 						</div>
+						<div class="row">
+							<div class="col-sm-2"></div>
+							<div class="col-sm-10">
+								<button id="view_settings_submit" class="btn btn-success"
+									style="margin-right: 10px;"">
+									<span>Update</span>
+								</button>
+							</div>
+						</div>
+
 					</div>
 				</div>
-				<div id="view_settings" class="tab-pane fade">
-					<div class="view_settings">
-						<div class="container">
-							<div class="row">
-								<div class="col-sm-2"></div>
-								<div class="col-sm-3">
-									<div class="row">
-										<div class="col-sm-4">
-											<label for="view_settings_layout"> Layout </label>
+			</div>
+			<div id="data_settings" class="tab-pane fade">
+				<div class="data_settings">
+					<div class="container">
+						<div class="row">
+							<form>
+								<div class="row">
+									<div class="col-sm-2"></div>
+									<div class="col-sm-6">
+										<div class="row">
+											<label for="min_interaction_score"> Minimum Required
+												Interaction Score: </label>
 										</div>
-										<div class="col-sm-8">
-											<select id="view_settings_layout">
-												<option value="concentric">Concentric</option>
-												<option value="breadthfirst">Breadth-first</option>
-												<option value="grid">Grid</option>
-												<option value="circle">Circle</option>
+										<div class="row">
+											<div id="min_interaction_score">
+												<div id="min_interaction_score_handle"
+													class="ui-slider-handle"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-2"></div>
+									<div class="col-sm-4">
+										<div class="row">
+											<label for="max_number_of_interactions"> Max Number of
+												Interactions: </label>
+										</div>
+										<div class="row">
+											<input type="text" name="max_number_of_interactions"
+												id="max_number_of_interactions" style="width: 60px;" />
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="row">
+											<label for="select_domain"> Domain </label>
+										</div>
+										<div class="row">
+											<select id="select_domain"> {% for domain in
+												domain_object_array %}
+												<option value="{{ domain.name }}">{{ domain.type }}({{
+													domain.name }})</option> {% endfor %}
 											</select>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-sm-4">
-											<label for="label_checkbox"> Label </label>
-										</div>
-										<div class="col-sm-4">
-											<input class="styled" type="checkbox"
-												name="view_settings_labels" id="view_settings_labels"
-												checked="checked"/>
-										</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-2"></div>
+									<div class="col-sm-6">
+										<a id="update_data_settings" class="btn btn-success"
+											style="margin-right: 10px;" href=""> <span>Update</span>
+										</a>
 									</div>
 								</div>
-								<div class="col-sm-5">
-    								<div id="test_1">
-    									<div class="row">
-    										<div class="col-sm-6">
-    											<label for="protein_of_intrest_color">Protein of Intrest</label>
-    										</div>
-    										<div class="col-sm-6">
-    											<input type='text' id='protein_of_intrest_color' />
-    										</div>
-    										<div id="spectrum_js"></div>
-    									</div>
-									</div>
-								</div>
-
-							</div>
-							<div class="row">
-								<div class="col-sm-2"></div>
-								<div class="col-sm-10">
-									<button id="view_settings_submit" class="btn btn-success"
-										style="margin-right: 10px;"">
-										<span>Update</span>
-									</button>
-								</div>
-							</div>
-
+							</form>
 						</div>
 					</div>
 				</div>
-				<div id="data_settings" class="tab-pane fade">
-					<div class="data_settings">
-						<div class="container">
-							<div class="row">
-								<form>
-									<div class="row">
-										<div class="col-sm-2"></div>
-										<div class="col-sm-6">
-    										<div class="row">
-        										<label for="min_interaction_score">
-        											Minimum Required Interaction Score:
-        										</label>
-        									</div>	
-        									<div class="row">
-        										<div id="min_interaction_score"><div id="min_interaction_score_handle" class="ui-slider-handle"></div></div>
-											</div>
-										</div>
-									</div>	
-									<div class="row">
-										<div class="col-sm-2"></div>
-										<div class="col-sm-6">
-    										<div class="row">	
-        										<label for="max_number_of_interactions">
-        											Max Number of Interactions:
-        										</label>
-        									</div>	
-        									<div class="row">
-        										<input type="text" name="max_number_of_interactions" id="max_number_of_interactions" style="width: 60px;"/>
-											</div>
-										</div>
-									</div>
-									</br>
-									<div class="row">
-										<div class="col-sm-2"></div>
-										<div class="col-sm-6">
-    										<a id="update_data_settings" class="btn btn-success"
-    											style="margin-right: 10px;" href="">
-    											<span>Update</span>
-    										</a>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div id="stats" class="tab-pane fade">
-					<div class="stats"></div>
-				</div>
-
 			</div>
-			<br class="clear" />
 		</div>
+		<br class="clear" />
 	</div>
 </div>
 </main>
@@ -481,6 +526,8 @@ $(function(){
 		var sourceProteinName = edgeArray[i][3];
 		var targetProteinName = edgeArray[i][4];
 		var scoreData = edgeArray[i][5];
+
+		
 		var nodeSourceDomainId = domainName;
 		var nodeTargetProteinId = targetProteinId + '_' + targetProteinName;
 		var edgeID = sourceDomainId + ',' + domainName + ',' + targetProteinId + ',' + targetProteinName + ',' + scoreData;
@@ -498,7 +545,6 @@ $(function(){
 			widthData = 6;
 		} 
 
-    	
     	cy.add([{ 
     		group: "edges", 
     		data: { 
@@ -548,7 +594,15 @@ $(function(){
 
 	cy.edges().qtip({
 		content: function(){ 
-			return 'Interaction: ' + this.data('interaction') + '<br/>' + 'Score: '	 + this.data('score'); 
+			return 'Interaction: ' + 
+			this.data('interaction') + 
+			'<br/>' + 
+			'Score: ' +
+			 this.data('score') +
+			 '<br/>' 
+
+
+			 ; 
 		},
 		position: {
 			my: 'top center',
@@ -639,70 +693,13 @@ $(function(){
 				}
 			},
 		});
-		/*		
-		var url = Routing.generate('search_results', { search_term: proteinOfIntrestName, score: searchScore, max_interactions: maxInteractions });
-	    $('#update_data_settings').attr('href', url);
-		*/
-
-		$('#test_1').append("" +
-				"<div class='row'>" +
-					"<div class='col-sm-6'>" +
-						"<label>" + domainID + "</label>" +
-					"</div>" +
-					"<div class='col-sm-6'>" +
-						"<input type='text' id='input_" + domainID + "' />" +
-					"</div>" +
-				"</div>");
-		
-	    $("#input_" + domainID).spectrum({
 
 
-		    color: domainColour,
-		    showInput: true,
-		    className: "full-spectrum",
-		    showInitial: true,
-		    showPalette: true,
-		    showSelectionPalette: true,
-		    maxSelectionSize: 10,
-		    preferredFormat: "hex",
-		    move: function (color) {
-		        
-		    },
-		    show: function () {
-		    
-		    },
-		    beforeShow: function () {
-		    
-		    },
-		    hide: function () {
-		    
-		    },
-		    change: function(color_change) { 
-    		    var colourChanged = color_change.toHexString();	
-    
-    			cy.$(domainSelector).roots().style({'background-color' : colourChanged });
-    			cy.$(domainSelector).neighborhood( 'edge' ).style({'line-color' : colourChanged }); 
-    			cy.$(domainSelector).neighborhood( 'node' ).style({'background-color': colourChanged }); 
-	   		},
-		    palette: [
-		        ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
-		        "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-		        ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
-		        "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
-		        ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
-		        "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
-		        "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
-		        "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
-		        "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
-		        "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
-		        "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
-		        "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
-		        "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
-		        "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
-		    ]
-		});
 
-	}
+
+
+
+		}
 	
 
 	cy.$('.protein_of_intrest').style({'background-color': '#CCCCCC'});
@@ -724,6 +721,8 @@ $(function(){
 	});
 
 
+
+
     $('#protein_of_intrest_color').spectrum({
 
 
@@ -735,18 +734,6 @@ $(function(){
 	    showSelectionPalette: true,
 	    maxSelectionSize: 10,
 	    preferredFormat: "hex",
-	    move: function (color) {
-	        
-	    },
-	    show: function () {
-	    
-	    },
-	    beforeShow: function () {
-	    
-	    },
-	    hide: function () {
-	    
-	    },
 	    change: function(color_change) { 
 	    	var colourChanged = color_change.toHexString();	
 
@@ -773,6 +760,47 @@ $(function(){
 	});
 
 
+	{% for domain in domains %}
+        $('#input_{{ domain }}').spectrum({
+            
+            
+    	    color: "{{ domain_colours[loop.index] }}",
+    	    showInput: true,
+    	    className: "full-spectrum",
+    	    showInitial: true,
+    	    showPalette: true,
+    	    showSelectionPalette: true,
+    	    maxSelectionSize: 10,
+    	    preferredFormat: "hex",
+    	    change: function(color_change) { 
+    		    var colourChanged = color_change.toHexString();	
+    
+    			cy.$('#{{ domain }}').roots().style({'background-color' : colourChanged });
+    			cy.$('#{{ domain }}').neighborhood( 'edge' ).style({'line-color' : colourChanged }); 
+    			cy.$('#{{ domain }}').neighborhood( 'node' ).style({'background-color': colourChanged }); 
+       		},
+    	    palette: [
+    	        ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+    	        "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+    	        ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+    	        "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
+    	        ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
+    	        "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
+    	        "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
+    	        "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
+    	        "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
+    	        "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+    	        "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+    	        "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+    	        "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
+    	        "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+    	    ]
+    	});
+    {% endfor %}
+
+
+
+	
 
     $('#update_data_settings').on('click', function(){
     	var maxInteractions = $('#max_number_of_interactions').val();

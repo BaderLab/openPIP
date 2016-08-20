@@ -1,0 +1,18 @@
+@CHARSET "ISO-8859-1";
+
+.row{
+	margin-top: 10px;
+	
+}
+
+.tab-content {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    min-height: 400px;
+}
+
+.nav-tabs {
+    margin-bottom: 0;
+}

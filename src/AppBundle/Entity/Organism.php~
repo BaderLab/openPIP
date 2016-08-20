@@ -67,7 +67,7 @@ class Organism
 	/**
 	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
-	protected $scientfic_name;
+	protected $scientific_name;
 	
 	/**
 	 * @ORM\Column(type="string", length=100, nullable=true)

@@ -51,6 +51,8 @@ doctrine:
         dbname:   "%database_name%"
         user:     "%database_user%"
         password: "%database_password%"
+        logging: false
+        profiling: false
         charset:  UTF8
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
@@ -84,10 +86,30 @@ assetic:
         cssrewrite: ~
         
 stfalcon_tinymce:
-    selector: ".tinymce"
     include_jquery: true
     tinymce_jquery: true
-    
+    selector: '.tinymce'
+    use_callback_tinymce_init: false
+    theme:
+        simple:
+            plugins:
+                - 'fullscreen code autolink lists link charmap preview hr pagebreak nonbreaking'
+            invalid_elements: '@[onclick|onunload|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onfocus|onblur|onkeypress|onkeydown|onkeyup|onsubmit|onreset|onselect|onchange],script'
+            theme: 'modern'
+            height: 400
+            menubar: 'file edit insert view format table tools'
+            toolbar1: "bold italic underline | alignleft aligncenter alignright alignjustify | styleselect | fontselect | fontsizeselect | bullist | numlist |"
+        advanced:
+            plugins:
+                - 'fullscreen code autolink lists link image charmap preview hr anchor pagebreak'
+                - 'searchreplace wordcount fullscreen media nonbreaking table textcolor'
+            invalid_elements: '@[onclick|onunload|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onfocus|onblur|onkeypress|onkeydown|onkeyup|onsubmit|onreset|onselect|onchange],script'
+            theme: 'modern'
+            menubar: 'file edit insert view format table tools'
+            toolbar1: "bold italic underline | alignleft aligncenter alignright alignjustify | image | table"
+            toolbar2: "code link charmap preview hr searchreplace styleselect paste media | fullscreen wordcount"
+            image_advtab: true
+
 oneup_uploader:
     mappings:
         gallery:

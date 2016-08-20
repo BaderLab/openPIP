@@ -34,6 +34,7 @@ class DataManagerController extends Controller
 	 */
 	public function data_managerAction(Request $request)
 	{
+	    gc_enable();
         $data_File = new Data_File();
         $form = $this->createForm('AppBundle\Form\Data_FileType', $data_File);
         $form->handleRequest($request);
@@ -76,7 +77,7 @@ class DataManagerController extends Controller
 	        		//skip header
 	        		if($file_row == 0){ $file_row++; continue; }
 	        		
-	        	
+	        	    try{
 	        		//variable for each mitab coloumn
 	        		list ($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id, $interactor_A_alias, $interactor_B_alias, $interaction_detection_method,
 	        				$publication_first_author, $publication_identifier, $taxid_interactor_A, $taxid_interactor_B, $interaction_type, $source_database,
@@ -89,6 +90,7 @@ class DataManagerController extends Controller
 	        				 
 	        	
 	        		$doctrine_manager = $this->getDoctrine()->getManager();
+	        		$doctrine_manager->getConfiguration()->setSQLLogger(null);
 	        		
 	        		
 	        		//Domain
@@ -135,7 +137,7 @@ class DataManagerController extends Controller
 	        		
 	        		
 	        		//Support Information
-	        		$support_informations_array = self::support_informationHandler($annotation_interactor_A);
+	        		$support_informations_array = self::support_informationHandler($interaction_parameter);
 	        		$support_information_array = '';
 	        		$interaction_support_information_array = '';
 	        		if($support_informations_array){
@@ -144,6 +146,9 @@ class DataManagerController extends Controller
 	        		
 	        		}
 					
+	        		
+	        		//Dataset
+	        		$dataset = self::datasetHandler($publication_identifier);
 
 	        		
 	        	
@@ -275,9 +280,15 @@ class DataManagerController extends Controller
 		        			$doctrine_manager->persist($link_B);
 		        		}	        		
 	        		}
+	        		
+	        		if($dataset){
+    	        		$dataset->addInteraction($interaction);
+    	        		$interaction->addDataset($dataset);
+    	        		$doctrine_manager->persist($dataset);
+	        		}
 	        		$interaction->setInteractorA($protein_A);
 	        		$interaction->setInteractorB($protein_B);
-
+	        		
 	        		
 	        		if($domain != null){
 		        		$interaction->setDomain($domain);	        		
@@ -291,10 +302,25 @@ class DataManagerController extends Controller
 	        		$doctrine_manager->persist($interaction);
 	        		
 	        		$doctrine_manager->flush();
+	        		$doctrine_manager->clear();
+	        		gc_collect_cycles();
+	        	  
+	        		}catch(Exception $e) {
+	        		}
+	        		
+	        		
+	        		
+	        		
 	        	}
         	}
         }
         
+        $admin_settings = $this->getDoctrine()
+        ->getRepository('AppBundle:Admin_Settings')
+        ->find(1);
+        
+        $color_scheme = $admin_settings->getColorScheme();
+        $short_title = $admin_settings->getShortTitle();
         return $this->render('data_manager.html.twig', array(
         		'new_datasets_added' => $new_datasets_added,
         		'new_organisms_added' => $new_organisms_added,
@@ -302,6 +328,8 @@ class DataManagerController extends Controller
         		'interactions_added' => $interactions_added,
         		'data_File' => $data_File,
         		'form' => $form->createView(),
+                'color_scheme' => $color_scheme,
+		        'short_title' => $short_title
         ));
 	}
 	
@@ -316,6 +344,118 @@ class DataManagerController extends Controller
 		}
 	
 	}
+	
+	
+	
+	public function datasetHandler($publication_identifier){
+	    
+	    $dataset = '';
+	    if(self::assertNotNull($publication_identifier)){
+	    
+	        $dataset = self::createDatasetFromData($publication_identifier);
+	    }
+	    
+	    return $dataset;
+	    
+	    
+	}
+	
+	
+	
+	
+	public function createDatasetFromData($publication_identifier){
+	    
+	    
+	    
+	    $reference_array =  explode("|", $publication_identifier);
+	    
+	    $dataset = '';
+	    
+	    foreach($reference_array as $reference){
+	         
+	        $_reference_array = explode(":", $reference);
+	    
+	        $name = $_reference_array[0];
+	        $id = $_reference_array[1];
+	        
+	        
+	        if ($name == 'pubmed'){
+	            
+	           if(self::isNewDataset($id) == true){
+	               
+	               $dataset = new Dataset();
+	               $dataset->setReference($id);
+	               
+	           }else{
+	               
+	               $dataset = self::getDatasetByReference($id);
+	               
+	           }
+
+	            
+	            
+	          }
+	       }  
+	      return $dataset;
+	}
+	
+	
+	
+	
+	
+	
+	
+	public function getDatasetByReference($id){
+	    
+	    $em = $this->getDoctrine()->getManager();
+	    $query = $em->createQuery(
+	                    "SELECT d
+							FROM AppBundle:Dataset d
+							WHERE d.reference = :reference"
+	                    );
+	    
+	    $query->setParameter('reference', $id);
+	    $results = $query->getResult();
+	    
+	    
+	    return $results[0];
+	    
+	    
+	    
+	}
+	
+	
+	
+	
+	
+	
+	
+	public function isNewDataset($id){
+	
+	    $em = $this->getDoctrine()->getManager();
+	    $query = $em->createQuery(
+	                    "SELECT d
+							FROM AppBundle:Dataset d
+							WHERE d.reference = :reference"
+	                    );
+	
+	    $query->setParameter('reference', $id);
+	    $results = $query->getResult();
+	
+	
+	    if($results){
+	        return false;
+	    }else{
+	        return true;
+	    }
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 
@@ -479,6 +619,9 @@ class DataManagerController extends Controller
 	    return $return;
 	
 	}
+	
+	
+	
 	
 	
 	
@@ -1101,7 +1244,7 @@ class DataManagerController extends Controller
 	
 		$organism->setTaxidId($taxid_id);
 		$organism->setCommonName($organism_common_name);
-		$organism->setScientficName($organism_scientific_name);
+		$organism->setScientificName($organism_scientific_name);
 		
 		return $organism;
 	

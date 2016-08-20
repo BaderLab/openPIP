@@ -69,7 +69,7 @@ class Data_File
 	protected $file_type;
 
 	/**
-	 * @Assert\File(maxSize="17000000")
+	 * @Assert\File(maxSize="200000000")
 	 */
 	private $data_file;
 

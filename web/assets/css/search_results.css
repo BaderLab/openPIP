@@ -22,10 +22,16 @@
 }
 
 .tab-pane{
-		min-height: 400px;
+		min-height: 300px;
 	width: 100%;
 	border: 1px solid #ccc;
     background-color: #FFFFFF;
     padding-top: 3%;
 }
 
+.results_panel{
+	
+	min-height: 300px;
+    width: 76%;
+
+}

@@ -67,7 +67,7 @@ class Organism
 	/**
 	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
-	protected $scientfic_name;
+	protected $scientific_name;
 	
 	/**
 	 * @ORM\Column(type="string", length=100, nullable=true)
@@ -129,29 +129,6 @@ class Organism
     public function getClass()
     {
         return $this->class;
-    }
-
-    /**
-     * Set scientfic_name
-     *
-     * @param string $scientficName
-     * @return Organism
-     */
-    public function setScientficName($scientficName)
-    {
-        $this->scientfic_name = $scientficName;
-
-        return $this;
-    }
-
-    /**
-     * Get scientfic_name
-     *
-     * @return string 
-     */
-    public function getScientficName()
-    {
-        return $this->scientfic_name;
     }
 
     /**
@@ -292,4 +269,28 @@ class Organism
     }
     
 
+
+    /**
+     * Set scientificName
+     *
+     * @param string $scientificName
+     *
+     * @return Organism
+     */
+    public function setScientificName($scientificName)
+    {
+        $this->scientific_name = $scientificName;
+
+        return $this;
+    }
+
+    /**
+     * Get scientificName
+     *
+     * @return string
+     */
+    public function getScientificName()
+    {
+        return $this->scientific_name;
+    }
 }

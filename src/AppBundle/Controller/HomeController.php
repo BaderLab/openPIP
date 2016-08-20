@@ -19,6 +19,7 @@ class HomeController extends Controller
 	 * Admin Home
 	 *
 	 * @Route("/admin/home/", name="admin_home")
+	 * @Route ("/")
 	 * @Method({"GET", "POST"})
 	 */
 	public function adminHomeAction(Request $request)
@@ -60,18 +61,35 @@ class HomeController extends Controller
 		$announcements = $announcement_query->getResult();
 
 		$announcements = array_reverse($announcements);
-		$hello = 'hello';
 
-
+		$admin_settings = $this->getDoctrine()
+		->getRepository('AppBundle:Admin_Settings')
+		->find(1);
+		
+		$title = $admin_settings->getTitle();
+		$home_page = $admin_settings->getHomePage();
+		
+		$admin_settings = $this->getDoctrine()
+		->getRepository('AppBundle:Admin_Settings')
+		->find(1);
+		
+		$title = $admin_settings->getTitle();
+		$short_title = $admin_settings->getShortTitle();
+		$home_page = $admin_settings->getHomePage();
+		$color_scheme = $admin_settings->getColorScheme();
+		
 		
 		return $this->render('admin_home.html.twig', array(
-				'hello' => $hello,
 				'announcements' => $announcements,
 				'protein_count' => $protein_count,
 				'organism_count' => $organism_count,
 				'interaction_count' => $interaction_count,
 				'domain_count' => $domain_count,
-				'domain_instance_count' => $domain_instance_count
+				'domain_instance_count' => $domain_instance_count,
+		        'title' => $title,
+		        'home_page' => $home_page,
+		        'color_scheme' => $color_scheme,
+		        'short_title' => $short_title
 		));
 	}
 	
@@ -101,6 +119,10 @@ class HomeController extends Controller
 		$interaction_query = $em->createQuery('SELECT COUNT(i.id) FROM AppBundle:Interaction i');
 	
 		$interaction_count = $interaction_query->getSingleScalarResult();
+		
+		$domain_instance_query = $em->createQuery('SELECT COUNT(d.id) FROM AppBundle:Domain d');
+		
+		$domain_instance_count = $domain_instance_query->getSingleScalarResult();
 	
 		$domain_query = $em->createQuery('SELECT COUNT(d.id) FROM AppBundle:Domain d');
 	
@@ -114,21 +136,33 @@ class HomeController extends Controller
 			    ORDER BY a.show_on_home_page ASC'
 				)->setParameter('show_on_home_page', '1');
 	
-				$announcements = $announcement_query->getResult();
+		$announcements = $announcement_query->getResult();
+
+		$announcements = array_reverse($announcements);
+
+		$admin_settings = $this->getDoctrine()
+		->getRepository('AppBundle:Admin_Settings')
+		->find(1);
+		
+		$title = $admin_settings->getTitle();
+		$home_page = $admin_settings->getHomePage();
+		$color_scheme = $admin_settings->getColorScheme();
+		$short_title = $admin_settings->getShortTitle();
+		
+		return $this->render('home.html.twig', array(
+		        'announcements' => $announcements,
+		        'protein_count' => $protein_count,
+		        'organism_count' => $organism_count,
+		        'interaction_count' => $interaction_count,
+		        'domain_count' => $domain_count,
+		        'domain_instance_count' => $domain_instance_count,
+		        'title' => $title,
+		        'home_page' => $home_page,
+		        'color_scheme' => $color_scheme,
+		        'short_title' => $short_title
+		));
 	
-				$announcements = array_reverse($announcements);
-				$hello = 'hello';
-	
-	
-	
-				return $this->render('home.html.twig', array(
-						'hello' => $hello,
-						'announcements' => $announcements,
-						'protein_count' => $protein_count,
-						'organism_count' => $organism_count,
-						'interaction_count' => $interaction_count,
-						'domain_count' => $domain_count
-				));
+
 	}
 	
 	public function count($entity){

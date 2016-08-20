@@ -60,7 +60,7 @@ class Protein
 	protected $name;
 	
 	/**
-	 * @ORM\Column(type="string", length=100, nullable=true)
+	 * @ORM\Column(type="string", length=1000, nullable=true)
 	 */
 	protected $sequence;
 	

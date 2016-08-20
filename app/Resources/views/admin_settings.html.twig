@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" type="text/css"
+	href="{{ asset('bundles/spectrum/spectrum.css') }}" />	
+	<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/admin_settings.css') }}">
+
+{% endblock %}
+
+{% block title %}TOR-IBIN | Admin Settings{% endblock %}
+
+{% block content %}
+<header>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header tor_ibin_header">
+	        <h5 class="nav-header" style="color: {{ color_scheme }}">{{ short_title }} Admin</h5>
+		    <button type="button" class="navbar-toggle left" data-toggle="collapse" data-target="#myNavbar">
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		    </button>
+		 </div>  
+		 <div id="myNavbar" class="collapse navbar-collapse">
+		    <ul class="nav navbar-nav ">
+		      <li><a href="{{ path('admin_home') }}">Home</a></li>
+		      <li><a href="{{ path('admin_search') }}">Search</a></li>
+		      <li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+		      <li><a href="{{ path('data_manager') }}">Data</a></li>
+		      <li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+		      <li class="active"><a href="{{ path('admin_settings') }}">Settings</a></li>  
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+			   <li><a href="{{ path('user_logout') }}">Logout</a></li>
+		    </ul>
+		 </div>
+	  </div>
+	  <div class="shadow"></div>
+	</nav>
+</header>
+<main>
+<div class="container">
+	<div class="row">
+		<ul class="nav nav-tabs">
+			<li class="active tab"><a data-toggle="tab" href="#title">Title</a></li>
+			<li class="tab"><a data-toggle="tab" href="#home_page">Home Page</a></li>
+			<li class="tab"><a data-toggle="tab" href="#about">About</a></li>
+			<li class="tab"><a data-toggle="tab" href="#color_scheme">Color Scheme</a></li>
+		</ul>
+	</div>
+	{{ form_start(form) }}
+	<div class="row" style="margin-top: 0px;">
+		<div class="tab-content">
+			<div id="title" class="tab-pane fade in active">
+    			<div class="container">
+    				<div class="row">
+    				    {{ form_label(form.title) }}
+        				{{ form_widget(form.title) }}
+        			</div>
+        			<div class="row">
+        			    {{ form_label(form.short_title) }}
+        				{{ form_widget(form.short_title) }}
+        			</div>		
+        		</div>
+    		</div>
+			<div id="home_page" class="tab-pane fade">
+				<div class="container">
+					<div class="row">
+					{{ form_label(form.home_page) }}
+    				{{ form_widget(form.home_page) }}
+    				</div>
+				</div>
+    		</div>
+    		<div id="about" class="tab-pane fade">
+				<div class="container">
+					<div class="row">
+					    {{ form_label(form.about) }}
+    				    {{ form_widget(form.about) }}
+    				</div>    
+				</div>
+    		</div>
+    		<div id="color_scheme" class="tab-pane fade">
+				<div class="container">
+        			<div class="row">
+        				{{ form_label(form.color_scheme) }}
+        				{{ form_widget(form.color_scheme) }}
+    				</div> 
+				</div>
+    		</div>
+ 		</div>
+	    <div class="container">
+			<div class="row">
+			    {{ form_label(form.submit) }}
+				{{ form_widget(form.submit) }}
+			</div>
+		</div>
+ 	</div>
+</div>
+{{ form_end(form) }}
+
+</main>
+{% endblock %}
+{% block javascripts %}
+
+{{ tinymce_init( {'theme' : {'advanced':{'height': 500 }}} ) }}
+<script src="{{ asset('assets/js/jquery-2.1.4.min.jsv') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<script src='{{ asset('bundles/spectrum/spectrum.js') }}'></script>
+<script src="{{ asset('assets/js/home.js') }}"></script>
+<script>
+
+
+
+$('.spectrum').spectrum({
+
+
+    color: "{{ color_scheme }}",
+    showInput: true,
+    className: "full-spectrum",
+    showInitial: true,
+    showPalette: true,
+    showSelectionPalette: true,
+    maxSelectionSize: 10,
+    preferredFormat: "hex",
+    move: function (color) {
+        
+    },
+    show: function () {
+    
+    },
+    beforeShow: function () {
+    
+    },
+    hide: function () {
+    
+    },
+    palette: [
+        ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+        "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+        ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+        "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
+        ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
+        "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
+        "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
+        "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
+        "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
+        "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+        "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+        "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+        "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
+        "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+    ]
+});
+
+
+</script>
+
+
+{% endblock %}

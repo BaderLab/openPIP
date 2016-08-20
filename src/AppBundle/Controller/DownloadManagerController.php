@@ -242,9 +242,14 @@ class DownloadManagerController extends Controller
             ->getRepository('AppBundle:Identifier');
              
             $identifier_A = $identifier_repository->findOneByIdentifier($interactor_A_name);
+            $identifier_A_identifier = $identifier_A->getIdentifier();
             $identifier_A_naming_convention = $identifier_A->getNamingConvention();
+            
             $identifier_B = $identifier_repository->findOneByIdentifier($interactor_B_name);
+            $identifier_B_identifier = $identifier_B->getIdentifier();
             $identifier_B_naming_convention = $identifier_B->getNamingConvention();
+            
+            $psi_mitab .= "$identifier_A_naming_convention:$identifier_A_identifier\t$identifier_B_naming_convention:$identifier_B_identifier\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t\r\n";
     
         }
          

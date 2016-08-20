@@ -68,11 +68,17 @@ class FileManagerController extends Controller
 	    }
 	    
 	    $directories = listdirs('../web/uploads');
-
+	    $admin_settings = $this->getDoctrine()
+	    ->getRepository('AppBundle:Admin_Settings')
+	    ->find(1);
 	    
-	    return $this->render('file_manager.html.twig', array(
+	    $color_scheme = $admin_settings->getColorScheme();
+	    $short_title = $admin_settings->getShortTitle();
+	    return $this->render('admin_file_manager.html.twig', array(
 	    		'upload_directory' => $upload_directory,
-				'directories' => $directories
+				'directories' => $directories,
+                'color_scheme' => $color_scheme,
+		        'short_title' => $short_title
 		));
 		
 	}
