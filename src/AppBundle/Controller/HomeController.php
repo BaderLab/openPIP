@@ -25,9 +25,6 @@ class HomeController extends Controller
 	public function adminHomeAction(Request $request)
 	{
 
-		
-
-		
 		$em = $this->getDoctrine()->getManager();
 		
 		$protein_query = $em->createQuery('SELECT COUNT(p.id) FROM AppBundle:Protein p');
@@ -103,9 +100,6 @@ class HomeController extends Controller
 	public function homeAction(Request $request)
 	{
 	
-	
-	
-	
 		$em = $this->getDoctrine()->getManager();
 	
 		$protein_query = $em->createQuery('SELECT COUNT(p.id) FROM AppBundle:Protein p');
@@ -127,7 +121,6 @@ class HomeController extends Controller
 		$domain_query = $em->createQuery('SELECT COUNT(d.id) FROM AppBundle:Domain d');
 	
 		$domain_count = $domain_query->getSingleScalarResult();
-	
 	
 		$announcement_query = $em->createQuery(
 				'SELECT a
@@ -167,7 +160,6 @@ class HomeController extends Controller
 	
 	public function count($entity){
 		
-		
 		$sql = 'SELECT COUNT(i.id) FROM AppBundle:' . $entity . ' i';
 		
 		$em = $this->getDoctrine()->getManager();
@@ -175,8 +167,6 @@ class HomeController extends Controller
 		$query = $em->createQuery($sql);
 		
 		$count = $query->getSingleScalarResult();
-		
-		
 		
 		return $count;
 		

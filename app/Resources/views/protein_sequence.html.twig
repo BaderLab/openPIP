@@ -1,29 +1,25 @@
-{% extends 'base.html.twig' %} {% block stylesheets %}
-<link rel="stylesheet" type="text/css"
-	href="{{ asset('assets/css/bootstrap.min.css') }}" />
-<link rel="stylesheet" type="text/css"
-	href="{{ asset('assets/css/main.css') }}" />
-<link rel="stylesheet" type="text/css"
-	href="{{ asset('assets/css/search.css') }}" />
-<link rel="stylesheet" type="text/css"
-	href="{{ asset('assets/css/search_results.css') }}" />
-<link rel='shortcut icon'
-	href='{{ asset('assets/images/tor_ibin_icon.ico') }}' />
-	
-	
-{% endblock %} {% block title %}TOR-IBIN | Results{% endblock %} {%
-block content %}
+{% extends 'base.html.twig' %} 
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap.min.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/search.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/search_results.css') }}" />
+<link rel='shortcut icon' href='{{ asset('assets/images/tor_ibin_icon.ico') }}' />
+{% endblock %} 
+{% block title %}{{ short_title }} | Results{% endblock %} 
+{% block content %}
 <header>
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header tor_ibin_header">
 				<img alt="" src="{{ asset('assets/images/tor_ibin_logo.png') }}"
 					class="logo left">
-				<h5 class="nav-header">TOR-IBIN Admin</h5>
+				<h5 class="nav-header">{{ short_title }} Admin</h5>
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
 					data-target="#myNavbar">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span>
 				</button>
 			</div>
 			<div id="myNavbar" class="collapse navbar-collapse">
@@ -32,8 +28,7 @@ block content %}
 					<li class="active"><a href="{{ path('search') }}">Search</a></li>
 					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
 					<li><a href="{{ path('data_manager') }}">Data</a></li>
-					<li><a
-						href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="{{ path('user_logout') }}">Logout</a></li>
@@ -44,14 +39,17 @@ block content %}
 	</nav>
 </header>
 <main>
-<div class="row network_row" style="background-color: #EEEEEE;">
-	<div class="col-sm-3"></div>
-	<div class="col-sm-6">
-		<div  style="margin: 2% auto 2%; width: 90%; background-color: #FFFFFF; padding: 3%;">
-		>{{ gene_name }}</br>
-		{{ protein_sequence }}
-		</div>
-	</div>
-</div>
-
-{% endblock %} {% block javascripts %}{% endblock %}
+    <div class="row network_row" style="background-color: #EEEEEE;">
+    	<div class="col-sm-3"></div>
+    	<div class="col-sm-6">
+    		<div style="margin: 2% auto 2%; width: 90%; background-color: #FFFFFF; padding: 3%;">
+    			{{ gene_name }}
+    			</br> 
+    			{{ protein_sequence }}
+    		</div>
+    	</div>
+    </div>
+</main>
+{% endblock %} 
+{% block javascripts %}
+{% endblock %}

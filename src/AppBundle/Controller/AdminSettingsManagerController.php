@@ -28,9 +28,6 @@ class AdminSettingsManagerController extends Controller
      */
     public function adminSettingsManagerAction(Request $request)
     {
-
-        
-        
         $admin_settings = $this->getDoctrine()
         ->getRepository('AppBundle:Admin_Settings')
         ->find(1);
@@ -41,32 +38,24 @@ class AdminSettingsManagerController extends Controller
         $color_scheme = $admin_settings->getColorScheme();
         $short_title = $admin_settings->getShortTitle();
         
-        
-        
-        
         $form = $this->createForm('AppBundle\Form\Admin_SettingsType', $admin_settings);
         $form->add('submit', SubmitType::class, array(
                 'label' => 'Update',
                 'attr'  => array('class' => 'btn btn-success')
         ));
         $form->handleRequest($request);
-        
-        
+               
         if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-                $admin_settings = $form->getData();
-                $title = $admin_settings->getTitle();
-                $home_page = $admin_settings->getHomePage();
-                $about = $admin_settings->getAbout();
-                $color_scheme = $admin_settings->getColorScheme();
-                $em->persist($admin_settings);
-                $em->flush();
-
-
-            	
+            $em = $this->getDoctrine()->getManager();
+            $admin_settings = $form->getData();
+            $title = $admin_settings->getTitle();
+            $home_page = $admin_settings->getHomePage();
+            $about = $admin_settings->getAbout();
+            $color_scheme = $admin_settings->getColorScheme();
+            $em->persist($admin_settings);
+            $em->flush();  	
         }
         
-
         return $this->render('admin_settings.html.twig', array(
                 'form' => $form->createView(),
                 'title' => $title,

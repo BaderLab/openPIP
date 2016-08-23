@@ -31,10 +31,7 @@ class DownloadManagerController extends Controller
     {
     
         $em = $this->getDoctrine()->getManager();
-    
-    
-    
-    
+
         $identifier_repository = $this->getDoctrine()
         ->getRepository('AppBundle:Identifier');
         	
@@ -48,7 +45,6 @@ class DownloadManagerController extends Controller
         $protein_sequence = $protein->getSequence();
         $protein_description = $protein->getDescription();
     
-    
         $query = $em->createQuery(
                         "SELECT i
 				FROM AppBundle:Interaction i
@@ -58,12 +54,9 @@ class DownloadManagerController extends Controller
         $query->setParameter('interactor_A', $protein_id);
         	
         $interaction_result_array = $query->getResult();
-    
-    
+
         $interactor_B_fasta = '';
-    
-    
-    
+        
         foreach($interaction_result_array as $interaction_result){
     
             $interaction_id = $interaction_result->getId();

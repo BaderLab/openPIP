@@ -1257,17 +1257,17 @@
         },
         {
             "name": "oneup/uploader-bundle",
-            "version": "1.7.0",
+            "version": "1.7.1",
             "target-dir": "Oneup/UploaderBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/1up-lab/OneupUploaderBundle.git",
-                "reference": "eb609baf31012cf67fb776953bdee2bd484e58eb"
+                "reference": "7920b4393d57e76038fbdb0e7152552ac52fd715"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/1up-lab/OneupUploaderBundle/zipball/eb609baf31012cf67fb776953bdee2bd484e58eb",
-                "reference": "eb609baf31012cf67fb776953bdee2bd484e58eb",
+                "url": "https://api.github.com/repos/1up-lab/OneupUploaderBundle/zipball/7920b4393d57e76038fbdb0e7152552ac52fd715",
+                "reference": "7920b4393d57e76038fbdb0e7152552ac52fd715",
                 "shasum": ""
             },
             "require": {
@@ -1322,7 +1322,7 @@
                 "plupload",
                 "upload"
             ],
-            "time": "2016-06-20 07:58:42"
+            "time": "2016-07-15 11:50:32"
         },
         {
             "name": "paragonie/random_compat",
@@ -1474,16 +1474,16 @@
         },
         {
             "name": "sensio/distribution-bundle",
-            "version": "v5.0.7",
+            "version": "v5.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
-                "reference": "a9c4723cbdbc6cf7fbfdfde3c639cb1943f0293a"
+                "reference": "f8ace5c71ee309492b027ef71215577f5a52b4ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/a9c4723cbdbc6cf7fbfdfde3c639cb1943f0293a",
-                "reference": "a9c4723cbdbc6cf7fbfdfde3c639cb1943f0293a",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/f8ace5c71ee309492b027ef71215577f5a52b4ea",
+                "reference": "f8ace5c71ee309492b027ef71215577f5a52b4ea",
                 "shasum": ""
             },
             "require": {
@@ -1522,7 +1522,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2016-06-23 16:11:33"
+            "time": "2016-08-17 18:16:49"
         },
         {
             "name": "sensio/framework-extra-bundle",

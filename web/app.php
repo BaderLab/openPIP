@@ -1,4 +1,3 @@
-
 <?php
 umask(0002);
 set_time_limit(0);

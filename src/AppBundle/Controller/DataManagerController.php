@@ -38,9 +38,7 @@ class DataManagerController extends Controller
         $data_File = new Data_File();
         $form = $this->createForm('AppBundle\Form\Data_FileType', $data_File);
         $form->handleRequest($request);
-        
 
-        
         //stats for data upload
         $interactions_added = 0;
         $new_proteins_added = 0;
@@ -92,10 +90,8 @@ class DataManagerController extends Controller
 	        		$doctrine_manager = $this->getDoctrine()->getManager();
 	        		$doctrine_manager->getConfiguration()->setSQLLogger(null);
 	        		
-	        		
 	        		//Domain
 	        		$domain = self::domainHandler($feature_interactor_A);
-	        	
 
 	        		//Organism
 	        		$organism_array = self::organismHandler($taxid_interactor_A, $taxid_interactor_B, $doctrine_manager);
@@ -121,21 +117,16 @@ class DataManagerController extends Controller
 	        		if($identifier_B_protein){
 	        			$identifier_B_protein->setProtein($protein_B);
 	        		}
+	        		
 	        		//Interaction
 	        		$interaction = self::interactionHandler($feature_interactor_B, $confidence_value);
-	        		
-	        		
 	        		
 	        		//Alt Interactor
 	        		$alt_interactor_array = self::alt_interactorHandler($alt_interactor_A_id, $alt_interactor_B_id);
 
-	        		
-	        		
-	        		
 	        		//Aliases
 	        		$alias_interactor_array = self::aliasHandler($interactor_A_alias, $interactor_B_alias);
-	        		
-	        		
+
 	        		//Support Information
 	        		$support_informations_array = self::support_informationHandler($interaction_parameter);
 	        		$support_information_array = '';
@@ -145,18 +136,11 @@ class DataManagerController extends Controller
     	        		$interaction_support_information_array = $support_informations_array[1];
 	        		
 	        		}
-					
-	        		
+
 	        		//Dataset
 	        		$dataset = self::datasetHandler($publication_identifier);
 
 	        		
-	        	
-	        	
-	        		
-	        		
-	        		
-
 	        		foreach ($organism_AB_array as $organism_AB){
 	        		    
 	        			if(self::assertRelationshipExistsProteinOrganism($protein_A, $organism_AB) == false){
@@ -179,7 +163,6 @@ class DataManagerController extends Controller
 	        			$doctrine_manager->persist($organism_AB);
 	        		}
 	        		
-                    
 	        		foreach ($organism_A_array as $organism_A){
 	        		    if(self::assertRelationshipExistsProteinOrganism($protein_A, $organism_A) == false){
     	        			$organism_A->addProtein($protein_A);
@@ -194,7 +177,6 @@ class DataManagerController extends Controller
 	        		    $doctrine_manager->persist($organism_A);
 	        		}
 	        		
-	        		
 	        		foreach ($organism_B_array as $organism_B){
 	        		    if(self::assertRelationshipExistsProteinOrganism($protein_B, $organism_B) == false){
     	        			$organism_B->addProtein($protein_B);
@@ -204,8 +186,6 @@ class DataManagerController extends Controller
 	        		    $doctrine_manager->persist($organism_B);
 	        		}
 
-	                       		
-	        		
                     if($support_information_array){
     	        		foreach ($support_information_array as $support_information){
     	        		    $doctrine_manager->persist($support_information);
@@ -213,8 +193,7 @@ class DataManagerController extends Controller
     	        		    
     	        		}
                     }
-                    
-                    
+
                     if($interaction_support_information_array){
     	        		foreach ($interaction_support_information_array as $interaction_support_information){
     	        		     
@@ -223,9 +202,7 @@ class DataManagerController extends Controller
     	        		    $doctrine_manager->persist($interaction_support_information);
     	        		}
                     }
-	        		
-	        		
-	        		
+                    
 	        		if($identifier_A_protein){
 	        			$doctrine_manager->persist($identifier_A_protein);
 	        		}
@@ -248,7 +225,6 @@ class DataManagerController extends Controller
 	        			$alt_interactor_B->setProtein($protein_B);
 	        			$doctrine_manager->persist($alt_interactor_B);
 	        		}
-	        		
 
 	        		$alias_interactor_A_array = $alias_interactor_array[0];
 	        		
@@ -265,8 +241,6 @@ class DataManagerController extends Controller
 	        			$alias_interactor_B->setProtein($protein_B);
 	        			$doctrine_manager->persist($alias_interactor_B);
 	        		}
-	        		
-	        		
 	        		
 	        		if($links_array_A){
 		        		foreach ($links_array_A as $link_A){
@@ -296,8 +270,6 @@ class DataManagerController extends Controller
 		        		$doctrine_manager->persist($domain);
 
 	        		}
-	        		
-
 
 	        		$doctrine_manager->persist($interaction);
 	        		
@@ -307,10 +279,6 @@ class DataManagerController extends Controller
 	        	  
 	        		}catch(Exception $e) {
 	        		}
-	        		
-	        		
-	        		
-	        		
 	        	}
         	}
         }
@@ -333,8 +301,6 @@ class DataManagerController extends Controller
         ));
 	}
 	
-
-	
 	public function assertNotNull($value){
 
 		if($value == '' || $value == ' ' || $value == '-' || $value == null){
@@ -342,10 +308,7 @@ class DataManagerController extends Controller
 		}else{
 			return true;
 		}
-	
 	}
-	
-	
 	
 	public function datasetHandler($publication_identifier){
 	    
@@ -356,16 +319,9 @@ class DataManagerController extends Controller
 	    }
 	    
 	    return $dataset;
-	    
-	    
 	}
 	
-	
-	
-	
 	public function createDatasetFromData($publication_identifier){
-	    
-	    
 	    
 	    $reference_array =  explode("|", $publication_identifier);
 	    
@@ -399,12 +355,6 @@ class DataManagerController extends Controller
 	      return $dataset;
 	}
 	
-	
-	
-	
-	
-	
-	
 	public function getDatasetByReference($id){
 	    
 	    $em = $this->getDoctrine()->getManager();
@@ -423,13 +373,7 @@ class DataManagerController extends Controller
 	    
 	    
 	}
-	
-	
-	
-	
-	
-	
-	
+
 	public function isNewDataset($id){
 	
 	    $em = $this->getDoctrine()->getManager();
@@ -449,15 +393,6 @@ class DataManagerController extends Controller
 	        return true;
 	    }
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	public function assertRelationshipExistsProteinOrganism($protein, $organism){
 	    
@@ -1015,10 +950,6 @@ class DataManagerController extends Controller
 	
 	}
 	
-	
-	
-	
-	
 	public function createDomainObjectFromData($feature_interactor_A){
 	
 		$domain_array =  explode(";", $feature_interactor_A);
@@ -1030,10 +961,8 @@ class DataManagerController extends Controller
 		$domain_start_position = null;
 		$domain_end_position = null;
 		
-			
 		foreach($domain_array as $domain){
 			
-		    
 			$_domain_array = explode(":", $domain);
 			$field = $_domain_array[0];
 			$value = $_domain_array[1];
@@ -1085,31 +1014,19 @@ class DataManagerController extends Controller
 
 		if($taxid_array_A && $taxid_array_B){
 			if($taxid_array_A){
-				//9606 9606 1001 2002 3003
 				$taxid_array_A = array_unique($taxid_array_A);
-				//9606 1001 2002 3003
 			}
 			if($taxid_array_B){
-				//9606 9606 1001 4004 5005
 				$taxid_array_B = array_unique($taxid_array_B);
-				//9606 1001 4004 5005
 			}
 			
 			$taxid_array_AB = array_intersect($taxid_array_A, $taxid_array_B);
-			//9606 1001
 			$taxid_array_A = array_diff($taxid_array_A, $taxid_array_AB);		
 			$taxid_array_B = array_diff($taxid_array_B, $taxid_array_AB);
 			
-
-			
-			
 			$taxid_array = array(array(), array(), array());
-			
-			//2002 3003
 			$taxid_array[0] = $taxid_array_A;
-			//4004 5005
 			$taxid_array[1] = $taxid_array_B;
-			//9606 1001
 			$taxid_array[2] = $taxid_array_AB;
 			
 
@@ -1118,14 +1035,11 @@ class DataManagerController extends Controller
 		}
 	}
 	
-
 	public function createOrganismsFromTaxidIds($taxid_id_array, &$doctrine_manager){
 		
-	
 		$organism_array = array();
 		$organism = null;
-		
-		
+
 		foreach($taxid_id_array as $taxid_id){
 
 			$is_new_taxid_id = self::isNewOrganism($taxid_id);
@@ -1140,16 +1054,13 @@ class DataManagerController extends Controller
 				$organism = new Organism;
 				$organism = self::setOrganismAttributes($taxid_id, $organism);
 				$organism_array[] = $organism;
-
-					
+	
 			}
 
 		}
 	
 		return $organism_array;
 	}
-	
-	
 
 	public function getTaxidIds($taxid_interactor){
 	
@@ -1169,13 +1080,9 @@ class DataManagerController extends Controller
 		return $taxid_id_array;
 	}
 	
-	
 	public function previouslyAddedOrganism($taxid_id, $previously_added_organisms){
 	
 		$organism_in_array = in_array($taxid_id, $previously_added_organisms);
-		
-
-
 		$return = null;
 	
 		switch($organism_in_array){
@@ -1218,7 +1125,6 @@ class DataManagerController extends Controller
 	}
 	
 	public function getOrganismFromTaxidId($taxid_id){
-	
 	
 		$em = $this->getDoctrine()->getManager();
 		$query = $em->createQuery(
@@ -1385,7 +1291,6 @@ class DataManagerController extends Controller
 	    return $domain;
 	    
 	}
-	
 }
 
 ?>

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Admin_Settings</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ admin_Setting.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ admin_Setting.title }}</td>
+            </tr>
+            <tr>
+                <th>Home_page</th>
+                <td>{{ admin_Setting.homepage }}</td>
+            </tr>
+            <tr>
+                <th>About</th>
+                <td>{{ admin_Setting.about }}</td>
+            </tr>
+            <tr>
+                <th>Color_scheme</th>
+                <td>{{ admin_Setting.colorscheme }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_settings_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_settings_edit', { 'id': admin_Setting.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

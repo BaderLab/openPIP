@@ -71,7 +71,7 @@ class Data_File
 	/**
 	 * @Assert\File(maxSize="200000000")
 	 */
-	private $data_file;
+	protected $data_file;
 
     /**
      * Get id

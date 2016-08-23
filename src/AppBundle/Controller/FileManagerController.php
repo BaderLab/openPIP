@@ -18,8 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 class FileManagerController extends Controller
 {
 
-
-	
 	/**
 	 * Lists all Announcement entities.
 	 *
@@ -28,29 +26,7 @@ class FileManagerController extends Controller
 	 */
 	public function uploadAction($upload_directory)
 	{
-		/*
-		Request $request
-	    $file = new File();
-	    $form = $this->createFormBuilder($file)
-	    
-	        -> add('file', FileType::class, array('attr' => array('name' => 'files[]', 'multiple' => true, 'webkitdirectory' => '')))
 
-	        ->getForm();
-	
-	    $form->handleRequest($request);
-	
-	    if ($form->isValid()) {
-	        $em = $this->getDoctrine()->getManager();
-	        $file->upload();
-	        $em->persist($file);
-	        $em->flush();
-	
-	        return $this->redirectToRoute('file_manager');
-	    }
-	    
-	    
-*/
-		
 	    function listdirs($dir) {
 	    	static $alldirs = array();
 	    	$dirs = glob($dir . '/*', GLOB_ONLYDIR);

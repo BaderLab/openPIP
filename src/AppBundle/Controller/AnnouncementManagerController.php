@@ -39,9 +39,6 @@ class AnnouncementManagerController extends Controller
 		
 		$em = $this->getDoctrine()->getManager();
 	
-
-		
-
 		$query = $em->createQuery(
 				'SELECT i
 			    FROM AppBundle:Announcement i
