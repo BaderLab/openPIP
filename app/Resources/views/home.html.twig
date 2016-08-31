@@ -1,8 +1,12 @@
 {% extends 'base.html.twig' %} 
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
+    {% stylesheets 
+        'assets/css/bootstrap.min.css'
+        'assets/css/main.css'
+        'assets/css/home.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %} 
 {% endblock %} 
 {% block title %}{{ short_title }} | Home{% endblock %}
 {% block content %}
@@ -26,16 +30,32 @@
 				</button>
 			</div>
 			<div id="myNavbar" class="collapse navbar-collapse">
-				<ul class="nav navbar-nav ">
-					<li class="active"><a href="{{ path('home') }}">Home</a></li>
-					<li><a href="{{ path('search') }}">Search</a></li>
-					<li><a href="{{ path('search') }}">Downloads</a></li>
-					<li><a href="{{ path('about') }}">About</a></li>
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
-				</ul>
-			</div>
+    			{% if login_status == false %}
+        				<ul class="nav navbar-nav ">
+        					<li class="active"><a href="{{ path('home') }}">Home</a></li>
+        					<li><a href="{{ path('search') }}">Search</a></li>
+        					<li><a href="{{ path('search') }}">Downloads</a></li>
+        					<li><a href="{{ path('about') }}">About</a></li>
+        				</ul>
+        				<ul class="nav navbar-nav navbar-right">
+        					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+        				</ul>
+    			{% elseif login_status == true %}
+    				<ul class="nav navbar-nav ">
+    					<li class="active"><a href="{{ path('admin_home') }}">Home</a></li>
+    					<li><a href="{{ path('admin_search') }}">Search</a></li>
+    					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
+    					<li><a href="{{ path('admin_about') }}">About</a></li>
+    					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+    					<li><a href="{{ path('data_manager') }}">Data</a></li>
+    					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+    					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+    				</ul>
+    				<ul class="nav navbar-nav navbar-right">
+    					<li><a href="{{ path('user_logout') }}">Logout</a></li>
+    				</ul>
+    			{% endif %}
+    		</div>
 		</div>
 		<div class="shadow"></div>
 	</nav>
@@ -135,7 +155,10 @@
 {% endblock %} 
 {% block javascripts %} 
     {{ tinymce_init() }}
-    <script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/home.js') }}"></script>
+    {% javascripts
+        'assets/js/jquery-2.1.4.min.js'
+        'assets/js/bootstrap.min.js'
+        'assets/js/home.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

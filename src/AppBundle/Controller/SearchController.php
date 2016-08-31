@@ -23,6 +23,7 @@ class SearchController extends Controller
 	 * Search Home
 	 *
 	 * @Route("/search/", name="search")
+	 * @Route("/admin/search/", name="admin_search")
 	 * @Method({"GET", "POST"})
 	 */
 	public function searchAction(Request $request)
@@ -95,11 +96,21 @@ class SearchController extends Controller
 		$short_title = $admin_settings->getShortTitle();
 		
 		
+		$login_status = false;
+		
+		$is_fully_authenticated = $this->get('security.context')
+		->isGranted('IS_AUTHENTICATED_FULLY');
+		
+		if($is_fully_authenticated){
+		    $login_status =  true;
+		}
+		
 		return $this->render('search.html.twig', array(
 				'form' => $form->createView(),
 				'organism_result_array' => $organism_result_array,
 		        'color_scheme' => $color_scheme,
-		        'short_title' => $short_title
+		        'short_title' => $short_title,
+		        'login_status' => $login_status
 				
 		));
 	}
@@ -108,6 +119,7 @@ class SearchController extends Controller
 	 * Search Results
 	 *
 	 * @Route("/search_results/{search_term}", name="search_results", options={"expose": true})
+	 * @Route("/admin/search_results/{search_term}", name="admin_search_results", options={"expose": true})
 	 * @Method({"GET", "POST"})
 	 */
 	public function searchResultsAction($search_term)
@@ -483,7 +495,16 @@ class SearchController extends Controller
 	        $color_scheme = $admin_settings->getColorScheme();
 	        $short_title = $admin_settings->getShortTitle();
 	    
+	        $login_status = false;
+	        
+	        $is_fully_authenticated = $this->get('security.context')
+	        ->isGranted('IS_AUTHENTICATED_FULLY');
+	        
+	        if($is_fully_authenticated){
+	            $login_status =  true;
+	        }
 	        	
+	        
 	        return $this->render('search_result.html.twig', array(
 	                'interaction_array' => $interaction_array,
 	                'json' => $json,
@@ -501,7 +522,8 @@ class SearchController extends Controller
 	                'parameter_min_interaction_score' => $parameter_min_interaction_score,
 	                'domain_colours' => $domain_colours,
 	                'domain_object_array' => $domain_object_array,
-	                'domains' => $domains
+	                'domains' => $domains,
+		            'login_status' => $login_status
 	        ));
 	    
 	    }else{
@@ -512,11 +534,21 @@ class SearchController extends Controller
 	    
 	        $color_scheme = $admin_settings->getColorScheme();
 	        $short_title = $admin_settings->getShortTitle();
+	        
+	        $login_status = false;
+	         
+	        $is_fully_authenticated = $this->get('security.context')
+	        ->isGranted('IS_AUTHENTICATED_FULLY');
+	         
+	        if($is_fully_authenticated){
+	            $login_status =  true;
+	        }
 	    
 	        return $this->render('no_results.html.twig', array(
 	                'search_query' => $search_query,
 	                'color_scheme' => $color_scheme,
-	                'short_title' => $short_title
+	                'short_title' => $short_title,
+		            'login_status' => $login_status
 	        ));
 
 	    }
@@ -576,11 +608,30 @@ class SearchController extends Controller
 	    $domain_sequence = $domain->getSequence();
 	    $domain_type = $domain->getType();
 	    $domain_name = $domain->getName();
+	    
+	    $admin_settings = $this->getDoctrine()
+	    ->getRepository('AppBundle:Admin_Settings')
+	    ->find(1);
+	     
+	    $color_scheme = $admin_settings->getColorScheme();
+	    $short_title = $admin_settings->getShortTitle();
+	     
+	    $login_status = false;
+	    
+	    $is_fully_authenticated = $this->get('security.context')
+	    ->isGranted('IS_AUTHENTICATED_FULLY');
+	    
+	    if($is_fully_authenticated){
+	        $login_status =  true;
+	    }
 
 	    return $this->render('domain_sequence.html.twig', array(
 	            'domain_sequence' => $domain_sequence,
 	            'domain_type' => $domain_type,
 	            'domain_name' => $domain_name,
+                'color_scheme' => $color_scheme,
+                'short_title' => $short_title,
+	            'login_status' => $login_status
 	
 	    ));
 	}
@@ -607,9 +658,29 @@ class SearchController extends Controller
 	    $protein_sequence = $protein->getSequence();
 	    $protein_description = $protein->getDescription();
 	
+	    
+	    $admin_settings = $this->getDoctrine()
+	    ->getRepository('AppBundle:Admin_Settings')
+	    ->find(1);
+	    
+	    $color_scheme = $admin_settings->getColorScheme();
+	    $short_title = $admin_settings->getShortTitle();
+	    
+	    $login_status = false;
+	     
+	    $is_fully_authenticated = $this->get('security.context')
+	    ->isGranted('IS_AUTHENTICATED_FULLY');
+	     
+	    if($is_fully_authenticated){
+	        $login_status =  true;
+	    }
+	    
 	    return $this->render('protein_sequence.html.twig', array(
 	            'protein_sequence' => $protein_sequence,
 	            'gene_name' => $protein_gene_name,
+                'color_scheme' => $color_scheme,
+                'short_title' => $short_title,
+	            'login_status' => $login_status
 	
 	    ));
 	}

@@ -1,8 +1,12 @@
 {% extends 'base.html.twig' %} 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/data_upload.css') }}">
+	{% stylesheets 
+        'assets/css/main.css'
+        'assets/css/data_manager.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
 {% endblock %}
 {% block title %}{{ short_title }} | Data{% endblock %} 
 {% block content %}
@@ -22,6 +26,8 @@
 				<ul class="nav navbar-nav ">
 					<li><a href="{{ path('admin_home') }}">Home</a></li>
 					<li><a href="{{ path('admin_search') }}">Search</a></li>
+					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
+					<li><a href="{{ path('admin_about') }}">About</a></li>
 					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
 					<li class="active"><a href="{{ path('data_manager') }}">Data</a></li>
 					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
@@ -41,13 +47,13 @@
     		<div class="col-md-8">
     			<div class="container data_upload_panel">
     				<div class="row">
-    					<div class="data_upload_header">
+    					<div class="data_upload_header" style="background-color: {{ color_scheme }}">
     						<h4>Upload Data</h4>
     					</div>
     				</div>
     				<div class="row data_upload_content">
     					{{ form_start(form) }}
-    					<div class="col-sm-4">
+    					<div class="col-lg-4">
     						<div class="row">
     							<input id="uploadFile" disabled="disabled" />
     						</div>
@@ -58,7 +64,7 @@
     							</div>
     						</div>
     					</div>
-    					<div class="col-sm-6">
+    					<div class="col-lg-6">
     						<div class="row">{{ form_widget(form.description) }}</div>
     						</br>
     						<div class="row">{{ form_widget(form.file_type) }}</div>
@@ -105,8 +111,11 @@
 </main>
 {% endblock %} 
 {% block javascripts %}
-    <script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/main.js') }}"></script>
-    <script src="{{ asset('assets/js/data_manager.js') }}"></script>
+    {% javascripts
+        'assets/js/jquery-2.1.4.min.js'
+        'assets/js/bootstrap.min.js'
+        'assets/js/main.js'
+        'assets/js/data_manager.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

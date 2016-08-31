@@ -1,71 +1,60 @@
-{% extends "FOSUserBundle::layout.html.twig" %}
-
-{% trans_default_domain 'FOSUserBundle' %}
-
-{% block stylesheets %}
-
-	<link rel='shortcut icon' href="{{ asset('assets/images/tor_ibin_icon.ico') }}" />
-	<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-	<link rel="stylesheet" href="{{ asset('assets/css/login.css') }}">
-{% endblock %}
-
-{% block title %}Login{% endblock %}
-
+{% extends "FOSUserBundle::layout.html.twig" %} 
+{% trans_default_domain 'FOSUserBundle' %} 
+{% block stylesheets %} 
+    {% stylesheets
+		'assets/css/bootstrap.min.css' 'assets/css/main.css'
+		'assets/css/data_manager.css' %}
+		<link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %} 
+{% endblock %} 
+{% block title %}{{ short_title }} | Login{% endblock %} 
 {% block fos_user_content %}
-
 <header>
 	<nav class="navbar navbar-default">
-	  <div class="container-fluid">
-	    <div class="navbar-header tor_ibin_header">
-	        <h5 class="nav-header">TOR-IBIN Admin</h5>
-		 </div>  
-	  </div>
-	  <div class="shadow"></div>
+		<div class="container-fluid">
+			<div class="navbar-header tor_ibin_header">
+				<h5 class="nav-header" style="color: {{ color_scheme }}">{{ short_title }} Admin</h5>
+			</div>
+		</div>
+		<div class="shadow"></div>
 	</nav>
 </header>
 <div id="slideshow">
-   <div>
-     <img class="background_img" src="{{ asset('assets/images/background_img_1.png') }}">
-   </div>
-   <div>
-     <img class="background_img" src="{{ asset('assets/images/background_img_2.png') }}">
-   </div>
-   <div>
-     <img class="background_img" src="{{ asset('assets/images/background_img_3.png') }}">
-   </div> 
-   <div>
-     <img class="background_img" src="{{ asset('assets/images/background_img_4.png') }}">
-   </div>
-   <div>
-     <img class="background_img" src="{{ asset('assets/images/background_img_5.png') }}">
-   </div>
-      <div>
-     <img class="background_img" src="{{ asset('assets/images/background_img_6.png') }}">
-   </div>
-</div>
 	<div>
-     <img class="background_img_2" src="{{ asset('assets/images/background_img_1.png') }}">
-    </div>
+		<img class="background_img" src="{{ asset('assets/images/background_img_1.png') }}">
+	</div>
+	<div>
+		<img class="background_img" src="{{ asset('assets/images/background_img_2.png') }}">
+	</div>
+	<div>
+		<img class="background_img" src="{{ asset('assets/images/background_img_3.png') }}">
+	</div>
+	<div>
+		<img class="background_img" src="{{ asset('assets/images/background_img_4.png') }}">
+	</div>
+	<div>
+		<img class="background_img" src="{{ asset('assets/images/background_img_5.png') }}">
+	</div>
+	<div>
+		<img class="background_img" src="{{ asset('assets/images/background_img_6.png') }}">
+	</div>
+</div>
+<div>
+	<img class="background_img_2" src="{{ asset('assets/images/background_img_1.png') }}">
+</div>
 <div class="container">
 	<div id='login'>
 		<form action="{{ path("fos_user_security_check") }}" method="post">
-		    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-		
-		    <div class="form-group">
-		        <label for="username">{{ 'Username'|trans }}</label>
-		        <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
-		    </div>
-		
-		    <div class="form-group">
-		        <label for="password">{{ 'Password'|trans }}</label>
-		        <input type="password" id="password" name="_password" required="required" />
-		    </div>
-		    <input type="submit"
-		           class="btn btn-success"
-		           id="_submit"
-		           name="_submit"
-		           value="{{ 'Submit'|trans }}" />
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+			<div class="form-group">
+				<label for="username">{{ 'Username'|trans }}</label> 
+				<input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+			</div>
+			<div class="form-group">
+				<label for="password">{{ 'Password'|trans }}</label> 
+				<input type="password" id="password" name="_password" required="required" />
+			</div>
+			<input type="submit" class="btn btn-success" id="_submit" name="_submit" value="{{ 'Submit'|trans }}" />
 		</form>
 	</div>
 </div>

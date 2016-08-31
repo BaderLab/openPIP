@@ -1,8 +1,13 @@
 {% extends 'base.html.twig' %} 
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/css/announcement.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+	{% stylesheets 
+        'assets/css/jquery-ui.min.css'
+        'assets/css/main.css'
+        'assets/css/announcement_manager.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
 {% endblock %} 
 {% block title %}{{ short_title }} | Announcement{% endblock %} 
 {% block content %}
@@ -22,6 +27,8 @@
 				<ul class="nav navbar-nav ">
 					<li><a href="{{ path('admin_home') }}">Home</a></li>
 					<li><a href="{{ path('admin_search') }}">Search</a></li>
+					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
+					<li><a href="{{ path('admin_about') }}">About</a></li>
 					<li class="active"><a href="{{ path('announcement_manager') }}">Announcements</a></li>
 					<li><a href="{{ path('data_manager') }}">Data</a></li>
 					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
@@ -71,7 +78,7 @@
     				<div class="row">
     					<div class="container announcement">
     						<div class="row">
-    							<div class="announcement_header">
+    							<div class="announcement_header" style="background-color: {{ color_scheme }}">
     								<div class="col-sm-10">
     									<div class="announcement_title">
     										<h4>{{ announcement.title }}</h4>
@@ -112,7 +119,14 @@
 {% endblock %}
 {% block javascripts %} 
     {{ tinymce_init() }}
-    <script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/main.js') }}"></script>
+    {% javascripts
+    	'bundles/fosjsrouting/js/router.js'
+        'assets/js/jquery-2.1.4.min.js'
+        'assets/js/jquery-ui.min.js'
+        'assets/js/bootstrap.min.js'
+        'assets/js/main.js'
+        'assets/js/announcement_manager.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
 {% endblock %}

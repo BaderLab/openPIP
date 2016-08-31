@@ -50,7 +50,7 @@ class FileManagerController extends Controller
 	    
 	    $color_scheme = $admin_settings->getColorScheme();
 	    $short_title = $admin_settings->getShortTitle();
-	    return $this->render('admin_file_manager.html.twig', array(
+	    return $this->render('file_manager.html.twig', array(
 	    		'upload_directory' => $upload_directory,
 				'directories' => $directories,
                 'color_scheme' => $color_scheme,

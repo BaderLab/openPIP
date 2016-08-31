@@ -16,15 +16,52 @@ use AppBundle\Form\ChoiceList\ArrayChoiceList;
 /**
  * Search controller.
  *
- * @Route("/admin/download")
+ *
  */
 class DownloadManagerController extends Controller
 {
+    
+    /**
+     * Search Home
+     *
+     * @Route("/download", name="download", options={"expose": true}))
+     * @Route("/admin/download", name="admin_download", options={"expose": true}))
+     * @Method({"GET", "POST"})
+     */
+    public function downloadAction()
+    {
+        $admin_settings = $this->getDoctrine()
+        ->getRepository('AppBundle:Admin_Settings')
+        ->find(1);
+        
+        $color_scheme = $admin_settings->getColorScheme();
+        $short_title = $admin_settings->getShortTitle();
+        
+        
+        $login_status = false;
+        
+        $is_fully_authenticated = $this->get('security.context')
+        ->isGranted('IS_AUTHENTICATED_FULLY');
+        
+        if($is_fully_authenticated){
+            $login_status =  true;
+        }
+        
+        return $this->render('download.html.twig', array(
+                'color_scheme' => $color_scheme,
+                'short_title' => $short_title,
+                'login_status' => $login_status
+        
+        ));
+    }
+    
+    
+    
 
     /**
      * Search Home
      *
-     * @Route("/multi_fasta/{search_term}", name="multi_fasta", options={"expose": true}))
+     * @Route("/admin/download/multi_fasta/{search_term}", name="multi_fasta", options={"expose": true}))
      * @Method({"GET", "POST"})
      */
     public function multi_fastaAction($search_term)
@@ -105,7 +142,7 @@ class DownloadManagerController extends Controller
     /**
      * Search Home
      *
-     * @Route("/csv/{search_term}", name="csv", options={"expose": true}))
+     * @Route("/admin/download/csv/{search_term}", name="csv", options={"expose": true}))
      * @Method({"GET", "POST"})
      */
     public function csvAction($search_term)
@@ -126,7 +163,7 @@ class DownloadManagerController extends Controller
     /**
      * Search Home
      *
-     * @Route("/psi_mitab/{search_term}", name="psi_mitab", options={"expose": true}))
+     * @Route("/admin/download/psi_mitab/{search_term}", name="psi_mitab", options={"expose": true}))
      * @Method({"GET", "POST"})
      */
     public function psi_mitabAction($search_term)
@@ -262,7 +299,7 @@ class DownloadManagerController extends Controller
     /**
      * Search Home
      *
-     * @Route("/psi_mixml/{search_term}", name="psi_mixml", options={"expose": true}))
+     * @Route("/admin/download/psi_mixml/{search_term}", name="psi_mixml", options={"expose": true}))
      * @Method({"GET", "POST"})
      */
     public function psi_mixmlAction($search_term)
