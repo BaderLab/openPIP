@@ -35,3 +35,17 @@
     width: 76%;
 
 }
+
+.qtip {
+
+    max-width: 800px;
+    min-width: 400px;
+
+}
+
+.morecontent span {
+    display: none;
+}
+.morelink {
+    display: block;
+}

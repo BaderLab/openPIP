@@ -18,7 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 /**
  * Admin Settings Controller
  */
-class AdminSettingsManagerController extends Controller
+class AdminSettingsController extends Controller
 {
     /**
      * Admin Settings
@@ -26,7 +26,7 @@ class AdminSettingsManagerController extends Controller
      * @Route("/admin/settings/", name="admin_settings")
      * @Method({"GET", "POST"})
      */
-    public function adminSettingsManagerAction(Request $request)
+    public function adminSettingsAction(Request $request)
     {
         $admin_settings = $this->getDoctrine()
         ->getRepository('AppBundle:Admin_Settings')
@@ -44,7 +44,9 @@ class AdminSettingsManagerController extends Controller
                 'attr'  => array('class' => 'btn btn-success')
         ));
         $form->handleRequest($request);
-         
+        
+        $updated = false;
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $admin_settings = $form->getData();
@@ -54,6 +56,7 @@ class AdminSettingsManagerController extends Controller
             $color_scheme = $admin_settings->getColorScheme();
             $em->persist($admin_settings);
             $em->flush();
+            $updated = true;
         }
 
         return $this->render('admin_settings.html.twig', array(
@@ -62,7 +65,8 @@ class AdminSettingsManagerController extends Controller
                 'home_page' => $home_page,
                 'about' => $about,
                 'color_scheme' => $color_scheme,
-                'short_title' => $short_title
+                'short_title' => $short_title,
+                'updated' => $updated
 
         ));
     }

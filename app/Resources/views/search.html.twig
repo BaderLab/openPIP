@@ -66,25 +66,21 @@
     			</div>
     			<div class="row search_content  search_panel"
     				style="background-color: #FFFFFF">
-    				<div class="col-sm-12">
+    				<div class="col-sm-10">
     					{{ form_start(form) }}
     					<div class="row" style='width: 84%; margin: 20px;'>
-    						<h4 class="left">Identifier:</h4>
-    						<a href='#' class='string_example example_small right'
-    							onclick='
-    										$("#form_identifier").val("Q5JRA6-2");
-    										$("#form_organism_select").val("9606").trigger("change");
-    									'>#3</a> <a href='#' class='string_example example_small right'
-    							onclick='
-    										$("#form_identifier").val("Q5JS98");
-    										$("#form_organism_select").val("9606").trigger("change");
-    									'>#2</a> <a href='#' class='string_example example_small right'
-    							onclick='
-    										$("#form_identifier").val("Q5SQN1");
-    										$("#form_organism_select").val("9606").trigger("change");
-    									'>#1</a>
-    
-    						<p class="right">Examples:</p>
+    						<div class="col-sm-8">
+    							<div class="row">
+    								<h4>{{ form_label(form.identifier) }}</h4>
+    							</div>
+    						</div>
+    						<div class="col-sm-4">
+    							<p>Examples:
+    							<a href='#' class='string_example example_small' onclick='$("#form_identifier").val("{{ example_3 }}");'>#1</a>
+    							<a href='#' class='string_example example_small' onclick='$("#form_identifier").val("{{ example_2 }}");'>#2</a>
+        						<a href='#' class='string_example example_small' onclick='$("#form_identifier").val("{{ example_1 }}");'>#3</a> 
+								</p>
+    						</div>
     					</div>
     					<div class="row" style='margin: 20px;'>
     						<div class="input-group input-group-sm">
@@ -178,7 +174,7 @@
         	$("#form_identifier").autocomplete({
         		source: function(request, response){
         
-        			url = 'http://localhost/php_eclipse_workspace/tor_ibin/web/app.php/admin/search/autocomplete/' + request.term;
+        			url = 'http://beta.baderlab.org/web/app.php/admin/search/autocomplete/' + request.term;
         			
         
         			$.getJSON(url, function(data){
@@ -207,11 +203,8 @@
                             }
                     	});
         		    }
-        
-        	    	
         	    }});
         	});
-        	
         });
     
     </script>

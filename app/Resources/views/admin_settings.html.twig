@@ -46,11 +46,17 @@
 </header>
 <main>
     <div class="container">
+    	{% if updated == true  %}
+    	<div class="row">
+    		<h4>Settings Successfully Updated</h4>
+   		</div>
+   		{% endif %}
     	<div class="row">
     		<ul class="nav nav-tabs">
     			<li class="active tab"><a data-toggle="tab" href="#title">Title</a></li>
     			<li class="tab"><a data-toggle="tab" href="#home_page">Home Page</a></li>
     			<li class="tab"><a data-toggle="tab" href="#about">About</a></li>
+    			<li class="tab"><a data-toggle="tab" href="#search_examples">Search Examples</a></li>
     			<li class="tab"><a data-toggle="tab" href="#color_scheme">Color Scheme</a></li>
     		</ul>
     	</div>
@@ -73,9 +79,21 @@
     					<div class="row">{{ form_label(form.about) }} {{ form_widget(form.about) }}</div>
     				</div>
     			</div>
+    			<div id="search_examples" class="tab-pane fade">
+    				<div class="container">
+    					<div class="row">{{ form_label(form.example_1) }} {{ form_widget(form.example_1) }}</div>
+    					<div class="row">{{ form_label(form.example_2) }} {{ form_widget(form.example_2) }}</div>
+    					<div class="row">{{ form_label(form.example_3) }} {{ form_widget(form.example_3) }}</div>
+    				</div>
+    			</div>
     			<div id="color_scheme" class="tab-pane fade">
     				<div class="container">
-    					<div class="row">{{ form_label(form.color_scheme) }} {{ form_widget(form.color_scheme) }}</div>
+    					<div class="row">
+    					    {{ form_label(form.color_scheme) }} 
+    					</div>
+    					<div class="row">
+    	                    {{ form_widget(form.color_scheme) }}
+    	                </div>
     				</div>
     			</div>
     		</div>

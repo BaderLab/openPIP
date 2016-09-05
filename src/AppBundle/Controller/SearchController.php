@@ -94,7 +94,9 @@ class SearchController extends Controller
 		
 		$color_scheme = $admin_settings->getColorScheme();
 		$short_title = $admin_settings->getShortTitle();
-		
+		$example_1 = $admin_settings->getExample1();
+		$example_2 = $admin_settings->getExample2();
+		$example_3 = $admin_settings->getExample3();
 		
 		$login_status = false;
 		
@@ -110,7 +112,10 @@ class SearchController extends Controller
 				'organism_result_array' => $organism_result_array,
 		        'color_scheme' => $color_scheme,
 		        'short_title' => $short_title,
-		        'login_status' => $login_status
+		        'login_status' => $login_status,
+		        'example_1' => $example_1,
+		        'example_2' => $example_2,
+		        'example_3' => $example_3
 				
 		));
 	}
@@ -125,35 +130,41 @@ class SearchController extends Controller
 	public function searchResultsAction($search_term)
 	{
 
+	    //search input
 	    $search_query = $search_term;
-	    	
+	    
+	    //search parameters
 	    $request = $this->getRequest();
 	    $search_setting_organism = $request->query->get('organism');
 	    $search_setting_domain = $request->query->get('domain');
 	    $search_setting_score = $request->query->get('score');
-	    $search_setting_max_interactions = $request->query->get('max_interactions');
+	    $search_setting_max_interactions = $request->query->get('max_number_of_interactions');
 	    //$domain = getDomainByType($search_setting_domain);
 	    
+	    //find identifier in database
 	    $identifier_repository = $this->getDoctrine()
-	    ->getRepository('AppBundle:Identifier');
-	    	
+	    ->getRepository('AppBundle:Identifier');	    	
 	    $identifier = $identifier_repository->findOneByIdentifier($search_query);
 	    
+	    //if idetifier is in database
 	    if($identifier){
 	    
+	        
 	        $identifier_identifier = $identifier->getIdentifier();
 	        $identifier_naming_convention = $identifier->getNamingConvention();
-	        $protein = $identifier->getProtein();
-	    
+	        
+	        //get protein
+	        $protein = $identifier->getProtein();	    
 	        $protein_id = $protein->getId();
 	        $protein_name = $protein->getName();
+	        $protein_gene_name = $protein->getGeneName();
 	        $protein_sequence = $protein->getSequence();
 	        $protein_description = $protein->getDescription();
 	        	
-	        	
+	        //if organism is not specified by user check if protein exists in multiple organisms	
 	        if(!$search_setting_organism){
+	            
 	            $em = $this->getDoctrine()->getManager();
-	    
 	            $repository = $em->getRepository('AppBundle:Organism');
 	            $query = $repository->createQueryBuilder('o')
 	            ->innerJoin('o.proteins', 'p')
@@ -165,7 +176,6 @@ class SearchController extends Controller
 	            if (count($organism_result_array) > 1){
 	    
 	                $option_array = array('search_term' => $search_query);
-	    
 	                if($search_setting_domain){
 	                    $option_array['domain'] = $search_setting_domain;
 	                }
@@ -175,35 +185,79 @@ class SearchController extends Controller
 	                if($search_setting_max_interactions){
 	                    $option_array['max_number_of_interactions'] = $search_setting_max_interactions;
 	                }
+	                
+	                //redirect to select organism page
 	                return $this->redirect($this->generateUrl('select_organmism', $option_array));
 	            }
 	        }
-	    
-	    
+	        
+
+	        $em = $this->getDoctrine()->getManager();
+	        
+	        $query = $em->createQuery(
+	                        "SELECT DISTINCT l.database_name
+				            FROM AppBundle:External_Link l
+				            WHERE l.protein = :protein_id"
+	                        );
+	         
+	        $query->setParameter('protein_id', $protein_id);
+	        
+	        $external_link_database_name_array = $query->getResult();
+	        $protein_of_intrest_external_links = array();
+	        
+	        
+	        foreach($external_link_database_name_array as $external_link_database_name){
+	           $name = $external_link_database_name['database_name'];
+	           $protein_of_intrest_external_links[$name] = array();
+	        }
+	         
+	        $query = $em->createQuery(
+	                        "SELECT l
+				            FROM AppBundle:External_Link l
+				            WHERE l.protein = :protein_id"
+	                        );
+	        
+	        $query->setParameter('protein_id', $protein_id);
+	         
+	        $external_link_array = $query->getResult();
+	        
+	        foreach($external_link_array as $external_link){
+	            
+	            $database_name = $external_link->getDatabaseName();
+	            $link = $external_link->getLink();
+	            
+	            $link_id = $external_link->getLinkId();
+	            $protein_of_intrest_external_links[$database_name][] = array($link_id, $link);
+	            
+	        }
+	        
+	        $protein_of_intrest = array($protein_id, $protein_name , $protein_gene_name, $protein_description, $protein_of_intrest_external_links);
+	         
+	        
 	        $repository = $this->getDoctrine()->getManager();
 	        //->getRepository('AppBundle:Interaction');
-	    
+	         
 	        $query_builder = $repository->createQueryBuilder('i');
 	        $query_builder->select('i');
 	        $query_builder->from('AppBundle:Interaction', 'i');
 	        $query_builder->where('i.interactor_A = :interactor_A');
 	        $query_builder->setParameter('interactor_A', $protein_id);
+	        
 	        if($search_setting_score){
 	            $query_builder->andWhere('i.score >= :score');
-	            $query_builder->setParameter('score', $search_setting_score);
-	    
+	            $query_builder->setParameter('score', $search_setting_score);  
 	        }
-	    
+	         
 	        if($search_setting_max_interactions){
 	            $query_builder->setMaxResults($search_setting_max_interactions);
 	        }
-	    
+	         
 	        $query = $query_builder->getQuery();
-	    
+	         
 	        $interaction_result_array = $query->getResult();
+
 	    
-	        $interaction_array = array();
-	    
+	        $interaction_array = array();	    
 	        $domain_array = array();
 	        $protein_of_intrest_array = array();
 	        $interacting_protein_nodes_array = array();
@@ -212,12 +266,13 @@ class SearchController extends Controller
 	        $domain_array[] = ' ';
 	         
 	        $min_interaction_score = 1;
-	    
 	        $number_of_interactions = 0;
 	         
 	        foreach($interaction_result_array as $interaction_result){
 	    
 	            $number_of_interactions ++;
+	            
+	            //Get interaction data
 	            $interaction_id = $interaction_result->getId();
 	            $interactor_A = $interaction_result->getInteractorA();
 	            $interactor_B = $interaction_result->getInteractorB();
@@ -229,9 +284,9 @@ class SearchController extends Controller
 	                 
 	                $min_interaction_score = $score;
 	            }
-	            	
+	            
+	            
 	            $em = $this->getDoctrine()->getManager();
-	    
 	    
 	            $query = $em->createQuery(
 	                            "SELECT p
@@ -240,15 +295,10 @@ class SearchController extends Controller
 	                            );
 	    
 	            $query->setParameter('interactor_A', $interactor_A);
-	    
 	            $interactor_A_array = $query->getResult();
-	    
 	            $_interactor_A = $interactor_A_array[0];
-	    
 	            $interactor_A_gene_name = $_interactor_A->getGeneName();
-	    
 	            $interactor_A_name = $_interactor_A->getName();
-	    
 	            $interactor_A_id = $_interactor_A->getId();
 	    
 	            	
@@ -266,7 +316,7 @@ class SearchController extends Controller
 	                    $domain_name = $domain->getName();
 	                    $domain_type = $domain->getType();
 	                    $domain_id = $domain->getId();
-	                    $domain_array[] = $domain_name;
+	                    $domain_array[] = array($domain_id, $domain_name, $domain_type);
 	    
 	                }else{
 	                    $domain_id = $interactor_A_id;
@@ -279,10 +329,8 @@ class SearchController extends Controller
 	                $domain_name = $interactor_A_id . '_' . $interactor_A_name;
 	            }
 	    
-	    
-	    
-	            $protein_of_intrest_array[] = array($interactor_A_id, $interactor_A_name, $interactor_A_gene_name, $domain_id, $domain_name, $domain_type);
-	    
+	            
+                //Get protein data
 	            $query = $em->createQuery(
 	                            "SELECT p
 				FROM AppBundle:Protein p
@@ -298,12 +346,13 @@ class SearchController extends Controller
 	            $interactor_B_gene_name = $_interactor_B->getGeneName();
 	    
 	            $interactor_B_name = $_interactor_B->getName();
-	            	
+	            $interactor_B_description = $_interactor_B->getDescription();
 	            $interactor_B_sequence = $_interactor_B->getSequence();
 	    
 	            $interactor_B_id  = $_interactor_B->getId();
 	            	
-	            	
+	            
+	            //Get support information
 	            $query = $em->createQuery(
 	                            "SELECT isi
 				FROM AppBundle:Interaction_Support_Information isi
@@ -323,8 +372,8 @@ class SearchController extends Controller
 	                	
 	                $query = $em->createQuery(
 	                                "SELECT si
-				FROM AppBundle:Support_Information si
-				WHERE si.id = :support_information_id"
+				                    FROM AppBundle:Support_Information si
+				                    WHERE si.id = :support_information_id"
 	                                );
 	                	
 	                $query->setParameter('support_information_id', $support_information_id);
@@ -335,7 +384,8 @@ class SearchController extends Controller
 	                $support_information_array[] = array($support_information_name, $support_information_value);
 	            }
 	            	
-	            	
+	            
+	            //Get reference for interaction
 	            $em = $this->getDoctrine()->getManager();
 	    
 	            $repository = $em->getRepository('AppBundle:Dataset');
@@ -350,33 +400,59 @@ class SearchController extends Controller
 	            $dataset_reference = $dataset->getReference();
 	            	
 	    
+	            
+	            //Get external links for interacting protein
+	            $interactor_B_external_links = array();
+	            
+	            $em = $this->getDoctrine()->getManager();
+	             
+	            $query = $em->createQuery(
+	                            "SELECT DISTINCT l.database_name
+				            FROM AppBundle:External_Link l
+				            WHERE l.protein = :protein_id"
+	                            );
+	            
+	            $query->setParameter('protein_id', $interactor_B_id);
+	             
+	            $interactor_B_external_link_database_name_array = $query->getResult();
+	            
+	             
+	            foreach($interactor_B_external_link_database_name_array as $interactor_B_external_link_database_name){
+	                $name = $interactor_B_external_link_database_name['database_name'];
+	               $interactor_B_external_links[$name] = array();
+	            }
+	            
 	            $query = $em->createQuery(
 	                            "SELECT l
-				FROM AppBundle:External_Link l
-				WHERE l.protein = :protein_id"
+				            FROM AppBundle:External_Link l
+				            WHERE l.protein = :protein_id"
 	                            );
-	            	
+	             
 	            $query->setParameter('protein_id', $interactor_B_id);
+	            
 	            $interactor_B_external_link_array = $query->getResult();
-	            	
-	            	
-	            $link = array();
+	             
 	            foreach($interactor_B_external_link_array as $interactor_B_external_link){
-	    
-	                $interactor_B_link = array();
-	                $interactor_B_link[] = $interactor_B_external_link->getLink();
-	                $interactor_B_link[] = $interactor_B_external_link->getLinkId();
-	                $interactor_B_link[] = $interactor_B_external_link->getDatabaseName();
-	                $link[] = $interactor_B_link;
+	                 
+	                $database_name = $interactor_B_external_link->getDatabaseName();
+	                $link = $interactor_B_external_link->getLink();
+	                $link_id = $interactor_B_external_link->getLinkId();
+	                $interactor_B_external_links[$database_name][] = array($link_id, $link);
 	            }
+	            
+	            
+
 	            	
-	            	
+	            //Set interacting protein node
+	            $interacting_protein_nodes_array[] = array($interactor_B_id, $interactor_B_name, $interactor_B_gene_name, $interactor_B_description, $interactor_B_external_links);
 	    
-	            $interacting_protein_nodes_array[] = array($interactor_B_id, $interactor_B_name, $link, $interactor_B_gene_name);
-	    
+	            
+	            //Set edge data
 	            $edge_array[] = array($domain_id, $domain_name, $interactor_B_id, $interactor_A_name, $interactor_B_name, $score);
 	    
-	    
+	            
+	            
+	            //Set network data
 	            $_interaction = array();
 	    
 	            if($interactor_A_name){
@@ -428,40 +504,40 @@ class SearchController extends Controller
 	            }
 	             
 	            
-	    
+	           //network data
 	            $interaction_array[] = $_interaction;
 	    
 	        }
 	    
-	        $domain_array = array_unique($domain_array);
-	    
+	        
+	        
+	        
+	        
+	        
+	        
+	        
+	        $domain_array = array_map("unserialize", array_unique(array_map("serialize", $domain_array)));
 	        $domain_array = array_values($domain_array);
-	        //$domain_array = array_map("unserialize", array_unique(array_map("serialize", $domain_array)));
-	    
-	    
-	    
-	    
-	        $domain_object_array = array();
-	        $domain_array_2 = $domain_array;
-	        array_shift($domain_array_2);
-	        foreach($domain_array_2 as $d){
-	            $domain_repository = $this->getDoctrine()
-	            ->getRepository('AppBundle:Domain');
-	             
-	            $domain_object = $domain_repository->findOneByName($d);
-	    
-	            $domain_object_array[] = $domain_object;
-	        }
-	    
-	        $domains = $domain_array;
-	        array_shift($domains);
-	    
-	        $json = json_encode(array('domain' => $domain_array, 'protein_of_intrest' => $protein_of_intrest_array, 'interacting_protein_nodes' => $interacting_protein_nodes_array, 'edge' => $edge_array));
-
-	        $domain_colours = array("black", "#ca0020", "#f4a582", "#0571b0", "#ffffbf", "#92c5de");
-	    
+	        
 	        $domain_count = count($domain_array) - 1;
+	        
+	       
+	        $domain_colours = array("black", "#ca0020", "#f4a582", "#0571b0", "#ffffbf", "#92c5de");
+	        
+	        
+	        $json = json_encode(array('domain' => $domain_array, 'protein_of_intrest' => $protein_of_intrest, 'interacting_protein_nodes' => $interacting_protein_nodes_array, 'edge' => $edge_array));
+
+	        
+	        
+	        
+	        
 	    
+	        
+
+	        
+	    
+	        
+	        //Get search parameters
 	        $parameter_min_interaction_score = 'N/A';
 	        if($min_interaction_score){
 	            $parameter_min_interaction_score = $min_interaction_score;
@@ -487,7 +563,7 @@ class SearchController extends Controller
 	            $search_setting_max_interactions = 'N/A';
 	        }
 	    
-	    
+	        //Get admin settings
 	        $admin_settings = $this->getDoctrine()
 	        ->getRepository('AppBundle:Admin_Settings')
 	        ->find(1);
@@ -495,6 +571,8 @@ class SearchController extends Controller
 	        $color_scheme = $admin_settings->getColorScheme();
 	        $short_title = $admin_settings->getShortTitle();
 	    
+	        
+	        //Check login status
 	        $login_status = false;
 	        
 	        $is_fully_authenticated = $this->get('security.context')
@@ -504,6 +582,24 @@ class SearchController extends Controller
 	            $login_status =  true;
 	        }
 	        	
+	        $handle = fopen('C:/Users/Miles/Desktop/test.txt', 'w');
+	        fwrite($handle, $json);
+	        fclose($handle);
+	        
+	        $domain_object_array = array();
+	        $domain_array_2 = $domain_array;
+	        array_shift($domain_array_2);
+	        foreach($domain_array_2 as $d){
+	            $domain_repository = $this->getDoctrine()
+	            ->getRepository('AppBundle:Domain');
+	        
+	            $domain_object = $domain_repository->findOneByName($d);
+	             
+	            $domain_object_array[] = $domain_object;
+	        }
+	        
+	        $domains = $domain_array;
+	        array_shift($domains);
 	        
 	        return $this->render('search_result.html.twig', array(
 	                'interaction_array' => $interaction_array,
@@ -519,13 +615,14 @@ class SearchController extends Controller
 	                'search_setting_score' => $search_setting_score,
 	                'search_setting_max_interactions' => $search_setting_max_interactions,
 	                'domain_count' => $domain_count,
+	                'interaction_count' => $number_of_interactions,
 	                'parameter_min_interaction_score' => $parameter_min_interaction_score,
 	                'domain_colours' => $domain_colours,
-	                'domain_object_array' => $domain_object_array,
 	                'domains' => $domains,
-		            'login_status' => $login_status
+		            'login_status' => $login_status,
+	                'domain_object_array' => $domain_object_array,
 	        ));
-	    
+	       
 	    }else{
 	    
 	        $admin_settings = $this->getDoctrine()
@@ -553,6 +650,7 @@ class SearchController extends Controller
 
 	    }
 	}
+
 	
 
 	/**

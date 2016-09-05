@@ -5,7 +5,7 @@
         'bundles/jqueryfileuploader/css/jquery.fileupload.css'
         'bundles/jqueryfileuploader/css/jquery.fileupload-ui.css'
         'assets/css/main.css'
-        'assets/css/file_upload.css'
+        'assets/css/file_manager.css'
     %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %} 
@@ -45,63 +45,63 @@
 	</nav>
 </header>
 <main>
-<div class="container">
-	<div class="row">
-		<div class="col-sm-3">
-			<div class='list-group'>
-				<span class='list-group-item list-group-item-header'><b>Upload Folders</b></span> 
-				{% for directory in directories %} 
-				    {% if directory == upload_directory %} 
-				    	<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item active'>{{ directory }}</a> 
-				    {% elseif directory == 'data' %} 
-				    {% else %} 
-				    	<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item'>{{ directory }}</a> 
-				    {% endif %} 
-				{% endfor %}
-			</div>
-		</div>
-		<div class="col-sm-9">
-			<form id="fileupload" method="POST" enctype="multipart/form-data">
-				<div class="row fileupload-buttonbar">
-					<span class="btn fileinput-button"> 
-						<i class="glyphicon glyphicon-plus"></i> 
-						<span>Add folder</span> 
-						<input type="file" name="files[]" webkitdirectory>
-					</span> 
-					<span class="btn fileinput-button"> 
-						<i class="glyphicon glyphicon-plus"></i> 
-						<span>Add files</span> 
-						<input type="file" name="files[]" multiple>
-					</span>
-					<button type="submit" class="btn btn-primary start">
-						<i class="glyphicon glyphicon-upload"></i> 
-						<span>Start upload</span>
-					</button>
-					<button type="reset" class="btn btn-warning cancel">
-						<i class="glyphicon glyphicon-ban-circle"></i> 
-						<span>Cancel upload</span>
-					</button>
-					<span class="fileupload-process"></span>
-				</div>
-				<div class="row">
-					<div class="fileupload-progress fade">
-						<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-							<div class="progress-bar progress-bar-success" style="width: 0%;"></div>
-						</div>
-						<div class="progress-extended">&nbsp;</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="upload_table">
-						<table role="presentation" class="table table-striped">
-							<tbody class="files"></tbody>
-						</table>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
+    <div class="container">
+    	<div class="row">
+    		<div class="col-sm-3">
+    			<div class='list-group'>
+    				<span class='list-group-item list-group-item-header' style="background-color: {{ color_scheme }}"><b>Upload Folders</b></span> 
+    				{% for directory in directories %} 
+    				    {% if directory == upload_directory %} 
+    				    	<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item active'>{{ directory }}</a> 
+    				    {% elseif directory == 'data' %} 
+    				    {% else %} 
+    				    	<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item'>{{ directory }}</a> 
+    				    {% endif %} 
+    				{% endfor %}
+    			</div>
+    		</div>
+    		<div class="col-sm-9">
+    			<form id="fileupload" method="POST" enctype="multipart/form-data">
+    				<div class="row fileupload-buttonbar">
+    					<span class="btn fileinput-button"> 
+    						<i class="glyphicon glyphicon-plus"></i> 
+    						<span>Add folder</span> 
+    						<input type="file" name="files[]" webkitdirectory>
+    					</span> 
+    					<span class="btn fileinput-button"> 
+    						<i class="glyphicon glyphicon-plus"></i> 
+    						<span>Add files</span> 
+    						<input type="file" name="files[]" multiple>
+    					</span>
+    					<button type="submit" class="btn btn-primary start">
+    						<i class="glyphicon glyphicon-upload"></i> 
+    						<span>Start upload</span>
+    					</button>
+    					<button type="reset" class="btn btn-warning cancel">
+    						<i class="glyphicon glyphicon-ban-circle"></i> 
+    						<span>Cancel upload</span>
+    					</button>
+    					<span class="fileupload-process"></span>
+    				</div>
+    				<div class="row">
+    					<div class="fileupload-progress fade">
+    						<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+    							<div class="progress-bar progress-bar-success" style="width: 0%;"></div>
+    						</div>
+    						<div class="progress-extended">&nbsp;</div>
+    					</div>
+    				</div>
+    				<div class="row">
+    					<div class="upload_table">
+    						<table role="presentation" class="table table-striped">
+    							<tbody class="files"></tbody>
+    						</table>
+    					</div>
+    				</div>
+    			</form>
+    		</div>
+    	</div>
+    </div>
 </main>
 {% endblock %} 
 {% block javascripts %}
@@ -121,11 +121,12 @@
         'bundles/jqueryfileuploader/js/jquery.fileupload-video.js'
         'bundles/jqueryfileuploader/js/jquery.fileupload-validate.js'
         'bundles/jqueryfileuploader/js/jquery.fileupload-ui.js'
+        'bundles/jqueryfileuploader/js/main.js'
         'assets/js/main.js'
         'assets/js/file_manager.js' %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     {% verbatim %}
 		<script id="template-upload" type="text/x-tmpl">
 			{% for (var i=0, file; file=o.files[i]; i++) { %}

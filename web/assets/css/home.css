@@ -218,7 +218,7 @@ border-radius: 0;
 	
 	font-weight: bold;
 	color: #008cba;
-	font-size: 0.8em;
+	font-size: 1.2em;
 	line-height: 1.42857143;
 }
 
@@ -242,7 +242,8 @@ border-radius: 0;
 
 .home_panel{
 	width: 94%;
-	background-color: #ffffff;
+
+	background-color: #FFFFFF;
 	border: 1px solid #cccccc;
 	padding: 20px;
 	margin: 20px auto 20px;
@@ -273,5 +274,13 @@ border-radius: 0;
 ::-webkit-scrollbar-corner {
       background-color: #f2f2f2;
 } /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
+
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 126px; }
+.se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 126px;
+}
 
 *

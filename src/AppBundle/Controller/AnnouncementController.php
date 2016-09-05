@@ -11,7 +11,7 @@ use AppBundle\Form\AnnouncementType;
  *
  * @Route("/admin/announcement_manager")
  */
-class AnnouncementManagerController extends Controller
+class AnnouncementController extends Controller
 {
 	
 	/**
@@ -20,7 +20,7 @@ class AnnouncementManagerController extends Controller
 	 * @Route("/", name="announcement_manager")
 	 * @Method({"GET", "POST"})
 	 */
-	public function announcement_managerAction(Request $request)
+	public function announcementAction(Request $request)
 	{
 		
 		$announcement = new Announcement();

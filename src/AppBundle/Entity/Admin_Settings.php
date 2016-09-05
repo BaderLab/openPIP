@@ -30,12 +30,12 @@ class Admin_Settings
     protected $short_title;
     
     /**
-     * @ORM\Column(name="`home_page`", type="string", length=4000, nullable=true)
+     * @ORM\Column(name="`home_page`", type="string", length=10000, nullable=true)
      */
     protected $home_page;
 
     /**
-     * @ORM\Column(name="`about`", type="string", length=4000, nullable=true)
+     * @ORM\Column(name="`about`", type="string", length=10000, nullable=true)
      */
     protected $about;
 
@@ -44,6 +44,23 @@ class Admin_Settings
      */
     protected $color_scheme;
 
+    
+    /**
+     * @ORM\Column(name="`example_1`", type="string", length=20, nullable=true)
+     */
+    protected $example_1;
+    
+    /**
+     * @ORM\Column(name="`example_2`", type="string", length=20, nullable=true)
+     */
+    protected $example_2;
+    
+    /**
+     * @ORM\Column(name="`example_3`", type="string", length=20, nullable=true)
+     */
+    protected $example_3;
+    
+    
     /**
      * Get id
      *
@@ -172,5 +189,77 @@ class Admin_Settings
     public function getShortTitle()
     {
         return $this->short_title;
+    }
+
+    /**
+     * Set example1
+     *
+     * @param string $example1
+     *
+     * @return Admin_Settings
+     */
+    public function setExample1($example1)
+    {
+        $this->example_1 = $example1;
+
+        return $this;
+    }
+
+    /**
+     * Get example1
+     *
+     * @return string
+     */
+    public function getExample1()
+    {
+        return $this->example_1;
+    }
+
+    /**
+     * Set example2
+     *
+     * @param string $example2
+     *
+     * @return Admin_Settings
+     */
+    public function setExample2($example2)
+    {
+        $this->example_2 = $example2;
+
+        return $this;
+    }
+
+    /**
+     * Get example2
+     *
+     * @return string
+     */
+    public function getExample2()
+    {
+        return $this->example_2;
+    }
+
+    /**
+     * Set example3
+     *
+     * @param string $example3
+     *
+     * @return Admin_Settings
+     */
+    public function setExample3($example3)
+    {
+        $this->example_3 = $example3;
+
+        return $this;
+    }
+
+    /**
+     * Get example3
+     *
+     * @return string
+     */
+    public function getExample3()
+    {
+        return $this->example_3;
     }
 }

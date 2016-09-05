@@ -90,24 +90,25 @@ stfalcon_tinymce:
     tinymce_jquery: true
     selector: '.tinymce'
     use_callback_tinymce_init: false
+   
     theme:
         simple:
             plugins:
-                - 'fullscreen code autolink lists link charmap preview hr pagebreak nonbreaking'
+                - 'fullscreen code autolink lists link charmap preview hr pagebreak nonbreaking textcolor colorpicker'
             invalid_elements: '@[onclick|onunload|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onfocus|onblur|onkeypress|onkeydown|onkeyup|onsubmit|onreset|onselect|onchange],script'
             theme: 'modern'
             height: 400
             menubar: 'file edit insert view format table tools'
-            toolbar1: "bold italic underline | alignleft aligncenter alignright alignjustify | styleselect | fontselect | fontsizeselect | bullist | numlist |"
+            toolbar1: "bold italic underline | alignleft aligncenter alignright alignjustify | styleselect | fontselect | fontsizeselect | bullist | numlist | forecolor backcolor"
         advanced:
             plugins:
-                - 'fullscreen code autolink lists link image charmap preview hr anchor pagebreak'
+                - 'fullscreen code autolink lists link image charmap preview hr anchor pagebreak textcolor colorpicker'
                 - 'searchreplace wordcount fullscreen media nonbreaking table textcolor'
             invalid_elements: '@[onclick|onunload|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onfocus|onblur|onkeypress|onkeydown|onkeyup|onsubmit|onreset|onselect|onchange],script'
             theme: 'modern'
             menubar: 'file edit insert view format table tools'
             toolbar1: "bold italic underline | alignleft aligncenter alignright alignjustify | image | table"
-            toolbar2: "code link charmap preview hr searchreplace styleselect paste media | fullscreen wordcount"
+            toolbar2: "code link charmap preview hr searchreplace styleselect paste media | fullscreen wordcount | forecolor backcolor"
             image_advtab: true
 
 oneup_uploader:

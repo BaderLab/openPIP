@@ -70,7 +70,7 @@ class Protein
 	protected $gene_name;
 	
 	/**
-	 * @ORM\Column(type="string", length=100, nullable=true)
+	 * @ORM\Column(type="string", length=10000, nullable=true)
 	 */
 	protected $description;
 	

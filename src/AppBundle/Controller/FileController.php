@@ -15,7 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
  *
  * 
  */
-class FileManagerController extends Controller
+class FileController extends Controller
 {
 
 	/**

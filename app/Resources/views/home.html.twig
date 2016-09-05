@@ -61,50 +61,42 @@
 	</nav>
 </header>
 <main>
-    <div id="slideshow">
-    	<div>
-    		<img class="background_img" src="{{ asset('assets/images/background_img_1.png') }}">
-    	</div>
-    	<div>
-    		<img class="background_img" src="{{ asset('assets/images/background_img_2.png') }}">
-    	</div>
-    	<div>
-    		<img class="background_img" src="{{ asset('assets/images/background_img_3.png') }}">
-    	</div>
-    	<div>
-    		<img class="background_img" src="{{ asset('assets/images/background_img_4.png') }}">
-    	</div>
-    	<div>
-    		<img class="background_img" src="{{ asset('assets/images/background_img_5.png') }}">
-    	</div>
-    	<div>
-    		<img class="background_img" src="{{ asset('assets/images/background_img_6.png') }}">
-    	</div>
-    </div>
-    <div>
-    	<img class="background_img_2" src="{{ asset('assets/images/background_img_1.png') }}">
-    </div>
     <div class="row">
     	<div class="col-sm-9">
     		<div class="home_panel">
     			<div class="container">
     				<div class="row db_content" style="margin-top: 4%;">
-    					<div class="col-lg-3 lefty">
-    						<span class='title' style="color: {{ color_scheme }}">Organisms</span><br />
-    						<span class='value' style="color: {{ color_scheme }}">{{ organism_count }}</span>
-    					</div>
-    					<div class="col-lg-3 centery">
-    						<span class='title' style="color: {{ color_scheme }}">Proteins</span><br />
-    						<span class='value' style="color: {{ color_scheme }}">{{ protein_count }}</span>
-    					</div>
-    					<div class="col-lg-3 righty">
-    						<span class='title' style="color: {{ color_scheme }}">Interactions</span><br />
-    						<span class='value' style="color: {{ color_scheme }}">{{ interaction_count }}</span>
-    					</div>
-    					<div class="col-lg-3 righty">
-    						<span class='title' style="color: {{ color_scheme }}">Domains</span><br />
-    						<span class='value' style="color: {{ color_scheme }}">{{ domain_count }}</span>
-    					</div>
+    					{% if domain_count > 0 %}
+        					<div class="col-lg-3 lefty">
+        						<span class='title' style="color: {{ color_scheme }}">Organisms</span><br />
+        						<span class='value' style="color: {{ color_scheme }}">{{ organism_count }}</span>
+        					</div>
+        					<div class="col-lg-3 centery">
+        						<span class='title' style="color: {{ color_scheme }}">Proteins</span><br />
+        						<span class='value' style="color: {{ color_scheme }}">{{ protein_count }}</span>
+        					</div>
+        					<div class="col-lg-3 righty">
+        						<span class='title' style="color: {{ color_scheme }}">Interactions</span><br />
+        						<span class='value' style="color: {{ color_scheme }}">{{ interaction_count }}</span>
+        					</div>
+        					<div class="col-lg-3 righty">
+        						<span class='title' style="color: {{ color_scheme }}">Domains</span><br />
+        						<span class='value' style="color: {{ color_scheme }}">{{ domain_count }}</span>
+        					</div>
+        				{% else %}
+    					    <div class="col-lg-4 lefty">
+        						<span class='title' style="color: {{ color_scheme }}">Organisms</span><br />
+        						<span class='value' style="color: {{ color_scheme }}">{{ organism_count }}</span>
+        					</div>
+        					<div class="col-lg-4 centery">
+        						<span class='title' style="color: {{ color_scheme }}">Proteins</span><br />
+        						<span class='value' style="color: {{ color_scheme }}">{{ protein_count }}</span>
+        					</div>
+        					<div class="col-lg-4 righty">
+        						<span class='title' style="color: {{ color_scheme }}">Interactions</span><br />
+        						<span class='value' style="color: {{ color_scheme }}">{{ interaction_count }}</span>
+        					</div>
+    					{% endif %}
     				</div>
     				<div class="row" style="margin-top: 4%;">
     					<div class="about">{{ home_page | raw }}</div>
@@ -139,11 +131,6 @@
     						<div class="row">
     							<div class="announcement_text">{{ announcement.text | raw }}</div>
     						</div>
-    						<div class="row">
-    							<div class="read_more">
-    								<a href='announce/'>Read more...</a>
-    							</div>
-    						</div>
     					</div>
     				</div>
     				{% endfor %}
@@ -151,6 +138,7 @@
     		</div>
     	</div>
     </div>
+    
 </main>
 {% endblock %} 
 {% block javascripts %} 
@@ -158,7 +146,9 @@
     {% javascripts
         'assets/js/jquery-2.1.4.min.js'
         'assets/js/bootstrap.min.js'
+        'assets/js/main.js'
         'assets/js/home.js' %}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
 {% endblock %}

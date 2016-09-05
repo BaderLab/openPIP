@@ -22,6 +22,9 @@ class Admin_SettingsType extends AbstractType
             ->add('home_page', 'textarea', array('label' => 'Home Page', 'attr' => array('class' => 'tinymce')))
             ->add('about', 'textarea', array('attr' => array('label' => 'About', 'class' => 'tinymce')))
             ->add('color_scheme', TextType::class, array('label' => 'Color Scheme', 'attr' => array('class' => 'spectrum')))
+            ->add('example_1', 'text', array('label' => 'Example 1', 'attr' => array('style' => "width: 200px;") ))
+            ->add('example_2', 'text', array('label' => 'Example 2', 'attr' => array('style' => "width: 200px;") ))
+            ->add('example_3', 'text', array('label' => 'Example 3', 'attr' => array('style' => "width: 200px;") ))
         ;
     }
     

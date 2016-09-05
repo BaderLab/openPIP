@@ -18,7 +18,7 @@ use AppBundle\Form\ChoiceList\ArrayChoiceList;
  *
  *
  */
-class DownloadManagerController extends Controller
+class DownloadController extends Controller
 {
     
     /**

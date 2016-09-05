@@ -25,14 +25,14 @@ use Symfony\Component\DomCrawler\Crawler;
  *
  * @Route("/admin/data_manager")
  */
-class DataManagerController extends Controller
+class DataController extends Controller
 {
 		
 	/**
 	 * @Route("/", name="data_manager")
 	 * @Method({"GET", "POST"})
 	 */
-	public function data_managerAction(Request $request)
+	public function dataAction(Request $request)
 	{
 	    gc_enable();
         $data_File = new Data_File();
@@ -553,14 +553,7 @@ class DataManagerController extends Controller
 	    $return = $results[0];
 	    return $return;
 	
-	}
-	
-	
-	
-	
-	
-	
-	
+	}	
 	
 	public function domainHandler($feature_interactor_A){
 		
@@ -849,10 +842,36 @@ class DataManagerController extends Controller
     			}
     			catch(Exception $e) {
     			}
-    
     			
     			
-    
+    			try{
+    			    //get the gene name node from xml
+    			    $function = $crawler->filter('uniprot > entry > comment[type="function"] > text');
+    			
+    			    //if the node is present
+    			    if($function->count()){
+    			
+    			        //get the gene name text from node
+    			        $function_text = $function->text();
+    			
+    			        //set the gene name text for the protein
+    			        $protein->setDescription($function_text);
+    			
+    			
+    			    }
+    			}
+    			catch(Exception $e) {
+    			}
+    			
+    			
+    			$external_link = new External_Link;
+    			$external_link->setDatabaseName("UniProt");
+    			$external_link->setLinkId($uniprot_accession);
+    			$external_link->setLink("http://www.uniprot.org/uniprot/" . $uniprot_accession);
+    			$external_link->setProtein($protein);
+    			$links_array[] = $external_link;
+    			
+    			
     			try{
     				//get the gene name node from xml
     				$link = $crawler->filter('uniprot > entry > dbReference[type="KEGG"]');
@@ -882,6 +901,12 @@ class DataManagerController extends Controller
     			}
     			catch(Exception $e) {
     			}
+    			
+    			
+    			
+    			
+    			
+    			
     			try{
     				//get the gene name node from xml
     				$link = $crawler->filter('uniprot > entry > dbReference[type="Ensembl"]');

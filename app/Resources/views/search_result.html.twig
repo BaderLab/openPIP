@@ -62,22 +62,23 @@
 	</nav>
 </header>
 <main>
-<div class="row network_row" style="background-color: #EEEEEE;">
-	<div class="col-sm-12">
-		<div id='cy'></div>
-	</div>
-</div>
-<div class="row">
-	<div class="shadow"></div>
-	<div class="row">
-		<ul class="nav nav-pills" style="margin: auto; width: 50%;">
-			<li class="active pill"><a data-toggle="pill" href="#search_summary" style="color: {{ color_scheme }}">Search Summary</a></li>
-			<li class="pill"><a data-toggle="pill" href="#network" style="color: {{ color_scheme }}">Network</a></li>
-			<li class="pill"><a data-toggle="pill" href="#downloads" style="color: {{ color_scheme }}">Downloads</a></li>
-			<li class="pill"><a data-toggle="pill" href="#view_settings" style="color: {{ color_scheme }}">View Settings</a></li>
-			<li class="pill"><a data-toggle="pill" href="#data_settings" style="color: {{ color_scheme }}">Data Settings</a></li>
-		</ul>
-	</div>
+    <div class="se-pre-con"></div>
+    <div class="row network_row" style="background-color: #EEEEEE;">
+    	<div class="col-sm-12">
+    		<div id='cy'></div>
+    	</div>
+    </div>
+    <div class="row">
+    	<div class="shadow"></div>
+    	<div class="row">
+    		<ul class="nav nav-pills" style="margin: auto; width: 50%;">
+    			<li class="active pill"><a data-toggle="pill" href="#search_summary" style="color: {{ color_scheme }}">Summary</a></li>
+    			<li class="pill"><a data-toggle="pill" href="#network" style="color: {{ color_scheme }}">Network</a></li>
+    			<li class="pill"><a data-toggle="pill" href="#downloads" style="color: {{ color_scheme }}">Downloads</a></li>
+    			<li class="pill"><a data-toggle="pill" href="#view_settings" style="color: {{ color_scheme }}">View Settings</a></li>
+    			<li class="pill"><a data-toggle="pill" href="#data_settings" style="color: {{ color_scheme }}">Data Settings</a></li>
+    		</ul>
+    	</div>
 	<div class="row">
 		<div class="results_panel">
 			<div class="tab-content" style="padding-top: 0;">
@@ -104,6 +105,7 @@
 									<div class="row">
 										<h3 style="color: {{ color_scheme }}">Stats</h3>
 									</div>
+									<div class="row">Number of Interactions: {{ interaction_count }}</div>
 									<div class="row">Number of Domains: {{ domain_count }}</div>
 								</div>
 							</div>
@@ -154,7 +156,7 @@
 									<td>{{ interaction.score }}</td>
 									<td>{{ interaction.binding_start }}</td>
 									<td>{{ interaction.binding_end }}</td>
-									<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/{{ interaction.dataset }}">Reference</a></td>
+									<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/{{ interaction.dataset }}" target="_blank">Reference</a></td>
 								</tr>
 								{% endfor %}
 							</tbody>
@@ -335,7 +337,7 @@
 												<label for="max_number_of_interactions"> Max Number of Interactions: </label>
 											</div>
 											<div class="row">
-												<input type="text" name="max_number_of_interactions" id="max_number_of_interactions" style="width: 60px;" />
+												<input type="text" name="max_number_of_interactions" id="max_number_of_interactions" style="width: 60px;" value="50" />
 											</div>
 										</div>
 										<div class="col-sm-4">
@@ -369,6 +371,7 @@
 		</div>
 	</div>
 </main>
+
 {% endblock %} 
 {% block javascripts %}
     {{ tinymce_init() }}
@@ -394,109 +397,123 @@
     
     
     <script id="document_js">
-    $(function(){
-    
+    $(function(){    
     	var proteinOfIntrestName = '';
-    	var cy = cytoscape({
-    		
-    	  container: document.getElementById('cy'),
-    	  
-    	  elements: {
-    	      nodes: [],      
-    	      edges: []
-    	    },
+		var cy = cytoscape({	
+			container: document.getElementById('cy'),
+    	  	elements: 
+          	{
+    	     	nodes: [],      
+    	     	edges: []
+    	  	},
+    	  	style: 
+		  	[
+    	  		{
+    				selector: '$node',
+    				css: 
+    				{
+                        'content': 'data(name)',
+                        'text-valign': 'center',
+                        'color': 'white',
+                        'text-outline-width': 2,
+                        'padding-top': '10px',
+                        'padding-left': '10px',
+                        'padding-bottom': '10px',
+                        'padding-right': '10px',
+                        'text-align': 'center',
+                        'background-color': '#55ACEE'
+        			}
+    			},
+            	{
+                    selector: '.protein_of_intrest',
+                    css: 
+                    {
+                        'content': 'data(gene_name)',
+                        'text-valign': 'top',
+                        'color': 'white',
+                        'text-outline-width': 2,
+                        'padding-top': '10px',
+                        'padding-left': '10px',
+                        'padding-bottom': '10px',
+                        'padding-right': '10px',
+                        'text-align': 'center',
+                        'background-color': '#55ACEE'
+                    }
+				},
+                {
+                	selector: '.edge',
+                	css: 
+                    {
+                	  'line-color' : '#AAAAAA'
+                	}
+                }
+			]
+		});
     
-     
-    	  style: [
-    	          {
-    			    selector: '$node',
-    			    css: {
-    			      'content': 'data(name)',
-    			      'text-valign': 'center',
-    			      'color': 'white',
-    			      'text-outline-width': 2,
-    			      'padding-top': '10px',
-    			      'padding-left': '10px',
-    			      'padding-bottom': '10px',
-    			      'padding-right': '10px',
-    			      'text-align': 'center',
-    			      'background-color': '#55ACEE'
-    			    }
-    			  },
-    	          {
-    	            selector: 'edge',
-    	            css: {
-    	            	  'line-color' : '#aaa'
-    	            }
-    	          },
-    	          {
-    	            selector: '.protein_of_intrest',
-    	            css: {
-    				      'content': 'data(name)',
-    				      'text-valign': 'top',
-    				      'color': 'white',
-    				      'text-outline-width': 2,
-    				      'padding-top': '10px',
-    				      'padding-left': '10px',
-    				      'padding-bottom': '10px',
-    				      'padding-right': '10px',
-    				      'text-align': 'center',
-    				      'background-color': '#55ACEE'
-    	            }
-    	          }
-    	      ]
-    	});
-    
-    	
     	var result = $.parseJSON('{{ json | raw }}');
     
-    	
     	var domainArray = result.domain;
     	var proteinOfIntrestArray = result.protein_of_intrest;
     	var interactingProteinNodeArray = result.interacting_protein_nodes;
     	var edgeArray = result.edge;
     	
-    	for (i = 0; i < proteinOfIntrestArray.length; ++i) {
+
     		
-    		var proteinId = proteinOfIntrestArray[i][0];
-    		var proteinName = proteinOfIntrestArray[i][1];
-    		var geneName = proteinOfIntrestArray[i][2];
-    		var domainId = proteinOfIntrestArray[i][3]; 
-    		var domainName = proteinOfIntrestArray[i][4];
-    		var domainType = proteinOfIntrestArray[i][5]; 
-    		var nodeProteinId = proteinId + "_" + proteinName;
-    		var nodeDomainId = domainName;
-    		proteinOfIntrestName = proteinName;
-    		
+		var proteinId = proteinOfIntrestArray[0];
+		var proteinName = proteinOfIntrestArray[1];
+		var geneName = proteinOfIntrestArray[2];
+		var proteinDescription = proteinOfIntrestArray[3];
+		var externalLinksArray = proteinOfIntrestArray[4]; 
+
+		var nodeProteinId = proteinId + "_" + proteinName;
+
+		proteinOfIntrestName = proteinName;
+
+		if( {{ interaction_count }} > 0 ){
     		cy.add([{ 
     			group: "nodes",
-    			data: { id: nodeProteinId, protein_name: proteinName, name: geneName },
+    			data: { id: nodeProteinId, protein_name: proteinName, gene_name: geneName, description: proteinDescription, external_links: externalLinksArray },
     			classes: "protein_of_intrest"
     			
     		}]);
-    		
-    		cy.add([{ 
-    			group: "nodes",
-    			data: { id: nodeDomainId, name: domainType, name_domain: domainId, domain_name: domainName, protein_name: proteinName, parent: nodeProteinId},
-    			classes: "domain"
-    			
-    		}]);
     	}
+
+		for (i = 1; i < domainArray.length; ++i) {
+
+			var domainId = domainArray[i][0];
+			var domainName = domainArray[i][1];
+			var domainType = domainArray[i][2];
+
+			cy.add([{ 
+				group: "nodes",
+				data: { id: domainName, name: domainType, name_domain: domainId, domain_name: domainName, domain_id: domainId, protein_name: proteinName, parent: nodeProteinId},
+				classes: "domain"
+				
+			}]);
+
+			
+		}
+
+
+
     	
     	for (i = 0; i < interactingProteinNodeArray.length; ++i) {
     		
     		var proteinId = interactingProteinNodeArray[i][0];
     		var proteinName = interactingProteinNodeArray[i][1];
+    		var geneName = interactingProteinNodeArray[i][2];
+    		var proteinDescription = interactingProteinNodeArray[i][3];
     		var nodeProteinId = proteinId + "_" + proteinName;
-    		var linkArray = interactingProteinNodeArray[i][2];
-    		var geneName = interactingProteinNodeArray[i][3];
+    		var linkArray = interactingProteinNodeArray[i][4];
+
     
     		cy.add([{ 
     			group: "nodes",
-    			data: { id: nodeProteinId, name: geneName, protein_name: proteinName, gene_name: geneName, link: linkArray},
+    			data: { id: nodeProteinId, name: geneName, protein_name: proteinName, gene_name: geneName, description: proteinDescription, external_links: linkArray},
     			classes: "interacting_protein_node"
     		}]);
     	}
+
     	for (i = 0; i < edgeArray.length; ++i) {
     		
     		var sourceDomainId = edgeArray[i][0];
@@ -537,6 +554,7 @@
         	
         	classes: "interacting_protein_node"
     	}
+
     	cy.center();
     	
     	cy.layout({ 
@@ -570,7 +588,100 @@
     		}
     
     	});
+
+
+  
+
+    	cy.$('.interacting_protein_node').qtip({
+    		content: function(){ 
+    			var proteinName = this.data('protein_name');
+    			var searchTerm = this.data('search_term');
+    			var geneName = this.data('gene_name');
+    			var proteinDescription = this.data('description');
+    			var linkArray = this.data('external_links');
+    			var returnLinks = '<div class="row">';
+
+    			$.each(linkArray, function(database, links) {
+
+    				returnLinks += '<div class="row">' + database + '</div>';
+    				returnLinks += '<div class="row">';
+    				for (i = 0; i < links.length; ++i) {
+    					link_id = links[i][0];
+    					link = links[i][1];
+						returnLinks += '<a href="' + link + '" target="_blank">' + link_id + '</a> ';
+					}
+					returnLinks += '</div>';
+    			});
+    			
+    			returnLinks += '</div>';			
+    			
+    			return '<div class="container"><div class="row"><div class="col-sm-8"><h4>' + geneName + '</h4></div></div><div class="col-sm-7"><div class="row"><h4>Description</h4></div><div class="row"><span class="more">' + proteinDescription + '</span></div></div><div class="col-sm-5"><div class="row"><h4>Links</h4></div>' + returnLinks + '</div><div class="row"><div class="col-sm-8"><div class="row"><h4>Actions</h4></div><div class="row"><a href="' + Routing.generate('search_results', { search_term: proteinName }) + '" target="_blank">Search for ' + geneName + '</a></div><div class="row"><a href="' + Routing.generate('protein_sequence', { search_term: proteinName }) + '"  target="_blank">Show protein sequence</a></div></div></div></div><script>$(document).ready(function() {var showChar = 300;var ellipsestext = "...";var moretext = "Read More";var lesstext = "Show less";$(".more").each(function() {var content = $(this).html();if(content.length > showChar) {var c = content.substr(0, showChar);var h = content.substr(showChar, content.length - showChar);var html = c + \'<span class="moreellipses">\' + ellipsestext + \'&nbsp;</span><span class="morecontent"><span>\' + h + \'</span>&nbsp;&nbsp;<a href="" class="morelink">Read More</a></span>\';$(this).html(html);}});$(".morelink").on("click", function(){if($(this).hasClass("less")) {$(this).removeClass("less");$(this).html(moretext);} else {$(this).addClass("less");$(this).html(lesstext);}$(this).parent().prev().toggle();$(this).prev().toggle();return false;});});</' + 'script>';
+
+    				
+    		},
+    		position: {
+    			my: 'top center',
+    			at: 'bottom center'
+    		},
+    		style: {
+    			classes: 'qtip-bootstrap',
+    			tip: {
+    				width: 16,
+    				height: 8
+    			}
+    		},
+    	});
+
+    	var domain_colours = ["black", "#ca0020", "#f4a582", "#0571b0", "#ffffbf", "#92c5de"];
+    	
+    	for (i = 1; i < domainArray.length; ++i) {
+    		
+			var domainId = domainArray[i][0];
+			var domainName = domainArray[i][1];
+			var domainType = domainArray[i][2];
+
+
+    		
+    		var domainColour = domain_colours[i];
+    		var domainSelector = '#' + domainName;
+    		
+    		cy.$(domainSelector).neighborhood( 'edge' ).style({'line-color' : domainColour });
+    		cy.$(domainSelector).neighborhood( 'node' ).style({'background-color': domainColour });
+    		cy.$(domainSelector).roots().style({'background-color': domainColour });
     
+    
+    	}
+
+		cy.$('.domain').qtip({
+		    show: {
+	            solo: true,
+		    },
+			content: function(){ 
+				return '<div class="container">' + 
+        					'<div class="row">' + 
+        						'<h4>' + this.data('domain_name') + '</h4>' +
+        					'</div>' +
+        					 '<div class="row">' +
+        			     		'<h4>Actions</h4>' +
+        			    	'</div>'+
+        			    	'<div class="row">'+
+        			       		'<a href="' + Routing.generate('domain_sequence', { search_term: this.data('domain_name') }) + '"  target="_blank">Show domain sequence</a>' +
+        			    	'</div>' +
+        				'</div>';	
+			},
+			position: {
+				my: 'top center',
+				at: 'bottom center'
+			},
+			style: {
+				classes: 'qtip-bootstrap',
+				tip: {
+					width: 20,
+					height: 8
+				}
+			},
+		});
+
     	cy.edges().qtip({
     		content: function(){ 
     			return 'Interaction: ' + 
@@ -595,28 +706,31 @@
     			}
     		}
     	});
-    	
-    	cy.$('.interacting_protein_node').qtip({
+
+    	cy.$('.protein_of_intrest').qtip({
     		content: function(){ 
     			var proteinName = this.data('protein_name');
     			var searchTerm = this.data('search_term');
     			var geneName = this.data('gene_name');
-    			var linkArray = this.data('link');
+    			var proteinDescription = this.data('description');
+    			var linkArray = this.data('external_links');
     			var returnLinks = '<div class="row">';
-    			for (i = 0; i < linkArray.length; ++i) {
-    
-    				var link = linkArray[i][0];
-    				var linkID = linkArray[i][1];
-    				var database = linkArray[i][2];
-    
-    				returnLinks += '<div class="row"><p>' + database + ': <a href="' + link + '" target="_blank">' + linkID + '</a></p></div>'
-    				
-    			}
-    
+
+    			$.each(linkArray, function(database, links) {
+
+    				returnLinks += '<div class="row">' + database + '</div>';
+    				returnLinks += '<div class="row">';
+    				for (i = 0; i < links.length; ++i) {
+    					link_id = links[i][0];
+    					link = links[i][1];
+						returnLinks += '<a href="' + link + '" target="_blank">' + link_id + '</a> ';
+					}
+					returnLinks += '</div>';
+    			});
+    			
     			returnLinks += '</div>';			
     			
-    			return '<div class="container"><div class="row"><h4>' + geneName + '</h4></div>' + returnLinks + '<div class="row"><h4>Actions</h4></div><div class="row"><a href="' + Routing.generate('search_results', { search_term: proteinName }) + '" target="_blank">Search for ' + geneName + '</a></div><div class="row"><a href="' + Routing.generate('protein_sequence', { search_term: proteinName }) + '"  target="_blank">Show protein sequence</a></div></div>';			
-    				
+    			return '<div class="container"><div class="row"><div class="col-sm-8"><h4>' + geneName + '</h4></div></div><div class="col-sm-7"><div class="row"><h4>Description</h4></div><div class="row"><span class="more">' + proteinDescription + '</span></div></div><div class="col-sm-5"><div class="row"><h4>Links</h4></div>' + returnLinks + '</div><div class="row"><div class="col-sm-8"><div class="row"><h4>Actions</h4></div><div class="row"><a href="' + Routing.generate('search_results', { search_term: proteinName }) + '" target="_blank">Search for ' + geneName + '</a></div><div class="row"><a href="' + Routing.generate('protein_sequence', { search_term: proteinName }) + '"  target="_blank">Show protein sequence</a></div></div></div></div>';    				
     		},
     		position: {
     			my: 'top center',
@@ -625,62 +739,16 @@
     		style: {
     			classes: 'qtip-bootstrap',
     			tip: {
-    				width: 16,
+    				width: 20,
     				height: 8
-    			}
+    			},
+    			
+			
     		},
+    		
+		
     	});
-    
-    	var domain_colours = ["black", "#ca0020", "#f4a582", "#0571b0", "#ffffbf", "#92c5de"];
-    	
-    	for (i = 1; i < domainArray.length; ++i) {
-    		
-    		var domainID = domainArray[i];
-    		var domainColour = domain_colours[i];
-    		var domainSelector = '#' + domainID;
-    		
-    		cy.$(domainSelector).neighborhood( 'edge' ).style({'line-color' : domainColour });
-    		cy.$(domainSelector).neighborhood( 'node' ).style({'background-color': domainColour });
-    		cy.$(domainSelector).roots().style({'background-color': domainColour });
-    
-    		cy.$(domainSelector).qtip({
-    		    show: {
-    	            solo: true,
-    		    },
-    			content: function(){ 
-    				return '<div class="container">' + 
-            					'<div class="row">' + 
-            						'<h4>' + this.data('domain_name') + '</h4>' +
-            					'</div>' +
-            					 '<div class="row">' +
-            			     		'<h4>Actions</h4>' +
-            			    	'</div>'+
-            			    	'<div class="row">'+
-            			       		'<a href="' + Routing.generate('domain_sequence', { search_term: domainID }) + '"  target="_blank">Show domain sequence</a>' +
-            			    	'</div>' +
-            				'</div>';	
-    			},
-    			position: {
-    				my: 'top center',
-    				at: 'bottom center'
-    			},
-    			style: {
-    				classes: 'qtip-bootstrap',
-    				tip: {
-    					width: 16,
-    					height: 8
-    				}
-    			},
-    		});
-    
-    
-    
-    
-    
-    
-    		}
-    	
-    
+        
     	cy.$('.protein_of_intrest').style({'background-color': '#CCCCCC'});
     
     
@@ -700,11 +768,9 @@
     	});
     
     
-    
-    
         $('#protein_of_intrest_color').spectrum({
-    
-    
+            
+            
     	    color: '#CCCCCC',
     	    showInput: true,
     	    className: "full-spectrum",
@@ -737,11 +803,10 @@
     	        "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
     	    ]
     	});
-    
-    
+
     	{% for domain in domains %}
-    	    {% if domain %}
-                $('#input_{{ domain }}').spectrum({
+            {% if domain %}
+                $('#input_{{ domain[1] }}').spectrum({
                     
                     
             	    color: "{{ domain_colours[loop.index] }}",
@@ -755,9 +820,9 @@
             	    change: function(color_change) { 
             		    var colourChanged = color_change.toHexString();	
             
-            			cy.$('#{{ domain }}').roots().style({'background-color' : colourChanged });
-            			cy.$('#{{ domain }}').neighborhood( 'edge' ).style({'line-color' : colourChanged }); 
-            			cy.$('#{{ domain }}').neighborhood( 'node' ).style({'background-color': colourChanged }); 
+            			cy.$('#{{ domain[1] }}').roots().style({'background-color' : colourChanged });
+            			cy.$('#{{ domain[1] }}').neighborhood( 'edge' ).style({'line-color' : colourChanged }); 
+            			cy.$('#{{ domain[1] }}').neighborhood( 'node' ).style({'background-color': colourChanged }); 
                		},
             	    palette: [
             	        ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
@@ -776,11 +841,8 @@
             	        "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
             	    ]
             	});
-               {% endif %}
+            {% endif %}
         {% endfor %}
-    
-    
-    
     	
     
         $('#update_data_settings').on('click', function(){
@@ -800,7 +862,7 @@
         
     });
     
-    
+
     
     
     $( function() {

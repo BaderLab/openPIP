@@ -30,12 +30,12 @@ class Admin_Settings
     protected $short_title;
     
     /**
-     * @ORM\Column(name="`home_page`", type="string", length=4000, nullable=true)
+     * @ORM\Column(name="`home_page`", type="string", length=10000, nullable=true)
      */
     protected $home_page;
 
     /**
-     * @ORM\Column(name="`about`", type="string", length=4000, nullable=true)
+     * @ORM\Column(name="`about`", type="string", length=10000, nullable=true)
      */
     protected $about;
 
@@ -44,6 +44,23 @@ class Admin_Settings
      */
     protected $color_scheme;
 
+    
+    /**
+     * @ORM\Column(name="`example_1`", type="string", length=10, nullable=true)
+     */
+    protected $example_1;
+    
+    /**
+     * @ORM\Column(name="`example_2`", type="string", length=10, nullable=true)
+     */
+    protected $example_2;
+    
+    /**
+     * @ORM\Column(name="`example_3`", type="string", length=10, nullable=true)
+     */
+    protected $example_3;
+    
+    
     /**
      * Get id
      *
@@ -148,5 +165,29 @@ class Admin_Settings
     public function getColorScheme()
     {
         return $this->color_scheme;
+    }
+
+    /**
+     * Set shortTitle
+     *
+     * @param string $shortTitle
+     *
+     * @return Admin_Settings
+     */
+    public function setShortTitle($shortTitle)
+    {
+        $this->short_title = $shortTitle;
+
+        return $this;
+    }
+
+    /**
+     * Get shortTitle
+     *
+     * @return string
+     */
+    public function getShortTitle()
+    {
+        return $this->short_title;
     }
 }
