@@ -22,10 +22,15 @@ class AboutController extends Controller {
     public function aboutAction(Request $request) {
         $admin_settings = $this->getDoctrine ()->getRepository ( 'AppBundle:Admin_Settings' )->find ( 1 );
          
-        $title = $admin_settings->getTitle ();
+
         $about = $admin_settings->getAbout ();
-        $color_scheme = $admin_settings->getColorScheme ();
-        $short_title = $admin_settings->getShortTitle ();
+		$title = $admin_settings->getTitle();
+		$short_title = $admin_settings->getShortTitle();
+		$footer = $admin_settings->getFooter();
+		$main_color_scheme = $admin_settings->getMainColorScheme();
+        $header_color_scheme = $admin_settings->getHeaderColorScheme();
+        $logo_color_scheme = $admin_settings->getLogoColorScheme();
+        $button_color_scheme = $admin_settings->getButtonColorScheme();
 
         $login_status = false;
         
@@ -37,8 +42,13 @@ class AboutController extends Controller {
         }
         return $this->render('about.html.twig', array(
                 'about' => $about,
-                'color_scheme' => $color_scheme,
+                'main_color_scheme' => $main_color_scheme,
+                'header_color_scheme' => $header_color_scheme,
+                'logo_color_scheme' => $logo_color_scheme,
+                'button_color_scheme' => $button_color_scheme,
                 'short_title' => $short_title,
+		        'title' => $title,
+		        'footer' => $footer,
                 'login_status' => $login_status
         ));
     }

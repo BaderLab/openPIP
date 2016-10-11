@@ -10,7 +10,7 @@
 .list-group-item-header:hover{	
 	background-color: #FFD2A0;
 	cursor: default;
-	color: #AF7637;
+	color: #FFFFFF;
 }
 
 .fileinput-button{
@@ -91,4 +91,36 @@
 	
 	margin: 0px;
 	padding: 0px;
+}
+
+.file_upload_header {
+	
+	width: 100%;
+	height: 40px;
+	margin-left: 0px;
+	
+}
+
+.file_upload_header h4{
+	
+	display:inline-block;
+	vertical-align:middle;
+	color: #FFFFFF;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 700;
+    margin: 8px;
+    cursor: default;
+}
+
+
+.file_upload_panel{
+	border: 1px solid #ccc;
+	
+}
+
+.file_upload_content{
+	
+	padding: 30px;
 }

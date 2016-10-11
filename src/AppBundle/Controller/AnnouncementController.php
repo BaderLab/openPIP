@@ -51,13 +51,22 @@ class AnnouncementController extends Controller
 		->getRepository('AppBundle:Admin_Settings')
 		->find(1);
 		
-		$color_scheme = $admin_settings->getColorScheme();
+		$main_color_scheme = $admin_settings->getMainColorScheme();
+        $header_color_scheme = $admin_settings->getHeaderColorScheme();
+        $logo_color_scheme = $admin_settings->getLogoColorScheme();
+        $button_color_scheme = $admin_settings->getButtonColorScheme();
 		$short_title = $admin_settings->getShortTitle();
+		$title = $admin_settings->getTitle();
+		
 		return $this->render('announcement_manager.html.twig', array(
 				'announcements' => $announcements,
 				'form' => $form->createView(),
-		        'color_scheme' => $color_scheme,
-		        'short_title' => $short_title
+		        'main_color_scheme' => $main_color_scheme,
+                'header_color_scheme' => $header_color_scheme,
+                'logo_color_scheme' => $logo_color_scheme,
+                'button_color_scheme' => $button_color_scheme,
+		        'short_title' => $short_title,
+		        'title' => $title,
 		));
 	}
 	
@@ -85,14 +94,20 @@ class AnnouncementController extends Controller
 	    ->getRepository('AppBundle:Admin_Settings')
 	    ->find(1);
 	    
-	    $color_scheme = $admin_settings->getColorScheme();
+	    $main_color_scheme = $admin_settings->getMainColorScheme();
+        $header_color_scheme = $admin_settings->getHeaderColorScheme();
+        $logo_color_scheme = $admin_settings->getLogoColorScheme();
+        $button_color_scheme = $admin_settings->getButtonColorScheme();
 	    $short_title = $admin_settings->getShortTitle();
 	
 	    return $this->render('announcement_edit.html.twig', array(
 	            'announcement' => $announcement,
 	            'edit_form' => $editForm->createView(),
 	            'delete_form' => $deleteForm->createView(),
-		        'color_scheme' => $color_scheme,
+		        'main_color_scheme' => $main_color_scheme,
+                'header_color_scheme' => $header_color_scheme,
+                'logo_color_scheme' => $logo_color_scheme,
+                'button_color_scheme' => $button_color_scheme,
 		        'short_title' => $short_title
 	    ));
 	}

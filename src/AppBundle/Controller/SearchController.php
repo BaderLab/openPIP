@@ -9,6 +9,7 @@ use AppBundle\Entity\Identifier;
 use AppBundle\Form\IdentifierType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use AppBundle\Entity\Protein;
 use AppBundle\Entity\Interaction;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,27 +36,55 @@ class SearchController extends Controller
 	                    );
 	    	
 	    $organism_result_array = $query->getResult();
-	    $choice_array = array('--');
+	    
+	    $query = $em->createQuery("SELECT d FROM AppBundle:Domain d");
+	    
+	    $domain_result_array = $query->getResult();
+	    
+	    
+	    $domain_query = $em->createQuery('SELECT COUNT(d.id) FROM AppBundle:Domain d');
+	    
+	    $domain_count = $domain_query->getSingleScalarResult();
+	    
+	    $organism_query = $em->createQuery('SELECT COUNT(o.id) FROM AppBundle:Organism o');
+	    
+	    $organism_count = $organism_query->getSingleScalarResult();
+	    
+	    $organism_choice_array = array('--');
 	    foreach($organism_result_array as $organism_result){
 	        $name = $organism_result->getCommonName();
 	        $scientific_name = $organism_result->getScientificName();
 	        $taxid_id = $organism_result->getTaxidId();
-	        $choice_array[$taxid_id] = $scientific_name . ' (' . $name . ')';
+	        $organism_choice_array[$taxid_id] = $scientific_name . ' (' . $name . ')';
+	    }
+	    
+	    $domain_choice_array = array('--');
+	    foreach($domain_result_array as $domain_result){
+	        $name = $domain_result->getName();
+	        $type = $domain_result->getType();
+	        
+	        $domain_choice_array[$type] = $type;
 	    }
     
 	    $defaultData = array('message' => 'Type your message here');
         $form = $this->createFormBuilder($defaultData)
             ->add('identifier', TextType::class)
             ->add('organism_select', ChoiceType::class, array(
-                    'choices' => $choice_array,            
+                    'choices' => $organism_choice_array,            
                     'attr' => array('class' => 'form-control organism_select', 'style' => "width: 240px;")))
             ->add('domain_select', ChoiceType::class, array(
-                    'choices' => array('--'),
+                    'choices' => $domain_choice_array,
                     'attr' => array('class' => 'form-control domain_select', 'style' => "width: 240px;")))
             ->add('min_interaction_score', TextType::class, array(
                     'attr' => array('class' => 'hidden', 'value' => 0, 'style' => "width: 240px;")))
             ->add('max_number_of_interactions', TextType::class, array(
                 'attr' => array('value' => 50, 'style' => "width: 60px;")))
+            ->add('published', CheckboxType::class, array(
+                    'required' => false,
+                    'attr' => array('value' => 'published', 'checked' => 'checked')))
+            ->add('prepublished', CheckboxType::class, array(
+                    'required' => false,
+                    'attr' => array('value' => 'pre_published', 'checked' => 'checked')))
             ->getForm();
         $form->handleRequest($request);
 		
@@ -66,6 +95,8 @@ class SearchController extends Controller
 			$domain = $form["domain_select"]->getData();
 			$min_interaction_score = $form["min_interaction_score"]->getData();
 			$max_number_of_interactions = $form["max_number_of_interactions"]->getData();
+			$published = $form["published"]->getData();
+			$pre_published = $form["prepublished"]->getData();
 			
 			
 			$option_array = array('search_term' => $search_query);
@@ -82,6 +113,14 @@ class SearchController extends Controller
 			if($max_number_of_interactions){
 			    $option_array['max_number_of_interactions'] = $max_number_of_interactions;
 			}
+			
+			if($published && $pre_published){
+			    $option_array['publication_status'] = 'all';
+			}elseif($published){
+			    $option_array['publication_status'] = 'published';
+			}elseif($pre_published){
+			    $option_array['publication_status'] = 'pre_published';
+			}
 				
 			return $this->redirectToRoute('search_results', $option_array);
 
@@ -92,8 +131,13 @@ class SearchController extends Controller
 		->getRepository('AppBundle:Admin_Settings')
 		->find(1);
 		
-		$color_scheme = $admin_settings->getColorScheme();
+		$title = $admin_settings->getTitle();
 		$short_title = $admin_settings->getShortTitle();
+		$footer = $admin_settings->getFooter();
+		$main_color_scheme = $admin_settings->getMainColorScheme();
+        $header_color_scheme = $admin_settings->getHeaderColorScheme();
+        $logo_color_scheme = $admin_settings->getLogoColorScheme();
+        $button_color_scheme = $admin_settings->getButtonColorScheme();
 		$example_1 = $admin_settings->getExample1();
 		$example_2 = $admin_settings->getExample2();
 		$example_3 = $admin_settings->getExample3();
@@ -110,8 +154,16 @@ class SearchController extends Controller
 		return $this->render('search.html.twig', array(
 				'form' => $form->createView(),
 				'organism_result_array' => $organism_result_array,
-		        'color_scheme' => $color_scheme,
+		        'domain_result_array' => $domain_result_array,
+		        'domain_count' => $domain_count,
+		        'organism_count' => $organism_count,
+		        'main_color_scheme' => $main_color_scheme,
+                'header_color_scheme' => $header_color_scheme,
+                'logo_color_scheme' => $logo_color_scheme,
+                'button_color_scheme' => $button_color_scheme,
 		        'short_title' => $short_title,
+		        'title' => $title,
+		        'footer' => $footer,
 		        'login_status' => $login_status,
 		        'example_1' => $example_1,
 		        'example_2' => $example_2,
@@ -139,6 +191,8 @@ class SearchController extends Controller
 	    $search_setting_domain = $request->query->get('domain');
 	    $search_setting_score = $request->query->get('score');
 	    $search_setting_max_interactions = $request->query->get('max_number_of_interactions');
+	    $query_publication_status = $request->query->get('publication_status');
+	    
 	    //$domain = getDomainByType($search_setting_domain);
 	    
 	    //find identifier in database
@@ -160,7 +214,7 @@ class SearchController extends Controller
 	        $protein_gene_name = $protein->getGeneName();
 	        $protein_sequence = $protein->getSequence();
 	        $protein_description = $protein->getDescription();
-	        	
+	        
 	        //if organism is not specified by user check if protein exists in multiple organisms	
 	        if(!$search_setting_organism){
 	            
@@ -234,12 +288,15 @@ class SearchController extends Controller
 	        $protein_of_intrest = array($protein_id, $protein_name , $protein_gene_name, $protein_description, $protein_of_intrest_external_links);
 	         
 	        
-	        $repository = $this->getDoctrine()->getManager();
-	        //->getRepository('AppBundle:Interaction');
+	        
+	        
+
+	        $em = $this->getDoctrine()->getManager();
+	        $repository = $em->getRepository('AppBundle:Interaction');
+
 	         
 	        $query_builder = $repository->createQueryBuilder('i');
-	        $query_builder->select('i');
-	        $query_builder->from('AppBundle:Interaction', 'i');
+	        $query_builder->innerJoin('i.datasets', 'd');
 	        $query_builder->where('i.interactor_A = :interactor_A');
 	        $query_builder->setParameter('interactor_A', $protein_id);
 	        
@@ -251,12 +308,22 @@ class SearchController extends Controller
 	        if($search_setting_max_interactions){
 	            $query_builder->setMaxResults($search_setting_max_interactions);
 	        }
-	         
+	        
+	        if($query_publication_status == 'all'){
+			}elseif($query_publication_status == 'published'){
+			    $query_builder->andWhere('d.reference != :reference');
+			    $query_builder->setParameter('reference', 'unassigned1304');  
+			}elseif($query_publication_status == 'pre_published'){
+			    $query_builder->andWhere('d.reference = :reference');
+			    $query_builder->setParameter('reference', 'unassigned1304');  
+			}else{
+			}
+			
 	        $query = $query_builder->getQuery();
 	         
 	        $interaction_result_array = $query->getResult();
 
-	    
+	        
 	        $interaction_array = array();	    
 	        $domain_array = array();
 	        $protein_of_intrest_array = array();
@@ -286,8 +353,12 @@ class SearchController extends Controller
 	            }
 	            
 	            
+	            
+	            
+	            
 	            $em = $this->getDoctrine()->getManager();
-	    
+
+	            
 	            $query = $em->createQuery(
 	                            "SELECT p
 				FROM AppBundle:Protein p
@@ -347,6 +418,7 @@ class SearchController extends Controller
 	    
 	            $interactor_B_name = $_interactor_B->getName();
 	            $interactor_B_description = $_interactor_B->getDescription();
+	            
 	            $interactor_B_sequence = $_interactor_B->getSequence();
 	    
 	            $interactor_B_id  = $_interactor_B->getId();
@@ -395,11 +467,17 @@ class SearchController extends Controller
 	            ->setParameter('interaction_id', $interaction_id )
 	            ->getQuery();
 	            $dataset_result_array = $query->getResult();
-	    
-	            $dataset = $dataset_result_array[0];
-	            $dataset_reference = $dataset->getReference();
-	            	
-	    
+	            
+	            $publication_status = 'pre-published';
+	            
+	            foreach($dataset_result_array as $dataset_result){
+	                $dataset_reference = $dataset_result->getReference();
+	                
+    	            if($dataset_reference != 'unassigned1304'){
+    	                 
+    	                $publication_status = 'published';
+    	            }
+	            }
 	            
 	            //Get external links for interacting protein
 	            $interactor_B_external_links = array();
@@ -448,7 +526,7 @@ class SearchController extends Controller
 	    
 	            
 	            //Set edge data
-	            $edge_array[] = array($domain_id, $domain_name, $interactor_B_id, $interactor_A_name, $interactor_B_name, $score);
+	            $edge_array[] = array($domain_id, $domain_name, $interactor_B_id, $interactor_A_name, $interactor_B_name, $score, $publication_status);
 	    
 	            
 	            
@@ -497,12 +575,40 @@ class SearchController extends Controller
 	                $_interaction['score'] = 'N/A';
 	            }
 	            
-	            if($dataset_reference){
-	                $_interaction['dataset'] = $dataset_reference;
-	            }else{
-	                $_interaction['dataset'] = 'N/A';
+	            $_interaction['dataset_array'] = array();
+
+	            
+	            if($dataset_result_array){
+	                foreach($dataset_result_array as $dataset_result){
+
+    	                $dataset_reference = $dataset_result->getReference();
+    	                $dataset_author = $dataset_result->getName();
+    	                
+    	                
+    	                
+    	                $dataset_values = array();
+    	                
+        	            if($dataset_reference){
+        	                $dataset_values['dataset_reference'] = $dataset_reference;
+        	            }elseif($dataset_reference == 'unassigned1304'){
+        	                $dataset_values['dataset_reference'] = '';
+        	            }else{
+        	                $dataset_values['dataset_reference'] = 'N/A';
+        	            }
+        	             
+        	            
+        	            if($dataset_author){
+        	                $dataset_values['dataset_author'] = $dataset_author;
+        	            }else{
+        	                $dataset_values['dataset_author'] = 'N/A';
+        	            }
+        	            
+        	            $_interaction['dataset_array'][] = $dataset_values;
+	                }
+	            
 	            }
-	             
+	            
+	            
 	            
 	           //network data
 	            $interaction_array[] = $_interaction;
@@ -525,13 +631,10 @@ class SearchController extends Controller
 	        $domain_colours = array("black", "#ca0020", "#f4a582", "#0571b0", "#ffffbf", "#92c5de");
 	        
 	        
-	        $json = json_encode(array('domain' => $domain_array, 'protein_of_intrest' => $protein_of_intrest, 'interacting_protein_nodes' => $interacting_protein_nodes_array, 'edge' => $edge_array));
+	        $json = json_encode(array('domain' => $domain_array, 'protein_of_intrest' => $protein_of_intrest, 'interacting_protein_nodes' => $interacting_protein_nodes_array, 'edge' => $edge_array), JSON_HEX_QUOT);
 
 	        
 	        
-	        
-	        
-	    
 	        
 
 	        
@@ -568,9 +671,13 @@ class SearchController extends Controller
 	        ->getRepository('AppBundle:Admin_Settings')
 	        ->find(1);
 	        	
-	        $color_scheme = $admin_settings->getColorScheme();
-	        $short_title = $admin_settings->getShortTitle();
-	    
+    		$title = $admin_settings->getTitle();
+    		$short_title = $admin_settings->getShortTitle();
+    		$footer = $admin_settings->getFooter();
+    		$main_color_scheme = $admin_settings->getMainColorScheme();
+            $header_color_scheme = $admin_settings->getHeaderColorScheme();
+            $logo_color_scheme = $admin_settings->getLogoColorScheme();
+            $button_color_scheme = $admin_settings->getButtonColorScheme();
 	        
 	        //Check login status
 	        $login_status = false;
@@ -582,9 +689,6 @@ class SearchController extends Controller
 	            $login_status =  true;
 	        }
 	        	
-	        $handle = fopen('C:/Users/Miles/Desktop/test.txt', 'w');
-	        fwrite($handle, $json);
-	        fclose($handle);
 	        
 	        $domain_object_array = array();
 	        $domain_array_2 = $domain_array;
@@ -601,19 +705,47 @@ class SearchController extends Controller
 	        $domains = $domain_array;
 	        array_shift($domains);
 	        
-	        return $this->render('search_result.html.twig', array(
+	        $json = str_replace("'","\\'", $json);
+	        //$handle = fopen('C:\Users\Miles\Desktop\test\test_2.txt', 'w');
+	        //fwrite($handle, $json);
+	        
+	        
+	        $organism_query = $em->createQuery('SELECT COUNT(o.id) FROM AppBundle:Organism o');
+	        
+	        $organism_count = $organism_query->getSingleScalarResult();
+	        
+	        $domain_query = $em->createQuery('SELECT COUNT(d.id) FROM AppBundle:Domain d');
+	        
+	        $domain_count = $domain_query->getSingleScalarResult();
+
+	        $binding_count_query = $em->createQuery('SELECT COUNT(i.id) FROM AppBundle:Interaction i WHERE i.binding_start IS NOT NULL');
+	         
+	        $binding_count = $binding_count_query->getSingleScalarResult();
+	        
+	        
+	        return $this->render('search_result_2.html.twig', array(
 	                'interaction_array' => $interaction_array,
 	                'json' => $json,
 	                'search_query' => $search_query,
 	                'min_interaction_score' => $min_interaction_score,
-	                'color_scheme' => $color_scheme,
+	                'main_color_scheme' => $main_color_scheme,
+                    'header_color_scheme' => $header_color_scheme,
+                    'logo_color_scheme' => $logo_color_scheme,
+                    'button_color_scheme' => $button_color_scheme, 
 	                'short_title' => $short_title,
+	                'title' => $title,
+	                'footer' => $footer,
+	                'protein_gene_name' => $protein_gene_name,
 	                'search_query' => $search_query,
+	                'domain_count' => $domain_count,
+	                'binding_count' => $binding_count,
+	                'organism_count' => $organism_count,
 	                'number_of_interactions' => $number_of_interactions,
 	                'search_setting_organism' => $organism_name,
 	                'search_setting_domain' => $search_setting_domain,
 	                'search_setting_score' => $search_setting_score,
 	                'search_setting_max_interactions' => $search_setting_max_interactions,
+	                'query_publication_status' => $query_publication_status,
 	                'domain_count' => $domain_count,
 	                'interaction_count' => $number_of_interactions,
 	                'parameter_min_interaction_score' => $parameter_min_interaction_score,
@@ -629,9 +761,14 @@ class SearchController extends Controller
 	        ->getRepository('AppBundle:Admin_Settings')
 	        ->find(1);
 	    
-	        $color_scheme = $admin_settings->getColorScheme();
-	        $short_title = $admin_settings->getShortTitle();
-	        
+    		$title = $admin_settings->getTitle();
+    		$short_title = $admin_settings->getShortTitle();
+    		$footer = $admin_settings->getFooter();
+    		$main_color_scheme = $admin_settings->getMainColorScheme();
+            $header_color_scheme = $admin_settings->getHeaderColorScheme();
+            $logo_color_scheme = $admin_settings->getLogoColorScheme();
+            $button_color_scheme = $admin_settings->getButtonColorScheme();
+    		
 	        $login_status = false;
 	         
 	        $is_fully_authenticated = $this->get('security.context')
@@ -643,9 +780,14 @@ class SearchController extends Controller
 	    
 	        return $this->render('no_results.html.twig', array(
 	                'search_query' => $search_query,
-	                'color_scheme' => $color_scheme,
+	                'main_color_scheme' => $main_color_scheme,
+                    'header_color_scheme' => $header_color_scheme,
+                    'logo_color_scheme' => $logo_color_scheme,
+                    'button_color_scheme' => $button_color_scheme, 
 	                'short_title' => $short_title,
-		            'login_status' => $login_status
+		            'footer' => $footer,
+		            'login_status' => $login_status,
+	                'title' => $title
 	        ));
 
 	    }
@@ -711,9 +853,13 @@ class SearchController extends Controller
 	    ->getRepository('AppBundle:Admin_Settings')
 	    ->find(1);
 	     
-	    $color_scheme = $admin_settings->getColorScheme();
+		$main_color_scheme = $admin_settings->getMainColorScheme();
+        $header_color_scheme = $admin_settings->getHeaderColorScheme();
+        $logo_color_scheme = $admin_settings->getLogoColorScheme();
+        $button_color_scheme = $admin_settings->getButtonColorScheme();
 	    $short_title = $admin_settings->getShortTitle();
-	     
+	    $title = $admin_settings->getTitle();
+	    
 	    $login_status = false;
 	    
 	    $is_fully_authenticated = $this->get('security.context')
@@ -727,8 +873,12 @@ class SearchController extends Controller
 	            'domain_sequence' => $domain_sequence,
 	            'domain_type' => $domain_type,
 	            'domain_name' => $domain_name,
-                'color_scheme' => $color_scheme,
+            	'main_color_scheme' => $main_color_scheme,
+                'header_color_scheme' => $header_color_scheme,
+                'logo_color_scheme' => $logo_color_scheme,
+                'button_color_scheme' => $button_color_scheme,
                 'short_title' => $short_title,
+	            'title' => $title,
 	            'login_status' => $login_status
 	
 	    ));
@@ -755,14 +905,17 @@ class SearchController extends Controller
 	    $protein_name = $protein->getName();
 	    $protein_sequence = $protein->getSequence();
 	    $protein_description = $protein->getDescription();
-	
 	    
 	    $admin_settings = $this->getDoctrine()
 	    ->getRepository('AppBundle:Admin_Settings')
 	    ->find(1);
 	    
-	    $color_scheme = $admin_settings->getColorScheme();
+		$main_color_scheme = $admin_settings->getMainColorScheme();
+        $header_color_scheme = $admin_settings->getHeaderColorScheme();
+        $logo_color_scheme = $admin_settings->getLogoColorScheme();
+        $button_color_scheme = $admin_settings->getButtonColorScheme();
 	    $short_title = $admin_settings->getShortTitle();
+	    $title = $admin_settings->getTitle();
 	    
 	    $login_status = false;
 	     
@@ -776,8 +929,12 @@ class SearchController extends Controller
 	    return $this->render('protein_sequence.html.twig', array(
 	            'protein_sequence' => $protein_sequence,
 	            'gene_name' => $protein_gene_name,
-                'color_scheme' => $color_scheme,
+            	'main_color_scheme' => $main_color_scheme,
+                'header_color_scheme' => $header_color_scheme,
+                'logo_color_scheme' => $logo_color_scheme,
+                'button_color_scheme' => $button_color_scheme,
                 'short_title' => $short_title,
+	            'title' => $title,
 	            'login_status' => $login_status
 	
 	    ));

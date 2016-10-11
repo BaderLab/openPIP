@@ -35,7 +35,11 @@ class AdminSettingsController extends Controller
         $title = $admin_settings->getTitle();
         $home_page = $admin_settings->getHomePage();
         $about = $admin_settings->getAbout();
-        $color_scheme = $admin_settings->getColorScheme();
+        $download = $admin_settings->getDownload();
+        $main_color_scheme = $admin_settings->getMainColorScheme();
+        $header_color_scheme = $admin_settings->getHeaderColorScheme();
+        $logo_color_scheme = $admin_settings->getLogoColorScheme();
+        $button_color_scheme = $admin_settings->getButtonColorScheme();
         $short_title = $admin_settings->getShortTitle();
 
         $form = $this->createForm('AppBundle\Form\Admin_SettingsType', $admin_settings);
@@ -53,7 +57,11 @@ class AdminSettingsController extends Controller
             $title = $admin_settings->getTitle();
             $home_page = $admin_settings->getHomePage();
             $about = $admin_settings->getAbout();
-            $color_scheme = $admin_settings->getColorScheme();
+            $download = $admin_settings->getDownload();
+            $main_color_scheme = $admin_settings->getMainColorScheme();
+            $header_color_scheme = $admin_settings->getHeaderColorScheme();
+            $logo_color_scheme = $admin_settings->getLogoColorScheme();
+            $button_color_scheme = $admin_settings->getButtonColorScheme();
             $em->persist($admin_settings);
             $em->flush();
             $updated = true;
@@ -64,7 +72,11 @@ class AdminSettingsController extends Controller
                 'title' => $title,
                 'home_page' => $home_page,
                 'about' => $about,
-                'color_scheme' => $color_scheme,
+                'download' => $download,
+                'main_color_scheme' => $main_color_scheme,
+                'header_color_scheme' => $header_color_scheme,
+                'logo_color_scheme' => $logo_color_scheme,
+                'button_color_scheme' => $button_color_scheme,                
                 'short_title' => $short_title,
                 'updated' => $updated
 

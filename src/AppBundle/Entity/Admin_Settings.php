@@ -30,20 +30,44 @@ class Admin_Settings
     protected $short_title;
     
     /**
-     * @ORM\Column(name="`home_page`", type="string", length=10000, nullable=true)
+     * @ORM\Column(name="`home_page`", type="text", length=8000, nullable=true)
      */
     protected $home_page;
 
     /**
-     * @ORM\Column(name="`about`", type="string", length=10000, nullable=true)
+     * @ORM\Column(name="`about`", type="text", length=5000, nullable=true)
      */
     protected $about;
+    
+    /**
+     * @ORM\Column(name="`download`", type="text", length=8000, nullable=true)
+     */
+    protected $download;
 
     /**
-     * @ORM\Column(name="`color_scheme`", type="string", length=10, nullable=true)
+     * @ORM\Column(name="`footer`", type="text", length=2000, nullable=true)
      */
-    protected $color_scheme;
+    protected $footer;
+    
+    /**
+     * @ORM\Column(name="`main_color_scheme`", type="string", length=10, nullable=true)
+     */
+    protected $main_color_scheme;
 
+    /**
+     * @ORM\Column(name="`header_color_scheme`", type="string", length=10, nullable=true)
+     */
+    protected $header_color_scheme;
+    
+    /**
+     * @ORM\Column(name="`logo_color_scheme`", type="string", length=10, nullable=true)
+     */
+    protected $logo_color_scheme;
+    
+    /**
+     * @ORM\Column(name="`button_color_scheme`", type="string", length=10, nullable=true)
+     */
+    protected $button_color_scheme;
     
     /**
      * @ORM\Column(name="`example_1`", type="string", length=20, nullable=true)
@@ -144,30 +168,6 @@ class Admin_Settings
     }
 
     /**
-     * Set colorScheme
-     *
-     * @param string $colorScheme
-     *
-     * @return Admin_Settings
-     */
-    public function setColorScheme($colorScheme)
-    {
-        $this->color_scheme = $colorScheme;
-
-        return $this;
-    }
-
-    /**
-     * Get colorScheme
-     *
-     * @return string
-     */
-    public function getColorScheme()
-    {
-        return $this->color_scheme;
-    }
-
-    /**
      * Set shortTitle
      *
      * @param string $shortTitle
@@ -261,5 +261,149 @@ class Admin_Settings
     public function getExample3()
     {
         return $this->example_3;
+    }
+
+    /**
+     * Set download
+     *
+     * @param string $download
+     *
+     * @return Admin_Settings
+     */
+    public function setDownload($download)
+    {
+        $this->download = $download;
+
+        return $this;
+    }
+
+    /**
+     * Get download
+     *
+     * @return string
+     */
+    public function getDownload()
+    {
+        return $this->download;
+    }
+
+    /**
+     * Set footer
+     *
+     * @param string $footer
+     *
+     * @return Admin_Settings
+     */
+    public function setFooter($footer)
+    {
+        $this->footer = $footer;
+
+        return $this;
+    }
+
+    /**
+     * Get footer
+     *
+     * @return string
+     */
+    public function getFooter()
+    {
+        return $this->footer;
+    }
+
+    /**
+     * Set mainColorScheme
+     *
+     * @param string $mainColorScheme
+     *
+     * @return Admin_Settings
+     */
+    public function setMainColorScheme($mainColorScheme)
+    {
+        $this->main_color_scheme = $mainColorScheme;
+
+        return $this;
+    }
+
+    /**
+     * Get mainColorScheme
+     *
+     * @return string
+     */
+    public function getMainColorScheme()
+    {
+        return $this->main_color_scheme;
+    }
+
+    /**
+     * Set headerColorScheme
+     *
+     * @param string $headerColorScheme
+     *
+     * @return Admin_Settings
+     */
+    public function setHeaderColorScheme($headerColorScheme)
+    {
+        $this->header_color_scheme = $headerColorScheme;
+
+        return $this;
+    }
+
+    /**
+     * Get headerColorScheme
+     *
+     * @return string
+     */
+    public function getHeaderColorScheme()
+    {
+        return $this->header_color_scheme;
+    }
+
+    /**
+     * Set logoColorScheme
+     *
+     * @param string $logoColorScheme
+     *
+     * @return Admin_Settings
+     */
+    public function setLogoColorScheme($logoColorScheme)
+    {
+        $this->logo_color_scheme = $logoColorScheme;
+
+        return $this;
+    }
+
+    /**
+     * Get logoColorScheme
+     *
+     * @return string
+     */
+    public function getLogoColorScheme()
+    {
+        return $this->logo_color_scheme;
+    }
+
+    /**
+     * Set buttonColorScheme
+     *
+     * @param string $buttonColorScheme
+     *
+     * @return Admin_Settings
+     */
+    public function setButtonColorScheme($buttonColorScheme)
+    {
+        $this->button_color_scheme = $buttonColorScheme;
+
+        return $this;
+    }
+
+    /**
+     * Get buttonColorScheme
+     *
+     * @return string
+     */
+    public function getButtonColorScheme()
+    {
+        return $this->button_color_scheme;
     }
 }

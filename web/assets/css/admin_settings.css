@@ -16,3 +16,34 @@
 .nav-tabs {
     margin-bottom: 0;
 }
+
+.admin_settings_content{
+	
+	padding: 0px 30px 30px 30px;
+}
+
+.admin_settings_panel{
+	border: 1px solid #ccc;
+	
+}
+
+.admin_settings_header {
+	
+	width: 100%;
+	height: 40px;
+	margin-left: 0px;
+	
+}
+
+.admin_settings_header h4{
+	
+	display:inline-block;
+	vertical-align:middle;
+	color: #FFFFFF;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 700;
+    margin: 8px;
+    cursor: default;
+}

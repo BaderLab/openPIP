@@ -73,7 +73,7 @@ class DataController extends Controller
 	        	while ($file_data = fgetcsv($handle, 0, "\t"))
 	        	{	
 	        		//skip header
-	        		if($file_row == 0){ $file_row++; continue; }
+	        		if($file_row < 1 ){ $file_row++; continue; }
 	        		
 	        	    try{
 	        		//variable for each mitab coloumn
@@ -89,194 +89,218 @@ class DataController extends Controller
 	        	
 	        		$doctrine_manager = $this->getDoctrine()->getManager();
 	        		$doctrine_manager->getConfiguration()->setSQLLogger(null);
-	        		
-	        		//Domain
-	        		$domain = self::domainHandler($feature_interactor_A);
-
-	        		//Organism
-	        		$organism_array = self::organismHandler($taxid_interactor_A, $taxid_interactor_B, $doctrine_manager);
-	        		$organism_A_array = $organism_array[0];
-	        		$organism_B_array = $organism_array[1];
-	        		$organism_AB_array = $organism_array[2];
-	
-	        		//Protein
-	        		$protein_A_array = self::proteinHandler($interactor_A_id, $doctrine_manager);
-	        		$protein_A = $protein_A_array[0];
-	        		$identifier_A_protein = $protein_A_array[1];
-	        		$links_array_A = $protein_A_array[2];
-	        		
-	        		
-					if($identifier_A_protein){
-						$identifier_A_protein->setProtein($protein_A);
-					}
-	        		
-	        		$protein_B_array = self::proteinHandler($interactor_B_id, $doctrine_manager);
-	        		$protein_B = $protein_B_array[0];
-	        		$identifier_B_protein = $protein_B_array[1];
-	        		$links_array_B = $protein_B_array[2];
-	        		if($identifier_B_protein){
-	        			$identifier_B_protein->setProtein($protein_B);
-	        		}
-	        		
-	        		//Interaction
-	        		$interaction = self::interactionHandler($feature_interactor_B, $confidence_value);
-	        		
-	        		//Alt Interactor
-	        		$alt_interactor_array = self::alt_interactorHandler($alt_interactor_A_id, $alt_interactor_B_id);
-
-	        		//Aliases
-	        		$alias_interactor_array = self::aliasHandler($interactor_A_alias, $interactor_B_alias);
-
-	        		//Support Information
-	        		$support_informations_array = self::support_informationHandler($interaction_parameter);
-	        		$support_information_array = '';
-	        		$interaction_support_information_array = '';
-	        		if($support_informations_array){
-    	        		$support_information_array = $support_informations_array[0];
-    	        		$interaction_support_information_array = $support_informations_array[1];
-	        		
-	        		}
-
-	        		//Dataset
-	        		$dataset = self::datasetHandler($publication_identifier);
-
-	        		
-	        		foreach ($organism_AB_array as $organism_AB){
-	        		    
-	        			if(self::assertRelationshipExistsProteinOrganism($protein_A, $organism_AB) == false){
-	        			    $organism_AB->addProtein($protein_A);
-	        			    $protein_A->addOrganism($organism_AB);
-	        			}
-	        			
-	        			
-	        			if($domain){
-    	        			if(self::assertRelationshipExistsDomainOrganism($domain, $organism_AB) == false){
-    	        			    $domain->addOrganism($organism_AB);  
-    	        			    $organism_AB->addDomain($domain);
-    	        			}
-	        			}
-	        			if(self::assertRelationshipExistsProteinOrganism($protein_B, $organism_AB) == false){
-    	        			$organism_AB->addProtein($protein_B);
-    	        			$protein_B->addOrganism($organism_AB);
-    	        			
-	        			}
-	        			$doctrine_manager->persist($organism_AB);
-	        		}
-	        		
-	        		foreach ($organism_A_array as $organism_A){
-	        		    if(self::assertRelationshipExistsProteinOrganism($protein_A, $organism_A) == false){
-    	        			$organism_A->addProtein($protein_A);
-    	        			$protein_A->addOrganism($organism_A);
-	        		    }
-	        		    if($domain){
-    	        		    if(self::assertRelationshipExistsDomainOrganism($domain, $organism_A) == false){
-        	        			$domain->addOrganism($organism_A);
-        	        			$organism_A->addDomain($domain);
-    	        		    }
-	        		    }
-	        		    $doctrine_manager->persist($organism_A);
-	        		}
-	        		
-	        		foreach ($organism_B_array as $organism_B){
-	        		    if(self::assertRelationshipExistsProteinOrganism($protein_B, $organism_B) == false){
-    	        			$organism_B->addProtein($protein_B);
-    	        			$protein_B->addOrganism($organism_B);
-    	        			
-	        		    }
-	        		    $doctrine_manager->persist($organism_B);
-	        		}
-
-                    if($support_information_array){
-    	        		foreach ($support_information_array as $support_information){
-    	        		    $doctrine_manager->persist($support_information);
+	        		if(self::isNewInteraction($interactor_A_id, $interactor_B_id) == true){
+    	        		//Domain
+    	        		$domain = self::domainHandler($feature_interactor_A);
     
+    	        		//Organism
+    	        		$organism_array = self::organismHandler($taxid_interactor_A, $taxid_interactor_B, $doctrine_manager);
+    	        		$organism_A_array = $organism_array[0];
+    	        		$organism_B_array = $organism_array[1];
+    	        		$organism_AB_array = $organism_array[2];
+    	
+    	        		//Protein
+    	        		$protein_A_array = self::proteinHandler($interactor_A_id, $doctrine_manager);
+    	        		$protein_A = $protein_A_array[0];
+    	        		$identifier_A_protein = $protein_A_array[1];
+    	        		$links_array_A = $protein_A_array[2];
+    	        		
+    	        		
+    					if($identifier_A_protein){
+    						$identifier_A_protein->setProtein($protein_A);
+    					}
+    	        		
+    	        		$protein_B_array = self::proteinHandler($interactor_B_id, $doctrine_manager);
+    	        		$protein_B = $protein_B_array[0];
+    	        		$identifier_B_protein = $protein_B_array[1];
+    	        		$links_array_B = $protein_B_array[2];
+    	        		if($identifier_B_protein){
+    	        			$identifier_B_protein->setProtein($protein_B);
+    	        		}
+    	        		
+    	        		//Interaction
+    	        		$interaction = self::interactionHandler($feature_interactor_B, $confidence_value);
+    	        		
+    	        		//Alt Interactor
+    	        		$alt_interactor_array = self::alt_interactorHandler($alt_interactor_A_id, $alt_interactor_B_id);
+    
+    	        		//Aliases
+    	        		$alias_interactor_array = self::aliasHandler($interactor_A_alias, $interactor_B_alias);
+    
+    	        		//Support Information
+    	        		$support_informations_array = self::support_informationHandler($interaction_parameter);
+    	        		$support_information_array = '';
+    	        		$interaction_support_information_array = '';
+    	        		if($support_informations_array){
+        	        		$support_information_array = $support_informations_array[0];
+        	        		$interaction_support_information_array = $support_informations_array[1];
+    	        		
+    	        		}
+    
+    	        		//Dataset
+    	        		$dataset = self::datasetHandler($publication_identifier, $publication_first_author);
+    
+    	        		
+    	        		foreach ($organism_AB_array as $organism_AB){
     	        		    
+    	        			if(self::assertRelationshipExistsProteinOrganism($protein_A, $organism_AB) == false){
+    	        			    $organism_AB->addProtein($protein_A);
+    	        			    $protein_A->addOrganism($organism_AB);
+    	        			}
+    	        			
+    	        			
+    	        			if($domain){
+        	        			if(self::assertRelationshipExistsDomainOrganism($domain, $organism_AB) == false){
+        	        			    $domain->addOrganism($organism_AB);  
+        	        			    $organism_AB->addDomain($domain);
+        	        			}
+    	        			}
+    	        			if(self::assertRelationshipExistsProteinOrganism($protein_B, $organism_AB) == false){
+        	        			$organism_AB->addProtein($protein_B);
+        	        			$protein_B->addOrganism($organism_AB);
+        	        			
+    	        			}
+    	        			$doctrine_manager->persist($organism_AB);
     	        		}
-                    }
-
-                    if($interaction_support_information_array){
-    	        		foreach ($interaction_support_information_array as $interaction_support_information){
-    	        		     
-    	        		    $interaction->addInteractionSupportInformation($interaction_support_information);
-    	        		    $interaction_support_information->setInteraction($interaction);
-    	        		    $doctrine_manager->persist($interaction_support_information);
+    	        		
+    	        		foreach ($organism_A_array as $organism_A){
+    	        		    if(self::assertRelationshipExistsProteinOrganism($protein_A, $organism_A) == false){
+        	        			$organism_A->addProtein($protein_A);
+        	        			$protein_A->addOrganism($organism_A);
+    	        		    }
+    	        		    if($domain){
+        	        		    if(self::assertRelationshipExistsDomainOrganism($domain, $organism_A) == false){
+            	        			$domain->addOrganism($organism_A);
+            	        			$organism_A->addDomain($domain);
+        	        		    }
+    	        		    }
+    	        		    $doctrine_manager->persist($organism_A);
     	        		}
-                    }
-                    
-	        		if($identifier_A_protein){
-	        			$doctrine_manager->persist($identifier_A_protein);
-	        		}
-	        		if($identifier_B_protein){
-	        			$doctrine_manager->persist($identifier_B_protein);
-	        		}
-
-	        		$alt_interactor_A_array = $alt_interactor_array[0];
-	        		
-	        		foreach ($alt_interactor_A_array as $alt_interactor_A){
-	        			
-	        			$alt_interactor_A->setProtein($protein_A);
-	        			$doctrine_manager->persist($alt_interactor_A);
-	        		}
-	        		
-	        		$alt_interactor_B_array = $alt_interactor_array[1];
-	        		
-	        		foreach ($alt_interactor_B_array as $alt_interactor_B){
-	        		
-	        			$alt_interactor_B->setProtein($protein_B);
-	        			$doctrine_manager->persist($alt_interactor_B);
-	        		}
-
-	        		$alias_interactor_A_array = $alias_interactor_array[0];
-	        		
-	        		foreach ($alias_interactor_A_array as $alias_interactor_A){
-	        			 
-	        			$alias_interactor_A->setProtein($protein_A);
-	        			$doctrine_manager->persist($alias_interactor_A);
-	        		}
-	        		
-	        		$alias_interactor_B_array = $alias_interactor_array[1];
-	        		
-	        		foreach ($alias_interactor_B_array as $alias_interactor_B){
-	        			 
-	        			$alias_interactor_B->setProtein($protein_B);
-	        			$doctrine_manager->persist($alias_interactor_B);
-	        		}
-	        		
-	        		if($links_array_A){
-		        		foreach ($links_array_A as $link_A){
-		        			 
-		        			$doctrine_manager->persist($link_A);
-		        		}
-	        		}
-	        		if($links_array_B){
-		        		foreach ($links_array_B as $link_B){
-		        			 
-		        			$doctrine_manager->persist($link_B);
-		        		}	        		
-	        		}
-	        		
-	        		if($dataset){
-    	        		$dataset->addInteraction($interaction);
-    	        		$interaction->addDataset($dataset);
-    	        		$doctrine_manager->persist($dataset);
-	        		}
-	        		$interaction->setInteractorA($protein_A);
-	        		$interaction->setInteractorB($protein_B);
-	        		
-	        		
-	        		if($domain != null){
-		        		$interaction->setDomain($domain);	        		
-		        		$domain->setProtein($protein_A);
-		        		$doctrine_manager->persist($domain);
-
-	        		}
-
-	        		$doctrine_manager->persist($interaction);
-	        		
-	        		$doctrine_manager->flush();
-	        		$doctrine_manager->clear();
-	        		gc_collect_cycles();
-	        	  
+    	        		
+    	        		foreach ($organism_B_array as $organism_B){
+    	        		    if(self::assertRelationshipExistsProteinOrganism($protein_B, $organism_B) == false){
+        	        			$organism_B->addProtein($protein_B);
+        	        			$protein_B->addOrganism($organism_B);
+        	        			
+    	        		    }
+    	        		    $doctrine_manager->persist($organism_B);
+    	        		}
+    
+                        if($support_information_array){
+        	        		foreach ($support_information_array as $support_information){
+        	        		    $doctrine_manager->persist($support_information);
+        
+        	        		    
+        	        		}
+                        }
+    
+                        if($interaction_support_information_array){
+        	        		foreach ($interaction_support_information_array as $interaction_support_information){
+        	        		     
+        	        		    $interaction->addInteractionSupportInformation($interaction_support_information);
+        	        		    $interaction_support_information->setInteraction($interaction);
+        	        		    $doctrine_manager->persist($interaction_support_information);
+        	        		}
+                        }
+                        
+    	        		if($identifier_A_protein){
+    	        			$doctrine_manager->persist($identifier_A_protein);
+    	        		}
+    	        		if($identifier_B_protein){
+    	        			$doctrine_manager->persist($identifier_B_protein);
+    	        		}
+    
+    	        		$alt_interactor_A_array = $alt_interactor_array[0];
+    	        		
+    	        		foreach ($alt_interactor_A_array as $alt_interactor_A){
+    	        			
+    	        			$alt_interactor_A->setProtein($protein_A);
+    	        			$doctrine_manager->persist($alt_interactor_A);
+    	        		}
+    	        		
+    	        		$alt_interactor_B_array = $alt_interactor_array[1];
+    	        		
+    	        		foreach ($alt_interactor_B_array as $alt_interactor_B){
+    	        		
+    	        			$alt_interactor_B->setProtein($protein_B);
+    	        			$doctrine_manager->persist($alt_interactor_B);
+    	        		}
+    
+    	        		$alias_interactor_A_array = $alias_interactor_array[0];
+    	        		
+    	        		foreach ($alias_interactor_A_array as $alias_interactor_A){
+    	        			 
+    	        			$alias_interactor_A->setProtein($protein_A);
+    	        			$doctrine_manager->persist($alias_interactor_A);
+    	        		}
+    	        		
+    	        		$alias_interactor_B_array = $alias_interactor_array[1];
+    	        		
+    	        		foreach ($alias_interactor_B_array as $alias_interactor_B){
+    	        			 
+    	        			$alias_interactor_B->setProtein($protein_B);
+    	        			$doctrine_manager->persist($alias_interactor_B);
+    	        		}
+    	        		
+    	        		if($links_array_A){
+    		        		foreach ($links_array_A as $link_A){
+    		        			 
+    		        			$doctrine_manager->persist($link_A);
+    		        		}
+    	        		}
+    	        		if($links_array_B){
+    		        		foreach ($links_array_B as $link_B){
+    		        			 
+    		        			$doctrine_manager->persist($link_B);
+    		        		}	        		
+    	        		}
+    	        		
+    	        		if($dataset){
+        	        		$dataset->addInteraction($interaction);
+        	        		$interaction->addDataset($dataset);
+        	        		$doctrine_manager->persist($dataset);
+    	        		}
+    	        		$interaction->setInteractorA($protein_A);
+    	        		$interaction->setInteractorB($protein_B);
+    	        		
+    	        		
+    	        		if($domain != null){
+    		        		$interaction->setDomain($domain);	        		
+    		        		$domain->setProtein($protein_A);
+    		        		$doctrine_manager->persist($domain);
+    
+    	        		}
+    
+    	        		$doctrine_manager->persist($interaction);
+    	        		
+    	        		$doctrine_manager->flush();
+    	        		$doctrine_manager->clear();
+    	        		gc_collect_cycles();
+	        		 }elseif(self::isNewDataset($publication_identifier) == false){
+	        		     
+	        		     $interaction = self::getInteractionByIds($interactor_A_id, $interactor_B_id);
+	        		     $dataset = self::getDatasetByReference($publication_identifier);
+	        		     $dataset->addInteraction($interaction);
+	        		     $interaction->addDataset($dataset);
+	        		     $doctrine_manager->persist($dataset);
+	        		     $doctrine_manager->persist($interaction);
+	        		     $doctrine_manager->flush();
+	        		     $doctrine_manager->clear();
+	        		     gc_collect_cycles();
+	        		     
+	        		 }elseif(self::isNewDataset($publication_identifier) == true){
+	        		     
+	        		     $interaction = self::getInteractionByIds($interactor_A_id, $interactor_B_id);
+	        		     $dataset = self::datasetHandler($publication_identifier, $publication_first_author);
+	        		     $dataset->addInteraction($interaction);
+	        		     $interaction->addDataset($dataset);
+	        		     $doctrine_manager->persist($dataset);
+	        		     $doctrine_manager->persist($interaction);
+	        		     $doctrine_manager->flush();
+	        		     $doctrine_manager->clear();
+	        		     gc_collect_cycles();
+	        		     
+	        		 }
 	        		}catch(Exception $e) {
 	        		}
 	        	}
@@ -287,8 +311,13 @@ class DataController extends Controller
         ->getRepository('AppBundle:Admin_Settings')
         ->find(1);
         
-        $color_scheme = $admin_settings->getColorScheme();
+        $main_color_scheme = $admin_settings->getMainColorScheme();
+        $header_color_scheme = $admin_settings->getHeaderColorScheme();
+        $logo_color_scheme = $admin_settings->getLogoColorScheme();
+        $button_color_scheme = $admin_settings->getButtonColorScheme();
         $short_title = $admin_settings->getShortTitle();
+        $title = $admin_settings->getTitle();
+        
         return $this->render('data_manager.html.twig', array(
         		'new_datasets_added' => $new_datasets_added,
         		'new_organisms_added' => $new_organisms_added,
@@ -296,8 +325,12 @@ class DataController extends Controller
         		'interactions_added' => $interactions_added,
         		'data_File' => $data_File,
         		'form' => $form->createView(),
-                'color_scheme' => $color_scheme,
-		        'short_title' => $short_title
+                'main_color_scheme' => $main_color_scheme,
+                'header_color_scheme' => $header_color_scheme,
+                'logo_color_scheme' => $logo_color_scheme,
+                'button_color_scheme' => $button_color_scheme,
+		        'short_title' => $short_title,
+		        'title' => $title
         ));
 	}
 	
@@ -310,18 +343,18 @@ class DataController extends Controller
 		}
 	}
 	
-	public function datasetHandler($publication_identifier){
+	public function datasetHandler($publication_identifier, $publication_first_author){
 	    
 	    $dataset = '';
-	    if(self::assertNotNull($publication_identifier)){
+	    if(self::assertNotNull($publication_identifier) && self::assertNotNull($publication_first_author)){
 	    
-	        $dataset = self::createDatasetFromData($publication_identifier);
+	        $dataset = self::createDatasetFromData($publication_identifier, $publication_first_author);
 	    }
 	    
 	    return $dataset;
 	}
 	
-	public function createDatasetFromData($publication_identifier){
+	public function createDatasetFromData($publication_identifier, $publication_first_author){
 	    
 	    $reference_array =  explode("|", $publication_identifier);
 	    
@@ -341,6 +374,7 @@ class DataController extends Controller
 	               
 	               $dataset = new Dataset();
 	               $dataset->setReference($id);
+	               $dataset->setName($publication_first_author);
 	               
 	           }else{
 	               
@@ -677,6 +711,81 @@ class DataController extends Controller
 		
 	}
 	
+	public function getInteractionByIds($interactor_A_id, $interactor_B_id){
+	    
+	    $interactor_A_id_array = explode(":", $interactor_A_id);
+	    $identifier_A_naming_convention_interactor_id = $interactor_A_id_array[0];
+	    $identifier_A_identifier_interactor_id = $interactor_A_id_array[1];
+	     
+	    $interactor_B_id_array = explode(":", $interactor_B_id);
+	    $identifier_B_naming_convention_interactor_id = $interactor_B_id_array[0];
+	    $identifier_B_identifier_interactor_id = $interactor_B_id_array[1];
+	     
+	    $protein_A_id = null;
+	    $protein_B_id = null;
+	    
+	    $em = $this->getDoctrine()->getManager();
+	     
+	    $query = $em->createQuery(
+	                    "SELECT i
+							FROM AppBundle:Identifier i
+				            WHERE i.identifier = :identifier"
+	
+	                    );
+	     
+	    $query->setParameter('identifier', $identifier_A_identifier_interactor_id);
+	     
+	    $identifier_A_results = $query->getResult();
+	     
+	    if($identifier_A_results){
+	         
+	        $identifier_A = $identifier_A_results[0];
+	
+	        $protein_A_id = $identifier_A->getProtein();
+	         
+	    }
+	
+	     
+	     
+	     
+	    $query = $em->createQuery(
+	                    "SELECT i
+							FROM AppBundle:Identifier i
+				            WHERE i.identifier = :identifier"
+	
+	                    );
+	     
+	    $query->setParameter('identifier', $identifier_B_identifier_interactor_id);
+	     
+	    $identifier_B_results = $query->getResult();
+	     
+	    if($identifier_B_results){
+	
+	        $identifier_B = $identifier_B_results[0];
+	         
+	        $protein_B_id = $identifier_B->getProtein();
+	
+	    }
+	
+	
+	     
+
+	         
+	        $query = $em->createQuery(
+	                        "SELECT i
+    							FROM AppBundle:Interaction i
+                				WHERE i.interactor_A = :interactor_A
+                				AND i.interactor_B = :interactor_B"
+	                        );
+	         
+	        $query->setParameter('interactor_A', $protein_A_id);
+	        $query->setParameter('interactor_B', $protein_B_id);
+	        $results = $query->getResult();
+	        $result = $results[0];
+	        return $result;
+	        
+	}
+	
 	public function createAltIdentifiersFromData($alt_interactor_id){
 		
 		$alt_identifier_array = array();
@@ -729,6 +838,8 @@ class DataController extends Controller
 				$interactor_alias_naming_convention = $_interactor_alias_array[0];
 					
 				$interactor_alias_identifier = $_interactor_alias_array[1];
+				
+				$interactor_alias_identifier = preg_replace('/\(.*$/',"", $interactor_alias_identifier);
 				
 				if(self::isNewIdentifier($interactor_alias_identifier, $interactor_alias_naming_convention) == true){	
 					//add identifer
@@ -791,180 +902,150 @@ class DataController extends Controller
 		$links_array = array();
 		
 		if($naming_convention == 'uniprotkb'){
+		    
+
 		 
 			//get the uniprot accession
 			$uniprot_accession = $identifier;
 			 
+			$external_link = new External_Link;
+			$external_link->setDatabaseName("UniProt");
+			$external_link->setLinkId($uniprot_accession);
+			$external_link->setLink("http://www.uniprot.org/uniprot/" . $uniprot_accession);
+			$external_link->setProtein($protein);
+			$links_array[] = $external_link;
+			
 			//get the uniprot xml url
 			$url = "http://www.uniprot.org/uniprot/$uniprot_accession.xml";
 			 
 			//get the uniprot xml
 			
 			try{
-    			$str=file_get_contents($url);
-    			 
-    			//delete string from xml (bug fix)
-    			$str=str_replace('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd"', "", $str);
-    			 
-    			//create crawler for xml
-    			$crawler = new Crawler($str);
-    			 
-    			try{
-    				//get the sequence node from xml
-    				$sequence = $crawler->filter('uniprot > entry > sequence');
-    		
-    				//if the node is present
-    				if($sequence->count()){
-    					//get the sequence text from node
-    					$sequence_text = $sequence->text();
-    					 
-    					//set the sequece text for the protein
-    					$protein->setSequence($sequence_text);
-    				}
-    			}
-    			catch(Exception $e) {
-    			}
-    			try{
-    				//get the gene name node from xml
-    				$gene_name = $crawler->filter('uniprot > entry > gene > name');
-    		
-    				//if the node is present
-    				if($gene_name->count()){
-    					 
-    					//get the gene name text from node
-    					$gene_name_text = $gene_name->text();
-    					 
-    					//set the gene name text for the protein
-    					$protein->setGeneName($gene_name_text);
-    
-    		
-    				}
-    			}
-    			catch(Exception $e) {
-    			}
+    			$str= @file_get_contents($url);
     			
-    			
-    			try{
-    			    //get the gene name node from xml
-    			    $function = $crawler->filter('uniprot > entry > comment[type="function"] > text');
-    			
-    			    //if the node is present
-    			    if($function->count()){
-    			
-    			        //get the gene name text from node
-    			        $function_text = $function->text();
-    			
-    			        //set the gene name text for the protein
-    			        $protein->setDescription($function_text);
-    			
-    			
-    			    }
-    			}
-    			catch(Exception $e) {
-    			}
-    			
-    			
-    			$external_link = new External_Link;
-    			$external_link->setDatabaseName("UniProt");
-    			$external_link->setLinkId($uniprot_accession);
-    			$external_link->setLink("http://www.uniprot.org/uniprot/" . $uniprot_accession);
-    			$external_link->setProtein($protein);
-    			$links_array[] = $external_link;
-    			
-    			
-    			try{
-    				//get the gene name node from xml
-    				$link = $crawler->filter('uniprot > entry > dbReference[type="KEGG"]');
-    			
-    				//if the node is present
-    				if($link->count()){
-    			
-    					//get the gene name text from node
-    					$link_text = $link->each(function ($node, $i) {
-    					    return $node->attr('id');
-    					});
-    
-    					//set the gene name text for the protein
-    					foreach($link_text as $l){
-    						
-    						
-    						$external_link = new External_Link;
-    						$external_link->setDatabaseName("KEGG");
-    						$external_link->setLinkId($l);
-    						$external_link->setLink("http://www.genome.jp/dbget-bin/www_bget?" . $l);
-    						$external_link->setProtein($protein);
-    						$links_array[] = $external_link;
-    
-    					}
-    
-    				}
-    			}
-    			catch(Exception $e) {
-    			}
-    			
-    			
-    			
-    			
-    			
-    			
-    			try{
-    				//get the gene name node from xml
-    				$link = $crawler->filter('uniprot > entry > dbReference[type="Ensembl"]');
-    					
-    				//if the node is present
-    				if($link->count()){
-    						
-    					//get the gene name text from node
-    					$link_text = $link->each(function ($node, $i) {
-    						return $node->attr('id');
-    					});
-    			
-    						//set the gene name text for the protein
-    						foreach($link_text as $l){
-    			
-    							$external_link = new External_Link;
-    							$external_link->setDatabaseName("Ensembl");
-    							$external_link->setLinkId($l);
-    							$external_link->setLink("http://www.ensembl.org/id/" . $l);
-    							$external_link->setProtein($protein);
-    							$links_array[] = $external_link;
-    			
-    						}
-    			
-    				}
-    			}
-    			catch(Exception $e) {
-    			}
-    			
-    			try{
-    				//get the gene name node from xml
-    				$link = $crawler->filter('uniprot > entry > dbReference[type="RefSeq"]');
-    					
-    				//if the node is present
-    				if($link->count()){
-    			
-    					//get the gene name text from node
-    					$link_text = $link->each(function ($node, $i) {
-    						return $node->attr('id');
-    					});
-    							
-    						//set the gene name text for the protein
-    						foreach($link_text as $l){
-    								
-    							$external_link = new External_Link;
-    							$external_link->setDatabaseName("RefSeq");
-    							$external_link->setLinkId($l);
-    							$external_link->setLink("http://www.ncbi.nlm.nih.gov/protein/" . $l);
-    							$external_link->setProtein($protein);
-    							$links_array[] = $external_link;
-    								
-    						}
-    							
-    				}
-    			}
-    			catch(Exception $e) {
-    			}
+    			if($str != FALSE){
+        			//delete string from xml (bug fix)
+        			$str=str_replace('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd"', "", $str);
+        			 
+        			//create crawler for xml
+        			$crawler = new Crawler($str);
+        			 
+        			try{
+        				//get the sequence node from xml
+        				$sequence = $crawler->filter('uniprot > entry > sequence');
+        		
+        				//if the node is present
+        				if($sequence->count()){
+        					//get the sequence text from node
+        					$sequence_text = $sequence->text();
+        					 
+        					//set the sequece text for the protein
+        					$protein->setSequence($sequence_text);
+        				}
+        			}
+        			catch(Exception $e) {
+        			}
+        			try{
+        				//get the gene name node from xml
+        				$gene_name = $crawler->filter('uniprot > entry > gene > name');
+        		
+        				//if the node is present
+        				if($gene_name->count()){
+        					 
+        					//get the gene name text from node
+        					$gene_name_text = $gene_name->text();
+        					 
+        					//set the gene name text for the protein
+        					$protein->setGeneName($gene_name_text);
+        
+        		
+        				}
+        			}
+        			catch(Exception $e) {
+        			}
+        			
+        			
+        			try{
+        			    //get the gene name node from xml
+        			    $function = $crawler->filter('uniprot > entry > comment[type="function"] > text');
+        			
+        			    //if the node is present
+        			    if($function->count()){
+        			
+        			        //get the gene name text from node
+        			        $function_text = $function->text();
+        			
+        			        //set the gene name text for the protein
+        			        $protein->setDescription($function_text);
+        			
+        			
+        			    }
+        			}
+        			catch(Exception $e) {
+        			}
+
+        			
+        			
+        			try{
+        				//get the gene name node from xml
+        				$link = $crawler->filter('uniprot > entry > dbReference[type="Ensembl"]');
+        					
+        				//if the node is present
+        				if($link->count()){
+        						
+        					//get the gene name text from node
+        					$link_text = $link->each(function ($node, $i) {
+        						return $node->attr('id');
+        					});
+        			
+        						//set the gene name text for the protein
+        						foreach($link_text as $l){
+        			
+        							$external_link = new External_Link;
+        							$external_link->setDatabaseName("Ensembl");
+        							$external_link->setLinkId($l);
+        							$external_link->setLink("http://www.ensembl.org/id/" . $l);
+        							$external_link->setProtein($protein);
+        							$links_array[] = $external_link;
+        			
+        						}
+        			
+        				}
+        			}
+        			catch(Exception $e) {
+        			}
+        			
+        			try{
+        				//get the gene name node from xml
+        				$link = $crawler->filter('uniprot > entry > dbReference[type="RefSeq"]');
+        					
+        				//if the node is present
+        				if($link->count()){
+        			
+        					//get the gene name text from node
+        					$link_text = $link->each(function ($node, $i) {
+        						return $node->attr('id');
+        					});
+        							
+        						//set the gene name text for the protein
+        						foreach($link_text as $l){
+        								
+        							$external_link = new External_Link;
+        							$external_link->setDatabaseName("RefSeq");
+        							$external_link->setLinkId($l);
+        							$external_link->setLink("http://www.ncbi.nlm.nih.gov/protein/" . $l);
+        							$external_link->setProtein($protein);
+        							$links_array[] = $external_link;
+        								
+        						}
+        							
+        				}
+        			}
+        			catch(Exception $e) {
+        			}
 			
+    			
+			    }
 			}
 			catch(Exception $e) {
 			}
@@ -1206,7 +1287,29 @@ class DataController extends Controller
 	
 		return $return;
 	}
+	/*
+	public function isNewDataset($publication_identifier){
+	    $em = $this->getDoctrine()->getManager();
+	    $query = $em->createQuery(
+	                    "SELECT d
+							FROM AppBundle:Dataset d
+							WHERE d.reference = :reference
+                        "
+	                    );
+	    	
+	    $query->setParameter('reference', $publication_identifier);
+
+	    $results = $query->getResult();
 	
+	
+	    if($results){
+	        return false;
+	    }else{
+	        return true;
+	    }
+	
+	}
+	*/
 	
 	public function isNewProtein($identifier, $naming_convention){
 		$em = $this->getDoctrine()->getManager();
@@ -1295,6 +1398,90 @@ class DataController extends Controller
 	        return true;
 	    }
 	}
+	
+	public function isNewInteraction($interactor_A_id, $interactor_B_id){
+	
+	    $interactor_A_id_array = explode(":", $interactor_A_id);
+	    $identifier_A_naming_convention_interactor_id = $interactor_A_id_array[0];
+	    $identifier_A_identifier_interactor_id = $interactor_A_id_array[1];
+	     
+	    $interactor_B_id_array = explode(":", $interactor_B_id);
+	    $identifier_B_naming_convention_interactor_id = $interactor_B_id_array[0];
+	    $identifier_B_identifier_interactor_id = $interactor_B_id_array[1];
+	     
+	    $protein_A_id = null;
+	    $protein_B_id = null;
+	    
+	    $em = $this->getDoctrine()->getManager();
+	     
+	    $query = $em->createQuery(
+	                    "SELECT i
+							FROM AppBundle:Identifier i
+				            WHERE i.identifier = :identifier"
+	
+	                    );
+	     
+	    $query->setParameter('identifier', $identifier_A_identifier_interactor_id);
+	     
+	    $identifier_A_results = $query->getResult();
+	     
+	    if($identifier_A_results){
+	         
+	        $identifier_A = $identifier_A_results[0];
+	
+	        $protein_A_id = $identifier_A->getProtein();
+	         
+	    }
+	
+	     
+	     
+	     
+	    $query = $em->createQuery(
+	                    "SELECT i
+							FROM AppBundle:Identifier i
+				            WHERE i.identifier = :identifier"
+	
+	                    );
+	     
+	    $query->setParameter('identifier', $identifier_B_identifier_interactor_id);
+	     
+	    $identifier_B_results = $query->getResult();
+	     
+	    if($identifier_B_results){
+	
+	        $identifier_B = $identifier_B_results[0];
+	         
+	        $protein_B_id = $identifier_B->getProtein();
+	
+	    }
+	
+	
+	     
+	    if ($protein_A_id && $protein_B_id){
+	         
+	        $query = $em->createQuery(
+	                        "SELECT i
+    							FROM AppBundle:Interaction i
+                				WHERE i.interactor_A = :interactor_A
+                				AND i.interactor_B = :interactor_B"
+	                        );
+	         
+	        $query->setParameter('interactor_A', $protein_A_id);
+	        $query->setParameter('interactor_B', $protein_B_id);
+	        $results = $query->getResult();
+	
+	        if($results){
+	            return false;
+	        }else{
+	            return true;
+	        }
+	    }
+	     
+	    return true;
+	
+	}
+	
+
 	
 	public function getDomainFromTypeName($type, $name){
 	    

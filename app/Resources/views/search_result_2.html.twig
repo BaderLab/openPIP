@@ -93,220 +93,69 @@
 <main>
     <div class="se-pre-con"></div>
     <div class="row network_row" style="background-color: #EEEEEE;">
-    	<div class="col-sm-2">
-    		<div class="summary_panel">
-        		<div class="container">
-        		
-        		
-            		<div class="row">
-            			<h3 style="color: {{ main_color_scheme }}">Summary</h3>
-            		</div>
-            		<div class="row">
-        				<div class="row">
-        					<h4 style="color: {{ main_color_scheme }}">Search Query</h4>
-        				</div>
-        				<div class="row">{{ search_query }}</div>
-            		</div>
-            		<div class="row">	
-        				<div class="row">
-        					<h4 style="color: {{ main_color_scheme }}">Parameters</h4>
-        				</div>
-    					{% if organism_count > 1 %}
-    						<div class="row">Organism: {{ search_setting_organism }}</div>
-    					{% endif %}
-    					{% if domain_count > 0 %}
-    						<div class="row">Domain: {{ search_setting_domain }}</div>
-    					{% endif %}
-        				<div class="row">Max Number of interactions: {{ search_setting_max_interactions }}</div>
-        				<div class="row">Minimum Interaction Score: {{ parameter_min_interaction_score }}</div>
-            		</div>
-            		<div class="row">
-        				<div class="row">
-        					<h4 style="color: {{ main_color_scheme }}">Stats</h4>
-        				</div>
-        				<div class="row">Number of Interactions: {{ interaction_count }}</div>
-        				<div class="row">Number of Domains: {{ domain_count }}</div>
-        			</div>
-        						
-    				<div class="row">
-    					<h3 style="color: {{ main_color_scheme }}">Downloads</h3>
-    				</div>
-    			
-    				<div class="row">
-    					<h4 style="color: {{ main_color_scheme }}">Download Image</h4>
-    				</div>
-    				<div class="row">
-    					<div class="row">
-    						<div class="col-sm-4">
-    							PNG:
-    						</div>
-    						<div class="col-sm-2">
-    							<a id='png' class="png" href="" download>Download</a>
-    						</div>
-    					</div>
-    					<div class="row">
-    						<div class="col-sm-4">
-    							JPG:
-    						</div>
-    						<div class="col-sm-2">
-    							<a id='jpg' class="jpg" href="" download>Download</a>
-    						</div>
-    					</div>
-    				</div>
-    				<div class="row">
-    					<h4 style="color: {{ main_color_scheme }}">Download Network Data</h4>
-    				</div>
-    				<div class="row">
-    					<div class="row">
-    						<div class="col-sm-6">
-    							PSI-MI Tab 2.7:
-    						</div>
-    						<div class="col-sm-2">
-    							<a href="{{path('psi_mitab', {'search_term': search_query })}}">Download</a>
-    						</div>
-    					</div>
-    					<div class="row">
-    						<div class="col-sm-6">
-    							CSV:
-    						</div>
-    						<div class="col-sm-2">
-    							<a href="{{path('csv', {'search_term': search_query })}}">Download</a>
-    						</div>
-    					</div>
-    					<div class="row">
-    						<div class="col-sm-6">
-    							PSI-MI XML:
-    						</div>
-    						<div class="col-sm-2">
-    							<a href="{{path('psi_mixml', {'search_term': search_query })}}">Download</a>
-    						</div>
-    					</div>
-    					<div class="row">
-    						<div class="col-sm-6">
-    							Protein Sequences in Multi-FASTA Format:
-    						</div>
-    						<div class="col-sm-2">
-    							<a href="{{path('multi_fasta', {'search_term': search_query })}}">Download</a>
-    						</div>
-    					</div>
-    				</div>
-            	</div>
-        	</div>
-        </div>	
-    	<div class="col-sm-8">
+    	<div class="col-sm-12">
     		<div id='cy'></div>
-    	</div>
-    	<div class="col-sm-2">
-        	<div class="summary_panel">
-        		<div class="container">
-            		<div class="row">
-            			<h3 style="color: {{ main_color_scheme }}">View Settings</h3>
-            		</div>
-    				<div class="row">
-    					<label for="view_settings_layout"> Layout </label>
-    				</div>	
-					<div class="row">
-						<select id="view_settings_layout">
-							<option value="concentric">Concentric</option>
-							<option value="breadthfirst">Breadth-first</option>
-							<option value="grid">Grid</option>
-							<option value="circle">Circle</option>
-						</select>
-    				</div>
-					<div class="row">
-						<label for="label_checkbox">Labels</label>
-						<input class="styled" type="checkbox" name="view_settings_labels" id="view_settings_labels" checked="checked" />
-					</div>
-					<div class="row">
-						<button id="view_settings_submit" class="btn btn-success" style="margin-right: 10px;"">
-							<span>Update</span>
-						</button>
-					</div>
-					<div class="row">
-    					<div class="col-sm-5">
-    					    <div class="row">
-        						<label for="protein_of_intrest_color">Nodes</label>
-        					</div>
-    					</div>
-    					<div class="col-sm-7">
-    					</div>					
-					</div>
-					<div class="row">
-    					<div class="col-sm-5">
-        					<div class="row">
-        						<input type='text' id='protein_of_intrest_color' />
-        						<div id="spectrum_js"></div>
-        					</div>
-    					</div>
-    					<div class="col-sm-7">
-    					</div>
-					</div>
-					<div class="row">
-    					<div class="col-sm-5">
-    					   	<div class="row">
-        						<label for="published_color">Published</label>
-        					</div>
-    					</div>
-    					<div class="col-sm-7">
-    					    <div class="row">
-        						<label for="pre-published_color">Pre-Published</label>
-        					</div>
-    					</div>					
-					</div>
-					<div class="row">
-    					<div class="col-sm-5">
-    					    <div class="row">
-        						<input type='text' id='published_color' />
-        						<div id="spectrum_js"></div>
-        					</div>
-    					</div>
-    					<div class="col-sm-7">
-        					<div class="row">
-        						<input type='text' id='pre-published_color' />
-        						<div id="spectrum_js"></div>
-        					</div>
-    					</div>
-					</div>
-					<div class="row">
-            			<h3 style="color: {{ main_color_scheme }}">Data Settings</h3>
-            		</div>
-            		<form>
-					<div class="row">
-						<label for="min_interaction_score"> Minimum Required Interaction Score: </label>
-					</div>
-					<div class="row">
-						<div id="min_interaction_score">
-							<div id="min_interaction_score_handle" class="ui-slider-handle"></div>
-						</div>
-					</div>
-					<div class="row">
-						<label for="max_number_of_interactions"> Max Number of Interactions: </label>
-					</div>
-					<div class="row">
-						<input type="text" name="max_number_of_interactions" id="max_number_of_interactions" style="width: 60px;" value="50" />
-					</div>
-					<div class="row">
-						<a id="update_data_settings" class="btn btn-success" style="margin-right: 10px;" href=""> <span>Update</span></a>
-					</div>
-					</form>	
-				</div>
-    		</div>
     	</div>
     </div>
     <div class="row result_row">
     	<div class="shadow"></div>
     	<div class="row">
-    		<ul class="nav nav-pills" style="margin: auto; width: 40%;">
-    			<li class="active pill"><a data-toggle="pill" href="#network" style="color: {{ main_color_scheme }}">Network</a></li>
-     		</ul>
-    	</div>
+        	<div class="col-md-3">
+        	</div>
+        	<div class="col-md-9">
+        		<ul class="nav nav-pills" style="margin: auto;">
+        			<li class="active pill"><a data-toggle="pill" href="#search_summary" style="color: {{ main_color_scheme }}">Summary</a></li>
+        			<li class="pill"><a data-toggle="pill" href="#network" style="color: {{ main_color_scheme }}">Network</a></li>
+        			<li class="pill"><a data-toggle="pill" href="#downloads" style="color: {{ main_color_scheme }}">Downloads</a></li>
+        			<li class="pill"><a data-toggle="pill" href="#view_settings" style="color: {{ main_color_scheme }}">View Settings</a></li>
+        			<li class="pill"><a data-toggle="pill" href="#data_settings" style="color: {{ main_color_scheme }}">Data Settings</a></li>
+        		</ul>
+        	</div>	
+       </div> 
 	<div class="row result_row">
 		<div class="results_panel">
 			<div class="tab-content" style="padding-top: 0;">
-				<div id="network"  class="tab-pane fade in active">
+				<div id="search_summary" class="tab-pane fade in active">
+					<div class="search_summary">
+						<div class="container">
+							<div class="row">
+								<div class="col-sm-4">
+									<div class="row">
+										<h3 style="color: {{ main_color_scheme }}">Search Query</h3>
+									</div>
+									<div class="row">{{ search_query }}</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="row">
+										<h3 style="color: {{ main_color_scheme }}">Parameters</h3>
+									</div>
+									{% if organism_count > 1 %}
+										<div class="row">Organism: {{ search_setting_organism }}</div>
+									{% endif %}
+									{% if domain_count > 0 %}
+										<div class="row">Domain: {{ search_setting_domain }}</div>
+									{% endif %}
+									
+									<div class="row">Max Number of interactions: {{ search_setting_max_interactions }}</div>
+									<div class="row">Minimum Interaction Score: {{ parameter_min_interaction_score }}</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="row">
+										<h3 style="color: {{ main_color_scheme }}">Stats</h3>
+									</div>
+									<div class="row">Number of Interactions: {{ interaction_count }}</div>
+									{% if domain_count > 0 %}
+										<div class="row">Number of Domains: {{ domain_count }}</div>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="network" class="tab-pane fade">
 					<div class="container" style="overflow: auto;">
 						<div class="row">
-							<h3 style="color: {{ main_color_scheme }}">Interactions</h3>
+							<h3 style="color: {{ main_color_scheme }}">Interactions with {{ protein_gene_name }}</h3>
 						</div>
 						<div class="row">
 							<div class="col-sm-8">
@@ -330,11 +179,12 @@
 							data-filter-minimum="3">
 							<thead>
 								<tr>
-									<th>Interactor A Gene Name</th>
-									<th>Interactor B Gene Name</th>
+									<th>Interactor Gene Name</th>
 									<th>Score</th>
-									<th>Binding Start</th>
-									<th>Binding End</th>
+									{% if binding_count > 0 %}
+    									<th>Binding Start</th>
+    									<th>Binding End</th>
+									{% endif %}
 									<th>Dataset</th>
 								</tr>
 							</thead>
@@ -342,12 +192,22 @@
 
 								{% for interaction in interaction_array %}
 								<tr>
-									<td>{{ interaction.interactor_A_gene_name }}</td>
 									<td>{{ interaction.interactor_B_gene_name }}</td>
 									<td>{{ interaction.score }}</td>
-									<td>{{ interaction.binding_start }}</td>
-									<td>{{ interaction.binding_end }}</td>
-									<td><a href="http://www.ncbi.nlm.nih.gov/pubmed/{{ interaction.dataset }}" target="_blank">Reference</a></td>
+									{% if binding_count > 0 %}
+										<td>{{ interaction.binding_start }}</td>
+										<td>{{ interaction.binding_end }}</td>
+									{% endif %}
+									<td>
+									{% for dataset in interaction.dataset_array %}
+    									{% if dataset != 'unassigned1304' %}
+    										<a href="http://www.ncbi.nlm.nih.gov/pubmed/{{ dataset.dataset_reference }}" target="_blank">{{ dataset.dataset_author }}</a></br>
+    									{% else %}
+    										Unpublished
+    									
+    									{% endif %}
+									{% endfor %}
+									</td>
 								</tr>
 								{% endfor %}
 							</tbody>
@@ -362,6 +222,236 @@
 						{% else %}
 						<p>No Interactions Found</p>
 						{% endif %} 
+					</div>
+				</div>
+				<div id="downloads" class="tab-pane fade">
+					<div class="container">
+						<div class="row">
+							<div class="col-sm-2"></div>
+							<div class="col-sm-4">
+								<div class="row">
+									<div class="col-sm-12">
+										<h3 style="color: {{ main_color_scheme }}">Download Image</h3>
+									</div>
+								</div>
+								<div class="row">
+									<div class="row">
+										<div class="col-sm-4">
+											<h4>PNG:</h4>
+										</div>
+										<div class="col-sm-2">
+											<a id='png' class="png" href="" download>Download</a>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-4">
+											<h4>JPG:</h4>
+										</div>
+										<div class="col-sm-2">
+											<a id='jpg' class="jpg" href="" download>Download</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="row">
+									<div class="col-sm-12">
+										<h3 style="color: {{ main_color_scheme }}">Download Network Data</h3>
+									</div>
+								</div>
+								<div class="row">
+									<div class="row">
+										<div class="col-sm-6">
+											<h4>PSI-MI Tab 2.7:</h4>
+										</div>
+										<div class="col-sm-2">
+											<a href="{{path('psi_mitab', {'search_term': search_query })}}">Download</a>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-6">
+											<h4>CSV:</h4>
+										</div>
+										<div class="col-sm-2">
+											<a href="{{path('csv', {'search_term': search_query })}}">Download</a>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-6">
+											<h4>PSI-MI XML:</h4>
+										</div>
+										<div class="col-sm-2">
+											<a href="{{path('psi_mixml', {'search_term': search_query })}}">Download</a>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-6">
+											<h4>Protein Sequences in Multi-FASTA Format:</h4>
+										</div>
+										<div class="col-sm-2">
+											<a href="{{path('multi_fasta', {'search_term': search_query })}}">Download</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="view_settings" class="tab-pane fade">
+					<div class="view_settings">
+						<div class="container">
+							<div class="row">
+								<div class="col-sm-2"></div>
+								<div class="col-sm-3">
+									<div class="row">
+										<div class="col-sm-4">
+											<label for="view_settings_layout"> Layout </label>
+										</div>
+										<div class="col-sm-8">
+											<select id="view_settings_layout">
+												<option value="concentric">Concentric</option>
+												<option value="breadthfirst">Breadth-first</option>
+												<option value="grid">Grid</option>
+												<option value="circle">Circle</option>
+											</select>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-4">
+											<label for="label_checkbox">Labels</label>
+										</div>
+										<div class="col-sm-4">
+											<input class="styled" type="checkbox" name="view_settings_labels" id="view_settings_labels" checked="checked" />
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-5">
+									<div id="test_1">
+										<div class="row">
+											<div class="col-sm-6">
+												<label for="protein_of_intrest_color">Nodes</label>
+											</div>
+											<div class="col-sm-6">
+												<input type='text' id='protein_of_intrest_color' />
+											</div>
+											<div id="spectrum_js"></div>
+										</div>
+										<div class="row">
+											<div class="col-sm-6">
+												<label for="published_color">Published Interactions</label>
+											</div>
+											<div class="col-sm-6">
+												<input type='text' id='published_color' />
+											</div>
+											<div id="spectrum_js"></div>
+										</div>
+										<div class="row">
+											<div class="col-sm-6">
+												<label for="pre-published_color">Pre-Published Interactions</label>
+											</div>
+											<div class="col-sm-6">
+												<input type='text' id='pre-published_color' />
+											</div>
+											<div id="spectrum_js"></div>
+										</div>
+										{% for domain in domain_object_array %} 
+    										{% if domain %}
+    										<div class='row'>
+    											<div class='col-sm-6'>
+    												<label>{{ domain.type }}({{ domain.name }})</label>
+    											</div>
+    											<div class='col-sm-6'>
+    												<input type='text' id='input_{{ domain.name }}' />
+    											</div>
+    										</div>
+    										{% endif %} 
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-2"></div>
+								<div class="col-sm-10">
+									<button id="view_settings_submit" class="btn btn-success" style="margin-right: 10px;"">
+										<span>Update</span>
+									</button>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div id="data_settings" class="tab-pane fade">
+					<div class="data_settings">
+						<div class="container">
+							<div class="row">
+								<form>
+									<div class="row">
+										<div class="col-sm-2"></div>
+										<div class="col-sm-6">
+											<div class="row">
+												<label for="min_interaction_score"> Minimum Required Interaction Score: </label>
+											</div>
+											<div class="row">
+												<div id="min_interaction_score">
+													<div id="min_interaction_score_handle" class="ui-slider-handle"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-2"></div>
+										<div class="col-sm-4">
+											<div class="row">
+												<label for="max_number_of_interactions"> Max Number of Interactions: </label>
+											</div>
+											<div class="row">
+												<input type="text" name="max_number_of_interactions" id="max_number_of_interactions" style="width: 60px;" value="{{ search_setting_max_interactions }}" />
+											</div>
+										</div>
+										<div class="col-sm-4">
+											<div class="row">
+												<label>Publication Status: </label>
+											</div>
+    										<div class="row">
+        										<input type="checkbox" id="published" name="published" value="published"
+        										{% if query_publication_status == "all" or query_publication_status == "published" %}
+                                                    checked
+                                                {% else %}
+                                                {% endif %} > <label>Published</label>
+        									</div>	
+        									<div class="row">
+        										<input type="checkbox" id="prepublished" name="prepublished" value="prepublished"
+        										{% if query_publication_status == "all" or query_publication_status == "pre-published" %}
+        										    checked
+                                                {% else %}
+                                                {% endif %}> <label>Pre-Published</label>
+    										</div>
+										
+										
+											<!--<div class="row">
+												<label for="select_domain"> Domain </label>
+											</div>
+											<div class="row">
+												<select id="select_domain"> 
+												{% for domain in domain_object_array %} 
+												    {% if domain %}
+														<option value="{{ domain.name }}">{{ domain.type }}({{ domain.name }})</option> 
+													{% endif %}
+												{% endfor %}
+												</select>
+											</div>-->
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-2"></div>
+										<div class="col-sm-6">
+											<a id="update_data_settings" class="btn btn-success" style="margin-right: 10px;" href=""> <span>Update</span></a>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -930,21 +1020,36 @@
         $('#update_data_settings').on('click', function(){
         	var maxInteractions = $('#max_number_of_interactions').val();
         	var searchScore = $("#min_interaction_score").slider("option", "value");
-        	var publices =all
 
-        	var publication_status=all
+			var publicationStatus = 'published';
+
+			if($("#published").prop("checked") && $("#prepublished").prop("checked")){
+				var publicationStatus = 'all';
+			}else if($("#published").prop("checked")){
+				var publicationStatus = 'published';
+			}else if($("#prepublished").prop("checked")){
+				var publicationStatus = 'pre_published';
+			}
 
 
-        	
         	var url = '';
-        	if(searchScore != null && maxInteractions >= 1){
-        		url = Routing.generate('search_results', { search_term: proteinOfIntrestName, score: searchScore, max_number_of_interactions: maxInteractions });
+        	if(searchScore != null && maxInteractions >= 1 && publicationStatus != null){
+            	
+        		url = Routing.generate('search_results', { search_term: proteinOfIntrestName, score: searchScore, max_number_of_interactions: maxInteractions, publication_status: publicationStatus});
+            }else if (searchScore != null && maxInteractions >= 1){
+            	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, score: searchScore});
+            }else if (searchScore != null && publicationStatus != null){
+            	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, score: searchScore, publication_status: publicationStatus});
+            }else if (maxInteractions >= 1 && publicationStatus != null){
+            	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, max_number_of_interactions: maxInteractions, publication_status: publicationStatus });
             }else if (searchScore != null){
             	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, score: searchScore});
             }else if (maxInteractions >= 1){
-            	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, max_interactions: maxInteractions });
+            	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, max_number_of_interactions: maxInteractions });
+            }else if (publicationStatus != null){
+            	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, publication_status: publicationStatus });
             }
-    
+
         	$('#update_data_settings').attr('href', url);
         });
         

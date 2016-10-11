@@ -62,9 +62,13 @@ class HomeController extends Controller
 		->find(1);
 		
 		$title = $admin_settings->getTitle();
-		$home_page = $admin_settings->getHomePage();
-		$color_scheme = $admin_settings->getColorScheme();
 		$short_title = $admin_settings->getShortTitle();
+		$footer = $admin_settings->getFooter();
+		$main_color_scheme = $admin_settings->getMainColorScheme();
+        $header_color_scheme = $admin_settings->getHeaderColorScheme();
+        $logo_color_scheme = $admin_settings->getLogoColorScheme();
+        $button_color_scheme = $admin_settings->getButtonColorScheme();
+		$home_page = $admin_settings->getHomePage();
 		
 		$login_status = false;
 		
@@ -84,8 +88,12 @@ class HomeController extends Controller
 		        'domain_instance_count' => $domain_instance_count,
 		        'title' => $title,
 		        'home_page' => $home_page,
-		        'color_scheme' => $color_scheme,
+		        'main_color_scheme' => $main_color_scheme,
+                'header_color_scheme' => $header_color_scheme,
+                'logo_color_scheme' => $logo_color_scheme,
+                'button_color_scheme' => $button_color_scheme,
 		        'short_title' => $short_title,
+		        'footer' => $footer,
 		        'login_status' => $login_status
 		));
 	

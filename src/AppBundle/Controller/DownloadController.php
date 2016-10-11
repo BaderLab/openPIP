@@ -34,9 +34,14 @@ class DownloadController extends Controller
         ->getRepository('AppBundle:Admin_Settings')
         ->find(1);
         
-        $color_scheme = $admin_settings->getColorScheme();
-        $short_title = $admin_settings->getShortTitle();
-        
+		$title = $admin_settings->getTitle();
+		$short_title = $admin_settings->getShortTitle();
+		$footer = $admin_settings->getFooter();
+		$main_color_scheme = $admin_settings->getMainColorScheme();
+        $header_color_scheme = $admin_settings->getHeaderColorScheme();
+        $logo_color_scheme = $admin_settings->getLogoColorScheme();
+        $button_color_scheme = $admin_settings->getButtonColorScheme();
+        $download = $admin_settings->getDownload();
         
         $login_status = false;
         
@@ -48,8 +53,14 @@ class DownloadController extends Controller
         }
         
         return $this->render('download.html.twig', array(
-                'color_scheme' => $color_scheme,
+                'main_color_scheme' => $main_color_scheme,
+                'header_color_scheme' => $header_color_scheme,
+                'logo_color_scheme' => $logo_color_scheme,
+                'button_color_scheme' => $button_color_scheme,
                 'short_title' => $short_title,
+		        'title' => $title,
+                'footer' => $footer,
+                'download' => $download,
                 'login_status' => $login_status
         
         ));
@@ -61,7 +72,7 @@ class DownloadController extends Controller
     /**
      * Search Home
      *
-     * @Route("/admin/download/multi_fasta/{search_term}", name="multi_fasta", options={"expose": true}))
+     * @Route("/download/multi_fasta/{search_term}", name="multi_fasta", options={"expose": true}))
      * @Method({"GET", "POST"})
      */
     public function multi_fastaAction($search_term)
@@ -142,7 +153,7 @@ class DownloadController extends Controller
     /**
      * Search Home
      *
-     * @Route("/admin/download/csv/{search_term}", name="csv", options={"expose": true}))
+     * @Route("/download/csv/{search_term}", name="csv", options={"expose": true}))
      * @Method({"GET", "POST"})
      */
     public function csvAction($search_term)
@@ -163,7 +174,7 @@ class DownloadController extends Controller
     /**
      * Search Home
      *
-     * @Route("/admin/download/psi_mitab/{search_term}", name="psi_mitab", options={"expose": true}))
+     * @Route("/download/psi_mitab/{search_term}", name="psi_mitab", options={"expose": true}))
      * @Method({"GET", "POST"})
      */
     public function psi_mitabAction($search_term)
@@ -299,7 +310,7 @@ class DownloadController extends Controller
     /**
      * Search Home
      *
-     * @Route("/admin/download/psi_mixml/{search_term}", name="psi_mixml", options={"expose": true}))
+     * @Route("/download/psi_mixml/{search_term}", name="psi_mixml", options={"expose": true}))
      * @Method({"GET", "POST"})
      */
     public function psi_mixmlAction($search_term)

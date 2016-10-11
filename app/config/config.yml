@@ -73,12 +73,15 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
     
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: AppBundle\Entity\User
-    
+    from_email:
+        address:        noreply@example.com
+        sender_name:    Demo App
 assetic:
     debug:          '%kernel.debug%'
     use_controller: '%kernel.debug%'
@@ -97,7 +100,6 @@ stfalcon_tinymce:
                 - 'fullscreen code autolink lists link charmap preview hr pagebreak nonbreaking textcolor colorpicker'
             invalid_elements: '@[onclick|onunload|onclick|ondblclick|onmousedown|onmouseup|onmouseover|onmousemove|onmouseout|onfocus|onblur|onkeypress|onkeydown|onkeyup|onsubmit|onreset|onselect|onchange],script'
             theme: 'modern'
-            height: 400
             menubar: 'file edit insert view format table tools'
             toolbar1: "bold italic underline | alignleft aligncenter alignright alignjustify | styleselect | fontselect | fontsizeselect | bullist | numlist | forecolor backcolor"
         advanced:

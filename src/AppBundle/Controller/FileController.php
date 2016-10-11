@@ -48,13 +48,23 @@ class FileController extends Controller
 	    ->getRepository('AppBundle:Admin_Settings')
 	    ->find(1);
 	    
-	    $color_scheme = $admin_settings->getColorScheme();
+	    $main_color_scheme = $admin_settings->getMainColorScheme();
+        $header_color_scheme = $admin_settings->getHeaderColorScheme();
+        $logo_color_scheme = $admin_settings->getLogoColorScheme();
+        $button_color_scheme = $admin_settings->getButtonColorScheme();
 	    $short_title = $admin_settings->getShortTitle();
+	    $title = $admin_settings->getTitle();
+	    
+	    
 	    return $this->render('file_manager.html.twig', array(
 	    		'upload_directory' => $upload_directory,
 				'directories' => $directories,
-                'color_scheme' => $color_scheme,
-		        'short_title' => $short_title
+                'main_color_scheme' => $main_color_scheme,
+                'header_color_scheme' => $header_color_scheme,
+                'logo_color_scheme' => $logo_color_scheme,
+                'button_color_scheme' => $button_color_scheme,
+		        'short_title' => $short_title,
+		        'title' => $title
 		));
 		
 	}

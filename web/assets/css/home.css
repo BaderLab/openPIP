@@ -32,11 +32,6 @@ h4{
 	margin: 0px;
 }
 
-.logo{
-	
-	vertical-align: middle;
-	margin: 20px;
-}
 
 
 .right_col {
@@ -153,7 +148,6 @@ ul.frontpage-headline li.righty {
     font-size: 1.8em;
     font-weight: bold;
     text-transform: uppercase;
-    color: #53a753;
     z-index: 5;
     font-style: italic;
 }
@@ -162,7 +156,6 @@ ul.frontpage-headline li.righty {
 	display: inline;
     font-size: 1.6em;
     margin-top: 10px;
-    color: #53a753;
     z-index: 5;
     font-weight: bold;
 }
@@ -212,6 +205,7 @@ border-radius: 0;
 	height: 92%;
 	overflow: scroll;
 	overflow-x: hidden;
+	margin: auto;
 }
 
 .announcement_title h4{

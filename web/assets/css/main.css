@@ -35,7 +35,12 @@ h4 {
 
 #myNavbar{
 	 z-index: 10000;
+	 padding-left: 0px;
 	
+}
+.container-fluid{
+	
+	padding-left: 0px;
 }
 
 .navbar-default .navbar-brand{
@@ -59,7 +64,7 @@ h4 {
     font-size: 18px;
     line-height: 20px;
     cursor: default;
-	
+	margin: 0px;
 }
 
 .navbar {
@@ -161,6 +166,58 @@ h4 {
 	width: 100%;
 	height: 100%;
 	z-index: 9999;
-	background: url(../assets/images/Preloader_3.gif) no-repeat #fff;
+	background: url(../../web/assets/images/Preloader_3.gif) no-repeat #fff;
 	background-position: 50% 30%;
+}
+
+.main_header{
+	margin: 0px;
+	
+}
+
+
+.main_header h3{
+	color: #FFFFFF;
+	font-size: 1.4em;
+	line-height: 1.42857143;
+	margin: 10px;
+	cursor: default;
+}
+
+.main_logo{
+	
+	vertical-align: middle;
+	margin: 16px;
+}
+
+
+
+.pannel{
+	border: 1px solid #ccc;
+	
+}
+
+.pannel_header{
+	
+	width: 100%;
+	height: 40px;
+	margin-left: 0px;
+}
+
+.pannel_header h4{
+	
+	display:inline-block;
+	vertical-align:middle;
+	color: #FFFFFF;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 700;
+    margin: 8px;
+    cursor: default;
+}
+
+.pannel_content{
+	
+	padding: 30px 30px 30px 30px;
 }
