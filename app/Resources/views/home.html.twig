@@ -1,0 +1,179 @@
+{% extends 'base.html.twig' %} 
+{% block stylesheets %}
+    {% stylesheets 
+        'assets/css/bootstrap.min.css'
+        'assets/css/main.css'
+        'assets/css/home.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %} 
+{% endblock %} 
+{% block title %}{{ short_title }} | Home{% endblock %}
+{% block content %}
+<header>
+	<nav class="navbar navbar-default main_header" style="background-color: {{ main_color_scheme }};">
+        <svg id="svg2" class="main_logo left " xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="40.026" width="69.124" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <metadata id="metadata7">
+              <rdf:RDF>
+               <cc:Work rdf:about="">
+                <dc:format>image/svg+xml</dc:format>
+                <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+                <dc:title/>
+               </cc:Work>
+              </rdf:RDF>
+             </metadata>
+             <g id="g3770" stroke-miterlimit="4" stroke-dasharray="none">
+              <path id="path2987" d="m48.576,17.582c0,9.2489-7.5012,16.746-16.754,16.746-9.2532,0-16.754-7.4977-16.754-16.746,0-9.2489,7.5012-16.746,16.754-16.746,9.2532,0,16.754,7.4977,16.754,16.746z" stroke-opacity="0.56084655000000005" class="parent" stroke="#000000" stroke-width="0.04307067000000000" fill="#e6e6e6"/>
+              <path id="path2991-1" d="m31.367,23.78c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
+              <path id="path2991-7" d="m42.899,13.341c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
+              <path id="path2991-4" d="m67.986,29.163c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
+              <path id="path2991-0" d="m10.903,34.545c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
+              <path id="path3807" stroke-linejoin="miter" d="m25.95,23.82-20.47,10.76" class="child" stroke="{{ logo_color_scheme }}" stroke-linecap="butt" stroke-width="1.07676673" fill="none"/>
+              <path id="path2991-9-45" d="m69.063,5.4793c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
+              <path id="path3807-1" stroke-linejoin="miter" d="m63.64,5.5195-25.848,7.5356" class="child" stroke="{{ logo_color_scheme }}" stroke-linecap="butt" stroke-width="1.07676673" fill="none"/>
+              <path id="path3807-1-5" stroke-linejoin="miter" d="m62.56,29.2-24.77-16.15" class="child" stroke="{{ logo_color_scheme }}" stroke-linecap="butt" stroke-width="1.07676673" fill="none"/>
+             </g>
+        </svg>
+		<div style="padding: 12px;">
+			<h3 style="color: {{ header_color_scheme }}">
+				<strong>{{ title }}</strong>
+			</h3>
+		</div>
+	</nav>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid" style="padding: 0px;">
+			<div class="navbar-header tor_ibin_header" >
+				<button type="button" class="navbar-toggle left" data-toggle="collapse" data-target="#myNavbar">
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
+    			{% if login_status == false %}
+    					<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+        				<ul class="nav navbar-nav ">
+        					<li class="active"><a href="{{ path('home') }}">Home</a></li>
+        					<li><a href="{{ path('search') }}">Search</a></li>
+        					<li><a href="{{ path('search') }}">Downloads</a></li>
+        					<li><a href="{{ path('about') }}">About</a></li>
+        				</ul>
+        				<ul class="nav navbar-nav navbar-right">
+        					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+        				</ul>
+    			{% elseif login_status == true %}
+    			<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
+    				<ul class="nav navbar-nav ">
+    					<li class="active"><a href="{{ path('admin_home') }}">Home</a></li>
+    					<li><a href="{{ path('admin_search') }}">Search</a></li>
+    					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
+    					<li><a href="{{ path('admin_about') }}">About</a></li>
+    					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+    					<li><a href="{{ path('data_manager') }}">Data</a></li>
+    					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+    					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+    				</ul>
+    				<ul class="nav navbar-nav navbar-right">
+    					<li><a href="{{ path('user_logout') }}">Logout</a></li>
+    				</ul>
+    			{% endif %}
+    		</div>
+		</div>
+		<div class="shadow"></div>
+	</nav>
+</header>
+<main>
+    <div class="row">
+    	<div class="col-sm-8">
+    		<div class="home_panel">
+    			<div class="container">
+    				<div class="row db_content" style="margin-top: 4%; color: {{ main_color_scheme }}">
+    					{% if domain_count > 0 %}
+        					<div class="col-lg-3 lefty">
+        						<span class='title'>Organisms</span><br />
+        						<span class='value'>{{ organism_count }}</span>
+        					</div>
+        					<div class="col-lg-3 centery">
+        						<span class='title'>Proteins</span><br />
+        						<span class='value'>{{ protein_count }}</span>
+        					</div>
+        					<div class="col-lg-3 righty">
+        						<span class='title'>Interactions</span><br />
+        						<span class='value'>{{ interaction_count }}</span>
+        					</div>
+        					<div class="col-lg-3 righty">
+        						<span class='title'>Domains</span><br />
+        						<span class='value'>{{ domain_count }}</span>
+        					</div>
+        				{% else %}
+    					    <div class="col-lg-4 lefty">
+        						<span class='title'>Organisms</span><br />
+        						<span class='value'>{{ organism_count }}</span>
+        					</div>
+        					<div class="col-lg-4 centery">
+        						<span class='title'>Proteins</span><br />
+        						<span class='value'>{{ protein_count }}</span>
+        					</div>
+        					<div class="col-lg-4 righty">
+        						<span class='title'>Interactions</span><br />
+        						<span class='value'>{{ interaction_count }}</span>
+        					</div>
+    					{% endif %}
+    				</div>
+    				<div class="row" style="margin-top: 4%;">
+    					<div class="about">{{ home_page | raw }}</div>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    	<div class="col-sm-4">
+    		<div class="panel panel-default">
+    			<div class="panel-heading" style="background-color: {{ main_color_scheme }}; color: {{ header_color_scheme }}">
+    				<strong>Announcements and News</strong>
+    			</div>
+    			<div class="panel-body announcement_panel">
+    				{% for announcement in announcements %}
+    				<div class="row">
+    					<div class="container announcement">
+    						<div class="row">
+    							<div class="announcement_header">
+    								<div class="announcement_title">
+    									<h4>{{ announcement.title }}</h4>
+    								</div>
+    							</div>
+    						</div>
+    						<div class="row">
+    							<div class="announcement_date">
+    								<p>
+    									<em>{% if announcement.date %}{{ announcement.date|date('Y-m-d') }}{% endif %}</em>
+    								</p>
+    							</div>
+    						</div>
+    						<div class="row">
+    							<div class="announcement_text">{{ announcement.text | raw }}</div>
+    						</div>
+    					</div>
+    				</div>
+    				{% endfor %}
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    
+</main>
+<footer>
+	<div class="shadow"></div>
+	{{ footer | raw }}
+</footer>
+{% endblock %} 
+{% block javascripts %} 
+    {{ tinymce_init() }}
+    {% javascripts
+        'assets/js/jquery-2.1.4.min.js'
+        'assets/js/bootstrap.min.js'
+        'assets/js/main.js'
+        'assets/js/home.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+{% endblock %}

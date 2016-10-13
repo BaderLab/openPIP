@@ -1,0 +1,27 @@
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+   
+oneup_uploader:
+    resource: .
+    type: uploader
+
+user_logout:
+   pattern:   /logout
+
+user_register:
+   pattern:   /register
+   
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+    
+    
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+    
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile

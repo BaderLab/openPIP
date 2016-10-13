@@ -1,0 +1,17 @@
+@CHARSET "ISO-8859-1";
+
+.outer_panel{
+	width: 94%;
+	background-color: #ffffff;
+	border: 1px solid #cccccc;
+	padding: 20px;
+	margin: 20px auto 20px;
+	
+}
+
+
+
+
+.navbar {
+    margin-bottom: 0px;
+}

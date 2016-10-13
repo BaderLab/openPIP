@@ -1,0 +1,137 @@
+@CHARSET "ISO-8859-1";
+
+#announcement_display{
+	
+	border: 1px solid #ccc;
+	height: 600px;
+	overflow: auto;
+}
+
+.announcement{
+	
+	width: 90%;
+	min-height: 160px;
+	margin: 20px auto;
+	border: 1px solid #ccc;
+
+}
+
+.announcement_header{
+	
+	width: 100%;
+	height: 40px;
+	padding: 1%;
+	color: #FFFFFF;
+	
+}
+
+.announcement_header p{
+	display:inline-block;
+	vertical-align:middle;
+	color: #FFFFFF;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    font-weight: 700;
+    margin: 1.4%;
+    cursor: default;
+}
+
+.announcement_title h4 { 
+	
+	display:inline-block;
+	vertical-align:middle;
+	color: #FFFFFF;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 700;
+    margin: 1.4%;
+	
+}
+
+.announcement_header h4{
+	margin: 0px;
+	cursor: default;
+}
+
+.announcement_text{
+	
+	min-height: 100px;
+	padding: 2%;
+}
+
+.announcement_show{
+	
+	margin-bottom: 10px;
+}
+
+#announcement_upload_form{
+	border: 1px solid #ccc;
+	padding: 20px;
+	background: #ffffff;
+	z-index: 2;
+}
+
+#new_announcement{
+	
+	margin: 20px;
+}
+
+::-webkit-scrollbar {
+      width: 10px;
+}
+
+::-webkit-scrollbar-track {
+      background-color: #f2f2f2;
+} /* the new scrollbar will have a flat appearance with the set background color */
+ 
+::-webkit-scrollbar-thumb {
+      background-color: #cccccc; 
+} /* this will style the thumb, ignoring the track */
+ 
+::-webkit-scrollbar-button {
+      background-color: #f2f2f2;
+} /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
+ 
+::-webkit-scrollbar-corner {
+      background-color: #f2f2f2;
+} /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
+
+.anouncement_upload_container{
+	
+	margin: 0px;
+	padding: 0px;
+}
+
+.anouncement_upload_header {
+	
+	width: 100%;
+	height: 40px;
+	margin-left: 0px;
+	
+}
+
+.anouncement_upload_header h4{
+	
+	display:inline-block;
+	vertical-align:middle;
+	color: #FFFFFF;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 700;
+    margin: 8px;
+    cursor: default;
+}
+
+
+.anouncement_upload_panel{
+	border: 1px solid #ccc;
+	
+}
+
+.anouncement_upload_content{
+	
+	padding:  0px 30px 30px 30px;
+}

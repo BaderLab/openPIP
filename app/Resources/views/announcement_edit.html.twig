@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+	{% stylesheets 
+        'assets/css/jquery-ui.min.css'
+        'assets/css/main.css'
+        'assets/css/announcement_manager.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}{{ short_title }} | Announcement{% endblock %} 
+
+{% block content %}
+
+<header>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header tor_ibin_header">
+	    	<img alt="" src="{{ asset('assets/images/tor_ibin_logo.png') }}" class="logo left">
+	        <h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
+		    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		    </button>
+		 </div>  
+		 <div id="myNavbar" class="collapse navbar-collapse">
+		    <ul class="nav navbar-nav ">
+				<li><a href="{{ path('admin_home') }}">Home</a></li>
+				<li><a href="{{ path('admin_search') }}">Search</a></li>
+				<li><a href="{{ path('admin_download') }}">Downloads</a></li>
+				<li><a href="{{ path('admin_about') }}">About</a></li>
+				<li class="active"><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+				<li><a href="{{ path('data_manager') }}">Data</a></li>
+				<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+				<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+			   <li><a href="{{ path('user_logout') }}">Logout</a></li>
+		    </ul>
+		 </div>
+	  </div>
+	  <div class="shadow"></div>
+	</nav>
+</header>
+<main>
+    <div id="announcement_upload"  class="large">
+		<div id="announcement_upload_form">
+	
+		    {{ form_start(edit_form) }}
+		    
+		    	<div class="row">
+		    		<div class="col-sm-9">
+						{{ form_widget(edit_form.title) }}
+					</div>
+					<div class="col-sm-3">
+						{{ form_widget(edit_form.show) }}
+						{{ form_widget(edit_form.show_on_home_page) }}
+					</div>	
+				</div>
+		    	<div class="row">
+		        	{{ form_widget(edit_form.text) }}
+		        </div>
+		        
+		        <div class="row" style="margin-top:20px;">
+		        	{{ form_widget(edit_form.date) }}
+		        </div>
+		        <div class="row" style="margin-top:20px;">  	
+	        	<button type="submit" class="btn btn-success left">
+					<i class="glyphicon glyphicon-edit"></i>
+					<span>Edit</span>
+				</button>
+
+		    {{ form_end(edit_form) }}
+
+		            {{ form_start(delete_form) }}		                
+		            <button type="submit" class="btn btn-danger right"  style="margin-left:10px;">
+						<i class="glyphicon glyphicon-remove"></i>
+						<span>Delete</span>
+					</button>
+		            {{ form_end(delete_form) }}
+		            <a class="btn btn-primary right" href="{{ path('announcement_manager') }}">
+						<i class="glyphicon glyphicon-triangle-left"></i>
+						<span>Back</span>
+					</a>
+		    </div>
+		</div>
+	</div>
+</main>
+{% endblock %}
+{% block javascripts %}
+    {{ tinymce_init() }}
+    {% javascripts
+    	'bundles/fosjsrouting/js/router.js'
+        'assets/js/jquery-2.1.4.min.js'
+        'assets/js/jquery-ui.min.js'
+        'assets/js/bootstrap.min.js'
+        'assets/js/main.js'
+        'assets/js/announcement_manager.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+{% endblock %}

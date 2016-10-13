@@ -1,0 +1,348 @@
+{% extends 'base.html.twig' %} 
+{% block stylesheets %}
+    {% stylesheets 
+        'assets/css/bootstrap.min.css'
+        'assets/css/jquery-ui.min.css'
+        'bundles/spectrum/spectrum.css'
+        'assets/css/main.css'
+        'assets/css/admin_settings.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %} 
+{% endblock %} 
+{% block title %}{{ short_title }} | Admin Settings{% endblock %}
+
+{% block content %}
+<header>
+	<nav class="navbar navbar-default main_header" style="background-color: {{ main_color_scheme }};">
+        <svg id="svg2" class="main_logo left " xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="40.026" width="69.124" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <metadata id="metadata7">
+              <rdf:RDF>
+               <cc:Work rdf:about="">
+                <dc:format>image/svg+xml</dc:format>
+                <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+                <dc:title/>
+               </cc:Work>
+              </rdf:RDF>
+             </metadata>
+             <g id="g3770" stroke-miterlimit="4" stroke-dasharray="none">
+              <path id="path2987" d="m48.576,17.582c0,9.2489-7.5012,16.746-16.754,16.746-9.2532,0-16.754-7.4977-16.754-16.746,0-9.2489,7.5012-16.746,16.754-16.746,9.2532,0,16.754,7.4977,16.754,16.746z" stroke-opacity="0.56084655000000005" class="parent" stroke="#000000" stroke-width="0.04307067000000000" fill="#e6e6e6"/>
+              <path id="path2991-1" d="m31.367,23.78c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
+              <path id="path2991-7" d="m42.899,13.341c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
+              <path id="path2991-4" d="m67.986,29.163c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
+              <path id="path2991-0" d="m10.903,34.545c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
+              <path id="path3807" stroke-linejoin="miter" d="m25.95,23.82-20.47,10.76" class="child" stroke="{{ logo_color_scheme }}" stroke-linecap="butt" stroke-width="1.07676673" fill="none"/>
+              <path id="path2991-9-45" d="m69.063,5.4793c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
+              <path id="path3807-1" stroke-linejoin="miter" d="m63.64,5.5195-25.848,7.5356" class="child" stroke="{{ logo_color_scheme }}" stroke-linecap="butt" stroke-width="1.07676673" fill="none"/>
+              <path id="path3807-1-5" stroke-linejoin="miter" d="m62.56,29.2-24.77-16.15" class="child" stroke="{{ logo_color_scheme }}" stroke-linecap="butt" stroke-width="1.07676673" fill="none"/>
+             </g>
+        </svg>
+		<div style="padding: 12px;">
+			<h3 style="color: {{ header_color_scheme }}">
+				<strong>{{ title }}</strong>
+			</h3>
+		</div>
+	</nav>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header tor_ibin_header">
+				<button type="button" class="navbar-toggle left"
+					data-toggle="collapse" data-target="#myNavbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="myNavbar" class="collapse navbar-collapse">
+				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
+				<ul class="nav navbar-nav ">
+					<li><a href="{{ path('admin_home') }}">Home</a></li>
+					<li><a href="{{ path('admin_search') }}">Search</a></li>
+					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
+					<li><a href="{{ path('admin_about') }}">About</a></li>
+					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+					<li><a href="{{ path('data_manager') }}">Data</a></li>
+					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+					<li class="active"><a href="{{ path('admin_settings') }}">Settings</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="{{ path('user_logout') }}">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="shadow"></div>
+	</nav>
+</header>
+<main>
+	<div class="se-pre-con"></div>
+    <div class="container">
+    	{% if updated == true  %}
+    	<div class="row">
+    		<h4>Settings Successfully Updated</h4>
+   		</div>
+   		{% endif %}
+    	<div class="row">
+    		<ul class="nav nav-tabs">
+    			<li class="active tab"><a data-toggle="tab" href="#global_settings">Global Settings</a></li>
+    			<li class="tab"><a data-toggle="tab" href="#home_page">Home Page</a></li>
+    			<li class="tab"><a data-toggle="tab" href="#about">About</a></li>
+    			<li class="tab"><a data-toggle="tab" href="#download">Downloads</a></li>
+    		</ul>
+    	</div>
+    	{{ form_start(form) }}
+    	<div class="row" style="margin-top: 0px;">
+    		<div class="tab-content">
+    		    <div id="global_settings" class="tab-pane fade in active">
+    				<div class="container">
+        				<div class="row">
+            				<div class="col-lg-5">
+            					<div class="container admin_settings_panel">
+        				    		<div class="row" style="margin-top: 0px;">
+                            			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
+                            				<h4 style="color: {{ header_color_scheme }}">Titles</h4>
+                            			</div>
+                            		</div>
+                            		<div class="row admin_settings_content">
+                    					<div class="row">{{ form_label(form.title) }} {{ form_widget(form.title) }}</div>
+                    					<div class="row">{{ form_label(form.short_title) }} {{ form_widget(form.short_title) }}</div>
+                    				</div>
+                    			</div>
+            				</div>	
+            				<div class="col-lg-4">
+            					<div class="container admin_settings_panel">
+            				        <div class="row" style="margin-top: 0px;">
+                            			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
+                            				<h4 style="color: {{ header_color_scheme }}">Color Scheme</h4>
+                            			</div>
+                            		</div>
+                					<div class="row admin_settings_content">
+                						<div class="col-lg-6">
+                        					<div class="row">
+                        					    {{ form_label(form.main_color_scheme) }} 
+                        					</div>
+                        					<div class="row">
+                        	                    {{ form_widget(form.main_color_scheme) }}
+                        	                </div>
+                        	                <div class="row">
+                        					    {{ form_label(form.header_color_scheme) }} 
+                        					</div>
+                        					<div class="row">
+                        	                    {{ form_widget(form.header_color_scheme) }}
+                        	                </div>
+                    	            	</div>
+                    	            	<div class="col-lg-6">
+                        	                <div class="row">
+                        					    {{ form_label(form.logo_color_scheme) }} 
+                        					</div>
+                        					<div class="row">
+                        	                    {{ form_widget(form.logo_color_scheme) }}
+                        	                </div>
+                        	                <div class="row">
+                        					    {{ form_label(form.button_color_scheme) }} 
+                        					</div>
+                        					<div class="row">
+                        	                    {{ form_widget(form.button_color_scheme) }}
+                        	                </div>
+                	                	</div>
+                	                </div>
+                	            </div>
+            	            </div>
+							<div class="col-lg-3">
+    							<div class="container admin_settings_panel">
+    							    <div class="row" style="margin-top: 0px;">
+                            			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
+                            				<h4 style="color: {{ header_color_scheme }}">Examples</h4>
+                            			</div>
+                            		</div>
+                            		<div class="row admin_settings_content">
+                    	                <div class="row">{{ form_label(form.example_1) }} {{ form_widget(form.example_1) }}</div>
+                    					<div class="row">{{ form_label(form.example_2) }} {{ form_widget(form.example_2) }}</div>
+                    					<div class="row">{{ form_label(form.example_3) }} {{ form_widget(form.example_3) }}</div>
+        							</div>
+        						</div>
+        					</div>
+    					</div>
+    					<div class="row">
+        					<div class="container admin_settings_panel" style="width: 96%;">
+    							<div class="row"  style="margin-top: 0px;">
+                        			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
+                        				<h4 style="color: {{ header_color_scheme }}">Footer</h4>
+                        			</div>
+                        		</div>
+                        		<div class="row admin_settings_content">
+        							<div class="row">{{ form_widget(form.footer) }}</div>
+        						</div>
+        					</div>
+        				</div>
+        				<div class="row">
+        				    <div class="col-lg-10">
+        					</div>
+
+        					<div class="col-lg-2">
+        						<a href="{{ path('user_register') }}" class="btn btn-primary" style="background-color: {{ main_color_scheme }};">Register New Admin</a>
+        					</div>
+        				</div>
+    				</div>
+    			</div>
+    		
+    			<div id="title" class="tab-pane fade">
+    				<div class="container">
+    				</div>
+    			</div>
+    			<div id="home_page" class="tab-pane fade">
+    				<div class="container">
+    					<div class="row">{{ form_label(form.home_page) }} {{ form_widget(form.home_page) }}</div>
+    				</div>
+    			</div>
+    			<div id="about" class="tab-pane fade">
+    				<div class="container">
+    					<div class="row">{{ form_label(form.about) }} {{ form_widget(form.about) }}</div>
+    				</div>
+    			</div>
+    			<div id="download" class="tab-pane fade">
+    				<div class="container">
+    					<div class="row">{{ form_label(form.download) }} {{ form_widget(form.download) }}</div>
+    				</div>
+    			</div>
+    			<div id="footer" class="tab-pane fade">
+    				<div class="container">
+    					
+    				</div>
+    			</div>
+    			<div id="search_examples" class="tab-pane fade">
+    				<div class="container">
+    				</div>
+    			</div>
+    			<div id="color_scheme" class="tab-pane fade">
+    				<div class="container">
+    				</div>
+    			</div>
+    		</div>
+    		<div class="container">
+    			<div class="row">
+    			        {{ form_label(form.submit) }} {{ form_widget(form.submit) }}
+    			</div>
+    		</div>
+    	</div>
+    	{{ form_end(form) }} 
+    </div>
+</main>
+{% endblock %} 
+{% block javascripts %} 
+    {{ tinymce_init( {'theme' : {'advanced':{'height': 500 }}} ) }}
+    {% javascripts
+    	'bundles/fosjsrouting/js/router.js'
+        'assets/js/jquery-2.1.4.min.js'
+        'assets/js/bootstrap.min.js'
+        'bundles/spectrum/spectrum.js'
+        'assets/js/main.js'
+        'assets/js/admin_settings.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>    
+        $('.main_color_scheme').spectrum({
+            color: "{{ main_color_scheme }}",
+            showInput: true,
+            className: "full-spectrum",
+            showInitial: true,
+            showPalette: true,
+            showSelectionPalette: true,
+            maxSelectionSize: 10,
+            preferredFormat: "hex",
+            palette: [
+                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+                "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
+                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
+                "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
+                "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
+                "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
+                "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
+                "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
+                "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+            ]
+        });
+        $('.header_color_scheme').spectrum({
+            color: "{{ header_color_scheme }}",
+            showInput: true,
+            className: "full-spectrum",
+            showInitial: true,
+            showPalette: true,
+            showSelectionPalette: true,
+            maxSelectionSize: 10,
+            preferredFormat: "hex",
+            palette: [
+                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+                "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
+                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
+                "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
+                "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
+                "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
+                "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
+                "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
+                "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+            ]
+        });
+        $('.logo_color_scheme').spectrum({
+            color: "{{ logo_color_scheme }}",
+            showInput: true,
+            className: "full-spectrum",
+            showInitial: true,
+            showPalette: true,
+            showSelectionPalette: true,
+            maxSelectionSize: 10,
+            preferredFormat: "hex",
+            palette: [
+                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+                "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
+                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
+                "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
+                "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
+                "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
+                "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
+                "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
+                "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+            ]
+        });
+        $('.button_color_scheme').spectrum({
+            color: "{{ button_color_scheme }}",
+            showInput: true,
+            className: "full-spectrum",
+            showInitial: true,
+            showPalette: true,
+            showSelectionPalette: true,
+            maxSelectionSize: 10,
+            preferredFormat: "hex",
+            palette: [
+                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+                "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
+                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
+                "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
+                "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
+                "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
+                "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
+                "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
+                "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+            ]
+        });
+    </script>
+{% endblock %}

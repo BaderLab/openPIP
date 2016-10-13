@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %} 
+{% block stylesheets %}
+    {% stylesheets 
+        'assets/css/bootstrap.min.css'
+        'assets/css/jquery-ui.min.css'
+        'assets/css/main.css'
+        'assets/css/search.css'
+        'assets/css/search_results.css'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %} 
+{% block title %}{{ short_title }} | Search{% endblock %} 
+{% block content %}
+<header>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header tor_ibin_header">
+				<img alt="" src="{{ asset('assets/images/tor_ibin_logo.png') }}" class="logo left">
+				<h5 class="nav-header" style="color: {{ color_scheme }}">{{ short_title }}</h5>
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="myNavbar" class="collapse navbar-collapse">
+    		    {% if login_status == false %}
+    				<ul class="nav navbar-nav ">
+    					<li><a href="{{ path('home') }}">Home</a></li>
+    					<li class="active"><a href="{{ path('search') }}">Search</a></li>
+    					<li><a href="{{ path('download') }}">Downloads</a></li>
+    					<li><a href="{{ path('about') }}">About</a></li>
+    				</ul>
+    				<ul class="nav navbar-nav navbar-right">
+    					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+    				</ul>
+    			{% elseif login_status == true %}
+    				<ul class="nav navbar-nav ">
+    					<li><a href="{{ path('admin_home') }}">Home</a></li>
+    					<li class="active"><a href="{{ path('admin_search') }}">Search</a></li>
+    					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
+    					<li><a href="{{ path('admin_about') }}">About</a></li>
+    					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+    					<li><a href="{{ path('data_manager') }}">Data</a></li>
+    					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+    					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+    				</ul>
+    				<ul class="nav navbar-nav navbar-right">
+    					<li><a href="{{ path('user_logout') }}">Logout</a></li>
+    				</ul>
+    			{% endif %}
+			</div>
+		</div>
+		<div class="shadow"></div>
+	</nav>
+</header>
+<main>
+    <div class="row" style="background-color: #EEEEEE;">
+    	<div class="search_outer_panel">
+    		<div class="search_inner_panel">
+    			{% for organism in organism_array %}
+    			<div class="container">
+    				<div class="row">
+    					<a href="{{ path('admin_search_results', {'search_term' : search_term, 'organism' : organism.TaxidId, 'min_interaction_score' : min_interaction_score, 'max_number_of_interactions' : max_number_of_interactions, }) }}">{{ organism.ScientificName }}</a>
+    				</div>
+    			</div>
+    			{% endfor %}
+    		</div>
+    	</div>
+    </div>
+    <div class="shadow"></div>
+</main>
+{% endblock %} 
+{% block javascripts %}
+    {% javascripts
+    	'bundles/fosjsrouting/js/router.js'
+        'assets/js/jquery-2.1.4.min.js'
+        'assets/js/jquery-ui.min.js'
+        'assets/js/bootstrap.min.js'
+        'assets/js/main.js'
+        'assets/js/search.js' %}
+        <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+{% endblock %}

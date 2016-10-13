@@ -1,0 +1,28 @@
+@CHARSET "ISO-8859-1";
+
+.background_img{
+	position: absolute;
+    top: 12%;
+    left: 10%;
+    z-index: -50;
+}
+
+.background_img_2{
+	position: absolute;
+    top: 12%;
+    left: 10%;
+    z-index: -100;
+}
+
+#login{
+	position: relative;
+	z-index: 10;
+}
+.navbar{
+	z-index: 10;
+}
+.full-screen {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}

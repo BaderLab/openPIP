@@ -1,0 +1,280 @@
+@CHARSET "ISO-8859-1";
+
+
+body{
+	background-color: #f9f9f9;
+	min-width: 1020px;
+}
+
+main{
+	min-width: 1020px;
+	
+}
+
+h3{
+	margin: 0px;
+	font-weight: bold;
+	font-size: 1.0em;
+}
+
+h4{
+	margin: 0px;
+	font-weight: bold;
+	font-size: 1.8em;
+	color: #53a753;
+}
+
+.container {
+    width: 86%;
+}
+
+.navbar{
+	margin: 0px;
+}
+
+
+
+.right_col {
+    position: absolute;
+    top: 129px;
+    right: 0;
+    bottom: 0;
+    width: 20%;
+    z-index: 10000;
+    margin-bottom: 0px;
+    border-radius: 0px;
+}
+
+.left_col{
+	position: absolute;
+    top: 129px;
+    left: 0;
+    bottom: 0;
+    width: 80%;
+    z-index: 10;
+    margin-bottom: 0px;
+    border-radius: 0px;
+    min-width: 804px;
+}
+.background_img{
+	position: absolute;
+    top: 14%;
+    left: 6%;
+    z-index: -50;
+}
+
+.background_img_2{
+	position: absolute;
+    top: 14%;
+    left: 6%;
+    z-index: -100;
+}
+
+
+.about_content{
+	position: relative;
+	z-index: 100;
+	
+}
+
+.feature_list{
+	list-style: none;
+	padding: 0px;
+}
+
+.feature_list li{
+	list-style: none;
+	font-size: 1.4em;
+    color: #4d4d4d;
+    
+}
+
+.feature_list li p{
+	font-size: 1.0em;
+    
+}
+
+
+ul.frontpage-headline {
+    display: table;
+    margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 6%;
+    padding: 0px;
+}
+
+ul.frontpage-headline li {
+    display: table-cell;
+    text-align: left;
+    padding: 0 20px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+ul.frontpage-headline li.lefty {
+    text-align: center;
+    background-image: url(../images/separator.png);
+    background-repeat: no-repeat;
+    background-position: right center;
+}
+
+ul.frontpage-headline li.centery {
+    text-align: center;
+    background-image: url(../images/separator.png);
+    background-repeat: no-repeat;
+    background-position: right center;
+}
+
+ul.frontpage-headline li.righty {
+    text-align: center;
+}
+
+
+.stats_panel{
+	margin: 8% auto 0;
+	text-align: center;
+	z-index: 4;
+}
+
+.stats_panel{
+
+	z-index: 4;
+}
+
+.title{
+	display: inline;
+    font-size: 1.8em;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 5;
+    font-style: italic;
+}
+
+.value{
+	display: inline;
+    font-size: 1.6em;
+    margin-top: 10px;
+    z-index: 5;
+    font-weight: bold;
+}
+
+.about{
+	
+	width: 100%;
+	z-index: 1000;
+	margin-bottom: 2%;
+	
+	
+}
+
+.about p{
+	font-size: 1.4em;
+	width: 100%;
+	color: #4d4d4d;
+	z-index: 1000;
+}
+
+
+.home_header{
+	background-color: #53a753;
+	margin: 0px;
+
+	
+}
+
+.home_header h3{
+	color: #FFFFFF;
+	font-size: 1.4em;
+	line-height: 1.42857143;
+	margin: 10px;
+}
+
+h2{
+	
+	color: #FFFFFF;
+	
+}
+
+.panel-heading {
+border-radius: 0;
+}
+
+.announcement_panel{
+	height: 92%;
+	overflow: scroll;
+	overflow-x: hidden;
+	margin: auto;
+}
+
+.announcement_title h4{
+	
+	font-weight: bold;
+	color: #008cba;
+	font-size: 1.2em;
+	line-height: 1.42857143;
+}
+
+.announcement_date p{
+	
+	padding-right:5px;
+	font-size:0.75em;"
+}
+
+.read_more a{
+	
+	color: #008cba;
+	font-size: 0.8em;
+	line-height: 1.42857143;
+}
+
+.panel{
+	margin-top: 20px;
+	
+}
+
+.home_panel{
+	width: 94%;
+
+	background-color: #FFFFFF;
+	border: 1px solid #cccccc;
+	padding: 20px;
+	margin: 20px auto 20px;
+}
+
+.db_content {
+	
+	text-align: center;
+	
+}
+
+::-webkit-scrollbar {
+      width: 4px;
+}
+
+::-webkit-scrollbar-track {
+      background-color: #f2f2f2;
+} /* the new scrollbar will have a flat appearance with the set background color */
+ 
+::-webkit-scrollbar-thumb {
+      background-color: #cccccc; 
+} /* this will style the thumb, ignoring the track */
+ 
+::-webkit-scrollbar-button {
+      background-color: #f2f2f2;
+} /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
+ 
+::-webkit-scrollbar-corner {
+      background-color: #f2f2f2;
+} /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
+
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 126px; }
+.se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 126px;
+}
+
+*
