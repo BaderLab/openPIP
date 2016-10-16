@@ -1,14 +1,10 @@
 {% extends 'base.html.twig' %} 
 {% block stylesheets %}
-    {% stylesheets 
-        'assets/css/bootstrap.min.css'
-        'assets/css/jquery-ui.min.css'
-        'assets/css/main.css'
-        'assets/css/downloads.css'
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}">
-    {% endstylesheets %} 
-{% endblock %} 
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/downloads.css') }}">
+{% endblock %}
 {% block title %}{{ short_title }} | Downloads{% endblock %}
 {% block content %}
 <header>
@@ -96,14 +92,8 @@
 </footer>
 {% endblock %} 
 {% block javascripts %}
-    {% javascripts
-    	'bundles/fosjsrouting/js/router.js'
-        'assets/js/jquery-2.1.4.min.js'
-        'assets/js/jquery-ui.min.js'
-        'assets/js/bootstrap.min.js'
-        'assets/js/main.js'
-        'assets/js/search.js' %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+<script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>
 {% endblock %}

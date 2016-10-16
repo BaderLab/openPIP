@@ -51,6 +51,16 @@
 
 }
 
+.interactor_B_qtip{
+	
+	cursor: default;
+}
+
+.reference_qtip{
+	
+	cursor: default;
+}
+
 .morecontent span {
     display: none;
 }
@@ -59,6 +69,24 @@
 }
 
 .summary_panel{
+	
+	height: 300px;
+    width: 100%;
+    border: 1px solid #ccc;
+    background-color: #FFFFFF;
+    margin: 20px auto 20px;
+}
+
+.settings_panel{
+	
+	height: 760px;
+    width: 100%;
+    border: 1px solid #ccc;
+    background-color: #FFFFFF;
+    margin: 20px auto 20px;
+}
+
+.download_panel{
 	
 	height: 760px;
     width: 100%;
@@ -69,7 +97,7 @@
 
 #cy {
     height: 760px;
-    width: 90%;
+    width: 96%;
     left: 0;
     top: 0;
     border: 1px solid #ccc;

@@ -67,13 +67,13 @@ class DataController extends Controller
         	$file_type = $form_data->getFileType();
 
         	if($file_type == 'psimi_tab_2.7'){
-
-	        	
+        	    
         		$file_row = 0;
+        		
 	        	while ($file_data = fgetcsv($handle, 0, "\t"))
 	        	{	
 	        		//skip header
-	        		if($file_row < 1 ){ $file_row++; continue; }
+	        		if($file_row < 1){ $file_row++; continue; }
 	        		
 	        	    try{
 	        		//variable for each mitab coloumn
@@ -90,6 +90,7 @@ class DataController extends Controller
 	        		$doctrine_manager = $this->getDoctrine()->getManager();
 	        		$doctrine_manager->getConfiguration()->setSQLLogger(null);
 	        		if(self::isNewInteraction($interactor_A_id, $interactor_B_id) == true){
+	        		    
     	        		//Domain
     	        		$domain = self::domainHandler($feature_interactor_A);
     
@@ -272,23 +273,27 @@ class DataController extends Controller
     	        		}
     
     	        		$doctrine_manager->persist($interaction);
-    	        		
     	        		$doctrine_manager->flush();
     	        		$doctrine_manager->clear();
     	        		gc_collect_cycles();
-	        		 }elseif(self::isNewDataset($publication_identifier) == false){
+    	        		
+	        		 }elseif(self::isNewDatasetFromPublicationIdentifier($publication_identifier) == false){
 	        		     
 	        		     $interaction = self::getInteractionByIds($interactor_A_id, $interactor_B_id);
-	        		     $dataset = self::getDatasetByReference($publication_identifier);
-	        		     $dataset->addInteraction($interaction);
-	        		     $interaction->addDataset($dataset);
-	        		     $doctrine_manager->persist($dataset);
-	        		     $doctrine_manager->persist($interaction);
-	        		     $doctrine_manager->flush();
-	        		     $doctrine_manager->clear();
-	        		     gc_collect_cycles();
+	        		     $dataset = self::getDatasetByPublicationIdentifier($publication_identifier);
 	        		     
-	        		 }elseif(self::isNewDataset($publication_identifier) == true){
+	        		     if(self::assertRelationshipExistsInteractionDataset($interaction, $dataset) == false){
+	        		         
+    	        		     $dataset->addInteraction($interaction);
+    	        		     $interaction->addDataset($dataset);
+    	        		     $doctrine_manager->persist($dataset);
+    	        		     $doctrine_manager->persist($interaction);
+    	        		     $doctrine_manager->flush();
+    	        		     $doctrine_manager->clear();
+    	        		     gc_collect_cycles();
+	        		     }
+
+	        		 }elseif(self::isNewDatasetFromPublicationIdentifier($publication_identifier) == true){
 	        		     
 	        		     $interaction = self::getInteractionByIds($interactor_A_id, $interactor_B_id);
 	        		     $dataset = self::datasetHandler($publication_identifier, $publication_first_author);
@@ -391,7 +396,10 @@ class DataController extends Controller
 	
 	public function getDatasetByReference($id){
 	    
+	    
 	    $em = $this->getDoctrine()->getManager();
+	    
+
 	    $query = $em->createQuery(
 	                    "SELECT d
 							FROM AppBundle:Dataset d
@@ -399,17 +407,51 @@ class DataController extends Controller
 	                    );
 	    
 	    $query->setParameter('reference', $id);
+         
 	    $results = $query->getResult();
 	    
-	    
 	    return $results[0];
+ 
 	    
-	    
-	    
+	}
+	
+	
+	public function getDatasetByPublicationIdentifier($publication_identifier){
+	     
+	     
+	    $em = $this->getDoctrine()->getManager();
+	     
+	    $reference_array =  explode("|", $publication_identifier);
+	
+	
+	    foreach($reference_array as $reference){
+	         
+	        $_reference_array = explode(":", $reference);
+	
+	        $name = $_reference_array[0];
+	        $id = $_reference_array[1];
+	
+	
+	        if ($name == 'pubmed'){
+	
+	            $query = $em->createQuery(
+	                            "SELECT d
+        							FROM AppBundle:Dataset d
+        							WHERE d.reference = :reference"
+	                            );
+	             
+	            $query->setParameter('reference', $id);
+	
+	            $results = $query->getResult();
+	             
+	            return $results[0];
+	        }
+	    }
+	     
 	}
 
 	public function isNewDataset($id){
-	
+	    
 	    $em = $this->getDoctrine()->getManager();
 	    $query = $em->createQuery(
 	                    "SELECT d
@@ -427,6 +469,40 @@ class DataController extends Controller
 	        return true;
 	    }
 	}
+	
+	
+	public function isNewDatasetFromPublicationIdentifier($publication_identifier){
+	    
+	    
+        $reference_array =  explode("|", $publication_identifier);
+	    
+	    $return = true;
+	    
+	    foreach($reference_array as $reference){
+	         
+	        $_reference_array = explode(":", $reference);
+	    
+	        $name = $_reference_array[0];
+	        $id = $_reference_array[1];
+	        
+	        
+	        if ($name == 'pubmed'){
+	            
+	           if(self::isNewDataset($id) == false){
+	               
+	               $return = false;
+	               
+	           }	            
+	            
+	        }
+	    }
+	       
+        return $return;
+	    
+	}
+	
+	
+	
 
 	public function assertRelationshipExistsProteinOrganism($protein, $organism){
 	    
@@ -485,6 +561,34 @@ class DataController extends Controller
 	        return false;
 	    }   
 	}
+	
+	
+	public function assertRelationshipExistsInteractionDataset($interaction, $dataset){
+	
+	    $i_id = $interaction->getId();
+	
+	    $d_id = $dataset->getId();
+	
+	    $em = $this->getDoctrine()->getManager();
+	
+	    $query = $em->createQuery(
+	                    "SELECT i
+				FROM AppBundle:Interaction i
+	            JOIN i.datasets d
+				WHERE i.id = :i_id
+	            AND  d.id = :d_id"
+	                    );
+	    $query->setParameter('i_id', $i_id);
+	    $query->setParameter('d_id', $d_id);
+	
+	    $results = $query->getResult();
+	    if($results){
+	        return true;
+	    }else{
+	        return false;
+	    }
+	}
+
 	
 	
 	public function support_informationHandler($annotation_interactor_A){
@@ -1503,6 +1607,8 @@ class DataController extends Controller
 	    return $domain;
 	    
 	}
+	
+
 }
 
 ?>

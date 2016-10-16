@@ -523,7 +523,8 @@ class SearchController extends Controller
 	            	
 	            //Set interacting protein node
 	            $interacting_protein_nodes_array[] = array($interactor_B_id, $interactor_B_name, $interactor_B_gene_name, $interactor_B_description, $interactor_B_external_links);
-	    
+	            $interactor_B_array = array('id' => $interactor_B_id, 'name' => $interactor_B_name, 'gene_name' => $interactor_B_gene_name, 'description' => $interactor_B_description, 'links' => $interactor_B_external_links);
+	             
 	            
 	            //Set edge data
 	            $edge_array[] = array($domain_id, $domain_name, $interactor_B_id, $interactor_A_name, $interactor_B_name, $score, $publication_status);
@@ -551,11 +552,8 @@ class SearchController extends Controller
 	                $_interaction['interactor_B_id'] = 'N/A';
 	            }
 	    
-	            if($interactor_B_gene_name){
-	                $_interaction['interactor_B_gene_name'] = $interactor_B_gene_name;
-	            }else{
-	                $_interaction['interactor_B_gene_name'] = 'N/A';
-	            }
+	            $_interaction['interactor_B_array'] = $interactor_B_array;
+	            
 	    
 	            if($binding_start){
 	                $_interaction['binding_start'] = $binding_start;
@@ -723,7 +721,7 @@ class SearchController extends Controller
 	        $binding_count = $binding_count_query->getSingleScalarResult();
 	        
 	        
-	        return $this->render('search_result_2.html.twig', array(
+	        return $this->render('search_result_3.html.twig', array(
 	                'interaction_array' => $interaction_array,
 	                'json' => $json,
 	                'search_query' => $search_query,

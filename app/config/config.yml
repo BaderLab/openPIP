@@ -36,7 +36,7 @@ framework:
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
-    cache:  false
+    cache:  '%kernel.cache_dir%/twig'
     form_themes:
     - 'bootstrap_3_layout.html.twig'
     globals:
@@ -83,7 +83,7 @@ fos_user:
         address:        noreply@example.com
         sender_name:    Demo App
 assetic:
-    debug:          '%kernel.debug%'
+    debug:          false
     use_controller: '%kernel.debug%'
     filters:
         cssrewrite: ~
