@@ -1607,7 +1607,6 @@ class DataController extends Controller
 	    return $domain;
 	    
 	}
-	
 
 }
 

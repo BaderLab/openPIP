@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %} 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
-{% endblock %} 
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
+{% endblock %}
 {% block title %}{{ short_title }} | Home{% endblock %}
 {% block content %}
 <header>
@@ -162,8 +163,9 @@
 	{{ footer | raw }}
 </footer>
 {% endblock %} 
-{% block javascripts %}
-    <script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/main.js') }}"></script>
+{% block javascripts %} 
+<script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>
 {% endblock %}
