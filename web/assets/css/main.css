@@ -1,7 +1,6 @@
 @CHARSET "ISO-8859-1";
 
 
-
 h1 {
 	color: #5cb85c;
 }
@@ -10,6 +9,14 @@ h4 {
 	
 	color: #333333;
 	margin: 0px;
+}
+
+.navbar {
+    margin-bottom: 0px;
+}
+
+.bold{
+	font-weight: bold;
 }
 
 .tor_ibin_header h5{
@@ -94,7 +101,7 @@ h4 {
     left: 0px;
     width: 100%;
     margin: 0px;
-    padding: 10% 15%;
+    padding: 15% 15%;
     height: 100%;
     z-index: 1;
 }

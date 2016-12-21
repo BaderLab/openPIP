@@ -60,6 +60,7 @@
 					<li><a href="{{ path('admin_search') }}">Search</a></li>
 					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
 					<li><a href="{{ path('admin_about') }}">About</a></li>
+					<li><a href="{{ path('admin_documentation') }}">Documentation</a></li>
 					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
 					<li><a href="{{ path('data_manager') }}">Data</a></li>
 					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
@@ -73,7 +74,7 @@
 		<div class="shadow"></div>
 	</nav>
 </header>
-<main>
+<main style="background-color: #EEEEEE;">
 	<div class="se-pre-con"></div>
     <div class="container">
     	{% if updated == true  %}
@@ -85,17 +86,21 @@
     		<ul class="nav nav-tabs">
     			<li class="active tab"><a data-toggle="tab" href="#global_settings">Global Settings</a></li>
     			<li class="tab"><a data-toggle="tab" href="#home_page">Home Page</a></li>
+    			<li class="tab"><a data-toggle="tab" href="#search">Search</a></li>
     			<li class="tab"><a data-toggle="tab" href="#about">About</a></li>
+    			<li class="tab"><a data-toggle="tab" href="#documentation">Documentation</a></li>
     			<li class="tab"><a data-toggle="tab" href="#download">Downloads</a></li>
     		</ul>
     	</div>
     	{{ form_start(form) }}
-    	<div class="row" style="margin-top: 0px;">
+    	<div class="row tab-panel">
     		<div class="tab-content">
     		    <div id="global_settings" class="tab-pane fade in active">
+    		    
+    		    
     				<div class="container">
         				<div class="row">
-            				<div class="col-lg-5">
+            				<div class="col-lg-4">
             					<div class="container admin_settings_panel">
         				    		<div class="row" style="margin-top: 0px;">
                             			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
@@ -147,20 +152,6 @@
                 	                </div>
                 	            </div>
             	            </div>
-							<div class="col-lg-3">
-    							<div class="container admin_settings_panel">
-    							    <div class="row" style="margin-top: 0px;">
-                            			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
-                            				<h4 style="color: {{ header_color_scheme }}">Examples</h4>
-                            			</div>
-                            		</div>
-                            		<div class="row admin_settings_content">
-                    	                <div class="row">{{ form_label(form.example_1) }} {{ form_widget(form.example_1) }}</div>
-                    					<div class="row">{{ form_label(form.example_2) }} {{ form_widget(form.example_2) }}</div>
-                    					<div class="row">{{ form_label(form.example_3) }} {{ form_widget(form.example_3) }}</div>
-        							</div>
-        						</div>
-        					</div>
     					</div>
     					<div class="row">
         					<div class="container admin_settings_panel" style="width: 96%;">
@@ -185,36 +176,43 @@
     				</div>
     			</div>
     		
-    			<div id="title" class="tab-pane fade">
-    				<div class="container">
-    				</div>
-    			</div>
     			<div id="home_page" class="tab-pane fade">
     				<div class="container">
     					<div class="row">{{ form_label(form.home_page) }} {{ form_widget(form.home_page) }}</div>
     				</div>
+    			</div>
+    			<div id="search" class="tab-pane fade">
+    				<div class="container">
+    					<div class="row">
+    						<div class="col-lg-4 admin_settings_panel"  style="padding: 0px;">
+    				             <div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
+                    				<h4 style="color: {{ header_color_scheme }}">Examples</h4>
+                    			</div>
+                         		<div class="admin_settings_content">
+                         			<div class="row">{{ form_label(form.example_3) }} {{ form_widget(form.example_3) }}</div>
+                					<div class="row">{{ form_label(form.example_2) }} {{ form_widget(form.example_2) }}</div>
+                					<div class="row">{{ form_label(form.example_1) }} {{ form_widget(form.example_1) }}</div>
+        						</div>   						
+    						</div>
+    					</div>
+					</div>
     			</div>
     			<div id="about" class="tab-pane fade">
     				<div class="container">
     					<div class="row">{{ form_label(form.about) }} {{ form_widget(form.about) }}</div>
     				</div>
     			</div>
+    			<div id="documentation" class="tab-pane fade">
+    				<div class="container">
+    					<div class="row">{{ form_label(form.documentation) }} {{ form_widget(form.documentation) }}</div>
+    				</div>
+    			</div>
     			<div id="download" class="tab-pane fade">
     				<div class="container">
+    				    <div class="row">{{ form_label(form.show_downloads) }} {{ form_widget(form.show_downloads) }}</div>
+    					<div class="row">{{ form_label(form.show_download_all) }} {{ form_widget(form.show_download_all) }}</div>
     					<div class="row">{{ form_label(form.download) }} {{ form_widget(form.download) }}</div>
-    				</div>
-    			</div>
-    			<div id="footer" class="tab-pane fade">
-    				<div class="container">
-    					
-    				</div>
-    			</div>
-    			<div id="search_examples" class="tab-pane fade">
-    				<div class="container">
-    				</div>
-    			</div>
-    			<div id="color_scheme" class="tab-pane fade">
-    				<div class="container">
+
     				</div>
     			</div>
     		</div>
@@ -227,6 +225,12 @@
     	{{ form_end(form) }} 
     </div>
 </main>
+<div class="shadow"></div>
+<div class="shadow"></div>
+<footer>
+	
+	{{ footer | raw }}
+</footer>
 {% endblock %} 
 {% block javascripts %} 
     {{ tinymce_init( {'theme' : {'advanced':{'height': 500 }}} ) }}

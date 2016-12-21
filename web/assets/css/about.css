@@ -1,5 +1,9 @@
 @CHARSET "ISO-8859-1";
 
+body{
+	background-color: #f8f8f8;
+}
+
 .outer_panel{
 	width: 94%;
 	background-color: #ffffff;

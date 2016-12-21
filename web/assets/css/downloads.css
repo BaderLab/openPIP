@@ -1,5 +1,9 @@
 @CHARSET "ISO-8859-1";
 
+body{
+	background-color: #f8f8f8;
+}
+
 .outer_panel{
 	width: 94%;
 	background-color: #ffffff;
@@ -10,8 +14,32 @@
 }
 
 
-
+.dataset{
+	
+	cursor:default;
+}
 
 .navbar {
     margin-bottom: 0px;
+}
+
+#download_request_form{
+	border: 1px solid #ccc;
+	padding: 20px;
+	width: 80%;
+	background: #ffffff;
+	z-index: 2;
+	margin: auto;
+}
+
+.large{
+    background-color: rgba(0,0,0,0.65);
+    position:fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    margin: 0px;
+    padding: 20% 20%;
+    height: 100%;
+    z-index: 1;
 }

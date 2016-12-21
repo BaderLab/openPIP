@@ -54,6 +54,7 @@
     					<li><a href="{{ path('search') }}">Search</a></li>
     					<li><a href="{{ path('download') }}">Downloads</a></li>
     					<li class="active"><a href="{{ path('about') }}">About</a></li>
+    					<li><a href="{{ path('documentation') }}">Documentation</a></li>
     				</ul>
     				<ul class="nav navbar-nav navbar-right">
     					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
@@ -65,6 +66,7 @@
     					<li><a href="{{ path('admin_search') }}">Search</a></li>
     					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
     					<li class="active"><a href="{{ path('admin_about') }}">About</a></li>
+    					<li><a href="{{ path('admin_documentation') }}">Documentation</a></li>
     					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
     					<li><a href="{{ path('data_manager') }}">Data</a></li>
     					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
@@ -82,7 +84,14 @@
 <main>
     <div class="row" style="background-color: #EEEEEE;">
     	<div class="outer_panel">
-    	    {{ about | raw }}
+        	<div class="container">
+        		<div class="row">
+					<h3 style="color: {{ main_color_scheme }}">About</h3>
+				</div>
+				<div class="row">
+    	            {{ about | raw }}
+    	        </div>
+    	    </div>
     	</div>
     </div>
 </main>

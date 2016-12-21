@@ -2,6 +2,7 @@
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/jquery.qtip.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/downloads.css') }}">
 {% endblock %}
@@ -54,6 +55,7 @@
     					<li><a href="{{ path('search') }}">Search</a></li>
     					<li class="active"><a href="{{ path('search') }}">Downloads</a></li>
     					<li><a href="{{ path('about') }}">About</a></li>
+    					<li><a href="{{ path('documentation') }}">Documentation</a></li>
     				</ul>
     				<ul class="nav navbar-nav navbar-right">
     					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
@@ -65,6 +67,7 @@
     					<li><a href="{{ path('admin_search') }}">Search</a></li>
     					<li class="active"><a href="{{ path('admin_download') }}">Downloads</a></li>
     					<li><a href="{{ path('admin_about') }}">About</a></li>
+    					<li><a href="{{ path('admin_documentation') }}">Documentation</a></li>
     					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
     					<li><a href="{{ path('data_manager') }}">Data</a></li>
     					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
@@ -79,10 +82,93 @@
 		<div class="shadow"></div>
 	</nav>
 </header>
-<main> 
+<main>
+    <div id="dataset_request" class="hidden large">
+    	<div id="download_request_form" style='padding: 6%;'>
+    		{{ form_start(form) }}
+    		<div class="hidden">{{ form_widget(form.dataset)}}</div>
+    		<div class="row">
+    			<strong>Email addresses will be used to inform users on major updates to the unpublished interactome datasets.</strong>
+    		</div>
+    		</br>
+    		<div class="row">{{ form_widget(form.email) }}</div>
+    		<div class="row" style='margin-top: 2%;'>
+    		    <div class="col-lg-4">
+    		    	
+        			<button id="down_data" type="submit" class="btn btn-success" style="float: right; margin-right: 10px;" >
+            				<i class="glyphicon glyphicon-plus"></i>
+            				<span>Download Dataset</span>
+        			</button>
+        		</div>
+        		<div class="col-lg-6">
+        			<div id="cancel_dataset_request" class="btn btn-danger" style="float: right;">
+        				<i class="glyphicon glyphicon-ban-circle"></i> 
+        				<span>Cancel</span>
+        			</div>
+        		</div>
+
+    		</div>
+    		{{ form_end(form) }}
+    	</div>
+    </div> 
     <div class="row" style="background-color: #EEEEEE;">
     	<div class="outer_panel">
-    	    {{ download | raw }}
+        	<div class="container">
+        		<div class="row">
+					<h3 id="dataset_request_links" style="color: {{ main_color_scheme }}">Downloads</h3>
+				</div>
+            	<table class="table table-striped">
+            		<thead>
+                    	<tr>
+                        	<th>Dataset</th>
+                            <th>Number of interactions</th>
+                            <th>PSMITAB file - collapsed(?)</th>
+                            <th>PSMITAB file - full(?)</th>
+                            <th>CSV</th>
+                            <th>Reference</th>
+                     	</tr>
+                    </thead>
+                    <tbody>
+                	{% if show_download_all == 1 %}
+        	            <tr>
+                            <td>All</td>
+                            <td></td>
+                            <td><a href="../../data/.txt" download>Download</a></td>
+                            <td><a href="../../data/.txt" download>Download</a></td>
+                    		<td><a href="../../data/.txt" download>Download</a></td>                      
+                            <td></td>                    
+                      	</tr>
+                	{% endif %}
+                	{% if show_downloads == 1 %}
+                    	{% for dataset in dataset_array %}
+                        	{% if dataset.InteractionStatus != 'published' %}
+                	          <tr>
+                                <td>{{ dataset.author }} ({{ dataset.year }})</td>
+                                <td>{{ dataset.NumberOfInteractions }}</td>
+                                <td><a id="{{ dataset.id }}_collapsed"  data= "{{ dataset.id }}"  class="dataset_request_links" style="cursor:pointer;">Download</a></td>
+                                <td><a id="{{ dataset.id }}_uncollapse"  data= "{{ dataset.id }}"  class="dataset_request_links" style="cursor:pointer;">Download</a></td>
+                                <td><a id="{{ dataset.id }}_csv" data= "{{ dataset.id }}" class="dataset_request_links" style="cursor:pointer;">Download</a></td>                        
+                                <td></td>                    
+                              </tr>                      	
+                        	{% else %}
+                        	     <tr>
+                                    <td>{{ dataset.author }} ({{ dataset.year }})</td>
+                                    <td>{{ dataset.NumberOfInteractions }}</td>
+                                    <td><a href="../../data/{{ dataset.PubmedId }}.txt" download>Download</a></td>
+                                    <td><a href="../../data/{{ dataset.PubmedId }}.txt" download>Download</a></td>
+                                    <td><a href="../../data/{{ dataset.PubmedId }}.txt" download>Download</a></td>                     
+                                    <td><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ dataset.PubmedId }}" target="_blank">{{ dataset.author }} ({{ dataset.year }})</a></td>                    
+                                  </tr>
+                        	{% endif %}
+                    	{% endfor %}
+                	{% endif %}
+                	</tbody>
+  				</table>
+  				<script>$(".dataset_request_links").on("click", showDatasetRequestForm);</script>
+            	<div class="row">
+            	    {{ download | raw }}
+            	</div>
+            </div>   
     	</div>
     </div>
 </main>
@@ -95,5 +181,10 @@
 <script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
 <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.qtip.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
+
+<script id="document_js">
+
+</script>
 {% endblock %}

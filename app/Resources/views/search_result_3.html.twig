@@ -112,23 +112,12 @@
         				<div class="row">
         					<h4 style="color: {{ main_color_scheme }}">Parameters</h4>
         				</div>
-    					{% if organism_count > 1 %}
-    						<div class="row">Organism: {{ search_setting_organism }}</div>
-    					{% endif %}
-    					{% if domain_count > 0 %}
-    						<div class="row">Domain: {{ search_setting_domain }}</div>
-    					{% endif %}
-        				<div class="row">Max Number of interactions: {{ search_setting_max_interactions }}</div>
-        				<div class="row">Minimum Interaction Score: {{ parameter_min_interaction_score }}</div>
             		</div>
             		<div class="row">
         				<div class="row">
         					<h4 style="color: {{ main_color_scheme }}">Stats</h4>
         				</div>
-        				<div class="row">Number of Interactions: {{ interaction_count }}</div>
-        				{% if domain_count > 0 %}
-        					<div class="row">Number of Domains: {{ domain_count }}</div>
-        				{% endif %}
+        				<div class="row">Number of Interactions: </div>
         			</div>
         						
     				<div class="row">
@@ -295,20 +284,6 @@
             						<div class="row">
             							<label>Publication Status: </label>
             						</div>
-            						<div class="row">
-            							<input type="checkbox" id="published" name="published" value="published"
-            							{% if query_publication_status == "all" or query_publication_status == "published" %}
-                                            checked
-                                        {% else %}
-                                        {% endif %} > <label>Published</label>
-            						</div>	
-            						<div class="row">
-            							<input type="checkbox" id="prepublished" name="prepublished" value="prepublished"
-            							{% if query_publication_status == "all" or query_publication_status == "pre-published" %}
-            							    checked
-                                        {% else %}
-                                        {% endif %}> <label>Pre-Published</label>
-            						</div>
                 				</div>
                 				<div class="row">
             						<a id="update_data_settings" class="btn btn-success" style="margin-right: 10px;" href=""> <span>Update</span></a>
@@ -326,7 +301,7 @@
 				<div id="network"  class="tab-pane fade in active">
 					<div class="container" style="overflow: auto;">
 						<div class="row">
-							<h3 style="color: {{ main_color_scheme }}">Interactions with {{ protein_gene_name }}</h3>
+							<h3 style="color: {{ main_color_scheme }}">Interactions with </h3>
 						</div>
 						<div class="row">
 							<div class="col-sm-8">
@@ -344,113 +319,7 @@
 								<input type="text" id="filter" placeholder="Search" />
 							</div>
 						</div>
-						{% if interaction_array|length > 0 %}
-						<table id="search_result_table" class="footable table"
-							data-filter="#filter" data-filtering="true"
-							data-filter-minimum="3">
-							<thead>
-								<tr>
-									<th>Interactor Gene Name</th>
-									<th>Score</th>
-									{% if binding_count > 0 %}
-    									<th>Binding Start</th>
-    									<th>Binding End</th>
-									{% endif %}
-									<th>Dataset</th>
-								</tr>
-							</thead>
-							<tbody>
-
-								{% for interaction in interaction_array %}
-								<tr>
-									<td>
-									
-									
-
-								    <a class="interactor_B_qtip">
-								    {{ interaction.interactor_B_array.gene_name }}
-								    </a>
-								    <div class="hidden">
-										<div class="container">
-											<div class="row">
-												<div class="col-sm-8">
-													<h4>{{ interaction.interactor_B_array.gene_name }}</h4>
-												</div>
-											</div>
-											<div class="col-sm-7">
-												<div class="row">
-													<h4>Description</h4>
-												</div>
-												<div class="row">
-													<span class="more">{{ interaction.interactor_B_array.description }}</span>
-												</div>
-											</div>
-											<div class="col-sm-5">
-												<div class="row">
-													<h4>Links</h4>
-												</div>
-												<div class="row">
-													{% for database,link_array in interaction.interactor_B_array.links %}	
-													    <div class="row">
-                                                             {{ database }}
-                                                        </div>
-                                                        <div class="row">
-                                                        {% for links in link_array %}
-															<a href="{{ links[1] }}" target="_blank">{{ links[0] }}</a>
-                                                        {% endfor %}
-                                                        </div>
-													{% endfor %}
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-sm-8">
-													<div class="row">
-														<h4>Actions</h4>
-													</div>
-													<div class="row">
-														<a href="{{ interaction.interactor_B_array.name }}?max_number_of_interactions=50" target="_blank">Search for {{ interaction.interactor_B_array.gene_name }}</a>
-													</div>
-													<div class="row">
-														<a href="../protein_sequence/{{ interaction.interactor_B_array.name }}" target="_blank">Show protein sequence</a>
-													</div>
-												</div>
-											</div>
-										</div>
-
-									</div>
-								    
-
-									</td>
-									<td>{{ interaction.score }}</td>
-									{% if binding_count > 0 %}
-										<td>{{ interaction.binding_start }}</td>
-										<td>{{ interaction.binding_end }}</td>
-									{% endif %}
-									<td>
-									{% for dataset in interaction.dataset_array %}
-										<a class="reference_qtip">
-										{{ dataset.dataset_author }}
-										</a>
-										<div class="hidden">
-											<a href="http://www.ncbi.nlm.nih.gov/pubmed/{{ dataset.dataset_reference }}" target="_blank">{{ dataset.dataset_author }}</a></br>
-										</div>
-    									</br>	
-									{% endfor %}
-									</td>
-								</tr>
-								{% endfor %}
-							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="5">
-										<div class="pagination pagination-centered"></div>
-									</td>
-								</tr>
-							</tfoot>
-						</table>
-						{% else %}
-						<p>No Interactions Found</p>
-						{% endif %} 
+						
 					</div>
 				</div>
 			</div> 
@@ -501,10 +370,10 @@
     	  	style: 
 		  	[
     	  		{
-    				selector: '$node',
+    				selector: '.nodes',
     				css: 
     				{
-                        'content': 'data(name)',
+                        'content': 'data(gene_name)',
                         'text-valign': 'center',
                         'color': 'white',
                         'text-outline-width': 2,
@@ -516,22 +385,6 @@
                         'background-color': '#55ACEE'
         			}
     			},
-            	{
-                    selector: '.protein_of_intrest',
-                    css: 
-                    {
-                        'content': 'data(gene_name)',
-                        'text-valign': 'center',
-                        'color': 'white',
-                        'text-outline-width': 2,
-                        'padding-top': '10px',
-                        'padding-left': '10px',
-                        'padding-bottom': '10px',
-                        'padding-right': '10px',
-                        'text-align': 'center',
-                        'background-color': '#55ACEE'
-                    }
-				},
                 {
                 	selector: '.edge',
                 	css: 
@@ -543,84 +396,38 @@
 		});
     
     	var result = {{ json | raw }};
-    
-    	var domainArray = result.domain;
-    	var proteinOfIntrestArray = result.protein_of_intrest;
-    	var interactingProteinNodeArray = result.interacting_protein_nodes;
-    	var edgeArray = result.edge;
-    	
 
-    		
-		var proteinId = proteinOfIntrestArray[0];
-		var proteinName = proteinOfIntrestArray[1];
-		var geneName = proteinOfIntrestArray[2];
-		var proteinDescription = proteinOfIntrestArray[3];
-		var externalLinksArray = proteinOfIntrestArray[4]; 
+    	var nodeArray = result.nodes;
+    	var edgeArray = result.edges;
 
-		var nodeProteinId = proteinId + "_" + proteinName;
+    	for (i = 0; i < nodeArray.length; ++i) {
 
-		proteinOfIntrestName = proteinName;
+    		var proteinId = nodeArray[i][0];
+    		var proteinName = nodeArray[i][1];
+    		var geneName = nodeArray[i][2];
+    		var proteinDescription = nodeArray[i][3];
+    		var nodeProteinId = proteinId + "_" + proteinName;
 
-		if( {{ interaction_count }} > 0 ){
     		cy.add([{ 
     			group: "nodes",
-    			data: { id: nodeProteinId, protein_name: proteinName, gene_name: geneName, description: proteinDescription, external_links: externalLinksArray },
-    			classes: "protein_of_intrest"
+    			data: { id: nodeProteinId, protein_name: proteinName, gene_name: geneName, description: proteinDescription },
+    			classes: "nodes"
     			
     		}]);
-    	}
-
-		for (i = 1; i < domainArray.length; ++i) {
-
-			var domainId = domainArray[i][0];
-			var domainName = domainArray[i][1];
-			var domainType = domainArray[i][2];
-
-			cy.add([{ 
-				group: "nodes",
-				data: { id: domainName, name: domainType, name_domain: domainId, domain_name: domainName, domain_id: domainId, protein_name: proteinName, parent: nodeProteinId},
-				classes: "domain"
-				
-			}]);
-
-			
-		}
-
-
+    		
+    	}	
 
     	
-    	for (i = 0; i < interactingProteinNodeArray.length; ++i) {
-    		
-    		var proteinId = interactingProteinNodeArray[i][0];
-    		var proteinName = interactingProteinNodeArray[i][1];
-    		var geneName = interactingProteinNodeArray[i][2];
-    		var proteinDescription = interactingProteinNodeArray[i][3];
-    		var nodeProteinId = proteinId + "_" + proteinName;
-    		var linkArray = interactingProteinNodeArray[i][4];
-
-    
-    		cy.add([{ 
-    			group: "nodes",
-    			data: { id: nodeProteinId, name: geneName, protein_name: proteinName, gene_name: geneName, description: proteinDescription, external_links: linkArray},
-    			classes: "interacting_protein_node"
-    		}]);
-    	}
-
-    	for (i = 0; i < edgeArray.length; ++i) {
-    		
-    		var sourceDomainId = edgeArray[i][0];
-    		var domainName = edgeArray[i][1];
+    	for (i = 0; i <  edgeArray.length; ++i) {
+        	
+    		var sourceProteinId = edgeArray[i][0];
+    		var sourceProteinName = edgeArray[i][1];
     		var targetProteinId = edgeArray[i][2];
-    		var sourceProteinName = edgeArray[i][3];
-    		var targetProteinName = edgeArray[i][4];
-    		var scoreData = edgeArray[i][5];
-    		var publicationStatus = edgeArray[i][6];
-    		
-    		
-    		var nodeSourceDomainId = domainName;
-    		var nodeTargetProteinId = targetProteinId + '_' + targetProteinName;
-    		var edgeID = sourceDomainId + ',' + domainName + ',' + targetProteinId + ',' + targetProteinName + ',' + scoreData;
-    		//add edge data to cytoscape
+    		var targetProteinName = edgeArray[i][3];
+    		var scoreData = edgeArray[i][4];
+    		var sourceNodeId = sourceProteinId + "_" + sourceProteinName;
+    		var targetNodeId = targetProteinId + "_" + targetProteinName;
+    		var edgeID = sourceProteinId + "_" + sourceProteinName + "_" + targetProteinId + "_" + targetProteinName;
         	var widthData = 1;
     		if (scoreData <= 0.20){
     			widthData = 2;
@@ -632,31 +439,21 @@
     			widthData = 5;
     		}else if(scoreData <= 1 && scoreData > 0.80){
     			widthData = 6;
-    		} 
-
-    		var publicationColor = '#AAAAAA';
-
-    		if(publicationStatus == 'published'){
-    			publicationColor = '#93C47D';
-        	}else if(publicationStatus == 'pre-published'){
-        		publicationColor = '#F6B26B';
-            }
-    
-        	cy.add([{ 
+    		}
+    		
+    		cy.add([{ 
         		group: "edges",
-        		classes: publicationStatus, 
         		data: { 
         			id: edgeID, 
-        			source: nodeSourceDomainId, 
-        			target: nodeTargetProteinId, 
+        			source: sourceNodeId, 
+        			target: targetNodeId, 
         			interaction: sourceProteinName + '-' + targetProteinName,
-        			domain: domainName,
         			score: scoreData
         			} 
-        	}]).css({ 'width': widthData, 'line-color' : publicationColor});
-        	
-        	classes: "interacting_protein_node "
+        	}]).css({ 'width': widthData });
+    		
     	}
+    	
 
     	cy.center();
     	
@@ -666,464 +463,150 @@
     		equidistant: true,
     		minNodeSpacing: 50,
     	});
-    
-    
-    	$('#view_settings_submit').on("click", function(){
-    
-    		layoutType = $('#view_settings_layout').val();
-    
-    		
-    		cy.layout({ 
-    			name: layoutType,
-    			avoidOverlap: true,
-    			equidistant: true,
-    			minNodeSpacing: 50,
-    			
-    		}); 
-    
-    
-    		if($("#view_settings_labels").is(':checked')){
-    			cy.style().selector('$node').style({'content': 'data(name)'}).update();
-    
-    		}else{
-    
-    			cy.style().selector('$node').style({'content': ''}).update();
-    		}
-    
-    	});
 
-
-  
-
-    	cy.$('.interacting_protein_node').qtip({
-    		content: function(){ 
-    			var proteinName = this.data('protein_name');
-    			var searchTerm = this.data('search_term');
-    			var geneName = this.data('gene_name');
-    			var proteinDescription = this.data('description');
-    			var linkArray = this.data('external_links');
-    			var returnLinks = '<div class="row">';
-
-    			$.each(linkArray, function(database, links) {
-
-    				returnLinks += '<div class="row">' + database + '</div>';
-    				returnLinks += '<div class="row">';
-    				for (i = 0; i < links.length; ++i) {
-    					link_id = links[i][0];
-    					link = links[i][1];
-						returnLinks += '<a href="' + link + '" target="_blank">' + link_id + '</a> ';
-					}
-					returnLinks += '</div>';
-    			});
-    			
-    			returnLinks += '</div>';			
-    			
-    			return '<div class="container"><div class="row"><div class="col-sm-8"><h4>' + geneName + '</h4></div></div><div class="col-sm-7"><div class="row"><h4>Description</h4></div><div class="row"><span class="more">' + proteinDescription + '</span></div></div><div class="col-sm-5"><div class="row"><h4>Links</h4></div>' + returnLinks + '</div><div class="row"><div class="col-sm-8"><div class="row"><h4>Actions</h4></div><div class="row"><a href="' + Routing.generate('search_results', { search_term: proteinName, max_number_of_interactions: '50' }) + '" target="_blank">Search for ' + geneName + '</a></div><div class="row"><a href="' + Routing.generate('protein_sequence', { search_term: proteinName }) + '"  target="_blank">Show protein sequence</a></div></div></div></div><script>$(document).ready(function() {var showChar = 300;var ellipsestext = "...";var moretext = "Read More";var lesstext = "Show less";$(".more").each(function() {var content = $(this).html();if(content.length > showChar) {var c = content.substr(0, showChar);var h = content.substr(showChar, content.length - showChar);var html = c + \'<span class="moreellipses">\' + ellipsestext + \'&nbsp;</span><span class="morecontent"><span>\' + h + \'</span>&nbsp;&nbsp;<a href="" class="morelink">Read More</a></span>\';$(this).html(html);}});$(".morelink").on("click", function(){if($(this).hasClass("less")) {$(this).removeClass("less");$(this).html(moretext);} else {$(this).addClass("less");$(this).html(lesstext);}$(this).parent().prev().toggle();$(this).prev().toggle();return false;});});</' + 'script>';
-
-    				
-    		},
-    		position: {
-    			my: 'top center',
-    			at: 'bottom center'
-    		},
-    		style: {
-    			classes: 'qtip-bootstrap',
-    			tip: {
-    				width: 16,
-    				height: 8
-    			}
-    		},
-    	});
-
-    	var domain_colours = ["black", "#ca0020", "#f4a582", "#0571b0", "#ffffbf", "#92c5de"];
-    	
-    	for (i = 1; i < domainArray.length; ++i) {
-    		
-			var domainId = domainArray[i][0];
-			var domainName = domainArray[i][1];
-			var domainType = domainArray[i][2];
-
-
-    		
-    		var domainColour = domain_colours[i];
-    		var domainSelector = '#' + domainName;
-    		
-    		cy.$(domainSelector).neighborhood( 'edge' ).style({'line-color' : domainColour });
-    		cy.$(domainSelector).neighborhood( 'node' ).style({'background-color': domainColour });
-    		cy.$(domainSelector).roots().style({'background-color': domainColour });
-    
-    
-    	}
-
-		cy.$('.domain').qtip({
-		    show: {
-	            solo: true,
-		    },
-			content: function(){ 
-				return '<div class="container">' + 
-        					'<div class="row">' + 
-        						'<h4>' + this.data('domain_name') + '</h4>' +
-        					'</div>' +
-        					 '<div class="row">' +
-        			     		'<h4>Actions</h4>' +
-        			    	'</div>'+
-        			    	'<div class="row">'+
-        			       		'<a href="' + Routing.generate('domain_sequence', { search_term: this.data('domain_name') }) + '"  target="_blank">Show domain sequence</a>' +
-        			    	'</div>' +
-        				'</div>';	
-			},
-			position: {
-				my: 'top center',
-				at: 'bottom center'
-			},
-			style: {
-				classes: 'qtip-bootstrap',
-				tip: {
-					width: 20,
-					height: 8
-				}
-			},
-		});
-
-    	cy.edges().qtip({
-    		content: function(){ 
-    			return 'Interaction: ' + 
-    			this.data('interaction') + 
-    			'<br/>' + 
-    			'Score: ' +
-    			 this.data('score') +
-    			 '<br/>' 
-    
-    
-    			 ; 
-    		},
-    		position: {
-    			my: 'top center',
-    			at: 'bottom center'
-    		},
-    		style: {
-    			classes: 'qtip-bootstrap',
-    			tip: {
-    				width: 16,
-    				height: 8
-    			}
-    		}
-    	});
-
-    	cy.$('.protein_of_intrest').qtip({
-    		content: function(){ 
-    			var proteinName = this.data('protein_name');
-    			var searchTerm = this.data('search_term');
-    			var geneName = this.data('gene_name');
-    			var proteinDescription = this.data('description');
-    			var linkArray = this.data('external_links');
-    			var returnLinks = '<div class="row">';
-
-    			$.each(linkArray, function(database, links) {
-
-    				returnLinks += '<div class="row">' + database + '</div>';
-    				returnLinks += '<div class="row">';
-    				for (i = 0; i < links.length; ++i) {
-    					link_id = links[i][0];
-    					link = links[i][1];
-						returnLinks += '<a href="' + link + '" target="_blank">' + link_id + '</a> ';
-					}
-					returnLinks += '</div>';
-    			});
-    			
-    			returnLinks += '</div>';			
-    			
-    			return '<div class="container"><div class="row"><div class="col-sm-8"><h4>' + geneName + '</h4></div></div><div class="col-sm-7"><div class="row"><h4>Description</h4></div><div class="row"><span class="more">' + proteinDescription + '</span></div></div><div class="col-sm-5"><div class="row"><h4>Links</h4></div>' + returnLinks + '</div><div class="row"><div class="col-sm-8"><div class="row"><h4>Actions</h4></div><div class="row"><a href="' + Routing.generate('search_results', { search_term: proteinName, max_number_of_interactions: '50' }) + '" target="_blank">Search for ' + geneName + '</a></div><div class="row"><a href="' + Routing.generate('protein_sequence', { search_term: proteinName }) + '"  target="_blank">Show protein sequence</a></div></div></div></div>';    				
-    		},
-    		position: {
-    			my: 'top center',
-    			at: 'bottom center'
-    		},
-    		style: {
-    			classes: 'qtip-bootstrap',
-    			tip: {
-    				width: 20,
-    				height: 8
-    			},
-    			
-			
-    		},
-    		
-		
-    	});
-        
-    	cy.$('.protein_of_intrest').style({'background-color': '#55ACEE'});
-    
-    
-    	$('#svg').on('click', function(){
-    		var png64 = cy.png();
-    		$('#svg').attr('href', png64);
-    	});
-    
-    	$('#png').on('click', function(){
-    		var png64 = cy.png();
-    		$('#png').attr('href', png64);
-    	});
-    
-    	$('#jpg').on('click', function(){
-    		var jpg = cy.jpg();
-    		$('#jpg').attr('href', jpg);
-    	});
-    
-    
-        $('#protein_of_intrest_color').spectrum({
-            
-            
-    	    color: '#55ACEE',
-    	    showInput: true,
-    	    className: "full-spectrum",
-    	    showInitial: true,
-    	    showPalette: true,
-    	    showSelectionPalette: true,
-    	    maxSelectionSize: 10,
-    	    preferredFormat: "hex",
-    	    change: function(color_change) { 
-    	    	var colourChanged = color_change.toHexString();	
-    
-    			cy.$('.protein_of_intrest').roots().style({'background-color' : colourChanged });
-  
-    			cy.$('.protein_of_intrest').neighborhood( 'node' ).style({'background-color': colourChanged }); 
-       		},
-    	    palette: [
-    	        ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
-    	        "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-    	        ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
-    	        "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
-    	        ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
-    	        "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
-    	        "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
-    	        "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
-    	        "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
-    	        "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
-    	        "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
-    	        "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
-    	        "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
-    	        "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
-    	    ]
-    	});
-
-        $('#published_color').spectrum({
-            
-            
-    	    color: '#93C47D',
-    	    showInput: true,
-    	    className: "full-spectrum",
-    	    showInitial: true,
-    	    showPalette: true,
-    	    showSelectionPalette: true,
-    	    maxSelectionSize: 10,
-    	    preferredFormat: "hex",
-    	    change: function(color_change) { 
-    	    	var colourChanged = color_change.toHexString();	
-    			cy.$('.published').style({'line-color' : colourChanged }); 
-
-       		},
-    	    palette: [
-    	        ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
-    	        "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-    	        ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
-    	        "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
-    	        ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
-    	        "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
-    	        "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
-    	        "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
-    	        "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
-    	        "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
-    	        "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
-    	        "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
-    	        "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
-    	        "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
-    	    ]
-    	});
-
-        $('#pre-published_color').spectrum({
-            
-            
-    	    color: '#F6B26B',
-    	    showInput: true,
-    	    className: "full-spectrum",
-    	    showInitial: true,
-    	    showPalette: true,
-    	    showSelectionPalette: true,
-    	    maxSelectionSize: 10,
-    	    preferredFormat: "hex",
-    	    change: function(color_change) { 
-    	    	var colourChanged = color_change.toHexString();	
-    
-    	    	cy.$('.pre-published').style({'line-color' : colourChanged }); 
-       		},
-    	    palette: [
-    	        ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
-    	        "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-    	        ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
-    	        "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
-    	        ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
-    	        "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
-    	        "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
-    	        "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
-    	        "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
-    	        "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
-    	        "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
-    	        "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
-    	        "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
-    	        "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
-    	    ]
-    	});
-
-    	{% for domain in domains %}
-            {% if domain %}
-                $('#input_{{ domain[1] }}').spectrum({
-                    
-                    
-            	    color: "{{ domain_colours[loop.index] }}",
-            	    showInput: true,
-            	    className: "full-spectrum",
-            	    showInitial: true,
-            	    showPalette: true,
-            	    showSelectionPalette: true,
-            	    maxSelectionSize: 10,
-            	    preferredFormat: "hex",
-            	    change: function(color_change) { 
-            		    var colourChanged = color_change.toHexString();	
-            
-            			cy.$('#{{ domain[1] }}').roots().style({'background-color' : colourChanged });
-            			cy.$('#{{ domain[1] }}').neighborhood( 'edge' ).style({'line-color' : colourChanged }); 
-            			cy.$('#{{ domain[1] }}').neighborhood( 'node' ).style({'background-color': colourChanged }); 
-               		},
-            	    palette: [
-            	        ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
-            	        "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-            	        ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
-            	        "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
-            	        ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
-            	        "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
-            	        "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
-            	        "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
-            	        "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
-            	        "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
-            	        "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
-            	        "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
-            	        "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
-            	        "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
-            	    ]
-            	});
-            {% endif %}
-        {% endfor %}
     	
     
-        $('#update_data_settings').on('click', function(){
-        	var maxInteractions = $('#max_number_of_interactions').val();
-        	var searchScore = $("#min_interaction_score").slider("option", "value");
-
-			var publicationStatus = 'published';
-
-			if($("#published").prop("checked") && $("#prepublished").prop("checked")){
-				var publicationStatus = 'all';
-			}else if($("#published").prop("checked")){
-				var publicationStatus = 'published';
-			}else if($("#prepublished").prop("checked")){
-				var publicationStatus = 'pre_published';
-			}
-
-
-        	var url = '';
-        	if(searchScore != null && maxInteractions >= 1 && publicationStatus != null){
-            	
-        		url = Routing.generate('search_results', { search_term: proteinOfIntrestName, score: searchScore, max_number_of_interactions: maxInteractions, publication_status: publicationStatus});
-            }else if (searchScore != null && maxInteractions >= 1){
-            	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, score: searchScore});
-            }else if (searchScore != null && publicationStatus != null){
-            	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, score: searchScore, publication_status: publicationStatus});
-            }else if (maxInteractions >= 1 && publicationStatus != null){
-            	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, max_number_of_interactions: maxInteractions, publication_status: publicationStatus });
-            }else if (searchScore != null){
-            	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, score: searchScore});
-            }else if (maxInteractions >= 1){
-            	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, max_number_of_interactions: maxInteractions });
-            }else if (publicationStatus != null){
-            	url = Routing.generate('search_results', { search_term: proteinOfIntrestName, publication_status: publicationStatus });
-            }
-
-        	$('#update_data_settings').attr('href', url);
-        });
-        
-        $( "#accordion" ).accordion();
-    });
-    
-
-    
-    
-    $( function() {
-        $( "#min_interaction_score" ).slider({
-    
-    		step: 0.01,
-            min: 0,
-            max: 1,
-            value: {{ min_interaction_score }},
-            slide: function( event, ui ) {
-              $("#min_interaction_score_handle").html(ui.value);
-            }
-          });
-        $("#min_interaction_score_handle").html($( "#min_interaction_score" ).slider( "value" ));
-      });
-    
-    $(function () {
-        $('table').footable();
-    	$('#change-page-size').change(function (e) {
-    		e.preventDefault();
-    		var pageSize = $(this).val();
-    		$('.footable').data('page-size', pageSize);
-    		$('.footable').trigger('footable_initialized');
-    	});
-    
-    
-      });
-
-    $('.interactor_B_qtip').each(function() { // Notice the .each() loop, discussed below
-        $(this).qtip({
-            content: {
-                text: $(this).next('div').html() // Use the "div" element next to this for the content
-            },
-    		position: {
-    			my: 'left center',
-    			at: 'right center'
-    		},
-    		style: {
-    			classes: 'qtip-bootstrap',
-    			tip: {
-    				width: 16,
-    				height: 8
-    			}
-    		},
-            show: 'click',
-            hide: 'unfocus'
-        });
     });
 
-    $('.reference_qtip').each(function() { // Notice the .each() loop, discussed below
-        $(this).qtip({
-            content: {
-                text: $(this).next('div').html() // Use the "div" element next to this for the content
-            },
-    		position: {
-    			my: 'right center',
-    			at: 'left center'
-    		},
-    		style: {
-    			classes: 'qtip-bootstrap',
-    			tip: {
-    				width: 16,
-    				height: 8
-    			}
-    		},
-            show: 'click',
-            hide: 'unfocus'
-        });
-    });
-    </script>
+
+    	</script>
 {% endblock %}
+
+
+
+
+
+
+
+div class="row result_row">
+		<div class="results_panel">
+			<div class="tab-content" style="padding-top: 0;">
+				<div id="network"  class="tab-pane fade in active">
+					<div class="container" style="overflow: auto;">
+						<div class="row">
+							<h3 style="color: {{ main_color_scheme }}">Interactions with {{ protein_gene_name }}</h3>
+						</div>
+						<div class="row">
+							<div class="col-sm-8">
+								<div class="input-group input-group-sm">
+									<lable for="change-page-size">Page Size:</lable>
+									<select id="change-page-size">
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="5">5</option>
+										<option value="10" selected>10</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<input type="text" id="filter" placeholder="Search" />
+							</div>
+						</div>
+						{% if interaction_array|length > 0 %}
+						<table id="search_result_table" class="footable table"
+							data-filter="#filter" data-filtering="true"
+							data-filter-minimum="3">
+							<thead>
+								<tr>
+									<th>Interactor Gene Name</th>
+									<th>Score</th>
+									{% if binding_count > 0 %}
+    									<th>Binding Start</th>
+    									<th>Binding End</th>
+									{% endif %}
+									<th>Dataset</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for interaction in interaction_array %}
+								<tr>
+									<td>
+									
+									
+								    <a class="interactor_B_qtip">
+								    {{ interaction.interactor_B_array.gene_name }}
+								    </a>
+								    <div class="hidden">
+										<div class="container">
+											<div class="row">
+												<div class="col-sm-8">
+													<h4>{{ interaction.interactor_B_array.gene_name }}</h4>
+												</div>
+											</div>
+											<div class="col-sm-7">
+												<div class="row">
+													<h4>Description</h4>
+												</div>
+												<div class="row">
+													<span class="more">{{ interaction.interactor_B_array.description }}</span>
+												</div>
+											</div>
+											<div class="col-sm-5">
+												<div class="row">
+													<h4>Links</h4>
+												</div>
+												<div class="row">
+													{% for database,link_array in interaction.interactor_B_array.links %}	
+													    <div class="row">
+                                                             {{ database }}
+                                                        </div>
+                                                        <div class="row">
+                                                        {% for links in link_array %}
+															<a href="{{ links[1] }}" target="_blank">{{ links[0] }}</a>
+                                                        {% endfor %}
+                                                        </div>
+													{% endfor %}
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-8">
+													<div class="row">
+														<h4>Actions</h4>
+													</div>
+													<div class="row">
+														<a href="{{ interaction.interactor_B_array.name }}?max_number_of_interactions=50" target="_blank">Search for {{ interaction.interactor_B_array.gene_name }}</a>
+													</div>
+													<div class="row">
+														<a href="../protein_sequence/{{ interaction.interactor_B_array.name }}" target="_blank">Show protein sequence</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								    
+									</td>
+									<td>{{ interaction.score }}</td>
+									{% if binding_count > 0 %}
+										<td>{{ interaction.binding_start }}</td>
+										<td>{{ interaction.binding_end }}</td>
+									{% endif %}
+									<td>
+									{% for dataset in interaction.dataset_array %}
+										<a class="reference_qtip">
+										{{ dataset.dataset_author }}
+										</a>
+										<div class="hidden">
+											<a href="http://www.ncbi.nlm.nih.gov/pubmed/{{ dataset.dataset_reference }}" target="_blank">{{ dataset.dataset_author }}</a></br>
+										</div>
+    									</br>	
+									{% endfor %}
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="5">
+										<div class="pagination pagination-centered"></div>
+									</td>
+								</tr>
+							</tfoot>
+						</table>
+						{% else %}
+						<p>No Interactions Found</p>
+						{% endif %} 
+					</div>
+				</div>
+			</div> 
+		</div>
+	</div>

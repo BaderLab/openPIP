@@ -43,6 +43,8 @@ class Data_File
 		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 
+	
+	
 	/**
 	 * @ORM\Column(type="string", length=1000, nullable=true)
 	 */

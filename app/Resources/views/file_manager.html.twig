@@ -59,6 +59,7 @@
 					<li><a href="{{ path('admin_search') }}">Search</a></li>
 					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
 					<li><a href="{{ path('admin_about') }}">About</a></li>
+					<li><a href="{{ path('admin_documentation') }}">Documentation</a></li>
 					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
 					<li><a href="{{ path('data_manager') }}">Data</a></li>
 					<li class="active"><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
@@ -72,7 +73,7 @@
 		<div class="shadow"></div>
 	</nav>
 </header>
-<main>
+<main style="background-color: #EEEEEE;">
     <div class="container file_upload_panel">   
 		<div class="row">
 			<div class="file_upload_header" style="background-color: {{ main_color_scheme }}">
@@ -138,6 +139,10 @@
     	</div>
     </div>
 </main>
+<footer>
+	<div class="shadow"></div>
+	{{ footer | raw }}
+</footer>
 {% endblock %} 
 {% block javascripts %}
     {% javascripts

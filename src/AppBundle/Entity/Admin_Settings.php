@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -28,7 +29,7 @@ class Admin_Settings
      * @ORM\Column(name="`short_title`", type="string", length=200, nullable=true)
      */
     protected $short_title;
-    
+
     /**
      * @ORM\Column(name="`home_page`", type="text", length=8000, nullable=true)
      */
@@ -38,17 +39,33 @@ class Admin_Settings
      * @ORM\Column(name="`about`", type="text", length=5000, nullable=true)
      */
     protected $about;
-    
+
     /**
      * @ORM\Column(name="`download`", type="text", length=8000, nullable=true)
      */
     protected $download;
 
+
+    /**
+     * @ORM\Column(name="`documentation`", type="text", length=8000, nullable=true)
+     */
+    protected $documentation;
+
+    /**
+     * @ORM\Column(name="`show_downloads`", type="boolean")
+     */
+    protected $show_downloads;
+
+    /**
+     * @ORM\Column(name="`show_download_all`", type="boolean")
+     */
+    protected $show_download_all;
+
     /**
      * @ORM\Column(name="`footer`", type="text", length=2000, nullable=true)
      */
     protected $footer;
-    
+
     /**
      * @ORM\Column(name="`main_color_scheme`", type="string", length=10, nullable=true)
      */
@@ -58,33 +75,33 @@ class Admin_Settings
      * @ORM\Column(name="`header_color_scheme`", type="string", length=10, nullable=true)
      */
     protected $header_color_scheme;
-    
+
     /**
      * @ORM\Column(name="`logo_color_scheme`", type="string", length=10, nullable=true)
      */
     protected $logo_color_scheme;
-    
+
     /**
      * @ORM\Column(name="`button_color_scheme`", type="string", length=10, nullable=true)
      */
     protected $button_color_scheme;
-    
+
     /**
      * @ORM\Column(name="`example_1`", type="string", length=20, nullable=true)
      */
     protected $example_1;
-    
+
     /**
      * @ORM\Column(name="`example_2`", type="string", length=20, nullable=true)
      */
     protected $example_2;
-    
+
     /**
      * @ORM\Column(name="`example_3`", type="string", length=20, nullable=true)
      */
     protected $example_3;
-    
-    
+
+
     /**
      * Get id
      *
@@ -406,4 +423,77 @@ class Admin_Settings
     {
         return $this->button_color_scheme;
     }
+
+    /**
+     * Set showDownloads
+     *
+     * @param boolean $showDownloads
+     *
+     * @return Admin_Settings
+     */
+    public function setShowDownloads($showDownloads)
+    {
+        $this->show_downloads = $showDownloads;
+
+        return $this;
+    }
+
+    /**
+     * Get showDownloads
+     *
+     * @return boolean
+     */
+    public function getShowDownloads()
+    {
+        return $this->show_downloads;
+    }
+
+    /**
+     * Set showDownloadAll
+     *
+     * @param boolean $showDownloadAll
+     *
+     * @return Admin_Settings
+     */
+    public function setShowDownloadAll($showDownloadAll)
+    {
+        $this->show_download_all = $showDownloadAll;
+
+        return $this;
+    }
+
+    /**
+     * Get showDownloadAll
+     *
+     * @return boolean
+     */
+    public function getShowDownloadAll()
+    {
+        return $this->show_download_all;
+    }
+
+    /**
+     * Set documentation
+     *
+     * @param string $documentation
+     *
+     * @return Admin_Settings
+     */
+    public function setDocumentation($documentation)
+    {
+        $this->documentation = $documentation;
+
+        return $this;
+    }
+
+    /**
+     * Get documentation
+     *
+     * @return string
+     */
+    public function getDocumentation()
+    {
+        return $this->documentation;
+    }
 }
+?>

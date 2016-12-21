@@ -32,7 +32,9 @@ h4{
 	margin: 0px;
 }
 
-
+.panel{
+	 width: 96%;
+}
 
 .right_col {
     position: absolute;
@@ -235,7 +237,7 @@ border-radius: 0;
 }
 
 .home_panel{
-	width: 94%;
+	width: 96%;
 
 	background-color: #FFFFFF;
 	border: 1px solid #cccccc;

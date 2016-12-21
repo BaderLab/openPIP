@@ -48,6 +48,7 @@ class FileController extends Controller
 	    ->getRepository('AppBundle:Admin_Settings')
 	    ->find(1);
 	    
+	    $footer = $admin_settings->getFooter();
 	    $main_color_scheme = $admin_settings->getMainColorScheme();
         $header_color_scheme = $admin_settings->getHeaderColorScheme();
         $logo_color_scheme = $admin_settings->getLogoColorScheme();
@@ -59,6 +60,7 @@ class FileController extends Controller
 	    return $this->render('file_manager.html.twig', array(
 	    		'upload_directory' => $upload_directory,
 				'directories' => $directories,
+	            'footer' => $footer,
                 'main_color_scheme' => $main_color_scheme,
                 'header_color_scheme' => $header_color_scheme,
                 'logo_color_scheme' => $logo_color_scheme,

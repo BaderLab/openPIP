@@ -1,5 +1,13 @@
 @CHARSET "ISO-8859-1";
 
+body{
+	background-color: #f8f8f8;
+}
+
+main{
+	padding: 20px;
+
+}
 
 .list-group-item-header{	
 	background-color: #FFD2A0;
@@ -121,6 +129,6 @@
 }
 
 .file_upload_content{
-	
+	background-color: #FFFFFF;
 	padding: 30px;
 }

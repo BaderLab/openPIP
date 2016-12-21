@@ -10,6 +10,54 @@ $("#new_announcement").on("click", showAnnouncmentForm);
 $("#cancel_announcement").on("click", hideAnnouncmentForm);
 
 
+function showDatasetRequestForm(event){
+
+    $("#dataset_request").removeClass("hidden");
+    
+    
+    $("#form_dataset").val(event.target.id);
+    $(".qtip").addClass("hidden");
+    
+}
+
+function hideDatasetRequestForm(event){
+    $("#dataset_request").addClass("hidden");
+    
+}
+
+$(".dataset_request_links").on("click", showDatasetRequestForm);
+$("#cancel_dataset_request").on("click", hideDatasetRequestForm);
+
+function hideDeleteDatasetForm(event){
+
+    $("#delete_dataset").addClass("hidden");
+    
+}
+
+function subDown(event){
+	$("#download_dataset").click();	
+    $("#form").submit();
+    
+}
+
+$("#down_data").on("click", subDown);
+
+
+
+
+function showDeleteDatasetForm(event){
+
+    var dataset = $( "#form_dataset_to_delete option:selected" ).text();
+    
+    
+    $("#dataset_to_delete").html(dataset);    
+    $("#delete_dataset").removeClass("hidden");
+
+}
+
+$("#delete_dataset_button").on("click", showDeleteDatasetForm);
+$("#cancel_delete_dataset").on("click", hideDeleteDatasetForm);
+
 $(document).on('click','.navbar-collapse.in',function(e) {
     if( $(e.target).is('a') ) {
         $(this).collapse('hide');

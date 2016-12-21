@@ -20,16 +20,6 @@ class Data_FileType extends AbstractType
         $builder
 
             ->add('data_file', FileType::class)
-            ->add('description', TextareaType::class, array('attr' => array('placeholder' => 'Description')))
-            ->add('file_type', ChoiceType::class, array(
-            		'choices'  => array(
-            				'psimi_xml_2.5' => 'PSI-MI XML Version 2.5',
-            				'psimi_tab_2.5' => 'PSI-MI TAB Version 2.5',
-            				'psimi_tab_2.7' => 'PSI-MI TAB Version 2.7',
-            			),
-            		'placeholder' => 'Choose File Type',
-            		)
-            	)
             ->getForm();
     }
     

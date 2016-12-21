@@ -7,8 +7,7 @@ body{
 
 .search_outer_panel{
 	background-color: #FFFFFF;
-    height: 500px;
-    width: 80%;
+    width: 46%;
 	border: 1px solid #ccc;
 	padding: 20px;
 	margin: 20px auto;
@@ -29,17 +28,18 @@ body{
 
 .search_inner_panel{
 	position: relative;
-	
-	width: 100%;
-	height: 420px;
+	width: 700px;
+
+	padding: 20px;
 	margin: auto;
 }
 
 .search_header{
-	width: 80%;
-	height: 4%;
-	padding: 0 20 0 20;
-	margin: 0 0 20px;
+
+	height: 100%;
+	border: 1px solid #ccc;
+	padding: 2%;
+	margin: auto;
 	
 }
 
@@ -50,12 +50,18 @@ body{
 
 .search_panel{
 	
-	width: 100%;
+
 	height: 100%;
 	border: 1px solid #ccc;
 	padding: 0%;
 	margin: auto;
 }
+
+.search_content{
+	padding: 2%;
+	
+}
+
 
 .input-group{
 	
@@ -91,15 +97,7 @@ body{
     background-color: #5cb85c;
 }
 
-.tab-content{
 
-	
-	width: 100%;
-	height: 260px;
-	padding-top: 2%;
-
-
-}
 
 .navbar {
     margin-bottom: 0px;
@@ -257,3 +255,14 @@ li {
     color: #f6931f;
     font-weight: bold;
 }
+
+
+h3{
+	margin: 10px;
+	margin-top: 0px;
+	margin-left: 0px;	
+}
+	
+
+	
+	

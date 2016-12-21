@@ -1,8 +1,16 @@
 @CHARSET "ISO-8859-1";
 
+body{
+	background-color: #f8f8f8;
+}
+
+main{
+	padding: 20px;
+}
+
 #announcement_display{
 	
-	border: 1px solid #ccc;
+	
 	height: 600px;
 	overflow: auto;
 }
@@ -128,10 +136,11 @@
 
 .anouncement_upload_panel{
 	border: 1px solid #ccc;
+
 	
 }
 
 .anouncement_upload_content{
-	
+	background-color: #ffffff;
 	padding:  0px 30px 30px 30px;
 }

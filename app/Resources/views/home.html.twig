@@ -38,7 +38,7 @@
 		</div>
 	</nav>
 	<nav class="navbar navbar-default">
-		<div class="container-fluid" style="padding: 0px;">
+		<div class="container-fluid" style="padding-left: 0px;">
 			<div class="navbar-header tor_ibin_header" >
 				<button type="button" class="navbar-toggle left" data-toggle="collapse" data-target="#myNavbar">
 					<span class="icon-bar"></span> 
@@ -48,23 +48,25 @@
 			</div>
 			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
     			{% if login_status == false %}
-    					<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
-        				<ul class="nav navbar-nav ">
-        					<li class="active"><a href="{{ path('home') }}">Home</a></li>
-        					<li><a href="{{ path('search') }}">Search</a></li>
-        					<li><a href="{{ path('search') }}">Downloads</a></li>
-        					<li><a href="{{ path('about') }}">About</a></li>
-        				</ul>
-        				<ul class="nav navbar-nav navbar-right">
-        					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
-        				</ul>
+					<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+    				<ul class="nav navbar-nav ">
+    					<li class="active"><a href="{{ path('home') }}">Home</a></li>
+    					<li><a href="{{ path('search') }}">Search</a></li>
+    					<li><a href="{{ path('download') }}">Downloads</a></li>
+    					<li><a href="{{ path('about') }}">About</a></li>
+    					<li><a href="{{ path('documentation') }}">Documentation</a></li>
+    				</ul>
+    				<ul class="nav navbar-nav navbar-right">
+    					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+    				</ul>
     			{% elseif login_status == true %}
-    			<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
+    				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
     				<ul class="nav navbar-nav ">
     					<li class="active"><a href="{{ path('admin_home') }}">Home</a></li>
     					<li><a href="{{ path('admin_search') }}">Search</a></li>
     					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
     					<li><a href="{{ path('admin_about') }}">About</a></li>
+    					<li><a href="{{ path('admin_documentation') }}">Documentation</a></li>
     					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
     					<li><a href="{{ path('data_manager') }}">Data</a></li>
     					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
@@ -80,42 +82,21 @@
 	</nav>
 </header>
 <main>
-    <div class="row">
-    	<div class="col-sm-8">
+    <div class="row" style="background-color: #EEEEEE;">
+    	<div class="col-sm-8" style="padding-right: 0px;">
     		<div class="home_panel">
     			<div class="container">
     				<div class="row db_content" style="margin-top: 4%; color: {{ main_color_scheme }}">
-    					{% if domain_count > 0 %}
-        					<div class="col-lg-3 lefty">
-        						<span class='title'>Organisms</span><br />
-        						<span class='value'>{{ organism_count }}</span>
-        					</div>
-        					<div class="col-lg-3 centery">
-        						<span class='title'>Proteins</span><br />
-        						<span class='value'>{{ protein_count }}</span>
-        					</div>
-        					<div class="col-lg-3 righty">
-        						<span class='title'>Interactions</span><br />
-        						<span class='value'>{{ interaction_count }}</span>
-        					</div>
-        					<div class="col-lg-3 righty">
-        						<span class='title'>Domains</span><br />
-        						<span class='value'>{{ domain_count }}</span>
-        					</div>
-        				{% else %}
-    					    <div class="col-lg-4 lefty">
-        						<span class='title'>Organisms</span><br />
-        						<span class='value'>{{ organism_count }}</span>
-        					</div>
-        					<div class="col-lg-4 centery">
-        						<span class='title'>Proteins</span><br />
-        						<span class='value'>{{ protein_count }}</span>
-        					</div>
-        					<div class="col-lg-4 righty">
-        						<span class='title'>Interactions</span><br />
-        						<span class='value'>{{ interaction_count }}</span>
-        					</div>
-    					{% endif %}
+    				    <div class="col-lg-3">
+    					</div>
+    					<div class="col-lg-3">
+    						<span class='title'>Proteins</span><br />
+    						<span class='value'>{{ protein_count }}</span>
+    					</div>
+    					<div class="col-lg-3">
+    						<span class='title'>Interactions</span><br />
+    						<span class='value'>{{ interaction_count }}</span>
+    					</div>
     				</div>
     				<div class="row" style="margin-top: 4%;">
     					<div class="about">{{ home_page | raw }}</div>
@@ -168,4 +149,15 @@
 <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-88190502-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
 {% endblock %}

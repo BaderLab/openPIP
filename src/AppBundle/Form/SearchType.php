@@ -4,6 +4,10 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+
 
 class SearchType extends AbstractType
 {
@@ -14,7 +18,26 @@ class SearchType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-		->add('query')
+            ->add('identifier', TextType::class)                   
+            ->add('query_query', CheckboxType::class, array(
+                    'label' => 'Query-Query',
+                    'required' => false,
+                    'attr' => array('value' => 'query_query')))
+                                       
+            ->add('min_interaction_score', TextType::class, array(
+                    'attr' => array('label' => 'Minimum Interaction Score', 'class' => 'hidden', 'value' => 0, 'style' => "width: 240px;")))
+            ->add('published', CheckboxType::class, array(
+                    'required' => false,
+                    'attr' => array('value' => 'published', 'checked' => 'checked')))
+            ->add('validated', CheckboxType::class, array(
+                    'required' => false,
+                    'attr' => array('value' => 'validated', 'checked' => 'checked')))
+            ->add('verified', CheckboxType::class, array(
+                    'required' => false,
+                    'attr' => array('value' => 'verified', 'checked' => 'checked')))
+            ->add('literature', CheckboxType::class, array(
+                    'required' => false,
+                    'attr' => array('value' => 'literature', 'checked' => 'checked')))
 
 		;
 	}

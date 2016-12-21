@@ -50,20 +50,38 @@ class Dataset
 		$this->data_files = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
+
 	/**
-	 * @ORM\Column(type="string", length=100, nullable=true)
+	 * @ORM\Column(type="string", length=10, nullable=true)
 	 */
-	protected $name;
+	protected $pubmed_id;
 	
 	/**
-	 * @ORM\Column(type="string", length=100, nullable=true)
+	 * @ORM\Column(type="string", length=10, nullable=true)
 	 */
-	protected $reference;
+	protected $author;
+	
+	/**
+	 * @ORM\Column(type="string", length=10, nullable=true)
+	 */
+	protected $year;
+	
+	
+	/**
+	 * @ORM\Column(type="string", length=10, nullable=true)
+	 */
+	protected $interaction_status;
 	
 	/**
 	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $description;
+	
+
+	/**
+	 * @ORM\Column(type="string", length=100, nullable=true)
+	 */
+	protected $number_of_interactions;
 
     /**
      * Get id
@@ -75,58 +93,6 @@ class Dataset
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return Dataset
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set reference
-     *
-     * @param string $reference
-     * @return Dataset
-     */
-    public function setReference($reference)
-    {
-        $this->reference = $reference;
-
-        return $this;
-    }
-
-    /**
-     * Get reference
-     *
-     * @return string 
-     */
-    public function getReference()
-    {
-        return $this->reference;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return Dataset
-     */
     public function setDescription($description)
     {
         $this->description = $description;
@@ -208,5 +174,149 @@ class Dataset
     public function getDataFiles()
     {
         return $this->data_files;
+    }
+
+    /**
+     * Set pubmedId
+     *
+     * @param string $pubmedId
+     *
+     * @return Dataset
+     */
+    public function setPubmedId($pubmedId)
+    {
+        $this->pubmed_id = $pubmedId;
+
+        return $this;
+    }
+
+    /**
+     * Get pubmedId
+     *
+     * @return string
+     */
+    public function getPubmedId()
+    {
+        return $this->pubmed_id;
+    }
+
+    /**
+     * Set author
+     *
+     * @param string $author
+     *
+     * @return Dataset
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return string
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * Set year
+     *
+     * @param string $year
+     *
+     * @return Dataset
+     */
+    public function setYear($year)
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    /**
+     * Get year
+     *
+     * @return string
+     */
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     *
+     * @return Dataset
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set numberOfInteractions
+     *
+     * @param string $numberOfInteractions
+     *
+     * @return Dataset
+     */
+    public function setNumberOfInteractions($numberOfInteractions)
+    {
+        $this->number_of_interactions = $numberOfInteractions;
+
+        return $this;
+    }
+
+    /**
+     * Get numberOfInteractions
+     *
+     * @return string
+     */
+    public function getNumberOfInteractions()
+    {
+        return $this->number_of_interactions;
+    }
+
+    /**
+     * Set interactionStatus
+     *
+     * @param string $interactionStatus
+     *
+     * @return Dataset
+     */
+    public function setInteractionStatus($interactionStatus)
+    {
+        $this->interaction_status = $interactionStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get interactionStatus
+     *
+     * @return string
+     */
+    public function getInteractionStatus()
+    {
+        return $this->interaction_status;
     }
 }

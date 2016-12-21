@@ -50,7 +50,7 @@ class AnnouncementController extends Controller
 		$admin_settings = $this->getDoctrine()
 		->getRepository('AppBundle:Admin_Settings')
 		->find(1);
-		
+		$footer = $admin_settings->getFooter();
 		$main_color_scheme = $admin_settings->getMainColorScheme();
         $header_color_scheme = $admin_settings->getHeaderColorScheme();
         $logo_color_scheme = $admin_settings->getLogoColorScheme();
@@ -67,6 +67,7 @@ class AnnouncementController extends Controller
                 'button_color_scheme' => $button_color_scheme,
 		        'short_title' => $short_title,
 		        'title' => $title,
+		        'footer' => $footer,
 		));
 	}
 	
@@ -108,6 +109,7 @@ class AnnouncementController extends Controller
                 'header_color_scheme' => $header_color_scheme,
                 'logo_color_scheme' => $logo_color_scheme,
                 'button_color_scheme' => $button_color_scheme,
+	            
 		        'short_title' => $short_title
 	    ));
 	}

@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %} 
+ {% extends 'base.html.twig' %} 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 	{% stylesheets 
@@ -56,6 +56,7 @@
 					<li><a href="{{ path('admin_search') }}">Search</a></li>
 					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
 					<li><a href="{{ path('admin_about') }}">About</a></li>
+					<li><a href="{{ path('admin_documentation') }}">Documentation</a></li>
 					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
 					<li class="active"><a href="{{ path('data_manager') }}">Data</a></li>
 					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
@@ -69,44 +70,88 @@
 		<div class="shadow"></div>
 	</nav>
 </header>
-<main>
-	<div class="col-lg-8">
-        <div class="container data_upload_panel">
-    		<div class="row">
-    			<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
-    				<h4 style="color: {{ header_color_scheme }}">Upload Data</h4>
-    			</div>
-    		</div>
-        	<div class="row data_upload_content">
-    			{{ form_start(form) }}
-    			<div class="col-lg-4">
-    				<div class="row">
-    					<input id="uploadFile" disabled="disabled" />
-    				</div>
-    				<div class="row">
-    					<div class="fileUpload btn btn-primary">
-    						<i class="glyphicon glyphicon-plus"></i> <span>Choose File</span>
-    						{{ form_widget(form.data_file, {'attr': {'class': 'upload'}}) }}
-    					</div>
-    				</div>
-    			</div>
-    			<div class="col-lg-6">
-    			
-    				<div class="row">{{ form_widget(form.description) }}</div>
-    				</br>
-    				<div class="row">{{ form_widget(form.file_type) }}</div>
-    				</br>
-    				<div class="row">
-    					<button type="submit" class="btn btn-success start">
-    						<i class="glyphicon glyphicon-upload"></i> <span>Upload Data</span>
-    					</button>
-    				</div>
-    			</div>
-    		    {{ form_end(form) }}
-        	</div>
+<main style="background-color: #EEEEEE;">
+
+<div class="container">
+	<div class="row">
+    	<div class="col-lg-6">
+            <div class="container data_upload_panel">
+        		<div class="row">
+        			<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
+        				<h4 style="color: {{ header_color_scheme }}">Upload Data</h4>
+        			</div>
+        		</div>
+        		{{ form_start(form) }}
+            	<div class="row data_upload_content" >
+        			<div class="col-lg-10">
+        				<div class="row" style="display: inline-block;">
+        					<input id="uploadFile" disabled="disabled" />
+        					<div class="fileUpload btn btn-primary">
+        						<i class="glyphicon glyphicon-plus"></i> <span>Choose File</span>
+        						{{ form_widget(form.data_file, {'attr': {'class': 'upload'}}) }}
+        					</div>
+        				</div>
+        			</div>    
+            	</div>
+            	<div class="row data_upload_content" >
+        			<div class="col-lg-12">
+                		<button type="submit" class="btn btn-success start" style="float: right; margin-right: 15px;">
+        					<i class="glyphicon glyphicon-upload"></i> <span>Upload Data</span>
+        				</button>
+        			</div>
+        		</div>
+        		{{ form_end(form) }}
+        		
+            </div>
+            
         </div>
-    </div>
+        <div class="col-lg-4">
+            <div class="container data_upload_panel">
+        		<div class="row">
+        			<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
+        				<h4 style="color: {{ header_color_scheme }}">Delete Dataset</h4>
+        			</div>
+        		</div>
+        		{{ form_start(delete_form) }}
+            		<div id="delete_dataset" class="hidden large_2">
+                    	<div id="delete_dataset_form">
+    						<div class="row">
+    						
+    							<p style="margin: 20px;"><strong>Are you sure you want to datele the Dataset?</strong></p>
+    							<p id="dataset_to_delete" style="margin: 20px; margin-bottom: 30px;"></p>
+    						</div>
+    						<div class="row">
+            					<div class="col-lg-6">
+            			      		<button type='submit' class="btn btn-danger">
+                						<i class="glyphicon glyphicon-ban-circle"></i> <span>Delete Dataset</span>
+                					</button>
+            					</div>
+            					<div class="col-lg-6">
+                					<div id="cancel_delete_dataset" class="btn btn-primary">
+                						<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
+                					</div>
+            					</div>
+        					</div>
+                    	</div>
+                    </div>
+            		<div class="row data_upload_content">
+            			 {{ form_widget(delete_form.dataset_to_delete) }}
+            		</div>
+        		{{ form_end(delete_form) }}
+        		<div class="row">
+    	      		<button id="delete_dataset_button" class="btn btn-danger" style="margin: 20px;">
+    					<i class="glyphicon glyphicon-ban-circle"></i> <span>Delete Dataset</span>
+    				</button>
+    			</div>
+        	</div>	
+        </div>
+    </div>	
+</div>
 </main>
+<footer>
+	<div class="shadow"></div>
+	{{ footer | raw }}
+</footer>
 {% endblock %} 
 {% block javascripts %}
     {% javascripts
