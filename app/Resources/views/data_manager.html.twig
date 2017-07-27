@@ -1,12 +1,11 @@
  {% extends 'base.html.twig' %} 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-	{% stylesheets 
-        'assets/css/main.css'
-        'assets/css/data_manager.css'
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}">
-    {% endstylesheets %}
+
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/data_manager.css') }}">
+
 {% endblock %}
 {% block title %}{{ short_title }} | Data{% endblock %} 
 {% block content %}
@@ -55,8 +54,8 @@
 					<li><a href="{{ path('admin_home') }}">Home</a></li>
 					<li><a href="{{ path('admin_search') }}">Search</a></li>
 					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
-					<li><a href="{{ path('admin_about') }}">About</a></li>
-					<li><a href="{{ path('admin_documentation') }}">Documentation</a></li>
+					<li><a href="{{ path('about') }}">About</a></li>
+					<li><a href="{{ path('contact') }}">Contact</a></li>
 					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
 					<li class="active"><a href="{{ path('data_manager') }}">Data</a></li>
 					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
@@ -145,6 +144,28 @@
     			</div>
         	</div>	
         </div>
+    </div>
+    <div class="row" style="margin-top: 15px;">
+        <div class="col-lg-6">
+            <div class="container data_upload_panel">
+        		<div class="row">
+        			<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
+        				<h4 style="color: {{ header_color_scheme }}">Update Users</h4>
+        			</div>
+        		</div>
+        		{{ form_start(update_user_form) }}
+            		<div class="row data_upload_content">
+            			 {{ form_widget(update_user_form.dataset) }}
+            		</div>
+
+        		<div class="row">
+    	      		<button id="update_user_button"  type="submit" class="btn btn-primary" style="margin: 20px;">
+    					<i class="glyphicon glyphicon-upload"></i> <span>Update Users</span>
+    				</button>
+    			</div>
+    			{{ form_end(update_user_form) }}
+        	</div>	
+        </div>
     </div>	
 </div>
 </main>
@@ -154,11 +175,11 @@
 </footer>
 {% endblock %} 
 {% block javascripts %}
-    {% javascripts
-        'assets/js/jquery-2.1.4.min.js'
-        'assets/js/bootstrap.min.js'
-        'assets/js/main.js'
-        'assets/js/data_manager.js' %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+
+    <script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="{{ asset('assets/js/data_manager.js') }}"></script>
+
 {% endblock %}

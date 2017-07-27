@@ -18,33 +18,19 @@ class Data_File
 	 */
 	protected $id;
 	
-	/**
-	 * @ORM\ManyToMany(targetEntity="Domain" , inversedBy="data_files")
-	 * @ORM\JoinTable(name="domain_data_file",
-	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="domain_id", referencedColumnName="id")
-	 *      	},
-	 *      inverseJoinColumns={
-	 *      		@ORM\JoinColumn(name="data_file_id", referencedColumnName="id")
-	 *      	}
-	 * 		)
-	 */
-	public $domains;
+	
 	
 	/**
-	 * @var \Doctrine\Common\Collections\ArrayCollection|Dataset[]
-	 * @ORM\ManyToMany(targetEntity="Dataset", mappedBy="files")
+	 * @ORM\ManyToOne(targetEntity="Dataset", inversedBy="data_files")
+	 * @ORM\JoinColumn(name="dataset_id", referencedColumnName="id")
 	 */
-	public $datasets;
+	public $dataset;
 	
-	public function __construct()
-	{
-		$this->datasets = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
-	}
+	
 
 	
 	
+
 	/**
 	 * @ORM\Column(type="string", length=1000, nullable=true)
 	 */

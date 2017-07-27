@@ -12,17 +12,28 @@ $("#cancel_announcement").on("click", hideAnnouncmentForm);
 
 function showDatasetRequestForm(event){
 
-    $("#dataset_request").removeClass("hidden");
-    
-    
-    $("#form_dataset").val(event.target.id);
+	if(loggedIn == true){
+
+		$("#data_request_logged_in").removeClass("hidden");
+		$("#form_request_dataset").val($(event.target).attr('data'));
+	    $("#form_request_file_format").val($(event.target).attr('format'));
+		
+	}else{
+
+		$("#data_request_logged_out").removeClass("hidden");
+		
+	}
+
     $(".qtip").addClass("hidden");
-    
+    $("body").addClass("noscroll");
 }
+
+
+
 
 function hideDatasetRequestForm(event){
     $("#dataset_request").addClass("hidden");
-    
+    $("body").removeClass("noscroll");
 }
 
 $(".dataset_request_links").on("click", showDatasetRequestForm);
@@ -35,20 +46,40 @@ function hideDeleteDatasetForm(event){
 }
 
 function subDown(event){
-	$("#download_dataset").click();	
-    $("#form").submit();
+    $("#form").submit();    
+}
+
+function showDataRequestForm(event){
+	if(loggedIn == true){
+
+		$("#data_request_logged_in").removeClass("hidden");
+	}else{
+
+		$("#data_request_logged_out").removeClass("hidden");
+		
+	}
+
+    $("#form_request_interaction_network_data").val($(event.target).attr('data'));
+    
+    $(".qtip").addClass("hidden");
+    $("body").addClass("noscroll");
     
 }
 
-$("#down_data").on("click", subDown);
+function hideDataRequestForm(event){
+	$("#data_request_logged_in").addClass("hidden");
+	$("#data_request_logged_out").addClass("hidden");
+    $("body").removeClass("noscroll");
+}
 
+$(".data_request_links").on("click", showDataRequestForm);
+$(".cancel_data_request").on("click", hideDataRequestForm);
 
-
+$("#download_unpublished_data_link").on("click", hideDataRequestForm);
 
 function showDeleteDatasetForm(event){
 
     var dataset = $( "#form_dataset_to_delete option:selected" ).text();
-    
     
     $("#dataset_to_delete").html(dataset);    
     $("#delete_dataset").removeClass("hidden");
@@ -63,6 +94,29 @@ $(document).on('click','.navbar-collapse.in',function(e) {
         $(this).collapse('hide');
     }
 });
+
+$(".edit_name").on("click", showNameForm);
+$(".hide_edit_name").on("click", hideNameForm);
+
+function showNameForm(event){
+
+	var networkId = $(event.target).attr('data');
+	$("#" + networkId + "_name").addClass("hidden");
+	$("#" + networkId + "_name_form").removeClass("hidden");
+	$("#" + networkId + "_edit_name").addClass("hidden");
+	$("#" + networkId + "_hide_edit_name").removeClass("hidden");
+}
+
+function hideNameForm(event){
+
+	var networkId = $(event.target).attr('data');
+	$("#" + networkId + "_name").removeClass("hidden");
+	$("#" + networkId + "_name_form").addClass("hidden");
+	$("#" + networkId + "_edit_name").removeClass("hidden");
+	$("#" + networkId + "_hide_edit_name").addClass("hidden");
+	
+	
+}
 
 
 //left: 37, up: 38, right: 39, down: 40,
@@ -84,13 +138,13 @@ if (keys[e.keyCode]) {
 }
 
 function disableScroll() {
-if (window.addEventListener) // older FF
- window.addEventListener('DOMMouseScroll', preventDefault, false);
-window.onwheel = preventDefault; // modern standard
-window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
-window.ontouchmove  = preventDefault; // mobile
-document.onkeydown  = preventDefaultForScrollKeys;
-}
+
+	 window.addEventListener('DOMMouseScroll', preventDefault, false);
+	window.onwheel = preventDefault; // modern standard
+	window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+	window.ontouchmove  = preventDefault; // mobile
+	document.onkeydown  = preventDefaultForScrollKeys;
+	}
 
 function enableScroll() {
 if (window.removeEventListener)
@@ -101,12 +155,6 @@ window.ontouchmove = null;
 document.onkeydown = null;  
 }
 
-disableScroll();
-$(window).load(function() {
-	// Animate loader off screen
-	$(".se-pre-con").fadeOut("slow");
-	enableScroll();
-});
 
 
 

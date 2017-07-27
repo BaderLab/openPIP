@@ -3,11 +3,9 @@
 {% block title %}{{ short_title }} | Register{% endblock %}
 
 {% block stylesheets %} 
-    {% stylesheets
-		'assets/css/bootstrap.min.css' 'assets/css/main.css'
-		'assets/css/data_manager.css' %}
-		<link rel="stylesheet" href="{{ asset_url }}">
-    {% endstylesheets %} 
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/data_manager.css') }}">	
 {% endblock %}
 
 {% block fos_user_content %}
@@ -91,7 +89,7 @@
             {% endif %}
         
         
-            <p>{{ 'registration.confirmed'|trans({'%username%': user.username}, 'FOSUserBundle') }} dddd</p>
+            <p>{{ 'registration.confirmed'|trans({'%username%': user.username}, 'FOSUserBundle') }}</p>
 
             {% if app.session is not empty %}
                 {% set targetUrl = app.session.get('_security.' ~ app.security.token.providerKey ~ '.target_path') %}

@@ -29,6 +29,12 @@ class Admin_Settings
      * @ORM\Column(name="`short_title`", type="string", length=200, nullable=true)
      */
     protected $short_title;
+    
+    /**
+     *
+     * @ORM\Column(name="`url`", type="string", length=200, nullable=true)
+     */
+    protected $url;
 
     /**
      * @ORM\Column(name="`home_page`", type="text", length=8000, nullable=true)
@@ -41,15 +47,20 @@ class Admin_Settings
     protected $about;
 
     /**
+     * @ORM\Column(name="`faq`", type="text", length=5000, nullable=true)
+     */
+    protected $faq;
+    
+    /**
      * @ORM\Column(name="`download`", type="text", length=8000, nullable=true)
      */
     protected $download;
 
 
     /**
-     * @ORM\Column(name="`documentation`", type="text", length=8000, nullable=true)
+     * @ORM\Column(name="`contact`", type="text", length=8000, nullable=true)
      */
-    protected $documentation;
+    protected $contact;
 
     /**
      * @ORM\Column(name="`show_downloads`", type="boolean")
@@ -87,21 +98,61 @@ class Admin_Settings
     protected $button_color_scheme;
 
     /**
-     * @ORM\Column(name="`example_1`", type="string", length=20, nullable=true)
+     * @ORM\Column(name="`example_1`", type="string", length=100, nullable=true)
      */
     protected $example_1;
 
     /**
-     * @ORM\Column(name="`example_2`", type="string", length=20, nullable=true)
+     * @ORM\Column(name="`example_2`", type="string", length=100, nullable=true)
      */
     protected $example_2;
 
     /**
-     * @ORM\Column(name="`example_3`", type="string", length=20, nullable=true)
+     * @ORM\Column(name="`example_3`", type="string", length=100, nullable=true)
      */
     protected $example_3;
 
 
+    /**
+     * @ORM\Column(name="`query_node_color`", type="string", length=20, nullable=true)
+     */
+    protected $query_node_color;
+    
+    /**
+     * @ORM\Column(name="`interactor_node_color`", type="string", length=20, nullable=true)
+     */
+    protected $interactor_node_color;
+    
+    /**
+     * @ORM\Column(name="`published_edge_color`", type="string", length=20, nullable=true)
+     */
+    protected $published_edge_color;
+    
+    
+    /**
+     * @ORM\Column(name="`validated_edge_color`", type="string", length=20, nullable=true)
+     */
+    protected $validated_edge_color;
+    
+    /**
+     * @ORM\Column(name="`verified_edge_color`", type="string", length=20, nullable=true)
+     */
+    protected $verified_edge_color;
+    
+    /**
+     * @ORM\Column(name="`literature_edge_color`", type="string", length=20, nullable=true)
+     */
+    protected $literature_edge_color;
+    
+  
+    /**
+     * @ORM\OneToMany(targetEntity="Interaction_Category", mappedBy="admin_settings")
+     */
+    public $interaction_categories;
+    
+
+    
+    
     /**
      * Get id
      *
@@ -134,6 +185,30 @@ class Admin_Settings
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set shortTitle
+     *
+     * @param string $shortTitle
+     *
+     * @return Admin_Settings
+     */
+    public function setShortTitle($shortTitle)
+    {
+        $this->short_title = $shortTitle;
+
+        return $this;
+    }
+
+    /**
+     * Get shortTitle
+     *
+     * @return string
+     */
+    public function getShortTitle()
+    {
+        return $this->short_title;
     }
 
     /**
@@ -185,102 +260,6 @@ class Admin_Settings
     }
 
     /**
-     * Set shortTitle
-     *
-     * @param string $shortTitle
-     *
-     * @return Admin_Settings
-     */
-    public function setShortTitle($shortTitle)
-    {
-        $this->short_title = $shortTitle;
-
-        return $this;
-    }
-
-    /**
-     * Get shortTitle
-     *
-     * @return string
-     */
-    public function getShortTitle()
-    {
-        return $this->short_title;
-    }
-
-    /**
-     * Set example1
-     *
-     * @param string $example1
-     *
-     * @return Admin_Settings
-     */
-    public function setExample1($example1)
-    {
-        $this->example_1 = $example1;
-
-        return $this;
-    }
-
-    /**
-     * Get example1
-     *
-     * @return string
-     */
-    public function getExample1()
-    {
-        return $this->example_1;
-    }
-
-    /**
-     * Set example2
-     *
-     * @param string $example2
-     *
-     * @return Admin_Settings
-     */
-    public function setExample2($example2)
-    {
-        $this->example_2 = $example2;
-
-        return $this;
-    }
-
-    /**
-     * Get example2
-     *
-     * @return string
-     */
-    public function getExample2()
-    {
-        return $this->example_2;
-    }
-
-    /**
-     * Set example3
-     *
-     * @param string $example3
-     *
-     * @return Admin_Settings
-     */
-    public function setExample3($example3)
-    {
-        $this->example_3 = $example3;
-
-        return $this;
-    }
-
-    /**
-     * Get example3
-     *
-     * @return string
-     */
-    public function getExample3()
-    {
-        return $this->example_3;
-    }
-
-    /**
      * Set download
      *
      * @param string $download
@@ -302,6 +281,78 @@ class Admin_Settings
     public function getDownload()
     {
         return $this->download;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param string $contact
+     *
+     * @return Admin_Settings
+     */
+    public function setContact($contact)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return string
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    /**
+     * Set showDownloads
+     *
+     * @param boolean $showDownloads
+     *
+     * @return Admin_Settings
+     */
+    public function setShowDownloads($showDownloads)
+    {
+        $this->show_downloads = $showDownloads;
+
+        return $this;
+    }
+
+    /**
+     * Get showDownloads
+     *
+     * @return boolean
+     */
+    public function getShowDownloads()
+    {
+        return $this->show_downloads;
+    }
+
+    /**
+     * Set showDownloadAll
+     *
+     * @param boolean $showDownloadAll
+     *
+     * @return Admin_Settings
+     */
+    public function setShowDownloadAll($showDownloadAll)
+    {
+        $this->show_download_all = $showDownloadAll;
+
+        return $this;
+    }
+
+    /**
+     * Get showDownloadAll
+     *
+     * @return boolean
+     */
+    public function getShowDownloadAll()
+    {
+        return $this->show_download_all;
     }
 
     /**
@@ -425,75 +476,307 @@ class Admin_Settings
     }
 
     /**
-     * Set showDownloads
+     * Set example1
      *
-     * @param boolean $showDownloads
+     * @param string $example1
      *
      * @return Admin_Settings
      */
-    public function setShowDownloads($showDownloads)
+    public function setExample1($example1)
     {
-        $this->show_downloads = $showDownloads;
+        $this->example_1 = $example1;
 
         return $this;
     }
 
     /**
-     * Get showDownloads
-     *
-     * @return boolean
-     */
-    public function getShowDownloads()
-    {
-        return $this->show_downloads;
-    }
-
-    /**
-     * Set showDownloadAll
-     *
-     * @param boolean $showDownloadAll
-     *
-     * @return Admin_Settings
-     */
-    public function setShowDownloadAll($showDownloadAll)
-    {
-        $this->show_download_all = $showDownloadAll;
-
-        return $this;
-    }
-
-    /**
-     * Get showDownloadAll
-     *
-     * @return boolean
-     */
-    public function getShowDownloadAll()
-    {
-        return $this->show_download_all;
-    }
-
-    /**
-     * Set documentation
-     *
-     * @param string $documentation
-     *
-     * @return Admin_Settings
-     */
-    public function setDocumentation($documentation)
-    {
-        $this->documentation = $documentation;
-
-        return $this;
-    }
-
-    /**
-     * Get documentation
+     * Get example1
      *
      * @return string
      */
-    public function getDocumentation()
+    public function getExample1()
     {
-        return $this->documentation;
+        return $this->example_1;
+    }
+
+    /**
+     * Set example2
+     *
+     * @param string $example2
+     *
+     * @return Admin_Settings
+     */
+    public function setExample2($example2)
+    {
+        $this->example_2 = $example2;
+
+        return $this;
+    }
+
+    /**
+     * Get example2
+     *
+     * @return string
+     */
+    public function getExample2()
+    {
+        return $this->example_2;
+    }
+
+    /**
+     * Set example3
+     *
+     * @param string $example3
+     *
+     * @return Admin_Settings
+     */
+    public function setExample3($example3)
+    {
+        $this->example_3 = $example3;
+
+        return $this;
+    }
+
+    /**
+     * Get example3
+     *
+     * @return string
+     */
+    public function getExample3()
+    {
+        return $this->example_3;
+    }
+
+    /**
+     * Set queryNodeColor
+     *
+     * @param string $queryNodeColor
+     *
+     * @return Admin_Settings
+     */
+    public function setQueryNodeColor($queryNodeColor)
+    {
+        $this->query_node_color = $queryNodeColor;
+
+        return $this;
+    }
+
+    /**
+     * Get queryNodeColor
+     *
+     * @return string
+     */
+    public function getQueryNodeColor()
+    {
+        return $this->query_node_color;
+    }
+
+    /**
+     * Set interactorNodeColor
+     *
+     * @param string $interactorNodeColor
+     *
+     * @return Admin_Settings
+     */
+    public function setInteractorNodeColor($interactorNodeColor)
+    {
+        $this->interactor_node_color = $interactorNodeColor;
+
+        return $this;
+    }
+
+    /**
+     * Get interactorNodeColor
+     *
+     * @return string
+     */
+    public function getInteractorNodeColor()
+    {
+        return $this->interactor_node_color;
+    }
+
+    /**
+     * Set publishedEdgeColor
+     *
+     * @param string $publishedEdgeColor
+     *
+     * @return Admin_Settings
+     */
+    public function setPublishedEdgeColor($publishedEdgeColor)
+    {
+        $this->published_edge_color = $publishedEdgeColor;
+
+        return $this;
+    }
+
+    /**
+     * Get publishedEdgeColor
+     *
+     * @return string
+     */
+    public function getPublishedEdgeColor()
+    {
+        return $this->published_edge_color;
+    }
+
+    /**
+     * Set validatedEdgeColor
+     *
+     * @param string $validatedEdgeColor
+     *
+     * @return Admin_Settings
+     */
+    public function setValidatedEdgeColor($validatedEdgeColor)
+    {
+        $this->validated_edge_color = $validatedEdgeColor;
+
+        return $this;
+    }
+
+    /**
+     * Get validatedEdgeColor
+     *
+     * @return string
+     */
+    public function getValidatedEdgeColor()
+    {
+        return $this->validated_edge_color;
+    }
+
+    /**
+     * Set verifiedEdgeColor
+     *
+     * @param string $verifiedEdgeColor
+     *
+     * @return Admin_Settings
+     */
+    public function setVerifiedEdgeColor($verifiedEdgeColor)
+    {
+        $this->verified_edge_color = $verifiedEdgeColor;
+
+        return $this;
+    }
+
+    /**
+     * Get verifiedEdgeColor
+     *
+     * @return string
+     */
+    public function getVerifiedEdgeColor()
+    {
+        return $this->verified_edge_color;
+    }
+
+    /**
+     * Set literatureEdgeColor
+     *
+     * @param string $literatureEdgeColor
+     *
+     * @return Admin_Settings
+     */
+    public function setLiteratureEdgeColor($literatureEdgeColor)
+    {
+        $this->literature_edge_color = $literatureEdgeColor;
+
+        return $this;
+    }
+
+    /**
+     * Get literatureEdgeColor
+     *
+     * @return string
+     */
+    public function getLiteratureEdgeColor()
+    {
+        return $this->literature_edge_color;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->interaction_categories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add interactionCategory
+     *
+     * @param \AppBundle\Entity\Interaction_Category $interactionCategory
+     *
+     * @return Admin_Settings
+     */
+    public function addInteractionCategory(\AppBundle\Entity\Interaction_Category $interactionCategory)
+    {
+        $this->interaction_categories[] = $interactionCategory;
+
+        return $this;
+    }
+
+    /**
+     * Remove interactionCategory
+     *
+     * @param \AppBundle\Entity\Interaction_Category $interactionCategory
+     */
+    public function removeInteractionCategory(\AppBundle\Entity\Interaction_Category $interactionCategory)
+    {
+        $this->interaction_categories->removeElement($interactionCategory);
+    }
+
+    /**
+     * Get interactionCategories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInteractionCategories()
+    {
+        return $this->interaction_categories;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     *
+     * @return Admin_Settings
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * Set faq
+     *
+     * @param string $faq
+     *
+     * @return Admin_Settings
+     */
+    public function setFaq($faq)
+    {
+        $this->faq = $faq;
+
+        return $this;
+    }
+
+    /**
+     * Get faq
+     *
+     * @return string
+     */
+    public function getFaq()
+    {
+        return $this->faq;
     }
 }
-?>

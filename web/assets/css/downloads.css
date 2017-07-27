@@ -5,12 +5,30 @@ body{
 }
 
 .outer_panel{
-	width: 94%;
+ 	max-width: 900px;
 	background-color: #ffffff;
 	border: 1px solid #cccccc;
 	padding: 20px;
 	margin: 20px auto 20px;
 	
+}
+
+#logged_out_form{
+	border: 1px solid #ccc;
+	padding: 20px;
+	max-width: 480px;
+	background: #ffffff;
+	z-index: 1002;
+	margin: auto;
+}
+
+#logged_in_form{
+	border: 1px solid #ccc;
+	padding: 20px;
+	max-width: 480px;
+	background: #ffffff;
+	z-index: 1002;
+	margin: auto;
 }
 
 
@@ -26,7 +44,7 @@ body{
 #download_request_form{
 	border: 1px solid #ccc;
 	padding: 20px;
-	width: 80%;
+	width: 70%;
 	background: #ffffff;
 	z-index: 2;
 	margin: auto;
@@ -43,3 +61,10 @@ body{
     height: 100%;
     z-index: 1;
 }
+
+
+.btn-default{
+	background-color: #F2F2F2;
+	
+}
+

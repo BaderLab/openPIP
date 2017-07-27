@@ -3,11 +3,9 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
 
 {% block stylesheets %} 
-    {% stylesheets
-		'assets/css/bootstrap.min.css' 'assets/css/main.css'
-		'assets/css/data_manager.css' %}
-		<link rel="stylesheet" href="{{ asset_url }}">
-    {% endstylesheets %} 
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/data_manager.css') }}">	
 {% endblock %}
 
 {% block fos_user_content %}
@@ -51,14 +49,17 @@
 				</button>
 			</div>
 			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
-				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
+				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
 				<ul class="nav navbar-nav ">
 					<li><a href="{{ path('home') }}">Home</a></li>
 					<li><a href="{{ path('search') }}">Search</a></li>
-					<li><a href="{{ path('download') }}">Downloads</a></li>
+					<li><a href="{{ path('search') }}">Downloads</a></li>
 					<li><a href="{{ path('about') }}">About</a></li>
+					<li><a href="{{ path('faq') }}">FAQ</a></li>
+					<li><a href="{{ path('contact') }}">Contact</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
+					<li><a href="{{ path('user_register') }}">Register</a></li>
 					<li class="active"><a href="{{ path('fos_user_security_login') }}">Login</a></li>
 				</ul>
     		</div>
@@ -67,20 +68,22 @@
 	</nav>
 </header>
 
-<div class="col-lg-4">
+<div style="margin:20px auto; max-width:600px;">
     <div class="container pannel">
         <div class="row" style="margin-top: 0px;">
     		<div class="pannel_header" style="background-color: {{ main_color_scheme }}">
-    			<h4 style="color: {{ header_color_scheme }}">Register Admin</h4>
+    			<h4 style="color: {{ header_color_scheme }}">Reset Password</h4>
     		</div>
     	</div>	
-        <div class="row pannel_content">
-            {{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'fos_user_resetting_reset' } }) }}
+        <div class="row pannel_content" style="background:#ffffff;">
+        	<div>
+        	    {{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'fos_user_resetting_reset' } }) }}
                 {{ form_widget(form) }}
                 <div>
-                    <input type="submit" value="{{ 'resetting.reset.submit'|trans }}" />
+                    <input type="submit" class="btn btn-success" value="{{ 'resetting.reset.submit'|trans }}" />
                 </div>
-            {{ form_end(form) }}
+                {{ form_end(form) }}
+        	</div>
         </div>
     </div>
 </div>

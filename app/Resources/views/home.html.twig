@@ -38,52 +38,68 @@
 		</div>
 	</nav>
 	<nav class="navbar navbar-default">
-		<div class="container-fluid" style="padding-left: 0px;">
+		<div class="container-fluid">
+		    {% if login_status == false %}
 			<div class="navbar-header tor_ibin_header" >
-				<button type="button" class="navbar-toggle left" data-toggle="collapse" data-target="#myNavbar">
+				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
 					<span class="icon-bar"></span> 
 					<span class="icon-bar"></span> 
 					<span class="icon-bar"></span>
 				</button>
 			</div>
 			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
-    			{% if login_status == false %}
-					<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
     				<ul class="nav navbar-nav ">
     					<li class="active"><a href="{{ path('home') }}">Home</a></li>
     					<li><a href="{{ path('search') }}">Search</a></li>
     					<li><a href="{{ path('download') }}">Downloads</a></li>
     					<li><a href="{{ path('about') }}">About</a></li>
-    					<li><a href="{{ path('documentation') }}">Documentation</a></li>
+    					<li><a href="{{ path('faq') }}">FAQ</a></li>
+    					<li><a href="{{ path('contact') }}">Contact</a></li>
     				</ul>
     				<ul class="nav navbar-nav navbar-right">
-    					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+    					<li><a href="{{ path('user_register') }}">Register</a></li>
+    					<li style=""><a href="{{ path('fos_user_security_login') }}">Login</a></li>
     				</ul>
-    			{% elseif login_status == true %}
-    				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
+    			</div>
+    		{% elseif login_status == true %}
+    				<div class="navbar-header tor_ibin_header" >
+						<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} {% if admin_status == true %}Admin{% endif %}</h5>
+        				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span>
+        				</button>
+        			</div>
+    			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
     				<ul class="nav navbar-nav ">
-    					<li class="active"><a href="{{ path('admin_home') }}">Home</a></li>
-    					<li><a href="{{ path('admin_search') }}">Search</a></li>
-    					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
-    					<li><a href="{{ path('admin_about') }}">About</a></li>
-    					<li><a href="{{ path('admin_documentation') }}">Documentation</a></li>
-    					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
-    					<li><a href="{{ path('data_manager') }}">Data</a></li>
-    					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
-    					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+    					<li class="active"><a href="{{ path('home') }}">Home</a></li>
+    					<li><a href="{{ path('search') }}">Search</a></li>
+    					<li><a href="{{ path('download') }}">Downloads</a></li>
+    					<li><a href="{{ path('about') }}">About</a></li>
+    					<li><a href="{{ path('faq') }}">FAQ</a></li>
+    					<li><a href="{{ path('contact') }}">Contact</a></li>
+    					{% if admin_status == true %}
+        					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+        					<li><a href="{{ path('data_manager') }}">Data</a></li>
+        					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+        					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+    					{% endif %}
     				</ul>
     				<ul class="nav navbar-nav navbar-right">
-    					<li><a href="{{ path('user_logout') }}">Logout</a></li>
+    					<li><a href="{{ path('fos_user_profile_show') }}">Profile</a></li>
+    					<li style="margin-left: 0px;"><a href="{{ path('user_logout') }}">Logout</a></li>
     				</ul>
+    			</div>
     			{% endif %}
-    		</div>
+    		
 		</div>
 		<div class="shadow"></div>
 	</nav>
 </header>
 <main>
-    <div class="row" style="background-color: #EEEEEE;">
-    	<div class="col-sm-8" style="padding-right: 0px;">
+    <div class="row" style="background-color: #EEEEEE; margin: 0px;">
+    	<div class="col-lg-8 col-md-8 col-sm-12"  style="padding: 0px;">
     		<div class="home_panel">
     			<div class="container">
     				<div class="row db_content" style="margin-top: 4%; color: {{ main_color_scheme }}">
@@ -104,14 +120,14 @@
     			</div>
     		</div>
     	</div>
-    	<div class="col-sm-4">
+    	<div  class="col-lg-4 col-md-4 col-sm-12" >
     		<div class="panel panel-default">
     			<div class="panel-heading" style="background-color: {{ main_color_scheme }}; color: {{ header_color_scheme }}">
     				<strong>Announcements and News</strong>
     			</div>
     			<div class="panel-body announcement_panel">
     				{% for announcement in announcements %}
-    				<div class="row">
+    				<div class="row" style="margin: 0px;">
     					<div class="container announcement">
     						<div class="row">
     							<div class="announcement_header">
@@ -155,7 +171,7 @@
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-88190502-1', 'auto');
+  ga('create', 'UA-387720-9', 'auto');
   ga('send', 'pageview');
 
 </script>

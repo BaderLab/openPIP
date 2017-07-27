@@ -1,11 +1,9 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 {% block stylesheets %} 
-    {% stylesheets
-		'assets/css/bootstrap.min.css' 'assets/css/main.css'
-		'assets/css/data_manager.css' %}
-		<link rel="stylesheet" href="{{ asset_url }}">
-    {% endstylesheets %} 
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/data_manager.css') }}">	
 {% endblock %}
 
 {% block fos_user_content %}
@@ -49,19 +47,18 @@
 				</button>
 			</div>
 			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
-				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
+				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
 				<ul class="nav navbar-nav ">
-					<li><a href="{{ path('admin_home') }}">Home</a></li>
-					<li><a href="{{ path('admin_search') }}">Search</a></li>
-					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
-					<li><a href="{{ path('admin_about') }}">About</a></li>
-					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
-					<li><a href="{{ path('data_manager') }}">Data</a></li>
-					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
-					<li class="active" ><a href="{{ path('admin_settings') }}">Settings</a></li>
+					<li><a href="{{ path('home') }}">Home</a></li>
+					<li><a href="{{ path('search') }}">Search</a></li>
+					<li><a href="{{ path('search') }}">Downloads</a></li>
+					<li><a href="{{ path('about') }}">About</a></li>
+					<li><a href="{{ path('faq') }}">FAQ</a></li>
+					<li><a href="{{ path('contact') }}">Contact</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="{{ path('user_logout') }}">Logout</a></li>
+					<li><a href="{{ path('user_register') }}">Register</a></li>
+					<li class="active"><a href="{{ path('fos_user_security_login') }}">Login</a></li>
 				</ul>
     		</div>
 		</div>
@@ -69,24 +66,24 @@
 	</nav>
 </header>
 
-<div class="col-lg-4">
+<div style="margin:20px auto; max-width:600px;">
     <div class="container pannel">
         <div class="row" style="margin-top: 0px;">
     		<div class="pannel_header" style="background-color: {{ main_color_scheme }}">
     			<h4 style="color: {{ header_color_scheme }}">Reset Password</h4>
     		</div>
     	</div>	
-        <div class="row pannel_content">
+        <div class="row pannel_content" style="background:#ffffff;" >
         
             <form action="{{ path('fos_user_resetting_send_email') }}" method="POST" class="fos_user_resetting_request">
                 <div class="row">
                         {% if invalid_username is defined %}
                             <p>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}</p>
                         {% endif %}
-                        <label for="username">{{ 'resetting.request.username'|trans({}, 'FOSUserBundle') }}</label>
-                        <input type="text" id="username" name="username" required="required" />
+                        <label for="username">{{ 'resetting.request.username'|trans({}, 'FOSUserBundle') }}</label></br>
+                        <input type="text" id="username" name="username" required="required" style="margin-top:10px;" />
                 </div>
-                <div class="row">
+                <div class="row" style="margin-top:10px;">
                     <input type="submit" class="btn btn-success" value="{{ 'resetting.request.submit'|trans({}, 'FOSUserBundle') }}" />
                 </div>
             </form>

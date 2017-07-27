@@ -30,6 +30,19 @@ class Interaction
     private $datasets;
     
     /**
+     * @var \Doctrine\Common\Collections\ArrayCollection|Interaction_Category[]
+     * @ORM\ManyToMany(targetEntity="Interaction_Category", mappedBy="interactions")
+     */
+    private $interaction_categories;
+    
+   /**
+    * @var \Doctrine\Common\Collections\ArrayCollection|Interaction_Network[]
+    * @ORM\ManyToMany(targetEntity="Interaction_Network", mappedBy="interactions")
+    */
+    private $interaction_networks;
+    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Domain", inversedBy="interactions")
      * @ORM\JoinColumn(name="domain", referencedColumnName="id")
      */
@@ -47,177 +60,142 @@ class Interaction
      */
     protected $interactor_B;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Experiment", mappedBy="interaction")
+     * @ORM\JoinColumn(name="experiment_id", referencedColumnName="id")
+     */
+    protected $experiments;
 
     
     public function __construct()
     {
+    	
+    	$this->interaction_networks = new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->interaction_categories= new \Doctrine\Common\Collections\ArrayCollection();
     	$this->interaction_support_informations = new \Doctrine\Common\Collections\ArrayCollection();
     	$this->datasets = new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->experiments= new \Doctrine\Common\Collections\ArrayCollection();
 
     }
     
-	/**
-	 * @ORM\Column(type="float", length=100, nullable=true)
-	 */
-	protected $score;
-	
-	/**
-	 * @ORM\Column(type="integer", length=100, nullable=true)
-	 */
-	protected $binding_start;
-	
-	/**
-	 * @ORM\Column(type="integer", length=100, nullable=true)
-	 */
-	protected $binding_end;
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    protected $score;
+    
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    protected $binding_start;
+    
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    protected $binding_end;
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
-
     /**
-     * Set score
+     * Add interactionSupportInformation
      *
-     * @param integer $score
+     * @param \AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation
+     *
      * @return Interaction
      */
-    public function setScore($score)
+    public function addInteractionSupportInformation(\AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation)
     {
-        $this->score = $score;
+        $this->interaction_support_informations[] = $interactionSupportInformation;
 
         return $this;
     }
 
     /**
-     * Get score
+     * Remove interactionSupportInformation
      *
-     * @return double 
+     * @param \AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation
      */
-    public function getScore()
+    public function removeInteractionSupportInformation(\AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation)
     {
-        return $this->score;
+        $this->interaction_support_informations->removeElement($interactionSupportInformation);
     }
 
     /**
-     * Set binding_start
+     * Get interactionSupportInformations
      *
-     * @param integer $bindingStart
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInteractionSupportInformations()
+    {
+        return $this->interaction_support_informations;
+    }
+
+    /**
+     * Add dataset
+     *
+     * @param \AppBundle\Entity\Dataset $dataset
+     *
      * @return Interaction
      */
-    public function setBindingStart($bindingStart)
+    public function addDataset(\AppBundle\Entity\Dataset $dataset)
     {
-        $this->binding_start = $bindingStart;
+        $this->datasets[] = $dataset;
 
         return $this;
     }
 
     /**
-     * Get binding_start
+     * Remove dataset
      *
-     * @return integer 
+     * @param \AppBundle\Entity\Dataset $dataset
      */
-    public function getBindingStart()
+    public function removeDataset(\AppBundle\Entity\Dataset $dataset)
     {
-        return $this->binding_start;
-    }
-
-    /**
-     * Set binding_end
-     *
-     * @param integer $bindingEnd
-     * @return Interaction
-     */
-    public function setBindingEnd($bindingEnd)
-    {
-        $this->binding_end = $bindingEnd;
-
-        return $this;
-    }
-
-    /**
-     * Get binding_end
-     *
-     * @return integer 
-     */
-    public function getBindingEnd()
-    {
-        return $this->binding_end;
-    }
-
-    /**
-     * Add support_informations
-     *
-     * @param \AppBundle\Entity\Support_Information $supportInformations
-     * @return Interaction
-     */
-    public function addSupportInformation(\AppBundle\Entity\Support_Information $supportInformations)
-    {
-        $this->support_informations[] = $supportInformations;
-
-        return $this;
-    }
-
-    /**
-     * Remove support_informations
-     *
-     * @param \AppBundle\Entity\Support_Information $supportInformations
-     */
-    public function removeSupportInformation(\AppBundle\Entity\Support_Information $supportInformations)
-    {
-        $this->support_informations->removeElement($supportInformations);
-    }
-
-    /**
-     * Get support_informations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getSupportInformations()
-    {
-        return $this->support_informations;
-    }
-
-
-    /**
-     * Add datasets
-     *
-     * @param \AppBundle\Entity\Dataset $datasets
-     * @return Interaction
-     */
-    public function addDataset(\AppBundle\Entity\Dataset $datasets)
-    {
-        $this->datasets[] = $datasets;
-
-        return $this;
-    }
-
-    /**
-     * Remove datasets
-     *
-     * @param \AppBundle\Entity\Dataset $datasets
-     */
-    public function removeDataset(\AppBundle\Entity\Dataset $datasets)
-    {
-        $this->datasets->removeElement($datasets);
+        $this->datasets->removeElement($dataset);
     }
 
     /**
      * Get datasets
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDatasets()
     {
         return $this->datasets;
     }
 
+
+
+    /**
+     * Set domain
+     *
+     * @param \AppBundle\Entity\Domain $domain
+     *
+     * @return Interaction
+     */
+    public function setDomain(\AppBundle\Entity\Domain $domain = null)
+    {
+        $this->domain = $domain;
+
+        return $this;
+    }
+
+    /**
+     * Get domain
+     *
+     * @return \AppBundle\Entity\Domain
+     */
+    public function getDomain()
+    {
+        return $this->domain;
+    }
 
     /**
      * Set interactorA
@@ -268,26 +246,142 @@ class Interaction
     }
 
     /**
-     * Set domain
+     * Set score
      *
-     * @param \AppBundle\Entity\Domain $domain
+     * @param string $score
      *
      * @return Interaction
      */
-    public function setDomain(\AppBundle\Entity\Domain $domain = null)
+    public function setScore($score)
     {
-        $this->domain = $domain;
+        $this->score = $score;
 
         return $this;
     }
 
     /**
-     * Get domain
+     * Get score
      *
-     * @return \AppBundle\Entity\Domain
+     * @return string
      */
-    public function getDomain()
+    public function getScore()
     {
-        return $this->domain;
+        return $this->score;
+    }
+
+    /**
+     * Set bindingStart
+     *
+     * @param string $bindingStart
+     *
+     * @return Interaction
+     */
+    public function setBindingStart($bindingStart)
+    {
+        $this->binding_start = $bindingStart;
+
+        return $this;
+    }
+
+    /**
+     * Get bindingStart
+     *
+     * @return string
+     */
+    public function getBindingStart()
+    {
+        return $this->binding_start;
+    }
+
+    /**
+     * Set bindingEnd
+     *
+     * @param string $bindingEnd
+     *
+     * @return Interaction
+     */
+    public function setBindingEnd($bindingEnd)
+    {
+        $this->binding_end = $bindingEnd;
+
+        return $this;
+    }
+
+    /**
+     * Get bindingEnd
+     *
+     * @return string
+     */
+    public function getBindingEnd()
+    {
+        return $this->binding_end;
+    }
+
+    /**
+     * Add interactionCategory
+     *
+     * @param \AppBundle\Entity\Interaction_Category $interactionCategory
+     *
+     * @return Interaction
+     */
+    public function addInteractionCategory(\AppBundle\Entity\Interaction_Category $interactionCategory)
+    {
+        $this->interaction_categories[] = $interactionCategory;
+
+        return $this;
+    }
+
+    /**
+     * Remove interactionCategory
+     *
+     * @param \AppBundle\Entity\Interaction_Category $interactionCategory
+     */
+    public function removeInteractionCategory(\AppBundle\Entity\Interaction_Category $interactionCategory)
+    {
+        $this->interaction_categories->removeElement($interactionCategory);
+    }
+
+    /**
+     * Get interactionCategories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInteractionCategories()
+    {
+        return $this->interaction_categories;
+    }
+
+    /**
+     * Add interactionNetwork
+     *
+     * @param \AppBundle\Entity\Interaction_Network $interactionNetwork
+     *
+     * @return Interaction
+     */
+    public function addInteractionNetwork(\AppBundle\Entity\Interaction_Network $interactionNetwork)
+    {
+        $this->interaction_networks[] = $interactionNetwork;
+
+        return $this;
+    }
+
+    /**
+     * Remove interactionNetwork
+     *
+     * @param \AppBundle\Entity\Interaction_Network $interactionNetwork
+     */
+    public function removeInteractionNetwork(\AppBundle\Entity\Interaction_Network $interactionNetwork)
+    {
+        $this->interaction_networks->removeElement($interactionNetwork);
+    }
+
+    /**
+     * Get interactionNetworks
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInteractionNetworks()
+    {
+        return $this->interaction_networks;
     }
 }

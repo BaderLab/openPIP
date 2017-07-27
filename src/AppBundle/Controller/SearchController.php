@@ -14,9 +14,18 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use AppBundle\Entity\Protein;
 use AppBundle\Entity\Interaction;
+//use AppBundle\Entity\Interaction_Network;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Form\ChoiceList\ArrayChoiceList;
-
+use AppBundle\Entity\Dataset_Request;
+use AppBundle\Utils\Node;
+use AppBundle\Utils\Edge;
+use AppBundle\Utils\QueryParameters;
+use AppBundle\Utils\PublicationStatus;
+use AppBundle\Utils\Functions;
+use AppBundle\Entity\Interaction_Category;
+use AppBundle\Entity\Interaction_Network;
+use AppBundle\Entity\Experiment;
 
 /**
  * Search controller.
@@ -27,860 +36,291 @@ class SearchController extends Controller
 	/**
 	 * Search Home
 	 *
-	 * @Route("/search/", name="search")
+	 * @Route("/search", name="search")
 	 * @Route("/admin/search/", name="admin_search")
 	 * @Method({"GET", "POST"})
 	 */
 	public function searchAction(Request $request)
 	{
-
-	    $form = $this->createForm('AppBundle\Form\SearchType');
-        $form->handleRequest($request);
+	
+		$tissue_array = self::defineTissueArray();
+		$subcellular_location_array = self::defineSubcellularLocationArray();
+		$interaction_categories_array = self::getInteractionCategories();
 		
+		$form = self::getSearchForm($tissue_array, $subcellular_location_array, $interaction_categories_array);
+		$form->handleRequest($request);
 		if ($form->isSubmitted()) {
-		   
-		    $option_array = self::getSearchFormData($form);
+			$option_array = self::getSearchFormData($form);
 			return $this->redirectToRoute('search_results', $option_array);
-
 		}
 		
-		$admin_settings = $this->getDoctrine()
-		->getRepository('AppBundle:Admin_Settings')
-		->find(1);
+		$admin_settings = self::getAdminSettings();
 		
 		$title = $admin_settings->getTitle();
 		$short_title = $admin_settings->getShortTitle();
 		$footer = $admin_settings->getFooter();
 		$main_color_scheme = $admin_settings->getMainColorScheme();
-        $header_color_scheme = $admin_settings->getHeaderColorScheme();
-        $logo_color_scheme = $admin_settings->getLogoColorScheme();
-        $button_color_scheme = $admin_settings->getButtonColorScheme();
+		$header_color_scheme = $admin_settings->getHeaderColorScheme();
+		$logo_color_scheme = $admin_settings->getLogoColorScheme();
+		$button_color_scheme = $admin_settings->getButtonColorScheme();
 		$example_1 = $admin_settings->getExample1();
 		$example_2 = $admin_settings->getExample2();
 		$example_3 = $admin_settings->getExample3();
+		$url = $admin_settings->getUrl();
 		
-		$login_status = false;
-		
-		$is_fully_authenticated = $this->get('security.context')
-		->isGranted('IS_AUTHENTICATED_FULLY');
-		
-		if($is_fully_authenticated){
-		    $login_status =  true;
-		}
+		$login_status = self::checkLoginStatus();
+		$admin_status = self::checkAdminStatus();
 		
 		return $this->render('search.html.twig', array(
 				'form' => $form->createView(),
-		        'main_color_scheme' => $main_color_scheme,
-                'header_color_scheme' => $header_color_scheme,
-                'logo_color_scheme' => $logo_color_scheme,
-                'button_color_scheme' => $button_color_scheme,
-		        'short_title' => $short_title,
-		        'title' => $title,
-		        'footer' => $footer,
-		        'login_status' => $login_status,
-		        'example_1' => $example_1,
-		        'example_2' => $example_2,
-		        'example_3' => $example_3
+				'tissue_array' => $tissue_array,
+				'subcellular_location_array' => $subcellular_location_array,
+				'main_color_scheme' => $main_color_scheme,
+				'header_color_scheme' => $header_color_scheme,
+				'logo_color_scheme' => $logo_color_scheme,
+				'button_color_scheme' => $button_color_scheme,
+				'interaction_categories_array' => $interaction_categories_array,
+				'short_title' => $short_title,
+				'title' => $title,
+				'footer' => $footer,
+				'login_status' => $login_status,
+				'example_1' => $example_1,
+				'example_2' => $example_2,
+				'example_3' => $example_3,
+				'admin_status' => $admin_status,
+				'url' => $url
 				
 		));
-	}
-	
-
-	/**
-	 * Search Results
-	 *
-	 * @Route("/search_results/{search_term}", name="search_results", options={"expose": true})
-	 * @Route("/admin/search_results/{search_term}", name="admin_search_results", options={"expose": true})
-	 * @Method({"GET", "POST"})
-	 */
-	public function searchResultsAction($search_term)
-	{
-	
-	    //search input
-	    $search_query = $search_term;
-	     
-	    //search parameters
-	    $request = $this->getRequest();
-
-	   
-	    
-	    
-	    $query_parameters_array = self::getQueryParameters($request);
-	    
-	    $search_published = $query_parameters_array[0];
-	    $search_validated = $query_parameters_array[1];
-	    $search_verified = $query_parameters_array[2];
-	    $search_literature = $query_parameters_array[3];
-	    $search_filter = $query_parameters_array[4];
-	    $search_setting_score = $query_parameters_array[5];
-	   
-	    
-	    $query_parameter_summary = self::getQueryParameterSummary($search_filter, $search_setting_score, $search_published, $search_validated, $search_verified, $search_literature);
-	    
-	    
-
-	    $status_array = array($search_published, $search_validated, $search_verified, $search_literature, $search_setting_score);
-	    
-	    
-	    
-	    
-	    $search_query_array = explode(",", $search_term);
-	    
-
-	    
-	    $nodes_edges = self::getNodesAndEdges($search_query_array, $search_filter, $status_array);
-	    
-	    $nodes = $nodes_edges[0];
-	    $edges = $nodes_edges[1];
-	    $interaction_array = $nodes_edges[2];
-
-	    
-	    $nodes = array_map("unserialize", array_unique(array_map("serialize", $nodes)));
-	    $edges = array_map("unserialize", array_unique(array_map("serialize", $edges)));
-	    $interaction_array = array_map("unserialize", array_unique(array_map("serialize", $interaction_array)));
-	    
-	    $nodes = array_values($nodes);
-	    $edges = array_values($edges);
-	    $interaction_array = array_values($interaction_array);
-
-        $edges = self::getUniqueEdges($edges);
-        $edges = array_values($edges);
-
-        
-	    $number_of_nodes = count($nodes);
-	    $number_of_edges = count($edges);
-
-	    
-	    $json = json_encode(array('nodes' => $nodes, 'edges' => $edges), JSON_HEX_QUOT);
-	     
-	
-	    //Get admin settings
-        $admin_settings = $this->getDoctrine()
-        ->getRepository('AppBundle:Admin_Settings')
-        ->find(1);
-        	
-		$title = $admin_settings->getTitle();
-		$short_title = $admin_settings->getShortTitle();
-		$footer = $admin_settings->getFooter();
-		$main_color_scheme = $admin_settings->getMainColorScheme();
-        $header_color_scheme = $admin_settings->getHeaderColorScheme();
-        $logo_color_scheme = $admin_settings->getLogoColorScheme();
-        $button_color_scheme = $admin_settings->getButtonColorScheme();
-        
-        //Check login status
-        $login_status = false;
-        
-        $is_fully_authenticated = $this->get('security.context')
-        ->isGranted('IS_AUTHENTICATED_FULLY');
-        
-        if($is_fully_authenticated){
-            $login_status =  true;
-        }
-        	
-
-        return $this->render('search_result_2.html.twig', array(
-                'interaction_array' => $interaction_array,
-                'number_of_nodes' => $number_of_nodes,
-                'number_of_edges' => $number_of_edges,
-                'json' => $json,
-                'search_query' => $search_query,
-                'parameters' => $query_parameter_summary,
-                'main_color_scheme' => $main_color_scheme,
-                'header_color_scheme' => $header_color_scheme,
-                'logo_color_scheme' => $logo_color_scheme,
-                'button_color_scheme' => $button_color_scheme, 
-                'short_title' => $short_title,
-                'title' => $title,
-                'footer' => $footer,
-                'search_query' => $search_query,
-                'search_setting_score' => $search_setting_score,
-	            'login_status' => $login_status,
-
-        ));
-	
-	}
-	
-	/**
-	 * Autocomplete
-	 *
-	 * @Route("/search/autocomplete/{search_term}", name="autocomplete_search")
-	 * @Method({"GET", "POST"})
-	 */
-	public function autocompleteAction($search_term)
-	{
-	
-	
-	    $em = $this->getDoctrine()->getManager();
-	    $identifier_repository = $em->getRepository('AppBundle:Identifier');
-	
-	    $query_builder = $identifier_repository->createQueryBuilder('i')
-	    ->where('i.identifier LIKE :identifier_keyword');
-	    	
-	    $query_builder->setParameter('identifier_keyword', "%$search_term%");
-	    $query = $query_builder->getQuery();
-	    $identifier_results = $query->getResult();
-	
-	    $return = array();
-	
-	    foreach($identifier_results as $identifier_result){
-	        	
-	        $name = $identifier_result->getIdentifier();
-	        $return[] = $name;
-	    }
-	
-	    $response = new JsonResponse();
-	    $response->setData($return);
-	
-	    return $response;
-	
-	}
-	
-	/**
-	 * Protein Sequence
-	 *
-	 * @Route("/protein_sequence/{search_term}", name="protein_sequence", options={"expose": true}))
-	 * @Method({"GET", "POST"})
-	 */
-	public function protein_sequenceAction($search_term)
-	{
-	    $identifier_repository = $this->getDoctrine()
-	    ->getRepository('AppBundle:Identifier');
-	
-	    $identifier = $identifier_repository->findOneByIdentifier($search_term);
-	    $identifier_identifier = $identifier->getIdentifier();
-	    $identifier_naming_convention = $identifier->getNamingConvention();
-	    $protein = $identifier->getProtein();
-	    $protein_gene_name = $protein->getGeneName();
-	    $protein_id = $protein->getId();
-	    $protein_name = $protein->getName();
-	    $protein_sequence = $protein->getSequence();
-	    $protein_description = $protein->getDescription();
-	     
-	    $admin_settings = $this->getDoctrine()
-	    ->getRepository('AppBundle:Admin_Settings')
-	    ->find(1);
-	     
-	    $main_color_scheme = $admin_settings->getMainColorScheme();
-	    $header_color_scheme = $admin_settings->getHeaderColorScheme();
-	    $logo_color_scheme = $admin_settings->getLogoColorScheme();
-	    $button_color_scheme = $admin_settings->getButtonColorScheme();
-	    $short_title = $admin_settings->getShortTitle();
-	    $title = $admin_settings->getTitle();
-	     
-	    $login_status = false;
-	
-	    $is_fully_authenticated = $this->get('security.context')
-	    ->isGranted('IS_AUTHENTICATED_FULLY');
-	
-	    if($is_fully_authenticated){
-	        $login_status =  true;
-	    }
-	     
-	    return $this->render('protein_sequence.html.twig', array(
-	            'protein_sequence' => $protein_sequence,
-	            'gene_name' => $protein_gene_name,
-	            'main_color_scheme' => $main_color_scheme,
-	            'header_color_scheme' => $header_color_scheme,
-	            'logo_color_scheme' => $logo_color_scheme,
-	            'button_color_scheme' => $button_color_scheme,
-	            'short_title' => $short_title,
-	            'title' => $title,
-	            'login_status' => $login_status
-	
-	    ));
-	}
-	
-	public function getNodesAndEdges($search_query_array, $filter, $status_array){
-
-	    $nodes_edges = array();
-	    $query_protein_array = self::getProteinQueryArray($search_query_array);
-
-	    switch ($filter) {
-            case 'query_query':
-                $nodes_edges = self::getQueryQueryNodesAndEdges($query_protein_array, $status_array);
-                break;
-                
-            case 'None':
-                $nodes_edges = self::getInteractorInteractorNodesAndEdges($query_protein_array, $status_array);
-                break;
-                
-            default:
-            
-	    }
-	   
-	    return $nodes_edges;
-	}
-	
-	public function getProteinQueryArray($search_query_array){
-	
-	    $query_protein_array = array();
-	     
-	    foreach($search_query_array as $query_protein){
-	
-	        $identifier_repository = $this->getDoctrine()
-	        ->getRepository('AppBundle:Identifier');
-	        $identifier = $identifier_repository->findOneByIdentifier($query_protein);
-	         
-	        if($identifier){
-
-	            $protein = $identifier->getProtein();
-	            $query_protein_array[] = $protein;
-             
-	        }
-	    }
-	     
-	    return $query_protein_array;
-	     
-	}
-	
-	public function getQueryQueryNodesAndEdges($query_protein_array, $status_array){
-	    
-	    $node_array = array();
-	    $edge_array = array();
-	    $interaction_array = array();
-	    
-		foreach($query_protein_array as  $query_protein_A){
-		        
-	        $protein_A_id =  $query_protein_A->getId();
-	        $protein_A_name =  $query_protein_A->getName();
-	        $protein_A_gene_name =  $query_protein_A->getGeneName();
-	        $protein_A_description = $query_protein_A->getDescription();
-	        $protein_A_external_links = self::getExternalLinks($protein_A_id);
-	        $external_links = self::getExternalLinks($protein_A_id);
-	        
-	        
-	        $node_array[] = array($protein_A_id, $protein_A_name, $protein_A_gene_name, $protein_A_description, $external_links);
-        
-	        foreach($query_protein_array as $query_protein_B){
-	             
-    	        $protein_B_id =  $query_protein_B->getId();
-    	        $protein_B_name =  $query_protein_B->getName();
-	            $protein_B_gene_name =  $query_protein_B->getGeneName();
-	            $protein_B_description = $query_protein_B->getDescription();
-	            $protein_B_external_links = self::getExternalLinks($protein_B_id);
-	            
-	            $interaction = self::getInteraction($query_protein_A, $query_protein_B, $status_array);
-
-	            if($interaction){
-	                $interaction_id = $interaction->getId();
-	                $score = $interaction->getScore();
-	                $dataset_array = self::getInteractionDatasets($interaction_id);
-	                $interactor_A_array = array('id' => $protein_A_id, 'name' => $protein_A_name, 'gene_name' => $protein_A_gene_name, 'description' => $protein_A_description, 'links' => $protein_A_external_links);
-	                $interactor_B_array = array('id' => $protein_B_id, 'name' => $protein_B_name, 'gene_name' => $protein_B_gene_name, 'description' => $protein_B_description, 'links' => $protein_B_external_links);
-	                 
-	                $interaction_array[] = array("interactor_A_id"=> $protein_A_id, "interactor_A_gene_name"=>$protein_A_gene_name, "interactor_A_array" => $interactor_A_array, "interactor_B_id"=> $protein_B_id, "interactor_B_gene_name"=>$protein_B_gene_name, "interactor_B_array" => $interactor_B_array, "score"=>$score, "dataset_array"=>$dataset_array);
-	                $edge_array[] = array($protein_A_id, $protein_A_name, $protein_B_id, $protein_B_name, $score);
-	            }
-	        }
-	    }
-	    
-	    return array($node_array, $edge_array, $interaction_array);
-	}
-	
-	public function getQueryInteractorNodesAndEdges($query_protein_array, $status_array){
-	     
-	    $node_array = array();
-	    $edge_array = array();
-	    $interaction_array = array();
-	    
-		foreach($query_protein_array as  $query_protein_A){
-		        
-	        $protein_A_id =  $query_protein_A->getId();
-	        $protein_A_name =  $query_protein_A->getName();
-	        $protein_A_gene_name =  $query_protein_A->getGeneName();
-	        $protein_A_description = $query_protein_A->getDescription();
-	        $protein_A_external_links = self::getExternalLinks($protein_A_id);
-	        
-	        $node_array[] = array($protein_A_id, $protein_A_name, $protein_A_gene_name, $protein_A_description, $protein_A_external_links);
-	        
-	        $interactions = self::getInteractions($query_protein_A, $status_array);
-	        if($interactions){
-        	    foreach($interactions as $interaction){
-        	         $interaction_id = $interaction->getId();
-                     $interactor_B = $interaction->getInteractorB();
-                     $score = $interaction->getScore();
-                     
-        	         $protein_B = $this->getDoctrine()
-        	         ->getRepository('AppBundle:Protein')
-        	         ->find($interactor_B);
-        	          
-        	         $protein_B_id = $protein_B->getId();
-        	         $protein_B_name = $protein_B->getName();
-        	         $protein_B_gene_name =  $protein_B->getGeneName();
-        	         $protein_B_description = $protein_B->getDescription();
-        	         $protein_B_external_links = self::getExternalLinks($protein_B_id);
-        	         
-        	         $dataset_array = self::getInteractionDatasets($interaction_id);
-        	         
-        	         $interactor_A_array = array('id' => $protein_A_id, 'name' => $protein_A_name, 'gene_name' => $protein_A_gene_name, 'description' => $protein_A_description, 'links' => $protein_A_external_links);
-        	         $interactor_B_array = array('id' => $protein_B_id, 'name' => $protein_B_name, 'gene_name' => $protein_B_gene_name, 'description' => $protein_B_description, 'links' => $protein_B_external_links);
-        	          
-        	         $interaction_array[] = array("interactor_A_id"=> $protein_A_id, "interactor_A_gene_name"=>$protein_A_gene_name, "interactor_A_array" => $interactor_A_array, "interactor_B_id"=> $protein_B_id, "interactor_B_gene_name"=>$protein_B_gene_name, "interactor_B_array" => $interactor_B_array, "score"=>$score, "dataset_array"=>$dataset_array);
-        	         
-        	         
-        	        
-        	         $node_array[] = array($protein_B_id, $protein_B_name, $protein_B_gene_name, $protein_B_description, $protein_B_external_links);
-    	             $edge_array[] = array($protein_A_id, $protein_A_name, $protein_B_id, $protein_B_name, $score);
-    
-        	     }
-	        }
-		}
-	    return array($node_array, $edge_array, $interaction_array);
-	     
-	}
-	
-	public function getInteractorInteractorNodesAndEdges($query_protein_array, $status_array){
-	    
-	    
-	    $handle = fopen('C:\\Users\\Miles\\Desktop\\test\\test.txt', 'w');
-	    fwrite($handle, 'START');
-	    
-	    $node_array = array();
-	    $edge_array = array();
-	    $interaction_array = array();
-	    $interactor_array = array();
-	    
-		foreach($query_protein_array as  $query_protein_A){
-		    fwrite($handle, '1');
-	        $protein_A_id =  $query_protein_A->getId();
-	        $protein_A_name =  $query_protein_A->getName();
-	        $protein_A_gene_name =  $query_protein_A->getGeneName();
-	        $protein_A_description = $query_protein_A->getDescription();
-	        $protein_A_external_links = self::getExternalLinks($protein_A_id);
-	        
-	        $interactor_array[] = $query_protein_A;
-	        $node_array[] = array($protein_A_id, $protein_A_name, $protein_A_gene_name, $protein_A_description, $protein_A_external_links);
-	        
-	        $interactions = self::getInteractions($query_protein_A, $status_array);
-            if($interactions){
-                fwrite($handle, '2');
-        	    foreach($interactions as $interaction){
-        	        fwrite($handle, '3');
-        	         $interaction_id = $interaction->getId();
-                     $interactor_B = $interaction->getInteractorB();
-                     $score = $interaction->getScore();
-                     
-        	         $protein_B = $this->getDoctrine()
-        	         ->getRepository('AppBundle:Protein')
-        	         ->find($interactor_B);
-        	          
-        	         $protein_B_id = $protein_B->getId();
-        	         $protein_B_name = $protein_B->getName();
-        	         $protein_B_gene_name =  $protein_B->getGeneName();
-        	         $protein_B_description = $protein_B->getDescription();
-        	         $protein_B_external_links = self::getExternalLinks($protein_B_id);
-        	         
-        	         $interactor_array[] = $protein_B;
-        	         
-        	         $dataset_array = self::getInteractionDatasets($interaction_id);
-        	         
-        	         $interactor_A_array = array('id' => $protein_A_id, 'name' => $protein_A_name, 'gene_name' => $protein_A_gene_name, 'description' => $protein_A_description, 'links' => $protein_A_external_links);
-        	         $interactor_B_array = array('id' => $protein_B_id, 'name' => $protein_B_name, 'gene_name' => $protein_B_gene_name, 'description' => $protein_B_description, 'links' => $protein_B_external_links);
-        	          
-        	         $interaction_array[] = array("interactor_A_id"=> $protein_A_id, "interactor_A_gene_name"=>$protein_A_gene_name, "interactor_A_array" => $interactor_A_array, "interactor_B_id"=> $protein_B_id, "interactor_B_gene_name"=>$protein_B_gene_name, "interactor_B_array" => $interactor_B_array, "score"=>$score, "dataset_array"=>$dataset_array);
-        	             	         
-        	        
-        	         $node_array[] = array($protein_B_id, $protein_B_name, $protein_B_gene_name, $protein_B_description, $protein_B_external_links);
-    	             $edge_array[] = array($protein_A_id, $protein_A_name, $protein_B_id, $protein_B_name, $score);
-    
-        	     }
-    		 } 
-		}
 		
-		fwrite($handle, '4');
-	     foreach($interactor_array as $interactor_A){
-	         
-	         foreach($interactor_array as $interactor_B){
-	           
-                $interaction = self::getInteraction($interactor_A, $interactor_B, $status_array);
-    	        
-	         	if($interaction){
-	         	    $interaction_id = $interaction->getId();
-	         	    $interactor_A_id = $interactor_A->getId();
-	         	    $interactor_A_gene_name = $interactor_A->getGeneName();
-	         	    $interactor_A_name = $interactor_A->getName();
-	         	    $interactor_A_description = $interactor_A->getDescription();
-	         	    $interactor_A_external_links = self::getExternalLinks($interactor_A_id);
-	         	    $interactor_B_id = $interactor_B->getId();
-	         	    $interactor_B_gene_name = $interactor_B->getGeneName();
-	         	    $interactor_B_name = $interactor_B->getName();
-	         	    $interactor_B_description = $interactor_B->getDescription();
-	         	    $interactor_B_external_links = self::getExternalLinks($interactor_B_id);
-	         	    
-	                $score = $interaction->getScore();
-	                
-	                $dataset_array = self::getInteractionDatasets($interaction_id);
-	                
-	                $interactor_A_array = array('id' => $interactor_A_id, 'name' => $interactor_A_name, 'gene_name' => $interactor_A_gene_name, 'description' => $interactor_A_description, 'links' => $interactor_A_external_links);
-	                $interactor_B_array = array('id' => $interactor_B_id, 'name' => $interactor_B_name, 'gene_name' => $interactor_B_gene_name, 'description' => $interactor_B_description, 'links' => $interactor_B_external_links);
-	                
-	                $interaction_array[] = array("interactor_A_id"=> $protein_A_id, "interactor_A_gene_name"=>$protein_A_gene_name, "interactor_A_array" => $interactor_A_array, "interactor_B_id"=> $protein_B_id, "interactor_B_gene_name"=>$protein_B_gene_name, "interactor_B_array" => $interactor_B_array, "score"=>$score, "dataset_array"=>$dataset_array);
-
-	                $edge_array[] = array($interactor_A_id, $interactor_A_name, $interactor_B_id, $interactor_B_name, $score);
-	            }
-	         }
-	     }
-
-	    return array($node_array, $edge_array, $interaction_array);
-	}
-	
-	public function getInteraction($interactor_A, $interactor_B, $status_array){
-	    
-	    $published = $status_array[0];
-	    $validated = $status_array[1];
-	    $verified = $status_array[2];
-	    $literature = $status_array[3];
-
-	    
-	    $interactor_A_id = $interactor_A->getID();
-	    $interactor_B_id = $interactor_B->getID();
-
-	    $em = $this->getDoctrine()->getManager();
-	    $interaction_repository = $em->getRepository('AppBundle:Interaction');
-	    $qb = $interaction_repository->createQueryBuilder('i');
-	    $qb->select('i');
-	    $qb->join('i.datasets', 'd');
-	    $qb->where('i.interactor_A = :interactor_A');
-	    $qb->andWhere('i.interactor_B = :interactor_B');
-
-
-	    $qb->setParameter('interactor_A', $interactor_A_id);
-	    $qb->setParameter('interactor_B', $interactor_B_id);
-
-       
-        $orX = $qb->expr()->orX();
-	    
-	    if($published){
-	        $orX->add('d.interaction_status = :published_status');
-	    }
-	     if($validated){
-	        $orX->add('d.interaction_status = :validated_status');
-	    }
-	    if($verified){
-	        $orX->add('d.interaction_status = :verified_status');
-	    }
-	    if($literature){
-	        $orX->add('d.interaction_status = :literature_status');
-	    }
-	    
-	    $qb->andWhere($orX);
-	    
-	    if($published){
-	        $qb->setParameter('published_status', 'published');
-	    }
-	    if($validated){
-	        $qb->setParameter('validated_status', 'validated');
-	    }
-	    if($verified){
-	        $qb->setParameter('verified_status', 'verified');
-	    }
-	    if($literature){
-	        $qb->setParameter('literature_status', 'literature');
-	    }
-	    
-	    $query = $qb->getQuery();
-	     
-	    $interaction_results_array = $query->getResult();
-
-	    if($interaction_results_array){
-	        $interaction = $interaction_results_array[0];
-	        return $interaction;
-	    }else{
-	        return false;
-	    }
-    
-	}
-	
-	public function getInteractions($interactor_A, $status_array){
-	     
-	    $published = $status_array[0];
-	    $validated = $status_array[1];
-	    $verified = $status_array[2];
-	    $literature = $status_array[3];
-
-	    
-	    
-	    $interactor_A_id = $interactor_A->getID();
-
-        $em = $this->getDoctrine()->getManager();
-        $interaction_repository = $em->getRepository('AppBundle:Interaction');
-        $qb = $interaction_repository->createQueryBuilder('i');
-        $qb->select('i');
-        $qb->join('i.datasets', 'd');
-        $qb->where('i.interactor_A = :interactor_A');
-        $qb->setParameter('interactor_A', $interactor_A_id);
-
-        
-	    $orX = $qb->expr()->orX();
-	    
-	    if($published){
-	        $orX->add('d.interaction_status = :published_status');
-	    }
-	     if($validated){
-	        $orX->add('d.interaction_status = :validated_status');
-	    }
-	    if($verified){
-	        $orX->add('d.interaction_status = :verified_status');
-	    }
-	    if($literature){
-	        $orX->add('d.interaction_status = :literature_status');
-	    }
-	    
-	    $qb->andWhere($orX);
-	    
-	    if($published){
-	        $qb->setParameter('published_status', 'published');
-	    }
-	    if($validated){
-	        $qb->setParameter('validated_status', 'validated');
-	    }
-	    if($verified){
-	        $qb->setParameter('verified_status', 'verified');
-	    }
-	    if($literature){
-	        $qb->setParameter('literature_status', 'literature');
-	    }
-	    
-        $query = $qb->getQuery();
-         
-        $interaction_array = $query->getResult();
-	
-	    if($interaction_array){
-	        return $interaction_array;
-	    }else{
-	        return false;
-	    }
-	
-	}
-	
-	public function getExternalLinks($protein_id){
-	
-    	$em = $this->getDoctrine()->getManager();
-    	 
-    	$query = $em->createQuery(
-    	                "SELECT DISTINCT l.database_name
-    				            FROM AppBundle:External_Link l
-    				            WHERE l.protein = :protein_id"
-    	                );
-    	
-    	$query->setParameter('protein_id', $protein_id);
-    	 
-    	$external_link_database_name_array = $query->getResult();
-    	
-    	$external_links = array();
-    	 
-    	foreach($external_link_database_name_array as $external_link_database_name){
-    	    $name = $external_link_database_name['database_name'];
-    	    $external_links[$name] = array();
-    	}
-    	
-    	$query = $em->createQuery(
-    	                "SELECT l
-    				            FROM AppBundle:External_Link l
-    				            WHERE l.protein = :protein_id"
-    	                );
-    	 
-    	$query->setParameter('protein_id', $protein_id);
-    	
-    	$external_link_array = $query->getResult();
-    	 
-    	foreach($external_link_array as $external_link){
-    	     
-    	    $database_name = $external_link->getDatabaseName();
-    	    $link = $external_link->getLink();
-    	     
-    	    $link_id = $external_link->getLinkId();
-    	    $external_links[$database_name][] = array($link_id, $link);
-    	     
-    	}
-    	
-    	return $external_links;
-    	
-	}
-	
-	public function getUniqueEdges($edges){
-	    
-	    
-	    
-	    foreach ($edges as $key_1 => &$array_1){
-	        
-	        foreach ($edges as $key_2 => $array_2) {
-	            
-	            if ($key_1 !== $key_2 && $array_1[0] === $array_2[2] && $array_1[2] === $array_2[0]) {
-	                unset($edges[$key_2]);
-	            }
-	            
-	            
-	        }
-	    }
-	                    
-	                    
-	    
-	   return $edges; 
-	}
-	
-	public function getInteractionDatasets($interaction_id){
-	    
-
-	    $em = $this->getDoctrine()->getManager();
-	     
-	    $repository = $em->getRepository('AppBundle:Dataset');
-	    $query = $repository->createQueryBuilder('ds')
-	    ->innerJoin('ds.interactions', 'i')
-	    ->where('i.id = :interaction_id')
-	    ->setParameter('interaction_id', $interaction_id )
-	    ->getQuery();
-	    $dataset_result_array = $query->getResult();
-
-	    $dataset_array = array();
-	    
-        foreach($dataset_result_array as $dataset_result){
-            $dataset_pubmed_id = $dataset_result->getPubmedId();
-            $dataset_author = $dataset_result->getAuthor();
-             
-             
-             
-            $dataset_values = array();
-             
-            if($dataset_pubmed_id){
-                $dataset_values['dataset_reference'] = $dataset_pubmed_id;
-            }elseif($dataset_pubmed_id == 'unassigned1304'){
-                $dataset_values['dataset_reference'] = '';
-            }else{
-                $dataset_values['dataset_reference'] = 'N/A';
-            }
-    
-             
-            if($dataset_author){
-                $dataset_values['dataset_author'] = $dataset_author;
-            }else{
-                $dataset_values['dataset_author'] = 'N/A';
-            }
-            
-            $dataset_array[] = $dataset_values;
-             
-        }
-        
-        return $dataset_array;
-
-	}
-	
-	public function getQueryParameterSummary($search_filter, $search_setting_score, $search_published, $search_validated, $search_verified, $search_literature){
-	    
-	    $parameters = '';
-	    if($search_filter){
-	        $parameters .= "<div class='row'><strong>Filter: </strong> $search_filter</div>";
-	    }
-	    if($search_setting_score){
-	        $parameters .= "<div class='row'><strong>Minimum Score: </strong> $search_setting_score</div>";
-	    }
-	    
-	    $parameter_array = array();
-	    
-	    if($search_published){
-	        $parameter_array[] = "Published";
-	    }
-	    if($search_validated){
-	        $parameter_array[] = "Validated";
-	    }
-	    if($search_verified){
-	        $parameter_array[] = "Verified";
-	    }
-	    if($search_literature){
-	        $parameter_array[] = "Literature";
-	    }
-	    
-	    $parameter_publication_status = join(', ', $parameter_array);
-	    
-	    $parameters .= "<div class='row'><strong>Interaction Status:</strong>";
-	    $parameters .= $parameter_publication_status;
-	    $parameters .= "</div>";
-	    
-	    return $parameters;
-	    
-	}
-	
-	public function getQueryParameters($request){
-	    
-	    $search_published = $request->query->get('published');
-	    $search_validated = $request->query->get('validated');
-	    $search_verified = $request->query->get('verified');
-	    $search_literature = $request->query->get('literature');
-	    $search_filter = $request->query->get('filter');
-	    $search_setting_score = $request->query->get('score');
-	    
-	    
-	    if($search_published == null && $search_validated == null && $search_verified == null && $search_literature == null && $search_filter == null && $search_setting_score == null){
-	        
-	        $search_published = true;
-	        $search_validated = true;
-	        $search_verified = true;
-	        $search_literature = true;
-	        $search_filter = 'None';
-	        $search_setting_score = 0;
-	    }
-	    
-	    $query_parameters_array = array($search_published, $search_validated, $search_verified, $search_literature, $search_filter, $search_setting_score);
-	    
-	    return $query_parameters_array;
 	}
 	
 	public function getSearchFormData($form){
-	    
-	    $search_query = $form["identifier"]->getData();
-	    $min_interaction_score = $form["min_interaction_score"]->getData();
-	    $published = $form["published"]->getData();
-	    $validated = $form["validated"]->getData();
-	    $verified = $form["verified"]->getData();
-	    $literature = $form["literature"]->getData();
-	    $query_query = $form["query_query"]->getData();
-	    
-	    $option_array = array('search_term' => $search_query);
-	    
-	    if($published && $validated && $verified && $literature && $published && $min_interaction_score == 0 && !$query_query){
+		
+		$search_query = $form["identifier"]->getData();
+		$min_interaction_score = $form["min_interaction_score"]->getData();
+		$text_output = $form["text_output"]->getData();
+		
+		
+		$form_data_array = array();
+		$category_array = array();
+		$tissue_parameter_array = array();
+		$subcellular_location_parameter_array = array();
+		
+		
+		
+		$interaction_categories = $this->getDoctrine()
+		->getRepository('AppBundle:Interaction_category')
+		->findAll();
+		
+		foreach ($interaction_categories as $interaction_category){
+			
+			$category_name = $interaction_category->getCategoryName();
+			
+			$category_name = strtolower($category_name);
+			
+			$category = $form["$category_name"]->getData();
+			
+			
+			$category_array[$category_name] = $category;
+			
+			
+		}
+		
+		$tissue_array = array('adipose_subcutaneous', 'adipose_visceral_omentum', 'adrenal_gland', 'artery_aorta', 'artery_coronary', 'artery_tibial', 'brain_0', 'brain_1', 'brain_2', 'breast_mammary_tissue', 'colon_sigmoid', 'colon_transverse', 'esophagus_gastroesophageal_junction', 'esophagus_mucosa', 'esophagus_muscularis', 'heart_atrial_appendage', 'heart_left_ventricle', 'kidney_cortex', 'liver', 'lung', 'minor_salivary_gland', 'muscle_skeletal', 'nerve_tibial', 'ovary', 'pancreas', 'pituitary', 'prostate', 'skin', 'small_intestine_terminal_ileum', 'spleen', 'stomach', 'testis', 'thyroid', 'uterus', 'vagina', 'whole_blood');
+		
+		
+		
+		foreach($tissue_array as $tissue){
+			
+			$tissue_value = $form["$tissue"]->getData();
+			
+			if($tissue_value == null || $tissue_value == 0){
+				$tissue_parameter_array[$tissue] = 0;
+			}else{
+				
+				
+				$tissue_parameter_array[$tissue] = $tissue_value;
+				
+			}
+		}
+		
+		
+		$subcellular_location_array = array('aggresome', 'cell_junctions', 'centrosome', 'cytokinetic_bridge', 'cytoplasmic_bodies', 'cytosol', 'endoplasmic_reticulum', 'endosomes', 'focal_adhesion_sites', 'golgi_apparatus', 'intermediate_filaments', 'lipid_droplets', 'lysosomes', 'microtubule_ends', 'microtubule_organizing_center', 'microtubules', 'midbody', 'midbody_ring', 'mitochondria', 'mitotic_spindle', 'nuclear_bodies', 'nuclear_membrane', 'nuclear_speckles', 'nucleoli', 'nucleoli_fibrillar_center', 'nucleoplasm', 'nucleus', 'peroxisomes', 'plasma_membrane', 'rods_and_rings', 'vesicles');
+		
+		foreach($subcellular_location_array as $subcellular_location ){
+			
+			$subcellular_location_value = $form["$subcellular_location"]->getData();
+			$subcellular_location_parameter_array["$subcellular_location"] = $subcellular_location_value;
+			
+		}
+		
+		
+		
+		$query_query = $form["query_query"]->getData();
+		
+		
+		$form_data_array["category_array"] = $category_array;
+		$form_data_array["tissue_parameter_array"] = $tissue_parameter_array;
+		$form_data_array["query_query"] = $query_query;
+		$form_data_array["min_interaction_score"] = $min_interaction_score;
+		
+		$pattern = '/[;,\s\t\n]/';
+		$search_query_array = preg_split( $pattern, $search_query);
+		$search_query_array = array_filter($search_query_array, function($value) { return $value !== ''; });
+		$search_query = join(",",$search_query_array);
+		
+		
+		$option_array = array('search_term' => $search_query);
+		
+		if($text_output){
+			
+			$option_array['output'] = 'text_output';
+		}
+		
+		if($query_query){
+			$option_array['filter'] = 'query_query';
+		}
+		
+		if($min_interaction_score){
+			$option_array['score'] = $min_interaction_score;
+		}
+		
+		foreach ($category_array as $key => $category){
+			
+			if(!$category){
+				$option_array["$key"] = 'false';
+			}
+			
+		}
+		
+		foreach ($tissue_parameter_array as $key => $tissue_value){
+			
+			if($tissue_value > 0){
+				
+				$option_array["$key"] = $tissue_value;
+			}
+			
+		}
+		
+		foreach ($subcellular_location_parameter_array as $key => $subcellular_location_value){
+			
+			if($subcellular_location_value){
+				
+				$option_array["$key"] = 'true';
+			}
+			
+		}
 
-	        
-	    }else{
-	        
-	        
-	        
-	        if($min_interaction_score){
-	            $option_array['score'] = $min_interaction_score;
-	        }
-	        
-	         
-	        if($published){
-	            $option_array['published'] = 'true';
-	        }
-	        if($validated){
-	            $option_array['validated'] = 'true';
-	        }
-	        if($verified){
-	            $option_array['verified'] = 'true';
-	        }
-	        if($literature){
-	            $option_array['literature'] = 'true';
-	        }
-	        
-	        if($query_query){
-	            $option_array['filter'] = 'query_query';
-	        }else{
-	            $option_array['filter'] = 'None';
-	        }
-	        
-	    }
+		return $option_array;
+	}
 
-
-	    
-	    
-	    
-	    
-	    return $option_array;
+	
+	public function getSearchForm($tissue_array, $subcellular_location_array, $interaction_categories_array){
+		$form = $this->createForm('AppBundle\Form\SearchType');
+		
+		foreach($interaction_categories_array as $interaction_category){
+			$category_name = $interaction_category[0]->getCategoryName();
+			$category_name = strtolower($category_name);	
+			$form ->add($category_name, CheckboxType::class, array(
+					'required' => false,
+					'attr' => array('value' => $category_name, 'checked' => 'checked')));
+		}
+		
+		foreach($tissue_array as $tissue_name => $tissue){
+			$form ->add($tissue, CheckboxType::class, array(
+					'label' => $tissue_name,
+					'required' => false,
+					'mapped' => false,
+					'attr' => array('value' => $tissue)));
+		}
+		
+		foreach($subcellular_location_array as $subcellular_location_name => $subcellular_location){
+			$form ->add($subcellular_location, CheckboxType::class, array(
+					'label' => $subcellular_location_name,
+					'required' => false,
+					'mapped' => false,
+					'attr' => array('value' => $subcellular_location)));
+		}
+		
+		$form ->add('text_output', CheckboxType::class, array(
+				'label' => 'Text Ouptput',
+				'required' => false,
+				'mapped' => false,));
+		
+		return $form;
+		
 	}
 	
+	public function getInteractionCategories(){
+		
+		$interaction_categories_array = array();
+		$interaction_categories = $this->getDoctrine()
+		->getRepository('AppBundle:Interaction_Category')
+		->findAll();
+		foreach ($interaction_categories as $interaction_category){			
+			$interaction_category_order = $interaction_category->getOrder();			
+			$category_name = $interaction_category->getCategoryName();			
+			$category_name = strtolower($category_name);
+			$interaction_categories_array[$interaction_category_order] = array($interaction_category, $category_name);	
+		}	
+		ksort($interaction_categories_array);
+		
+		return $interaction_categories_array;
+	}
+	
+	
+	public function defineTissueArray(){
+		
+		$tissue_array = array('Adipose Subcutaneous' => 'adipose_subcutaneous', 'Adipose Visceral Omentum' => 'adipose_visceral_omentum', 'Adrenal Gland' => 'adrenal_gland', 'Artery Aorta' => 'artery_aorta', 'Artery Coronary' => 'artery_coronary', 'Artery Tibial' => 'artery_tibial',
+				'Brain 0' => 'brain_0', 'Brain 1' => 'brain_1', 'Brain 2' => 'brain_2', 'Breast Mammary Tissue' => 'breast_mammary_tissue', 'Colon Sigmoid' => 'colon_sigmoid',
+				'Colon Transverse' => 'colon_transverse', 'Esophagus Gastroesophageal Junction' => 'esophagus_gastroesophageal_junction', 'Esophagus Mucosa' => 'esophagus_mucosa',
+				'Esophagus Muscularis' => 'esophagus_muscularis', 'Heart Atrial Appendage' => 'heart_atrial_appendage', 'Heart Left Ventricle' => 'heart_left_ventricle',
+				'Kidney Cortex' => 'kidney_cortex', 'Liver' => 'liver', 'Lung' => 'lung', 'Minor Salivary Gland' => 'minor_salivary_gland', 'Muscle Skeletal' => 'muscle_skeletal',
+				'Nerve Tibial' => 'nerve_tibial', 'Ovary' => 'ovary', 'Pancreas' => 'pancreas', 'Pituitary' => 'pituitary', 'Prostate' => 'prostate',  'Skin' => 'skin',
+				'Small Intestine Terminal Ileum' => 'small_intestine_terminal_ileum', 'Spleen' => 'spleen', 'Stomach' => 'stomach',  'Testis' => 'testis',
+				'Thyroid' => 'thyroid', 'Uterus' => 'uterus', 'Vagina' => 'vagina', 'Whole Blood' => 'whole_blood');
+		
+		return $tissue_array;
+	}
+	
+	public function defineSubcellularLocationArray(){
+		$subcellular_location_array = array('Aggresome' => 'aggresome', 'Cell Junctions' => 'cell_junctions', 'Centrosome' => 'centrosome',
+				'Cytokinetic Bridge' => 'cytokinetic_bridge', 'Cytoplasmic Bodies' => 'cytoplasmic_bodies', 'Cytosol' => 'cytosol', 'Endoplasmic Reticulum' => 'endoplasmic_reticulum',
+				'Endosomes' => 'endosomes', 'Focal Adhesion Sites' => 'focal_adhesion_sites', 'Golgi Apparatus' => 'golgi_apparatus', 'Intermediate Filaments' => 'intermediate_filaments',
+				'Lipid_droplets' => 'lipid_droplets', 'Lysosomes' => 'lysosomes', 'Microtubule_ends' => 'microtubule_ends', 'Microtubule Organizing Center' => 'microtubule_organizing_center',
+				'Microtubules' => 'microtubules', 'Midbody' => 'midbody', 'Midbody Ring' => 'midbody_ring', 'Mitochondria' => 'mitochondria', 'Mitotic Spindle' => 'mitotic_spindle',
+				'Nuclear_Bodies' => 'nuclear_bodies', 'Nuclear Membrane' => 'nuclear_membrane', 'Nuclear Speckles' => 'nuclear_speckles', 'Nucleoli' => 'nucleoli',
+				'Nucleoli Fibrillar Center' => 'nucleoli_fibrillar_center', 'Nucleoplasm' => 'nucleoplasm', 'Nucleus' => 'nucleus', 'Peroxisomes' => 'peroxisomes',
+				'Plasma Membrane' => 'plasma_membrane', 'Rods and Rings' => 'rods_and_rings', 'Vesicles' => 'vesicles');
+		
+		return $subcellular_location_array;
+		
+	}
+	
+	public function checkLoginStatus(){
+		$login_status = false;
+		$is_fully_authenticated = $this->get('security.context')
+		->isGranted('IS_AUTHENTICATED_FULLY');
+		if($is_fully_authenticated){
+			$login_status =  true;
+		}
+		return $login_status;
+	}
 
-
+	public function checkAdminStatus(){
+		$admin_status = false;
+		if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
+			$admin_status = true;
+		}
+		return $admin_status;
+	}
+	
+	public function getAdminSettings(){
+	
+		$admin_settings = $this->getDoctrine()
+		->getRepository('AppBundle:Admin_Settings')
+		->find(1);
+		return $admin_settings;
+	}
 }
-	
-	
 ?>	

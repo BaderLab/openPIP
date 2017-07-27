@@ -40,41 +40,55 @@
 	</nav>
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
-			<div class="navbar-header tor_ibin_header">
-				<button type="button" class="navbar-toggle left" data-toggle="collapse" data-target="#myNavbar">
-					<span class="icon-bar"></span> 
-					<span class="icon-bar"></span> 
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div id="myNavbar" class="collapse navbar-collapse">
-    		    {% if login_status == false %}
-    		    	<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+				{% if login_status == false %}
+    			<div class="navbar-header tor_ibin_header" >
+    				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+    				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+    					<span class="icon-bar"></span> 
+    					<span class="icon-bar"></span> 
+    					<span class="icon-bar"></span>
+    				</button>
+    			</div>
+    			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
+        				<ul class="nav navbar-nav ">
+        					<li><a href="{{ path('home') }}">Home</a></li>
+        					<li><a href="{{ path('search') }}">Search</a></li>
+        					<li class="active"><a href="{{ path('download') }}">Downloads</a></li>
+        					<li><a href="{{ path('about') }}">About</a></li>
+        					<li><a href="{{ path('faq') }}">FAQ</a></li>
+        					<li><a href="{{ path('contact') }}">Contact</a></li>
+        				</ul>
+        				<ul class="nav navbar-nav navbar-right">
+        					<li><a href="{{ path('user_register') }}">Register</a></li>
+        					<li style="margin-left: 0px;"><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+        				</ul>
+        		{% elseif login_status == true %}
+    				<div class="navbar-header tor_ibin_header" >
+						<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+        				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span>
+        				</button>
+        			</div>
+    	
     				<ul class="nav navbar-nav ">
     					<li><a href="{{ path('home') }}">Home</a></li>
     					<li><a href="{{ path('search') }}">Search</a></li>
-    					<li class="active"><a href="{{ path('search') }}">Downloads</a></li>
+    					<li class="active"><a href="{{ path('download') }}">Downloads</a></li>
     					<li><a href="{{ path('about') }}">About</a></li>
-    					<li><a href="{{ path('documentation') }}">Documentation</a></li>
-    				</ul>
-    				<ul class="nav navbar-nav navbar-right">
-    					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
-    				</ul>
-    			{% elseif login_status == true %}
-    				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
-    				<ul class="nav navbar-nav ">
-    					<li><a href="{{ path('admin_home') }}">Home</a></li>
-    					<li><a href="{{ path('admin_search') }}">Search</a></li>
-    					<li class="active"><a href="{{ path('admin_download') }}">Downloads</a></li>
-    					<li><a href="{{ path('admin_about') }}">About</a></li>
-    					<li><a href="{{ path('admin_documentation') }}">Documentation</a></li>
+    					<li><a href="{{ path('faq') }}">FAQ</a></li>
+    					<li><a href="{{ path('contact') }}">Contact</a></li>
+    					{% if admin_status == true %}
     					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
     					<li><a href="{{ path('data_manager') }}">Data</a></li>
     					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
     					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+    					{% endif %}
     				</ul>
     				<ul class="nav navbar-nav navbar-right">
-    					<li><a href="{{ path('user_logout') }}">Logout</a></li>
+    					<li><a href="{{ path('fos_user_profile_show') }}">Profile</a></li>
+    					<li style="margin-left: 0px;"><a href="{{ path('user_logout') }}">Logout</a></li>
     				</ul>
     			{% endif %}
 			</div>
@@ -83,36 +97,69 @@
 	</nav>
 </header>
 <main>
-    <div id="dataset_request" class="hidden large">
-    	<div id="download_request_form" style='padding: 6%;'>
-    		{{ form_start(form) }}
-    		<div class="hidden">{{ form_widget(form.dataset)}}</div>
-    		<div class="row">
-    			<strong>Email addresses will be used to inform users on major updates to the unpublished interactome datasets.</strong>
+    <div id="data_request_logged_out" class="hidden large">
+    	<div id="logged_out_form">
+    		<div class="container">
+    			<div class="row">
+    				<h3 class="bold" style="text-align: center; color: {{ main_color_scheme }}">Download Dataset</h3>
+    				<p style='margin-top: 20px;'>
+    					<strong>Please register or login to download unpublished data.</strong>
+    				</p>
+    			</div>
+    			<div class="row" style='margin-top: 30px;'>
+    				<div style="padding-left: 0px; float: left;">
+    					<a class="btn btn-default" href="{{ path('user_register') }}">Register</a>
+    					<a class="btn btn-default" href="{{ path('fos_user_security_login') }}">Login</a>
+    				</div>
+    				<div style="float: right;">
+    					<div class="cancel_data_request btn btn-default" style="float: right;">
+    						<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
+    					</div>
+    				</div>
+    			</div>
     		</div>
-    		</br>
-    		<div class="row">{{ form_widget(form.email) }}</div>
-    		<div class="row" style='margin-top: 2%;'>
-    		    <div class="col-lg-4">
-    		    	
-        			<button id="down_data" type="submit" class="btn btn-success" style="float: right; margin-right: 10px;" >
-            				<i class="glyphicon glyphicon-plus"></i>
-            				<span>Download Dataset</span>
-        			</button>
-        		</div>
-        		<div class="col-lg-6">
-        			<div id="cancel_dataset_request" class="btn btn-danger" style="float: right;">
-        				<i class="glyphicon glyphicon-ban-circle"></i> 
-        				<span>Cancel</span>
-        			</div>
-        		</div>
-
-    		</div>
-    		{{ form_end(form) }}
     	</div>
-    </div> 
+    </div>
+    
+    <div id="data_request_logged_in" class="hidden large">
+    	<div id="logged_in_form">
+    	    {{ form_start(form, {'attr': {'id': 'add_dataset_form'}}) }}
+    		<div class="container">
+    			<div class="hidden">
+    				{{ form_widget(form.request_dataset)}}
+    				{{ form_widget(form.request_file_format)}}
+    				<input id="submit_form" type="submit" value="submit" />
+    
+    			</div>
+    			<div class="row">
+    				<h3 class="bold" style="text-align: center; color: {{ main_color_scheme }}">Download Dataset</h3>
+    			</div>
+    			<div class="row">
+    				
+    				{{ form_widget(form.add_dataset)}}
+    			</div>
+    			
+    			<div class="row">
+    			
+    				<div style="padding-left: 0px; float: left;">
+    					<button id="download_unpublished_data_link" type="submit" class="btn btn-default" style="float: left; margin-right: 10px;" href=""><i class="glyphicon glyphicon-download-alt"></i> Download Dataset</button>
+    		
+    				</div>
+    				<div style="float: right;">
+    					<div class="cancel_data_request btn btn-default" style="float: right;">
+    						<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    		
+    		{{ form_end(form) }}
+    		
+    	</div>
+    
+    </div>
     <div class="row" style="background-color: #EEEEEE;">
-    	<div class="outer_panel">
+    	<div class="outer_panel"  style="overflow: auto;">
         	<div class="container">
         		<div class="row">
 					<h3 id="dataset_request_links" style="color: {{ main_color_scheme }}">Downloads</h3>
@@ -122,49 +169,41 @@
                     	<tr>
                         	<th>Dataset</th>
                             <th>Number of interactions</th>
-                            <th>PSMITAB file - collapsed(?)</th>
-                            <th>PSMITAB file - full(?)</th>
-                            <th>CSV</th>
-                            <th>Reference</th>
+                            <th>File Downloads</th>
                      	</tr>
                     </thead>
                     <tbody>
-                	{% if show_download_all == 1 %}
-        	            <tr>
-                            <td>All</td>
-                            <td></td>
-                            <td><a href="../../data/.txt" download>Download</a></td>
-                            <td><a href="../../data/.txt" download>Download</a></td>
-                    		<td><a href="../../data/.txt" download>Download</a></td>                      
-                            <td></td>                    
-                      	</tr>
-                	{% endif %}
                 	{% if show_downloads == 1 %}
                     	{% for dataset in dataset_array %}
-                        	{% if dataset.InteractionStatus != 'published' %}
-                	          <tr>
-                                <td>{{ dataset.author }} ({{ dataset.year }})</td>
-                                <td>{{ dataset.NumberOfInteractions }}</td>
-                                <td><a id="{{ dataset.id }}_collapsed"  data= "{{ dataset.id }}"  class="dataset_request_links" style="cursor:pointer;">Download</a></td>
-                                <td><a id="{{ dataset.id }}_uncollapse"  data= "{{ dataset.id }}"  class="dataset_request_links" style="cursor:pointer;">Download</a></td>
-                                <td><a id="{{ dataset.id }}_csv" data= "{{ dataset.id }}" class="dataset_request_links" style="cursor:pointer;">Download</a></td>                        
-                                <td></td>                    
-                              </tr>                      	
-                        	{% else %}
+                        	{% if dataset[0].InteractionStatus == 'published' %}
                         	     <tr>
-                                    <td>{{ dataset.author }} ({{ dataset.year }})</td>
-                                    <td>{{ dataset.NumberOfInteractions }}</td>
-                                    <td><a href="../../data/{{ dataset.PubmedId }}.txt" download>Download</a></td>
-                                    <td><a href="../../data/{{ dataset.PubmedId }}.txt" download>Download</a></td>
-                                    <td><a href="../../data/{{ dataset.PubmedId }}.txt" download>Download</a></td>                     
-                                    <td><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ dataset.PubmedId }}" target="_blank">{{ dataset.author }} ({{ dataset.year }})</a></td>                    
+                                    
+                                    <td>{% if dataset[0].pubmedid %}<a href="https://www.ncbi.nlm.nih.gov/pubmed/{{ dataset[0].pubmedid }}" target="_blank">{{ dataset[0].name }}</a>{% else %}{{ dataset[0].name }}{% endif %}</td>
+                                    <td>{{ dataset[0].NumberOfInteractions }}</td>
+    								<td>
+                                        {% for data_file in dataset[1] %}
+                                        	<a href="{{ data_file.path }}"   download>{{ data_file.name }}</a></br>
+                      					{% endfor %}
+                  					</td>                                     
                                   </tr>
+                        	{% endif %}
+                    	{% endfor %}
+                    	{% for dataset in dataset_array %}
+                        	{% if dataset[0].InteractionStatus != 'published' %}
+                	          <tr>
+                                <td>{{ dataset[0].name }}</td>
+                                <td>{{ dataset[0].NumberOfInteractions }}</td>
+								<td>
+                                {% for data_file in dataset[1] %}
+                                	<a id="{{ data_file.path }}"  class="dataset_request_links" format="{{ data_file.FileType }}" data="{{ dataset[0].id }}" style="cursor:pointer;">{{ data_file.name }}</a></br>
+              					{% endfor %}
+              					</td>
+                              </tr>                      	
                         	{% endif %}
                     	{% endfor %}
                 	{% endif %}
                 	</tbody>
   				</table>
-  				<script>$(".dataset_request_links").on("click", showDatasetRequestForm);</script>
             	<div class="row">
             	    {{ download | raw }}
             	</div>
@@ -178,10 +217,13 @@
 </footer>
 {% endblock %} 
 {% block javascripts %}
+<script>
+	var loggedIn = "{{ login_status }}";
+</script>
 <script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
 <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('assets/js/jquery.qtip.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.qtip.min.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
 
 <script id="document_js">

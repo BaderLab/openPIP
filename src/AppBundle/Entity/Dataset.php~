@@ -18,6 +18,20 @@ class Dataset
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
 	protected $id;
+	
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Dataset_Request" , inversedBy="datasets")
+	 * @ORM\JoinTable(name="dataset_request_dataset",
+	 *      joinColumns={
+	 *      		@ORM\JoinColumn(name="dataset_id", referencedColumnName="id")
+	 *      	},
+	 *      inverseJoinColumns={
+	 *      		@ORM\JoinColumn(name="dataset_request_id", referencedColumnName="id")
+	 *      	}
+	 * 		)
+	 */
+	public $dataset_requests;
 
 	/**
 	 * @ORM\ManyToMany(targetEntity="Interaction" , inversedBy="datasets")
@@ -31,33 +45,47 @@ class Dataset
 	 * 		)
 	 */
 	public $interactions;
+
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="Data_File" , inversedBy="datasets")
-	 * @ORM\JoinTable(name="dataset_data_file",
+	 * @ORM\OneToMany(targetEntity="Data_File", mappedBy="dataset")
+	 */
+	
+	public $data_files;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="User" , inversedBy="datasets")
+	 * @ORM\JoinTable(name="user_datasets",
 	 *      joinColumns={
-	 *      		@ORM\JoinColumn(name="data_file_id", referencedColumnName="id")
+	 *      		@ORM\JoinColumn(name="dataset_id", referencedColumnName="id")
 	 *      	},
 	 *      inverseJoinColumns={
-	 *      		@ORM\JoinColumn(name="dataset_id", referencedColumnName="id")
+	 *      		@ORM\JoinColumn(name="user_id", referencedColumnName="id")
 	 *      	}
 	 * 		)
 	 */
-	public $data_files;
+	public $users;
+	
 	
 	public function __construct() {
+		$this->datasets = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->data_files = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->dataset_requests = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
+	/**
+	 * @ORM\Column(type="string", length=100, nullable=true)
+	 */
+	protected $name;
 
 	/**
-	 * @ORM\Column(type="string", length=10, nullable=true)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $pubmed_id;
 	
 	/**
-	 * @ORM\Column(type="string", length=10, nullable=true)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $author;
 	
@@ -68,12 +96,12 @@ class Dataset
 	
 	
 	/**
-	 * @ORM\Column(type="string", length=10, nullable=true)
+	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $interaction_status;
 	
 	/**
-	 * @ORM\Column(type="string", length=100, nullable=true)
+	 * @ORM\Column(type="string", length=1000, nullable=true)
 	 */
 	protected $description;
 	
@@ -82,6 +110,11 @@ class Dataset
 	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $number_of_interactions;
+	
+	/**
+	 * @ORM\Column(type="string", length=100, nullable=true)
+	 */
+	protected $file_path;
 
     /**
      * Get id
@@ -294,5 +327,111 @@ class Dataset
     public function getNumberOfInteractions()
     {
         return $this->number_of_interactions;
+    }
+
+    /**
+     * Set interactionStatus
+     *
+     * @param string $interactionStatus
+     *
+     * @return Dataset
+     */
+    public function setInteractionStatus($interactionStatus)
+    {
+        $this->interaction_status = $interactionStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get interactionStatus
+     *
+     * @return string
+     */
+    public function getInteractionStatus()
+    {
+        return $this->interaction_status;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     *
+     * @return Dataset
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Add datasetRequest
+     *
+     * @param \AppBundle\Entity\Dataset_Request $datasetRequest
+     *
+     * @return Dataset
+     */
+    public function addDatasetRequest(\AppBundle\Entity\Dataset_Request $datasetRequest)
+    {
+        $this->dataset_requests[] = $datasetRequest;
+
+        return $this;
+    }
+
+    /**
+     * Remove datasetRequest
+     *
+     * @param \AppBundle\Entity\Dataset_Request $datasetRequest
+     */
+    public function removeDatasetRequest(\AppBundle\Entity\Dataset_Request $datasetRequest)
+    {
+        $this->dataset_requests->removeElement($datasetRequest);
+    }
+
+    /**
+     * Get datasetRequests
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDatasetRequests()
+    {
+        return $this->dataset_requests;
+    }
+
+    /**
+     * Set filePath
+     *
+     * @param string $filePath
+     *
+     * @return Dataset
+     */
+    public function setFilePath($filePath)
+    {
+        $this->file_path = $filePath;
+
+        return $this;
+    }
+
+    /**
+     * Get filePath
+     *
+     * @return string
+     */
+    public function getFilePath()
+    {
+        return $this->file_path;
     }
 }

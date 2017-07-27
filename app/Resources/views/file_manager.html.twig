@@ -1,14 +1,13 @@
 {% extends 'base.html.twig' %} 
 {% block stylesheets %}
-	<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
-    {% stylesheets 
-        'bundles/jqueryfileuploader/css/jquery.fileupload.css'
-        'bundles/jqueryfileuploader/css/jquery.fileupload-ui.css'
-        'assets/css/main.css'
-        'assets/css/file_manager.css'
-    %}
-        <link rel="stylesheet" href="{{ asset_url }}">
-    {% endstylesheets %} 
+
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/jqueryfileuploader/css/jquery.fileupload.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/jqueryfileuploader/css/jquery.fileupload-ui.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/file_manager.css') }}">
+
 {% endblock %} 
 {% block title %}{{ short_title }} | File{% endblock %} 
 {% block content %}
@@ -145,28 +144,21 @@
 </footer>
 {% endblock %} 
 {% block javascripts %}
-    {% javascripts
-        'assets/js/jquery-2.1.4.min.js'
-        'assets/js/jquery-ui.min.js'
-        'bundles/jqueryfileuploader/js/vendor/jquery.ui.widget.js'
-        'bundles/jqueryfileuploader/js/tmpl.min.js'
-        'bundles/jqueryfileuploader/js/load-image.all.min.js'
-        'bundles/jqueryfileuploader/js/canvas-to-blob.min.js'
-        'bundles/jqueryfileuploader/js/blueimp-gallery.min.js'
-        'bundles/jqueryfileuploader/js/jquery.iframe-transport.js'
-        'bundles/jqueryfileuploader/js/jquery.fileupload.js'
-        'bundles/jqueryfileuploader/js/jquery.fileupload-process.js'
-        'bundles/jqueryfileuploader/js/jquery.fileupload-image.js'
-        'bundles/jqueryfileuploader/js/jquery.fileupload-audio.js'
-        'bundles/jqueryfileuploader/js/jquery.fileupload-video.js'
-        'bundles/jqueryfileuploader/js/jquery.fileupload-validate.js'
-        'bundles/jqueryfileuploader/js/jquery.fileupload-ui.js'
-        'bundles/jqueryfileuploader/js/main.js'
-        'assets/js/main.js'
-        'assets/js/file_manager.js' %}
-        <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-	<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+
+    <script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('bundles/jqueryfileuploader/js/vendor/jquery.ui.widget.js') }}"></script>
+    <script src="{{ asset('bundles/jqueryfileuploader/js/tmpl.min.js') }}"></script>
+    <script src="{{ asset('bundles/jqueryfileuploader/js/load-image.all.min.js') }}"></script>
+    <script src="{{ asset('bundles/jqueryfileuploader/js/canvas-to-blob.min.js') }}"></script>
+    <script src="{{ asset('bundles/jqueryfileuploader/js/blueimp-gallery.min.js') }}"></script>
+    <script src="{{ asset('bundles/jqueryfileuploader/js/jquery.iframe-transport.js') }}"></script>
+    <script src="{{ asset('bundles/jqueryfileuploader/js/jquery.fileupload.js') }}"></script>
+    <script src="{{ asset('bundles/jqueryfileuploader/js/canvas-to-blob.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="{{ asset('assets/js/file_manager.js') }}"></script>
+
     {% verbatim %}
 		<script id="template-upload" type="text/x-tmpl">
 			{% for (var i=0, file; file=o.files[i]; i++) { %}

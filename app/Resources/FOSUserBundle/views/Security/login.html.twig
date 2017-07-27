@@ -1,21 +1,11 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
-
- 
 {% trans_default_domain 'FOSUserBundle' %} 
-
-
-{% block stylesheets %} 
-    {% stylesheets
-		'assets/css/bootstrap.min.css' 'assets/css/main.css'
-		'assets/css/data_manager.css' %}
-		<link rel="stylesheet" href="{{ asset_url }}">
-    {% endstylesheets %} 
+{% block stylesheets %}   
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/data_manager.css') }}">	
 {% endblock %}
-
- 
 {% block title %}{{ short_title }} | Login{% endblock %}
-
- 
 {% block fos_user_content %}
 <header>
 	<nav class="navbar navbar-default main_header" style="background-color: {{ main_color_scheme }};">
@@ -63,8 +53,11 @@
 					<li><a href="{{ path('search') }}">Search</a></li>
 					<li><a href="{{ path('search') }}">Downloads</a></li>
 					<li><a href="{{ path('about') }}">About</a></li>
+					<li><a href="{{ path('faq') }}">FAQ</a></li>
+					<li><a href="{{ path('contact') }}">Contact</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
+					<li><a href="{{ path('user_register') }}">Register</a></li>
 					<li class="active"><a href="{{ path('fos_user_security_login') }}">Login</a></li>
 				</ul>
     		</div>

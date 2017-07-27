@@ -12,3 +12,39 @@ services:
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload }
+            
+    app.node:
+      class: AppBundle\Utils\Node
+      shared: false
+      
+    app.edge:
+      class: AppBundle\Utils\Edge
+      shared: false
+      
+    app.queryparameters:
+      class: AppBundle\Utils\QueryParameters
+      shared: false
+      
+    app.publication_status:
+      class: AppBundle\Utils\PublicationStatus
+      shared: false
+      
+    app.interaction_category_status:
+      class: AppBundle\Utils\InteractionCategoryStatus
+      shared: false
+        
+    
+    app.functions:
+      class: AppBundle\Utils\Functions
+      shared: false
+      
+    app.interaction_data:
+      class: AppBundle\Utils\InteractionData
+      shared: false
+      arguments: ['@doctrine.orm.entity_manager', '@app.functions', '@app.publication_status']
+      
+    app.search:
+      class: AppBundle\Controller\SearchController
+      shared: false
+      calls:
+       - [setContainer, ["@service_container"]]

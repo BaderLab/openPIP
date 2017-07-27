@@ -22,6 +22,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 use Symfony\Component\DomCrawler\Crawler;
+use AppBundle\Entity\Experiment;
+use AppBundle\Entity\Interaction_Category;
 
 /**
  * Data controller.
@@ -58,15 +60,33 @@ class DataController extends Controller
 	    
 	        return $this->redirectToRoute('data_manager');
 	    }
+	   
+	     
+	    $update_user_form = self::getUpdateUserForm();
+	    $update_user_form->handleRequest($request);
+	     
+	    if ($update_user_form->isSubmitted() && $update_user_form->isValid()) {
+	         
+
+	        $dataset_id = $delete_form->get('dataset')->getData();
+	         
+	        self::updateUsers($dataset_id);
+
+	        
+	        return $this->redirectToRoute('data_manager');
+	    }
+	    
 	    
 
 	    $data_File = new Data_File();
 	    $data_form = $this->createForm('AppBundle\Form\Data_FileType', $data_File);
 	    $data_form->handleRequest($request);
 	    
-	    if ($data_form->isSubmitted() && $data_form->isValid()) {
+	    if ($data_form->isSubmitted()) {
 	        
+	    	
 	        /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+	    /*
 	        $file = $data_File->getDataFile();
 	        $fileName = $file->getClientOriginalName();
 	        $file->move(
@@ -80,15 +100,31 @@ class DataController extends Controller
 	        $handle = fopen($filepath , "r");
 	         
 	        $form_data = $data_form->getData();
-	         
+	      */   
 	        $file_row = 0;
-	        
-	        
+	        $functions = $this->get('app.functions');
+	        $connection =  $functions->mysql_connect();
+	    	//$handle = fopen('D:\\HuRI Data\\release_170701\\bioinfo_katja..tsv_psi_mi_detailed' , "r");
+	        $handle = fopen('D:\\HuRI Data\release_170701\\bioinfo_katja..tsv_psi_mi_detailed' , "r");
+
+	        $functions = $this->get('app.functions');
+	        $connection =  $functions->mysql_connect();
+	        $result = $connection->query("SELECT * FROM `experiment`");
+	        $experiment_array = array();
+	        if($result){
+	        	while($row = $result->fetch_assoc()) {
+	        		$experiment_array[$row['id']] = $row;
+	        	}
+	        }
+	        $handle2 = fopen('D:\\test\\test.txt', 'w');
 	        while ($file_data = fgetcsv($handle, 0, "\t"))
 	        {
-	            if($file_row < 1){ $file_row++; continue; }
-	            
+	        	$file_row++;
+	        	if($file_row < 80 || $file_row > 100){ continue; }
+
 	            try{
+
+	            	
 	                //variable for each mitab coloumn
 	                list ($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id, $interactor_A_alias, $interactor_B_alias, $interaction_detection_method,
 	                                $publication_first_author, $publication_identifier, $taxid_interactor_A, $taxid_interactor_B, $interaction_type, $source_database,
@@ -99,35 +135,224 @@ class DataController extends Controller
 	                                $negative, $feature_interactor_A, $feature_interactor_B, $stoichiometry_interactor_A, $stoichiometry_interactor_B,
 	                                $identification_method_participant_A, $identification_method_participant_B) = $file_data;
 	                
-                    $doctrine_manager = $this->getDoctrine()->getManager();
-                    $doctrine_manager->getConfiguration()->setSQLLogger(null);
-                    
-                    if(self::isNewInteraction($interactor_A_id, $interactor_B_id) == true){
-                        
-                        
-                        //Protein
-                        $protein_A_array = self::proteinHandler($interactor_A_id, $doctrine_manager);
-                        $protein_A = $protein_A_array[0];
-                        $identifier_A_protein_array = $protein_A_array[1];
-                        $links_array_A = $protein_A_array[2];
-                         
-                         
+	                                
+	                                
+	                                $experiment = $experiment_array[$file_row];
+	                                
+	                                
+	                                $experiment_assay_version= $experiment['assay_version'];
+	                                
+	                                
+	                                
+	                                if(preg_match('/.*pDEST-DB.*/',$annotation_interactor_A) &&
+	                                		preg_match('/.*pDEST-AD.*/',$annotation_interactor_B)){
+	                                			$assay_version = 1;
+	                                }elseif(preg_match('/.*pDEST-DB.*/',$annotation_interactor_A) &&
+	                                		preg_match('/.*pQZ213.*/',$annotation_interactor_B)){
+	                                			$assay_version = 2;
+	                                }elseif(preg_match('/.*pQZ212.*/',$annotation_interactor_A) &&
+	                                		preg_match('/.*pDEST-AD.*/',$annotation_interactor_B)){
+	                                			$assay_version = 3;
+	                                }elseif(preg_match('/.*pQZ212.*/',$annotation_interactor_A) &&
+	                                		preg_match('/.*pQZ213.*/',$annotation_interactor_B)){
+	                                			$assay_version = 4;
+	                                }elseif(preg_match('/.*pDEST-DB.*',$annotation_interactor_A) &&
+	                                		preg_match('/.*pAR68.*/',$annotation_interactor_B)){
+	                                			$assay_version = 6;
+	                                }elseif(preg_match('/.*pQZ212.*/',$annotation_interactor_A) &&
+	                                		preg_match('/.*pAR68.*/',$annotation_interactor_B)){
+	                                			$assay_version = 8;
+	                                }
+	                                
+	                                
 
-                         
-                        $protein_B_array = self::proteinHandler($interactor_B_id, $doctrine_manager);
-                        $protein_B = $protein_B_array[0];
-                        $identifier_B_protein_array = $protein_B_array[1];
-                        $links_array_B = $protein_B_array[2];
-                        
+	                                
+	                                if($experiment_assay_version != $assay_version){
+	                                	//$result = $connection->query("UPDATE `experiment` SET `assay_version`= '$assay_version' WHERE `id` = '$file_row'");
+	                                	fwrite($handle2, $file_row . ' ' . $experiment_assay_version . ' ' . $assay_version);
+	                                
+	                                }
+	                                /*
+	                //if($interactor_A_id == '-' && $interactor_B_id != '-'){ continue; }
+	                
+	                                $interaction = self::getInteractionByIds($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id);
+	                                $experiment = self::experimentHandler($interactor_A_id, $interactor_B_id,  $alt_interactor_A_id, $alt_interactor_B_id, $interactor_A_alias, $interactor_B_alias, $annotation_interactor_A, $annotation_interactor_B, $interaction_annotation);
+	                                if($publication_first_author == 'unpublished space III'){$publication_first_author = 'HI-III';}
+	                                $dataset = self::getDatasetByReference($publication_first_author);
+	                                
+	                                if($interaction != null && $interaction != ''){
+	                                	$experiment->setInteraction($interaction);
+	                                }
+	                                $experiment->setDataset($dataset);
+	                                
+	                                $doctrine_manager = $this->getDoctrine()->getManager();
+	                                $doctrine_manager->getConfiguration()->setSQLLogger(null);
+	                                
 
-                        
+	                                $doctrine_manager->persist($experiment);
+
+	                                $doctrine_manager->flush();
+	                                $doctrine_manager->clear();
+	                                gc_collect_cycles();
+	                                
+	                                
+	                                */
+	                                
+
+	                                
+	                                
+/*
+	                                $interaction = self::getInteractionByIds($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id);
+	                                $interaction_id = $interaction->getId();
+	                                
+	                                if($interaction_detection_method == 'psi-mi:"MI:0397"(two hybrid array)'){
+	                                	
+	                                	$query_string = "INSERT INTO `interaction_interaction_category`(`interaction_category_id`, `interaction_id`) VALUES ('3',$interaction_id)";
+	                                	$query = $connection->query($query_string);
+	                                	
+	                                	
+	                                }elseif($interaction_detection_method == 'psi-mi:"MI:1112"(two hybrid prey pooling approach)'){
+	                                	$query_string = "INSERT INTO `interaction_interaction_category`(`interaction_category_id`, `interaction_id`) VALUES ('3',$interaction_id)";
+	                                	$query = $connection->query($query_string);
+	                                	
+	                                	
+	                                }elseif($interaction_detection_method == 'psi-mi:"MI:1356"(validated two hybrid)'){
+	                                	$query_string = "INSERT INTO `interaction_interaction_category`(`interaction_category_id`, `interaction_id`) VALUES ('2',$interaction_id)";
+	                                	$query = $connection->query($query_string);
+	                                	
+	                                	
+	                                }
+	                                
+	                                if($publication_identifier != '-'){
+	                                	
+	                                	$query_string = "INSERT INTO `interaction_interaction_category`(`interaction_category_id`, `interaction_id`) VALUES ('1',$interaction_id)";
+	                                	$query = $connection->query($query_string);
+	                                	
+	                                	
+	                                	
+	                                }
+	                                
+	                                
+	                                
+	                                
+	                                
+	                                
+	                                
+	                                
+	                                /*
+	                
+	                               
+	                                
+	                                $interaction = self::getInteractionByIds($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id);
+	                                
+	                                $experiment = self::experimentHandler($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id, $interactor_A_alias, $interactor_B_alias, $interaction_annotation);
+	                                
+	                                $dna_binding_domain_obj = $experiment->getDnaBindingDomain();
+	                                $activation_domain_obj = $experiment->getActivationDomain();
+	                                
+	                                $dna_binding_domain = $dna_binding_domain_obj->getId();
+	                                $activation_domain = $activation_domain_obj->getId();
+	                                
+	                                $orf_a = $experiment->getOrfA();
+	                                $orf_b = $experiment->getOrfB();
+	                                $num_screens = $experiment->getNumScreens();
+	                                
+	                                
+	                                
+	                                
+	                                $interaction_id = $interaction->getId();
+	                                
+	                                if($publication_first_author == 'unpublished space III'){
+	                                
+	                                $publication_first_author = 'HI-III';
+	                                }
+	                                
+	                                
+	                                
+	                                $em = $this->getDoctrine()->getManager();
+	                                
+	                                $query = $em->createQuery(
+	                                "SELECT ds
+	                                FROM AppBundle:Dataset ds
+	                                WHERE ds.name = :name"
+	                                )
+	                                ->setParameter('name', $publication_first_author);
+	                                
+	                                $dataset_array = $query->getResult();
+	                                
+	                                $dataset = $dataset_array[0];
+	                                
+	                                
+	                                $dataset_id = $dataset->getId();
+	                                
+	                                
+	                                $query = " INSERT INTO `experiment`(`id`, `dna_binding_domain`, `activation_domain`, `interaction_id`, `orf_a`, `orf_b`, `num_screens`, `dataset_id`) VALUES (NULL,$dna_binding_domain,$activation_domain,$interaction_id,$orf_a,$orf_b,$num_screens,$dataset_id)";
+	                                
+	                                $result = $connection->query($query);
+	                                
+	                                
+	                               	
+	                
+	                
+
+	                 /*
+	                
+	                
+	                if(self::isNewInteraction($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id)== true){
+	         
+                    	$protein_A = self::proteinHandler($interactor_A_id, $alt_interactor_A_id);
+                    	if($interactor_A_id == $interactor_B_id && $alt_interactor_A_id == $alt_interactor_B_id){
+                    		$protein_B = $protein_A;
+                        }else{
+                        	$protein_B = self::proteinHandler($interactor_B_id, $alt_interactor_B_id);
+                        }
+
                         $dataset = self::datasetHandler($publication_identifier, $publication_first_author);
+
                         
                         
-                        //Interaction
                         $interaction = self::interactionHandler($feature_interactor_B, $confidence_value);
                         
+                        //$experiment = self::experimentHandler($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id, $interactor_A_alias, $interactor_B_alias, $interaction_annotation);
+
+                        /*
+                        $interaction_status = $dataset->getInteractionStatus();
+                        $interaction_category_id = '';
+                        if($interaction_status == 'published'){
+                        	$interaction_category_id = '1';
+                        }elseif($interaction_status == 'validated'){
+                        	$interaction_category_id = '2';
+                        }elseif($interaction_status == 'verified'){
+                        	$interaction_category_id = '3';
+                        }
                         
+                        $interaction_category = $this->getDoctrine()
+                        ->getRepository('AppBundle:Interaction_Category')
+                        ->find($interaction_category_id);
+                        
+                        $interaction->addInteractionCategory($interaction_category);
+                        $interaction_category->addInteraction($interaction);
+                       
+                        
+                        $dataset->addInteraction($interaction);
+                        $interaction->addDataset($dataset);
+                        //$experiment->setInteraction($interaction);
+                        $interaction->setInteractorA($protein_A);
+                        $interaction->setInteractorB($protein_B);
+                        
+                        $doctrine_manager = $this->getDoctrine()->getManager();
+                        $doctrine_manager->getConfiguration()->setSQLLogger(null);
+                        
+                        //$doctrine_manager->persist($interaction_category);
+                        $doctrine_manager->persist($dataset);
+                        //$doctrine_manager->persist($experiment);
+                        $doctrine_manager->persist($interaction);
+                        $doctrine_manager->flush();
+                        $doctrine_manager->clear();
+                        gc_collect_cycles();
+                        
+                        //$domian = self::domainHandler($feature_interactor_A);
+                        /*
                         $support_informations_array = self::support_informationHandler($interaction_parameter);
                         $support_information_array = '';
                         $interaction_support_information_array = '';
@@ -146,84 +371,51 @@ class DataController extends Controller
                             }
                         }
                         
-
-                        
-                        foreach($identifier_A_protein_array as $identifier_A_protein){
-                            $identifier_A_protein->setProtein($protein_A);
-                            $doctrine_manager->persist($identifier_A_protein);
-                        }
-                        
-                        foreach($identifier_B_protein_array as $identifier_B_protein){
-                            $identifier_B_protein->setProtein($protein_B);
-                            $doctrine_manager->persist($identifier_B_protein);
-                        }
-                        
-                        
-                        
-                        if($links_array_A){
-                            foreach ($links_array_A as $link_A){
-                        
-                                $doctrine_manager->persist($link_A);
-                            }
-                        }
-                        if($links_array_B){
-                            foreach ($links_array_B as $link_B){
-                        
-                                $doctrine_manager->persist($link_B);
-                            }
-                        }
-                        
-                        if($dataset){
-                            $dataset->addInteraction($interaction);
-                            $interaction->addDataset($dataset);
-                            $doctrine_manager->persist($dataset);
-                        }
-                        $interaction->setInteractorA($protein_A);
-                        $interaction->setInteractorB($protein_B);
-                        
-                        $doctrine_manager->persist($interaction);
-                        $doctrine_manager->flush();
-                        $doctrine_manager->clear();
-                        gc_collect_cycles();
-                        
-                    }elseif(self::isNewDatasetFromPublicationIdentifier($publication_identifier) == false){
-                        
-                        $interaction = self::getInteractionByIds($interactor_A_id, $interactor_B_id);
-                        $dataset = self::getDatasetByPublicationIdentifier($publication_identifier);
-                        
-                        if(self::assertRelationshipExistsInteractionDataset($interaction, $dataset) == false){
-                        
-                            $dataset->addInteraction($interaction);
-                            $interaction->addDataset($dataset);
-                            $doctrine_manager->persist($dataset);
-                            $doctrine_manager->persist($interaction);
-                            $doctrine_manager->flush();
-                            $doctrine_manager->clear();
-                            gc_collect_cycles();
-                        }
-                        
-                    }elseif(self::isNewDatasetFromPublicationIdentifier($publication_identifier) == true){
-                        
-                        $interaction = self::getInteractionByIds($interactor_A_id, $interactor_B_id);
-                        $dataset = self::datasetHandler($publication_identifier, $publication_first_author);
-                        
-                        $dataset->addInteraction($interaction);
-                        $interaction->addDataset($dataset);
-                        $doctrine_manager->persist($dataset);
-                        $doctrine_manager->persist($interaction);
-                        $doctrine_manager->flush();
-                        $doctrine_manager->clear();
-                        gc_collect_cycles();
-                        
+						
+                       
                     }
-	                                
-	                                
+                    /*
+                    else{
+             
+                    	
+                    	$interaction = self::getInteractionByIds($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id);
+                    	
+                    	$dataset = '';
+                    	
+                    		
+                    	$dataset = self::datasetHandler($publication_identifier, $publication_first_author);
+
+                    	//$experiment = self::experimentHandler($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id, $interactor_A_alias, $interactor_B_alias, $interaction_annotation);
+                    		
+                    	
+                    	$doctrine_manager = $this->getDoctrine()->getManager();
+                    	$doctrine_manager->getConfiguration()->setSQLLogger(null);
+                    	
+                    	if(self::assertRelationshipExistsInteractionDataset($interaction, $dataset) == false){
+                    		
+                    		$dataset->addInteraction($interaction);
+                    		$interaction->addDataset($dataset);
+                    		$doctrine_manager->persist($dataset);
+                    		
+
+                    	}
+                    	
+                    	//$doctrine_manager->persist($experiment);
+                    	$doctrine_manager->persist($interaction);
+                    	$doctrine_manager->flush();
+                    	$doctrine_manager->clear();
+                    	gc_collect_cycles();
+                    	
+                    }
+					*/
 	            }catch(Exception $e) {
                 }
+              
 	            
 	        }
-	        
+
 	    }
+
 	    
 	    $admin_settings = $this->getDoctrine()
 	    ->getRepository('AppBundle:Admin_Settings')
@@ -238,6 +430,7 @@ class DataController extends Controller
 	    $title = $admin_settings->getTitle();
 	    
 	    return $this->render('data_manager.html.twig', array(
+	            'update_user_form' => $update_user_form->createView(),
 	            'delete_form' => $delete_form->createView(),
 	            'form' => $data_form->createView(),
 	            'dataset_array' => $dataset_array,
@@ -283,6 +476,40 @@ class DataController extends Controller
 	    
 	}
 	
+	public function getUpdateUserForm(){
+	    
+	    $em = $this->getDoctrine()->getManager();
+	    $query = $em->createQuery(
+	                    "SELECT ds
+				FROM AppBundle:Dataset ds
+	            WHERE ds.interaction_status != :interaction_status
+	                    "
+	                    );
+	    $query->setParameter('interaction_status', 'published');
+	    $dataset_array = $query->getResult();
+	    
+	    $unpublished_dataset_array = array();
+	    
+	    foreach($dataset_array as $dataset){
+	        $id = $dataset->getId();
+	        $pubmed_id = $dataset->getPubmedId();
+
+	    
+	        $unpublished_dataset_array[$id] = $pubmed_id;
+	    
+	    }
+	    
+	    $defaultData = array('message' => 'Type your message here');
+	    $update_user_form = $this->createFormBuilder($defaultData)
+	    ->add('dataset', ChoiceType::class, array(
+	            'choices' => $unpublished_dataset_array))->getForm();
+	    
+	    return $update_user_form;
+	    
+	    
+	}
+	
+	
 	public function getDataForm(){
 	    
 	    $data = array();
@@ -308,11 +535,7 @@ class DataController extends Controller
 	public function datasetHandler($publication_identifier, $publication_first_author){
 	    
 	    $dataset = '';
-
-	    
-	        $dataset = self::createDatasetFromData($publication_identifier, $publication_first_author);
-
-	    
+	    $dataset = self::createDatasetFromData($publication_identifier, $publication_first_author);
 	    return $dataset;
 	}
 	
@@ -321,50 +544,62 @@ class DataController extends Controller
 	    //$reference_array =  explode("|", $publication_identifier);
 	    
 	    $dataset = '';
-	    if($publication_identifier == 'validated'){
-	        if(self::isNewDataset('0000') == true){
-	             
-	            $dataset = new Dataset();
-	            $dataset->setInteractionStatus('validated');
-	            $dataset->setPubmedId('0000');
-	             
-	        }else{
-	             
-	            $dataset = self::getDatasetByReference('0000');
-	             
-	        }
-	    }
-	    //foreach($reference_array as $reference){
-	         
-	        $_reference_array = explode(":", $publication_identifier);
 	    
-	        $name = $_reference_array[0];
-	        
-	        if(array_key_exists(1, $_reference_array)){
-	           $id = $_reference_array[1];
-	        }
-	        
-	        if ($name == 'pubmed'){
-	            
-	           if(self::isNewDataset($id) == true){
-	               
-	               $dataset = new Dataset();
-	               $dataset->setPubmedId($id);
-	               $dataset->setAuthor($publication_first_author);
-	               $dataset->setInteractionStatus('published');
-	               
-	           }else{
-	               
-	               $dataset = self::getDatasetByReference($id);
-	               
-	           }
 
-	          }
-	      // }  
+	    
+	    if($publication_first_author == 'unpublished space III'){$publication_first_author = 'HI-III';}
+
+	    
+	    if(self::isNewDataset($publication_first_author) == true){
+	    	
+
+	    	
+	    	$doctrine_manager = $this->getDoctrine()->getManager();
+	    	$doctrine_manager->getConfiguration()->setSQLLogger(null);
+	    	$dataset = new Dataset();
+	    	
+	    	if($publication_identifier == '-'){
+	    		
+	    		if($publication_first_author == 'HI-III'){
+	    			
+	    			$dataset->setName('HI-III');
+	    			$dataset->setInteractionStatus('validated');
+	    			$dataset->setPubmedId('HI-III');
+	    			
+	    			
+	    			
+	    		}else{
+	    			
+	    			$dataset->setName($publication_first_author);
+	    			$dataset->setInteractionStatus('verified');
+	    			$dataset->setPubmedId($publication_identifier);
+	    			
+
+	    		}
+
+	    	}else{
+	    		$dataset->setName($publication_first_author);
+	    		$dataset->setInteractionStatus('published');
+	    		$dataset->setPubmedId($publication_identifier);
+
+	    	}
+	    	
+	    	$doctrine_manager->persist($dataset);
+	    	$doctrine_manager->flush();
+	    	
+	    	
+
+	    }else{
+	    	
+	    	$dataset = self::getDatasetByReference($publication_first_author);
+	    	
+	    }
+
 	      return $dataset;
 	}
 	
-	public function getDatasetByReference($id){
+	
+	public function getDatasetByReference($publication_first_author){
 	    
 	    
 	    $em = $this->getDoctrine()->getManager();
@@ -373,11 +608,13 @@ class DataController extends Controller
 	    $query = $em->createQuery(
 	                    "SELECT d
 							FROM AppBundle:Dataset d
-							WHERE d.pubmed_id = :pubmed_id"
+							WHERE d.name = :name
+							"
 	                    );
 	    
-	    $query->setParameter('pubmed_id', $id);
-         
+	    $query->setParameter('name', $publication_first_author);
+
+	    
 	    $results = $query->getResult();
 	    
 	    return $results[0];
@@ -395,14 +632,14 @@ class DataController extends Controller
 	
 	
 	    foreach($reference_array as $reference){
-	         /*
+	         
 	        $_reference_array = explode(":", $reference);
 	
 	        $name = $_reference_array[0];
 	        $id = $_reference_array[1];
 	
-	*/
-	        if ($reference == 'validated'){
+	
+
 	
 	            $query = $em->createQuery(
 	                            "SELECT d
@@ -410,26 +647,26 @@ class DataController extends Controller
         							WHERE d.pubmed_id = :pubmed_id"
 	                            );
 	             
-	            $query->setParameter('pubmed_id', '0000');
+	            $query->setParameter('pubmed_id', $id);
 	
 	            $results = $query->getResult();
 	             
 	            return $results[0];
-	        }
+
 	    }
 	     
 	}
 
-	public function isNewDataset($id){
+	public function isNewDataset($name){
 	    
 	    $em = $this->getDoctrine()->getManager();
 	    $query = $em->createQuery(
 	                    "SELECT d
 							FROM AppBundle:Dataset d
-							WHERE d.pubmed_id = :pubmed_id"
+							WHERE d.name = :name"
 	                    );
 	
-	    $query->setParameter('pubmed_id', $id);
+	    $query->setParameter('name', $name);
 	    $results = $query->getResult();
 	
 	
@@ -720,16 +957,16 @@ class DataController extends Controller
 		
 	}
 
-	public function proteinHandler($interactor_id, &$doctrine_manager){
+	public function proteinHandler($interactor_id, $alt_interactor_id){
 
-		if(self::assertNotNull($interactor_id)){
 
-			$return_array = self::createProteinFromData($interactor_id, $doctrine_manager);
+
+		$protein = self::createProteinFromData($interactor_id, $alt_interactor_id);
 	
-		}
+
 		
 
-		return $return_array;
+		return $protein;
 	}
 	
 	public function aliasHandler($interactor_A_alias, $interactor_B_alias){
@@ -768,12 +1005,155 @@ class DataController extends Controller
 	}
 	
 	
+	public function experimentHandler($interactor_A_id, $interactor_B_id,  $alt_interactor_A_id, $alt_interactor_B_id, $interactor_A_alias, $interactor_B_alias, $annotation_interactor_A, $annotation_interactor_B, $interaction_annotation){
+		
+		$experiment = self::createExperimentFromData($interactor_A_id, $interactor_B_id,  $alt_interactor_A_id, $alt_interactor_B_id, $interactor_A_alias, $interactor_B_alias, $annotation_interactor_A, $annotation_interactor_B, $interaction_annotation);
+		
+		return $experiment;
+	}
+	
+
 	
 	
+	public function createExperimentFromData($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id, $interactor_A_alias, $interactor_B_alias, $annotation_interactor_A, $annotation_interactor_B, $interaction_annotation){
+		
+
+		$assay_version = 0;
+		
+		if(preg_match('/.*pDEST-DB.*/',$annotation_interactor_A) && 
+		   preg_match('/.*pDEST-AD.*/',$annotation_interactor_B)){
+		   	$assay_version = 1;
+		}elseif(preg_match('/.*pDEST-DB.*/',$annotation_interactor_A) &&
+				preg_match('/.*pQZ213.*/',$annotation_interactor_B)){
+			$assay_version = 2;
+		}elseif(preg_match('/.*pQZ212.*/',$annotation_interactor_A) &&
+				preg_match('/.*pDEST-AD.*/',$annotation_interactor_B)){
+					$assay_version = 3;
+		}elseif(preg_match('/.*pQZ212.*/',$annotation_interactor_A) &&
+				preg_match('/.*pQZ213.*/',$annotation_interactor_B)){
+					$assay_version = 4;
+		}elseif(preg_match('/.*pDEST-DB.*',$annotation_interactor_A) &&
+				preg_match('/.*pAR68.*/',$annotation_interactor_B)){
+					$assay_version = 6;
+		}elseif(preg_match('/.*pQZ212.*/',$annotation_interactor_A) &&
+				preg_match('/.*pAR68.*/',$annotation_interactor_B)){
+					$assay_version = 8;
+		}
+				
+				
+				
+		/*		
+				
+				$annotation_interactor_A == 'comment:"vector name: pDEST-DB"|comment:"centromeric vector"'
+				&& $annotation_interactor_B == 'comment:"vector name: pDEST-AD"|comment:"centromeric vector"'){
+					$assay_version = 1;
+		}elseif($annotation_interactor_A == 'comment:"vector name: pDEST-DB"|comment:"centromeric vector"'
+				&& $annotation_interactor_B == 'comment:"vector name: pQZ213"|comment:"2u vector"'){
+					$assay_version = 2;
+		}elseif($annotation_interactor_A == 'comment:"vector name: pQZ212"|comment:"2u vector"'
+				&& $annotation_interactor_B == 'comment:"vector name: pDEST-AD"|comment:"centromeric vector"'){
+					$assay_version = 3;
+		}elseif($annotation_interactor_A == 'comment:"vector name: pQZ212"|comment:"2u vector"'
+				&& $annotation_interactor_B == 'comment:"vector name: pQZ213"|comment:"2u vector"'){
+					$assay_version = 4;
+		}elseif($annotation_interactor_A == 'comment:"vector name: pDEST-DB"|comment:"centromeric vector"'
+				&& $annotation_interactor_B == 'comment:"vector name: pAR68"|comment:"2u vector"'){
+					$assay_version = 6;
+		}elseif($annotation_interactor_A == 'comment:"vector name: pQZ212"|comment:"2u vector"'
+				&& $annotation_interactor_B == 'comment:"vector name: pAR68"|comment:"2u vector"'){
+					$assay_version = 8;
+		}
+		*/
+		
+		if($interactor_A_id == '-'){
+			
+			
+			$naming_convention = 'ensembl';
+			
+			preg_match('/.*(ENSG[0-9]*)\..*/', $alt_interactor_A_id, $matchesA);
+			
+			$identifier_A_id = $matchesA[1];
+			
+		}else{
+			$interactor_id_array = explode(":", $interactor_A_id);
+			$naming_convention = 'uniprotkb';
+			$identifier_A_id = $interactor_id_array[1];
+		}
+		
+		
+		
+		$protein_A = self::getProteinFromIdentifier($identifier_A_id, $naming_convention);
+		
+		if($interactor_B_id == '-'){
+			
+			
+			$naming_convention = 'ensembl';
+			
+			preg_match('/.*(ENSG[0-9]*)\..*/', $alt_interactor_B_id, $matchesB);
+			
+			$identifier_B_id = $matchesB[1];
+			
+		}else{
+			$interactor_id_array = explode(":", $interactor_B_id);
+			$naming_convention = 'uniprotkb';
+			$identifier_B_id = $interactor_id_array[1];
+		}
+		
+		
+		$protein_B = self::getProteinFromIdentifier($identifier_B_id, $naming_convention);
+		
+		
+		$matches_A = '';
+		
+		preg_match('/human orfeome collection:([0-9]*)\(author assigned name\)/', $interactor_A_alias, $matches_A);
+		
+		$orf_A_id = $matches_A[1];
+		
+
+		
+		
+		$matches_B = '';
+		
+		preg_match('/human orfeome collection:([0-9]*)\(author assigned name\)/', $interactor_B_alias, $matches_B);
+		
+		$orf_B_id = $matches_B[1];
+		
+
+		
+		$matches_num_screens = '';
+		
+		preg_match('/comment:"Found in screens ([0-9,]*)\."/', $interaction_annotation, $matches_num_screens);
+		
+		$num_screens_string = $matches_num_screens[1];
+
+		
+		$num_screens_array = split(",", $num_screens_string);
+		$num_screens = count($num_screens_array);
+		
+		
+		$experiment = new Experiment();
+		
+		$experiment->setOrfA($orf_A_id);
+		$experiment->setOrfB($orf_B_id);
+		$experiment->setDnaBindingDomain($protein_A);
+		$experiment->setActivationDomain($protein_B);
+		$experiment->setNumScreens($num_screens);
+		$experiment->setAssayVersion($assay_version);
+		return $experiment;
+		
+		
+		
+		
+	}
+	
+	
+	
+		
 	public function createInteractionFromData($feature_interactor_B, $confidence_value){
 		
 		$interaction = new Interaction;
 		
+		/*
 		if(self::assertNotNull($feature_interactor_B)){
 		
 			$binding_array = explode(':', $feature_interactor_B);
@@ -785,31 +1165,126 @@ class DataController extends Controller
 			$interaction->setBindingEnd($binding_end);
 		
 		}
-		
+		*/
 		if(self::assertNotNull($confidence_value)){
 		
-			$score_array = explode(':', $confidence_value);
-			$score = $score_array[1];
-			$interaction->setScore($score);
+			//$score_array = explode(':', $confidence_value);
+			//$score = $score_array[0];
+			$interaction->setScore($confidence_value);
 		}
 		
 		return $interaction;
 		
 	}
+	/*
 	
-	public function getInteractionByIds($interactor_A_id, $interactor_B_id){
-	    
-	    $interactor_A_id_array = explode(":", $interactor_A_id);
-	    $identifier_A_naming_convention_interactor_id = $interactor_A_id_array[0];
-	    $identifier_A_identifier_interactor_id = $interactor_A_id_array[1];
-	     
-	    $interactor_B_id_array = explode(":", $interactor_B_id);
-	    $identifier_B_naming_convention_interactor_id = $interactor_B_id_array[0];
-	    $identifier_B_identifier_interactor_id = $interactor_B_id_array[1];
+	public function domainHandler($feature_interactor_A){
+		
+		if(self::assertNotNull($feature_interactor_A)){
+		
+			$feature_interactor_A_array = explode(';', $feature_interactor_A);
+			
+			foreach($feature_interactor_A_array as $feature){
+				$feild = explode(':', $feature);
+				
+				$feild_name = $feild[0];
+				$feild_value = $feild[1];
+			}
+
+			
+		}
+		
+	}
+	*/
+	
+	public function getInteractionByIds($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id){
+		$naming_convention_A = "";
+		$naming_convention_B = "";
+		$identifier_A_identifier_interactor_id = "";
+		$identifier_B_identifier_interactor_id = "";
+		
+		if($interactor_A_id == '-'){
+			
+			
+			$naming_convention_A = 'ensembl';
+			
+			preg_match('/.*(ENSG[0-9]*)\..*/', $alt_interactor_A_id, $matchesA);
+			
+			$identifier_A_identifier_interactor_id = $matchesA[1];
+			
+		}else{
+			$interactor_id_array = explode(":", $interactor_A_id);
+			$naming_convention_A = 'uniprotkb';
+			$identifier_A_identifier_interactor_id = $interactor_id_array[1];
+		}
+		
+		if($interactor_B_id == '-'){
+			
+			
+			$naming_convention_B = 'ensembl';
+			
+			preg_match('/.*(ENSG[0-9]*)\..*/', $alt_interactor_B_id, $matchesB);
+			
+			$identifier_B_identifier_interactor_id = $matchesB[1];
+			
+		}else{
+			$interactor_id_array = explode(":", $interactor_B_id);
+			$naming_convention_B = 'uniprotkb';
+			$identifier_B_identifier_interactor_id = $interactor_id_array[1];
+		}
+		
 	     
 	    $protein_A_id = null;
 	    $protein_B_id = null;
 	    
+	    $functions = $this->get('app.functions');
+	    $connection =  $functions->mysql_connect();
+	    
+	    
+	    if($naming_convention_A == 'uniprotkb'){
+	    	
+	    	$query = "SELECT * FROM `protein` WHERE `uniprot_id` = '$identifier_A_identifier_interactor_id'";
+	    	$result = $connection->query($query);
+	    	if($result){
+	    		while($row = $result->fetch_assoc()) {
+	    			$protein_A_id= $row['id'];
+	    		}
+	    	}	
+	    	
+	    }elseif($naming_convention_A == 'ensembl'){
+	    	
+	    	$query = "SELECT * FROM `protein` WHERE `ensembl_id` = '$identifier_A_identifier_interactor_id'";
+	    	$result = $connection->query($query);
+	    	if($result){
+	    		while($row = $result->fetch_assoc()) {
+	    			$protein_A_id= $row['id'];
+	    		}
+	    	}	
+	    }
+	    
+	    if($naming_convention_B == 'uniprotkb'){
+	    	
+	    	$query = "SELECT * FROM `protein` WHERE `uniprot_id` = '$identifier_B_identifier_interactor_id'";
+	    	$result = $connection->query($query);
+	    	if($result){
+	    		while($row = $result->fetch_assoc()) {
+	    			$protein_B_id= $row['id'];
+	    		}
+	    	}
+	    	
+	    }elseif($naming_convention_B == 'ensembl'){
+	    	
+	    	$query = "SELECT * FROM `protein` WHERE `ensembl_id` = '$identifier_B_identifier_interactor_id'";
+	    	$result = $connection->query($query);
+	    	if($result){
+	    		while($row = $result->fetch_assoc()) {
+	    			$protein_B_id= $row['id'];
+	    		}
+	    	}
+	    }
+	    
+	    
+	    /*
 	    $em = $this->getDoctrine()->getManager();
 	     
 	    $query = $em->createQuery(
@@ -854,8 +1329,8 @@ class DataController extends Controller
 	    }
 	
 	
-	     
-
+	     */
+	    $em = $this->getDoctrine()->getManager();
 	         
 	        $query = $em->createQuery(
 	                        "SELECT i
@@ -867,9 +1342,52 @@ class DataController extends Controller
 	        $query->setParameter('interactor_A', $protein_A_id);
 	        $query->setParameter('interactor_B', $protein_B_id);
 	        $results = $query->getResult();
-	        $result = $results[0];
+	        $result = '';
+	        if($results){
+	        	$result = $results[0];
+	        }
 	        return $result;
 	        
+	}
+	
+	public function getExperimentByOrfIds($interactor_A_alias, $interactor_B_alias){
+		
+		$matches_A = '';
+		
+		preg_match('/human orfeome collection:([0-9]*)\(author assigned name\)/', $interactor_A_alias, $matches_A);
+		
+		$orf_A_id = $matches_A[1];
+		
+		
+		
+		
+		$matches_B = '';
+		
+		preg_match('/human orfeome collection:([0-9]*)\(author assigned name\)/', $interactor_B_alias, $matches_B);
+		
+		$orf_B_id = $matches_B[1];
+		
+
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$query = $em->createQuery(
+				"SELECT ex
+			    FROM AppBundle:Experiment ex
+			    JOIN ex.orf_a a
+			    WHERE ex.orf_b b = :orf_a 
+				AND ex.orf_b = :orf_b "
+				)
+		->setParameter('orf_a', $orf_A_id )
+		->setParameter('orf_b', $orf_B_id );
+				
+		$experiment_array = $query->getResult();
+				
+		$experiment = $experiment_array[0];
+		
+		
+		return $experiment;
+		
 	}
 	
 	public function createAltIdentifiersFromData($alt_interactor_id){
@@ -943,14 +1461,44 @@ class DataController extends Controller
 		
 	}
  	
-	public function createProteinFromData($interactor_id, &$doctrine_manager){
+	public function createProteinFromData($interactor_id, $alt_interactor_id){
+
+		
 		
 		$protein = null;
 		$identifier_array = array();
 		$links_array = null;
-		$interactor_id_array = explode(":", $interactor_id);
-		$identifier_naming_convention_interactor_id = $interactor_id_array[0];
-		$identifier_identifier_interactor_id = $interactor_id_array[1];
+		$gene_name = '';
+		
+
+		if($interactor_id == '-'){
+
+			$alt_interactor_id_array = array();
+						
+			$identifier_naming_convention_interactor_id = 'ensembl';
+			
+			preg_match('/.*(ENSG[0-9]*)\..*/', $alt_interactor_id, $matches);
+			
+			$identifier_identifier_interactor_id = $matches[1];
+
+			$url = "https://rest.ensembl.org/xrefs/id/$identifier_identifier_interactor_id?content-type=application/json";
+
+			try{
+				$str= @file_get_contents($url);
+				$json =  json_decode($str, true);
+				$gene_name = $json[1]['display_id'];
+
+			}catch(Exception $e) {
+			}
+		
+		}else{
+			$interactor_id_array = explode(":", $interactor_id);
+			$identifier_naming_convention_interactor_id = $interactor_id_array[0];
+			$identifier_identifier_interactor_id = $interactor_id_array[1];
+		}
+		
+
+		
 		
 		$is_new_protein = self::isNewProtein($identifier_identifier_interactor_id, $identifier_naming_convention_interactor_id);
 		
@@ -961,38 +1509,137 @@ class DataController extends Controller
 		}elseif($is_new_protein == true){
 			
 			$protein = new Protein;
-
-			$protein_remote_data_array = self::getProteinRemoteData($protein, $identifier_naming_convention_interactor_id, $identifier_identifier_interactor_id);
-			$links_array = $protein_remote_data_array[0];
-			$remote_identifier = $protein_remote_data_array[1];
 			
+			if($identifier_naming_convention_interactor_id == 'ensembl'){
+				$protein->setEnsemblId($identifier_identifier_interactor_id);
+				$protein->setGeneName($gene_name);
+				
+				$ensembl_identifier = new Identifier();
+				
+				$ensembl_identifier->setIdentifier($identifier_identifier_interactor_id);
+				$ensembl_identifier->setNamingConvention('ensembl');
+				$ensembl_identifier->setProtein($protein);
+				
+				$doctrine_manager = $this->getDoctrine()->getManager();
+				$doctrine_manager->getConfiguration()->setSQLLogger(null);	
+				$doctrine_manager->persist($protein);
+				$doctrine_manager->persist($ensembl_identifier);
+				
+				
+				$gene_name_identifier = new Identifier();
+				
+				$gene_name_identifier->setIdentifier($gene_name);
+				$gene_name_identifier->setNamingConvention('gene_name');
+				$gene_name_identifier->setProtein($protein);
+				
+				$doctrine_manager = $this->getDoctrine()->getManager();
+				$doctrine_manager->getConfiguration()->setSQLLogger(null);
+				$doctrine_manager->persist($protein);
+				$doctrine_manager->persist($gene_name_identifier);
+				
+				
+				$doctrine_manager->flush();
+				
 			
-			$protein->setName($identifier_identifier_interactor_id);
+				
+			}else{
 
-			$doctrine_manager->persist($protein);
-		      
-			if($remote_identifier){
-    			$remote_identifier->setProtein($protein);
-    			$identifier_array[] = $remote_identifier;
+				$protein_remote_data_array = self::getProteinRemoteData($protein, $identifier_naming_convention_interactor_id, $identifier_identifier_interactor_id);
+				$link_array = $protein_remote_data_array[0];
+				$remote_identifier_array = $protein_remote_data_array[1];
+				
+				
+				$protein->setUniprotId($identifier_identifier_interactor_id);
+				/*
+				$em = $this->getDoctrine()->getManager();
+				$em->getConfiguration()->setSQLLogger(null);
+				$query = $em->createQuery(
+						'SELECT te
+						    FROM AppBundle:Tissue_Expression te
+						    WHERE te.uniprot_id = :uniprot_id'
+						)->setParameter('uniprot_id', $identifier_identifier_interactor_id);
+						
+				$tissue_expression_array = $query->getResult();
+				
+				
+				
+				$ensembl_id = $protein->getEnsemblId();
+				
+				$em = $this->getDoctrine()->getManager();
+				$em->getConfiguration()->setSQLLogger(null);
+				$query = $em->createQuery(
+						'SELECT sl
+						    FROM AppBundle:Subcellular_Location_Expression sl
+						    WHERE sl.ensembl_id = :ensembl_id'
+						)->setParameter('ensembl_id', $ensembl_id);
+						
+				$subcellular_localization_array = $query->getResult();
+						
+						
+				$doctrine_manager = $this->getDoctrine()->getManager();
+				$doctrine_manager->getConfiguration()->setSQLLogger(null);				
+						
+						
+				if($tissue_expression_array){
+					
+					$tissue_expression = $tissue_expression_array[0];
+					
+					if($tissue_expression){
+						
+						$tissue_expression->setProtein($protein);
+						$protein->setTissueExpression($tissue_expression);
+						$doctrine_manager->persist($protein);
+						$doctrine_manager->persist($tissue_expression);
+					}
+				}
+				
+				if($subcellular_localization_array){
+					
+					$subcellular_localization = $subcellular_localization_array[0];
+					
+					if($subcellular_localization){
+						if($subcellular_localization->getProtein() == null){
+							$subcellular_localization->setProtein($protein);
+							$protein->setSubcellularLocationExpression($subcellular_localization);
+							$doctrine_manager->persist($protein);
+							$doctrine_manager->persist($subcellular_localization);
+						}
+					}
+				}
+						
+	
+						*/
+				
+
+				
+				
+				$doctrine_manager = $this->getDoctrine()->getManager();
+				$doctrine_manager->getConfiguration()->setSQLLogger(null);	
+				$doctrine_manager->persist($protein);
+				
+				foreach($remote_identifier_array as $remote_identifier){
+	
+					$remote_identifier->setProtein($protein);
+					$doctrine_manager->persist($remote_identifier);
+				}
+				
+				foreach($link_array as $link){
+	
+					$link->setProtein($protein);
+					$doctrine_manager->persist($link);
+	
+				}
+				
+				$doctrine_manager->flush();
+			
 			}
-
 			
-			$uniprot_identifier = new Identifier();
-			$uniprot_identifier->setProtein($protein);
-			
+		      
 
-			$uniprot_identifier->setIdentifier($identifier_identifier_interactor_id);
-			$uniprot_identifier->setNamingConvention($identifier_naming_convention_interactor_id);
-			$identifier_array[] = $uniprot_identifier;
 		}
 		
-		
-		
-		$return_array = array($protein, $identifier_array, $links_array);
-		
-		
-		
-		return $return_array;
+
+		return $protein;
 	}
 
 
@@ -1000,7 +1647,7 @@ class DataController extends Controller
 	public function getProteinRemoteData(&$protein, &$naming_convention, &$identifier){
 
 		$links_array = array();
-		$remote_identifier = null;
+		$remote_identifier_array = array();
 		if($naming_convention == 'uniprotkb'){
 		    
 
@@ -1012,8 +1659,13 @@ class DataController extends Controller
 			$external_link->setDatabaseName("UniProt");
 			$external_link->setLinkId($uniprot_accession);
 			$external_link->setLink("http://www.uniprot.org/uniprot/" . $uniprot_accession);
-			$external_link->setProtein($protein);
 			$links_array[] = $external_link;
+			
+			
+			$uniprot_identifier = new Identifier();
+			$uniprot_identifier->setIdentifier($uniprot_accession);
+			$uniprot_identifier->setNamingConvention('uniprotkb');
+			$remote_identifier_array[] = $uniprot_identifier;
 			
 			
 			//get the uniprot xml url
@@ -1062,11 +1714,10 @@ class DataController extends Controller
         					
         					if(self::isNewIdentifier($gene_name_text, 'uniprotkb') == true){
         					    //add identifer
-        					    $remote_identifier = new Identifier();
-        					    	
-        					    $remote_identifier->setIdentifier($gene_name_text);
-        					    $remote_identifier->setNamingConvention('uniprotkb');
-        					    
+        						$gene_name_identifier = new Identifier();
+        						$gene_name_identifier->setIdentifier($gene_name_text);
+        						$gene_name_identifier->setNamingConvention('gene_name');
+        						$remote_identifier_array[] = $gene_name_identifier;
         					}
         					
         		
@@ -1099,63 +1750,53 @@ class DataController extends Controller
         			
         			try{
         				//get the gene name node from xml
-        				$link = $crawler->filter('uniprot > entry > dbReference[type="Ensembl"]');
+        				$ensembl_gene = $crawler->filter('uniprot > entry > dbReference[type="Ensembl"] > property[type="gene ID"]');
         					
-        				//if the node is present
-        				if($link->count()){
-        						
-        					//get the gene name text from node
-        					$link_text = $link->each(function ($node, $i) {
-        						return $node->attr('id');
-        					});
-        			
-        						//set the gene name text for the protein
-        						foreach($link_text as $l){
-        			
-        							$external_link = new External_Link;
-        							$external_link->setDatabaseName("Ensembl");
-        							$external_link->setLinkId($l);
-        							$external_link->setLink("http://www.ensembl.org/id/" . $l);
-        							$external_link->setProtein($protein);
-        							$links_array[] = $external_link;
-        			
-        						}
-        			
+        				if($ensembl_gene->count()){
+        					$ensembl_gene_id = $ensembl_gene->attr("value");
+        					$protein->setEnsemblId($ensembl_gene_id);
+        					
+        					$external_link = new External_Link;
+        					$external_link->setDatabaseName("Ensembl");
+        					$external_link->setLinkId($ensembl_gene_id);
+        					$external_link->setLink("http://www.ensembl.org/id/" . $ensembl_gene_id);
+        					$links_array[] = $external_link;
+        					
+        					$ensembl_identifier = new Identifier();
+        					
+        					$ensembl_identifier->setIdentifier($ensembl_gene_id);
+        					$ensembl_identifier->setNamingConvention('ensembl');
+        					$remote_identifier_array[] = $ensembl_identifier;
         				}
+
         			}
         			catch(Exception $e) {
         			}
-        			
         			try{
         				//get the gene name node from xml
-        				$link = $crawler->filter('uniprot > entry > dbReference[type="RefSeq"]');
+        				$entrez_gene = $crawler->filter('uniprot > entry > dbReference[type="GeneID"]');
+        				
+        				if($entrez_gene->count()){
+        					$entrez_gene_id = $entrez_gene->attr("id");
+        					$protein->setEntrezId($entrez_gene_id);
         					
-        				//if the node is present
-        				if($link->count()){
-        			
-        					//get the gene name text from node
-        					$link_text = $link->each(function ($node, $i) {
-        						return $node->attr('id');
-        					});
-        							
-        						//set the gene name text for the protein
-        						foreach($link_text as $l){
-        								
-        							$external_link = new External_Link;
-        							$external_link->setDatabaseName("RefSeq");
-        							$external_link->setLinkId($l);
-        							$external_link->setLink("http://www.ncbi.nlm.nih.gov/protein/" . $l);
-        							$external_link->setProtein($protein);
-        							$links_array[] = $external_link;
-        								
-        						}
-        							
+        					 $external_link = new External_Link;
+        					 $external_link->setDatabaseName("Entrez");
+        					 $external_link->setLinkId($entrez_gene_id);
+        					 $external_link->setLink("https://www.ncbi.nlm.nih.gov/gene/" . $entrez_gene_id);
+        					 $protein->addExternalLink($external_link);
+        					 
+        					 $entrez_identifier = new Identifier();
+        					 
+        					 $entrez_identifier->setIdentifier($entrez_gene_id);
+        					 $entrez_identifier->setNamingConvention('entrez');
+        					 $remote_identifier_array[] = $entrez_identifier;
+        					 
         				}
         			}
         			catch(Exception $e) {
         			}
-			
-    			
+
 			    }
 			}
 			catch(Exception $e) {
@@ -1163,7 +1804,7 @@ class DataController extends Controller
 			
 		}
 		
-		$return_array = array($links_array, $remote_identifier);
+		$return_array = array($links_array, $remote_identifier_array);
 		return $return_array;
 	
 	}
@@ -1446,6 +2087,44 @@ class DataController extends Controller
 	}
 	
 	public function getProteinFromIdentifier($identifier, $naming_convention){
+		
+
+		
+
+		
+		$functions = $this->get('app.functions');
+		$connection =  $functions->mysql_connect();
+		
+		$protein_id = null;
+		if($naming_convention == 'uniprotkb'){
+			
+			$query = "SELECT * FROM `protein` WHERE `uniprot_id` = '$identifier'";
+			$result = $connection->query($query);
+			if($result){
+				while($row = $result->fetch_assoc()) {
+					$protein_id= $row['id'];
+				}
+			}
+			
+		}elseif($naming_convention == 'ensembl'){
+			
+			$query = "SELECT * FROM `protein` WHERE `ensembl_id` = '$identifier'";
+			$result = $connection->query($query);
+			if($result){
+				while($row = $result->fetch_assoc()) {
+					$protein_id= $row['id'];
+				}
+			}
+		}
+		
+		$protein = false;
+		
+		if($protein_id){
+			$protein = $this->getDoctrine()
+			->getRepository('AppBundle:Protein')
+			->find($protein_id);
+		}
+		/*
 		$em = $this->getDoctrine()->getManager();
 		$query = $em->createQuery(
 				"SELECT i
@@ -1461,7 +2140,7 @@ class DataController extends Controller
 		$identifier_object = $identifier_array[0];
 		$protein = $identifier_object->getProtein();
 		
-
+*/
 		
 		return $protein;
 	
@@ -1511,65 +2190,101 @@ class DataController extends Controller
 	    }
 	}
 	
-	public function isNewInteraction($interactor_A_id, $interactor_B_id){
+	public function isNewInteraction($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id){
 	
-	    $interactor_A_id_array = explode(":", $interactor_A_id);
-	    $identifier_A_naming_convention_interactor_id = $interactor_A_id_array[0];
-	    $identifier_A_identifier_interactor_id = $interactor_A_id_array[1];
-	     
-	    $interactor_B_id_array = explode(":", $interactor_B_id);
-	    $identifier_B_naming_convention_interactor_id = $interactor_B_id_array[0];
-	    $identifier_B_identifier_interactor_id = $interactor_B_id_array[1];
-	     
-	    $protein_A_id = null;
-	    $protein_B_id = null;
-	    
-	    $em = $this->getDoctrine()->getManager();
-	     
-	    $query = $em->createQuery(
-	                    "SELECT i
-							FROM AppBundle:Identifier i
-				            WHERE i.identifier = :identifier"
+		$handle = fopen('D:\\test\\test.txt', 'w');
+		fwrite($handle, "TEST_1");
+		
+		$naming_convention_A = "";
+		$naming_convention_B = "";
+		$identifier_A_identifier_interactor_id = "";
+		$identifier_B_identifier_interactor_id = "";
+		
+		if($interactor_A_id == '-'){
+			
+			
+			$naming_convention_A = 'ensembl';
+			
+			preg_match('/.*(ENSG[0-9]*)\..*/', $alt_interactor_A_id, $matchesA);
+			
+			$identifier_A_identifier_interactor_id = $matchesA[1];
+			
+		}else{
+			$interactor_id_array = explode(":", $interactor_A_id);
+			$naming_convention_A = 'uniprotkb';
+			$identifier_A_identifier_interactor_id = $interactor_id_array[1];
+		}
+		
+		if($interactor_B_id == '-'){
+			
+			
+			$naming_convention_B = 'ensembl';
+			
+			preg_match('/.*(ENSG[0-9]*)\..*/', $alt_interactor_B_id, $matchesB);
+			
+			$identifier_B_identifier_interactor_id = $matchesB[1];
+			
+		}else{
+			$interactor_id_array = explode(":", $interactor_B_id);
+			$naming_convention_B = 'uniprotkb';
+			$identifier_B_identifier_interactor_id = $interactor_id_array[1];
+		}
+		
+		
+		$protein_A_id = null;
+		$protein_B_id = null;
+		
+		$functions = $this->get('app.functions');
+		$connection =  $functions->mysql_connect();
+		
+		
+		if($naming_convention_A == 'uniprotkb'){
+			
+			$query = "SELECT * FROM `protein` WHERE `uniprot_id` = '$identifier_A_identifier_interactor_id'";
+			$result = $connection->query($query);
+			if($result){
+				while($row = $result->fetch_assoc()) {
+					$protein_A_id= $row['id'];
+				}
+			}
+			
+		}elseif($naming_convention_A == 'ensembl'){
+			
+			$query = "SELECT * FROM `protein` WHERE `ensembl_id` = '$identifier_A_identifier_interactor_id'";
+			$result = $connection->query($query);
+			if($result){
+				while($row = $result->fetch_assoc()) {
+					$protein_A_id= $row['id'];
+				}
+			}
+		}
+		
+		if($naming_convention_B == 'uniprotkb'){
+			
+			$query = "SELECT * FROM `protein` WHERE `uniprot_id` = '$identifier_B_identifier_interactor_id'";
+			$result = $connection->query($query);
+			if($result){
+				while($row = $result->fetch_assoc()) {
+					$protein_B_id= $row['id'];
+				}
+			}
+			
+		}elseif($naming_convention_B == 'ensembl'){
+			
+			$query = "SELECT * FROM `protein` WHERE `ensembl_id` = '$identifier_B_identifier_interactor_id'";
+			$result = $connection->query($query);
+			if($result){
+				while($row = $result->fetch_assoc()) {
+					$protein_B_id= $row['id'];
+				}
+			}
+		}
+		
+		fwrite($handle, $protein_A_id . " " . $protein_B_id);
 	
-	                    );
+		$em = $this->getDoctrine()->getManager();
 	     
-	    $query->setParameter('identifier', $identifier_A_identifier_interactor_id);
-	     
-	    $identifier_A_results = $query->getResult();
-	     
-	    if($identifier_A_results){
-	         
-	        $identifier_A = $identifier_A_results[0];
-	
-	        $protein_A_id = $identifier_A->getProtein();
-	         
-	    }
-	
-	     
-	     
-	     
-	    $query = $em->createQuery(
-	                    "SELECT i
-							FROM AppBundle:Identifier i
-				            WHERE i.identifier = :identifier"
-	
-	                    );
-	     
-	    $query->setParameter('identifier', $identifier_B_identifier_interactor_id);
-	     
-	    $identifier_B_results = $query->getResult();
-	     
-	    if($identifier_B_results){
-	
-	        $identifier_B = $identifier_B_results[0];
-	         
-	        $protein_B_id = $identifier_B->getProtein();
-	
-	    }
-	
-	
-	     
-	    if ($protein_A_id && $protein_B_id){
+
 	         
 	        $query = $em->createQuery(
 	                        "SELECT i
@@ -1587,10 +2302,8 @@ class DataController extends Controller
 	        }else{
 	            return true;
 	        }
-	    }
-	     
-	    return true;
-	
+
+
 	}
 	
 
@@ -1618,18 +2331,43 @@ class DataController extends Controller
 
 
 	
+	public function updateUsers($dataset_id){
+	    
+	    
+        $em = $this->getDoctrine()->getManager();
+         
+        $query = $em->createQuery(
+                        "SELECT i
+				FROM AppBundle:Dataset_Request dr
+	            JOIN dr.datasets ds
+				WHERE ds.id = :ds_id"
+                        );
+        $query->setParameter('ds_id', $dataset_id);
+        
+        $dataset_request_array = $query->getResult();
+        
+        
+        $dataset = $this->getDoctrine()
+        ->getRepository('AppBundle:Dataset')
+        ->find($dataset_id);
+        
+        $dataset_description = $dataset->getDescription();
+	    
+	    foreach($dataset_request_array as $dataset_request){
+	        
+	        $email = $dataset_request->getEmail();
+	        
+	        $message = \Swift_Message::newInstance()
+	        ->setSubject('HuRi Dataset Update')
+	        ->setFrom('noreply@interactome.baderlab.org')
+	        ->setTo($email)
+	        ->setBody('The dataset' . $dataset_description . 'has been updated');
+	        $this->get('mailer')->send($message);
+	        
+	    }
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 
     public function deleteData($dataset_id){
@@ -1847,7 +2585,177 @@ class DataController extends Controller
         $em->flush();
         $em->clear();
     }
-    
+    public function updateUniprot(){
+    	
+    	
+    	$em = $this->getDoctrine()->getManager();
+    	$query = $em->createQuery(
+    			"SELECT p
+        				FROM AppBundle:Protein p
+        				WHERE
+                        p.gene_name IS NULL
+                        "
+    			);
+    	
+    	$protein_array = $query->getResult();
+    	
+    	foreach($protein_array as $protein){
+    		$doctrine_manager = $this->getDoctrine()->getManager();
+    		$uniprot_accession = $protein->getUniprotId();
+    		
+    		$url = "http://www.uniprot.org/uniprot/$uniprot_accession.xml";
+    		
+    		//get the uniprot xml
+    		
+    		try{
+    			$str= @file_get_contents($url);
+    			
+    			if($str != FALSE){
+    				//delete string from xml (bug fix)
+    				$str=str_replace('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd"', "", $str);
+    				
+    				//create crawler for xml
+    				$crawler = new Crawler($str);
+    				
+    				try{
+    					//get the sequence node from xml
+    					$sequence = $crawler->filter('uniprot > entry > sequence');
+    					
+    					//if the node is present
+    					if($sequence->count()){
+    						//get the sequence text from node
+    						$sequence_text = $sequence->text();
+    						
+    						//set the sequece text for the protein
+    						$protein->setSequence($sequence_text);
+    					}
+    				}
+    				catch(Exception $e) {
+    				}
+    				try{
+    					//get the gene name node from xml
+    					$gene_name = $crawler->filter('uniprot > entry > gene > name');
+    					
+    					//if the node is present
+    					if($gene_name->count()){
+    						
+    						//get the gene name text from node
+    						$gene_name_text = $gene_name->text();
+    						
+    						//set the gene name text for the protein
+    						$protein->setGeneName($gene_name_text);
+    						
+    						
+    						if(self::isNewIdentifier($gene_name_text, 'uniprotkb') == true){
+    							//add identifer
+    							$remote_identifier = new Identifier();
+    							
+    							$remote_identifier->setIdentifier($gene_name_text);
+    							$remote_identifier->setNamingConvention('uniprotkb');
+    							
+    						}
+    						
+    						
+    					}
+    				}
+    				catch(Exception $e) {
+    				}
+    				
+    				
+    				try{
+    					//get the gene name node from xml
+    					$function = $crawler->filter('uniprot > entry > comment[type="function"] > text');
+    					
+    					//if the node is present
+    					if($function->count()){
+    						
+    						//get the gene name text from node
+    						$function_text = $function->text();
+    						
+    						//set the gene name text for the protein
+    						$protein->setDescription($function_text);
+    						
+    						
+    					}
+    				}
+    				catch(Exception $e) {
+    				}
+    				
+    				
+    				
+    				try{
+    					//get the gene name node from xml
+    					$link = $crawler->filter('uniprot > entry > dbReference[type="Ensembl"]');
+    					
+    					//if the node is present
+    					if($link->count()){
+    						
+    						//get the gene name text from node
+    						$link_text = $link->each(function ($node, $i) {
+    							return $node->attr('id');
+    						});
+    							
+    							//set the gene name text for the protein
+    							foreach($link_text as $l){
+    								
+    								$external_link = new External_Link;
+    								$external_link->setDatabaseName("Ensembl");
+    								$external_link->setLinkId($l);
+    								$external_link->setLink("http://www.ensembl.org/id/" . $l);
+    								$external_link->setProtein($protein);
+    								$protein->addExternalLink($external_link);
+    								$doctrine_manager->persist($external_link);
+    								
+    							}
+    							
+    					}
+    				}
+    				catch(Exception $e) {
+    				}
+    				
+    				try{
+    					//get the gene name node from xml
+    					$link = $crawler->filter('uniprot > entry > dbReference[type="RefSeq"]');
+    					
+    					//if the node is present
+    					if($link->count()){
+    						
+    						//get the gene name text from node
+    						$link_text = $link->each(function ($node, $i) {
+    							return $node->attr('id');
+    						});
+    							
+    							//set the gene name text for the protein
+    							foreach($link_text as $l){
+    								
+    								$external_link = new External_Link;
+    								$external_link->setDatabaseName("RefSeq");
+    								$external_link->setLinkId($l);
+    								$external_link->setLink("http://www.ncbi.nlm.nih.gov/protein/" . $l);
+    								$external_link->setProtein($protein);
+    								$protein->addExternalLink($external_link);
+    								$doctrine_manager->persist($external_link);
+    								
+    							}
+    							
+    					}
+    				}
+    				catch(Exception $e) {
+    				}
+    				
+    				
+    			}
+    		}
+    		catch(Exception $e) {
+    		}
+    		
+    		
+    		$doctrine_manager->persist($protein);
+    		$doctrine_manager->flush();
+    		
+    	}
+
+    }  
 
     
 }

@@ -12,10 +12,13 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use AppBundle\Entity\Protein;
 use AppBundle\Entity\Interaction;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Form\ChoiceList\ArrayChoiceList;
 use AppBundle\Entity\Admin_Settings;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use AppBundle\Entity\Interaction_Category;
+use AppBundle\Form\Interaction_CategoryType;
 /**
  * Admin Settings Controller
  */
@@ -34,9 +37,11 @@ class AdminSettingsController extends Controller
         ->find(1);
 
         $title = $admin_settings->getTitle();
+        $url = $admin_settings->getUrl();
         $home_page = $admin_settings->getHomePage();
         $about = $admin_settings->getAbout();
-        $documentation = $admin_settings->getDocumentation();
+        $faq = $admin_settings->getFaq();
+        $contact = $admin_settings->getContact();
         $download = $admin_settings->getDownload();
         $footer = $admin_settings->getFooter();
         $show_downloads = $admin_settings->getShowDownloads();
@@ -46,8 +51,47 @@ class AdminSettingsController extends Controller
         $logo_color_scheme = $admin_settings->getLogoColorScheme();
         $button_color_scheme = $admin_settings->getButtonColorScheme();
         $short_title = $admin_settings->getShortTitle();
+        $query_node_color = $admin_settings->getQueryNodeColor();
+        $interactor_node_color = $admin_settings->getInteractorNodeColor();
+        /*
+        $published_edge_color = $admin_settings->getPublishedEdgeColor();
+        $validated_edge_color = $admin_settings->getValidatedEdgeColor();
+        $verified_edge_color = $admin_settings->getVerifiedEdgeColor();
+        $literature_edge_color = $admin_settings->getLiteratureEdgeColor();
+        */
+        
+        $interaction_categories_array = array();
+        
+        $interaction_categories = $this->getDoctrine()
+        ->getRepository('AppBundle:Interaction_Category')
+        ->findAll();
+        
+        
+        
+        foreach ($interaction_categories as $interaction_category){
+        	
+        	$interaction_category_order = $interaction_category->getOrder();
+        	$category_name = $interaction_category->getcategoryName();
+        	$category_name_edge_color = $category_name . '_edge_color';
+        	
+        	$interaction_categories_array[$interaction_category_order] = array($interaction_category, $category_name_edge_color);
+        	
+        	
+        }
+        
+        ksort($interaction_categories_array);
+        
+        $interaction_categories_array = array_values($interaction_categories_array);
 
+        
+        
+        
+        
         $form = $this->createForm('AppBundle\Form\Admin_SettingsType', $admin_settings);
+        
+        
+
+        
         
         
         $form->add('submit', SubmitType::class, array(
@@ -80,6 +124,10 @@ class AdminSettingsController extends Controller
             
             
         }
+        
+        
+        
+        
         $form->handleRequest($request);
         
         $updated = false;
@@ -88,25 +136,45 @@ class AdminSettingsController extends Controller
             $em = $this->getDoctrine()->getManager();
             $admin_settings = $form->getData();
             $title = $admin_settings->getTitle();
+            $url =  $admin_settings->getUrl();
             $home_page = $admin_settings->getHomePage();
             $about = $admin_settings->getAbout();
-            $documentation = $admin_settings->getDocumentation();
+            $faq = $admin_settings->getFaq();
+            $contact = $admin_settings->getContact();
             $download = $admin_settings->getDownload();
             $main_color_scheme = $admin_settings->getMainColorScheme();
             $header_color_scheme = $admin_settings->getHeaderColorScheme();
             $logo_color_scheme = $admin_settings->getLogoColorScheme();
             $button_color_scheme = $admin_settings->getButtonColorScheme();
+            $query_node_color = $admin_settings->getQueryNodeColor();
+            $interactor_node_color = $admin_settings->getInteractorNodeColor();
+            
+            /*
+            $published_edge_color = $admin_settings->getPublishedEdgeColor();
+            $validated_edge_color = $admin_settings->getValidatedEdgeColor();
+            $verified_edge_color = $admin_settings->getVerifiedEdgeColor();
+            $literature_edge_color = $admin_settings->getLiteratureEdgeColor();
+            */
+            
+            
             $em->persist($admin_settings);
             $em->flush();
+            
+            
+            
+            
+            
+            
             $updated = true;
         }
 
-        return $this->render('admin_settings.html.twig', array(
+        return $this->render('admin_settings_2.html.twig', array(
                 'form' => $form->createView(),
                 'title' => $title,
                 'home_page' => $home_page,
                 'about' => $about,
-                'documentation' => $documentation,
+        		'faq' => $faq,
+                'contact' => $contact,
                 'download' => $download,
                 'footer' => $footer,
                 'show_downloads' => $show_downloads,
@@ -114,7 +182,11 @@ class AdminSettingsController extends Controller
                 'main_color_scheme' => $main_color_scheme,
                 'header_color_scheme' => $header_color_scheme,
                 'logo_color_scheme' => $logo_color_scheme,
-                'button_color_scheme' => $button_color_scheme,                
+                'button_color_scheme' => $button_color_scheme,
+                'query_node_color' => $query_node_color,
+        		'interactor_node_color' => $interactor_node_color,
+        		'url' => $url,
+        		'interaction_categories_array' => $interaction_categories_array,
                 'short_title' => $short_title,
                 'updated' => $updated
 

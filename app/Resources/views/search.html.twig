@@ -40,167 +40,291 @@
 	</nav>
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
-			<div class="navbar-header tor_ibin_header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span> 
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div id="myNavbar" class="collapse navbar-collapse">
-    		    {% if login_status == false %}
-    		    	<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+		
+		
+				{% if login_status == false %}
+    			<div class="navbar-header tor_ibin_header" >
+    				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+    				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+    					<span class="icon-bar"></span> 
+    					<span class="icon-bar"></span> 
+    					<span class="icon-bar"></span>
+    				</button>
+    			</div>
+    			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
     				<ul class="nav navbar-nav ">
     					<li><a href="{{ path('home') }}">Home</a></li>
-    					<li class="active"><a href="{{ path('search') }}">Search</a></li>
+    					<li  class="active"><a href="{{ path('search') }}">Search</a></li>
     					<li><a href="{{ path('download') }}">Downloads</a></li>
     					<li><a href="{{ path('about') }}">About</a></li>
-    					<li><a href="{{ path('documentation') }}">Documentation</a></li>
+    					<li><a href="{{ path('faq') }}">FAQ</a></li>
+    					<li><a href="{{ path('contact') }}">Contact</a></li>
     				</ul>
     				<ul class="nav navbar-nav navbar-right">
-    					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+    					<li><a href="{{ path('user_register') }}">Register</a></li>
+    					<li style="margin-left: 0px;"><a href="{{ path('fos_user_security_login') }}">Login</a></li>
     				</ul>
-    			{% elseif login_status == true %}
-    				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
-    				<ul class="nav navbar-nav ">
-    					<li><a href="{{ path('admin_home') }}">Home</a></li>
-    					<li class="active"><a href="{{ path('admin_search') }}">Search</a></li>
-    					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
-    					<li><a href="{{ path('admin_about') }}">About</a></li>
-    					<li><a href="{{ path('admin_documentation') }}">Documentation</a></li>
-    					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
-    					<li><a href="{{ path('data_manager') }}">Data</a></li>
-    					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
-    					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
-    				</ul>
-    				<ul class="nav navbar-nav navbar-right">
-    					<li><a href="{{ path('user_logout') }}">Logout</a></li>
-    				</ul>
+    			</div>
+        		{% elseif login_status == true %}
+    				<div class="navbar-header tor_ibin_header" >
+						<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+        				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span>
+        				</button>
+        			</div>
+    				<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
+        				<ul class="nav navbar-nav ">
+        					<li><a href="{{ path('home') }}">Home</a></li>
+        					<li  class="active"><a href="{{ path('search') }}">Search</a></li>
+        					<li><a href="{{ path('download') }}">Downloads</a></li>
+        					<li><a href="{{ path('about') }}">About</a></li>
+        					<li><a href="{{ path('faq') }}">FAQ</a></li>
+        					<li><a href="{{ path('contact') }}">Contact</a></li>
+        					
+        					{% if admin_status == true %}
+            					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+            					<li><a href="{{ path('data_manager') }}">Data</a></li>
+            					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+            					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+        					{% endif %}
+        				</ul>
+        				<ul class="nav navbar-nav navbar-right">
+        					<li><a href="{{ path('fos_user_profile_show') }}">Profile</a></li>
+        					<li style="margin-left: 0px;"><a href="{{ path('user_logout') }}">Logout</a></li>
+        				</ul>
+        			</div>
     			{% endif %}
-			</div>
+    			
+    			
+    			
+    			
+    			
 		</div>
 		<div class="shadow"></div>
 	</nav>
 </header>
-<main>
-    <div class="row" style="background-color: #EEEEEE;">
-
-    		<div class="search_inner_panel" >
-    			<div class="row search_header" style="background: {{ main_color_scheme }}">
-    				<h4 style="color: {{ header_color_scheme }}">
-    					<strong>Search {{ short_title }}</strong>
-    				</h4>
-    			</div>
-    			<div class="row search_content  search_panel"
-    				style="background-color: #FFFFFF">
-    				<div class="col-sm-12">
-    					{{ form_start(form) }}
-    					<div class="row" style='width: 84%; margin: 20px;'>
-    						<div class="col-sm-7">
-    							<div class="row">
-    								<h4>{{ form_label(form.identifier) }}</h4>
-    							</div>
-    						</div>
-    						<div class="col-sm-5">
-    							<p>Examples:
-    							<a href='#' class='string_example example_small' onclick='$("#search_identifier").val("{{ example_3 }}");'>#1</a>
-    							<a href='#' class='string_example example_small' onclick='$("#search_identifier").val("{{ example_2 }}");'>#2</a>
-        						<a href='#' class='string_example example_small' onclick='$("#search_identifier").val("{{ example_1 }}");'>#3</a> 
-								</p>
-    						</div>
-    					</div>
-    					<div class="row" style='margin: 20px;'>
-    						<div class="input-group input-group-sm">
-    							{{ form_widget(form.identifier) }} <span class="input-group-btn">
-    								<button type="submit" class="btn btn-success" type="button" id="search_btn" style="background: {{ button_color_scheme }}">Search</button>
-    							</span>
-    						</div>
-    					</div>
-    					
-						
-						
-    					<div class="col-sm-6">
-					    	<div class="row" style='margin: 20px;'>
-								<h4><strong>Filter Interactions</strong></h4>
-							</div>
-								<div class="row"  style='margin-left: 20px;'>
-									<div class="col-sm-10" style='padding-left: 0px;'>
-    									<div>{{ form_widget(form.query_query) }}</div>
-    								</div>
-    								<div class="col-sm-2">
-    									<img class='help_query' src='{{ asset("assets/images/help.png")}}' width="16px" height="16px"/>
-										<div class="hidden">
-											Only show interactions among query proteins.
+<main style="background-color: #EEEEEE;">
+    <div class="container" >
+        <div class="row" >
+        	<div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2">
+        		<div class="search_inner_panel" >
+        			<div class="row search_header" style="background: {{ main_color_scheme }}">
+        				<h4 style="color: {{ header_color_scheme }}">
+        					<strong>Search {{ short_title }}</strong>
+        				</h4>
+        				
+        			</div>
+        			<div class="row search_content  search_panel"
+        				style="background-color: #FFFFFF">
+        				<div class="col-lg-12">
+    
+        					{{ form_start(form) }}
+        					<div class="row" style='width: 84%; margin: 20px;'>
+        						<div class="col-sm-4">
+        							
+        						</div>
+        						<div class="col-sm-8">
+            						<div id="examples">
+        								Examples:
+            							<a id="example_1" href='#'  class='string_example example_small' onclick='$("#search_identifier").val("{{ example_3 }}"); validateSearchTerms();'>#1</a>
+            							<a id="example_2" href='#' class='string_example example_small' onclick='$("#search_identifier").val("{{ example_2 }}"); validateSearchTerms();'>#2</a>
+                						<a id="example_3" href='#' class='string_example example_small' onclick='$("#search_identifier").val("{{ example_1 }}"); validateSearchTerms();'>#3</a> 
+            						</div>
+        						</div>
+        					</div>
+    
+        					<div class="row" style='margin: 20px; display: table;  width: 84%; '>
+        						<div style="display: table-row;">
+            						<div style="display: table-cell;">
+            						
+                						<div class="input-group input-group-sm" style="margin: 0px; width: 100%;">
+                							{{ form_widget(form.identifier) }} 
+    
+                						</div>
+                						
+            						</div>
+    
+                                </div>
+        					</div>
+        					
+    						<div class="row" style='margin: 20px; display: table; width: 84%; '>
+    						    <div class="col-sm-10" style="text-align: left;">
+    								<a id="advanced" data-toggle="collapse" data-target="#advanced_search" class="" style="cursor: pointer;">Advanced</a>
+    							</div> 
+    							<div class="col-sm-2">
+        							<div style="display: table-row;">
+                						<div style="display: table-cell;">
+                						
+                    						<div class="input-group input-group-sm" style="margin: 0px; width: 100%;">
+                    							<span class="input-group-btn">
+                    								<button type="submit" class="btn btn-success" type="button" id="search_btn" style="background: {{ button_color_scheme }}">Search</button>
+                    							</span>
+                    						</div>
+                    						
+                						</div>
+                					
+                    					<div style="display: table-cell; padding-top: 6px; vertical-align: middle;" >
+                							<i class="help_query glyphicon glyphicon-question-sign" style='margin: 0px 0px 0px 10px;'></i>
+                								
+                							<div class="hidden">
+                								Enter a gene name or Uniprot Id. Multiple search terms can be added seperated by a new line, comma, space, or tab. 
+                								A list of suggested proteins will appear after 2 characters are entered.
+                								
+                                            </div>
                                         </div>
-    								</div>
-								</div>
-							
-        					<div class="row hidden" style='margin: 20px;'>
-    							<h4>{{ form_label(form.min_interaction_score) }}</h4>
+                                    </div>
+                                
+                              </div>
+    
+    
+    						    <div class="row" style='display: table; width: 100%; '>
+                                	<div class="col-sm-8">
+                                	<div id="all_terms_valid" class="border hidden" style="white-space:nowrap; display: inline-flex; padding: 6px; margin-top: 10px;">
+                                        <i class="glyphicon glyphicon glyphicon-ok" style='margin: 2px 10px 0px 0px;'></i>
+                                        <div style="margin: 2px 4px 0px 0px;">All Terms Present in {{ short_title }}</div>
+                                	</div>
+                                	<div id="search_terms_not_found" class="hidden" style=" white-space:nowrap; display: inline-flex; padding: 6px; margin-top: 10px;">
+                                        <h4>Terms Not Present in {{ short_title }}</h4>
+                                	</div>
+                                	<div id="invalid_terms_array" data="" class="border hidden" style="padding:10px; margin-top:10px; max-height: 100px; overflow-x: hidden; overflow-y: scroll;" >
+                                	
+                                	</div>
+                                	<div id="remove_invalid_terms" class="invalid_term btn btn-default hidden" style="margin-top:10px;"><i class="glyphicon glyphicon glyphicon-remove" style="margin: 2px 10px 0px 0px;"></i>Remove Terms</div>
+                                	 
+                               	 	</div>
+                                
+                               </div>	
+    							
     						</div>
-    						<div class="row hidden" style='margin: 20px;'>
-    							<div class="input-group input-group-sm">
-    								<div id="min_interaction_score">
-    									<div id="min_interaction_score_handle" class="ui-slider-handle"></div>
-    								</div>
-    								{{ form_widget(form.min_interaction_score) }}
-    							</div>
-    						</div>
-    					
-    					</div>
-    					<div class="col-sm-6">
-    						    <div class="row" style='margin: 20px;'>
-    								<h4><label>Interaction Status</label></h4>
-    							</div>
-    							<div class="row" style='margin: 20px;'>
-    								<div class="row">
-        								<div class="col-sm-7">
-        								    {{ form_widget(form.published) }}<h4>{{ form_label(form.published) }}</h4>
-    									</div>
-    									<div class="col-sm-2">
-    										<img class='help_query' src='{{ asset("assets/images/help.png")}}' width="16px" height="16px"/>
-    										<div class="hidden">Published: Include all interactions from datasets that are published with an associated publication.</div>
-    									</div>
-    								</div>
-    								<div class="row">
-        								<div class="col-sm-7">
-        								    {{ form_widget(form.validated) }}<h4>{{ form_label(form.validated) }}</h4>
-    									</div>
-    									<div class="col-sm-2">
-    										<img class='help_query' src='{{ asset("assets/images/help.png")}}' width="16px" height="16px"/>
-    										<div class="hidden">Validated: Include all interactions that are not yet published but that originate from datasets that
-    										 have been validated by successfully testing a representative subset of these interactions in at least one orthogonal 
-    										 binary interaction detection assay.</div>
-    									</div>
-    								</div>
-    								<div class="row">
-        								<div class="col-sm-7">
-        								    {{ form_widget(form.verified) }}<h4>{{ form_label(form.verified) }}</h4>
-    									</div>
-    									<div class="col-sm-2">
-    										<img class='help_query' src='{{ asset("assets/images/help.png")}}' width="16px" height="16px"/>
-    										<div class="hidden">Verified: Include all interactions that are neither published nor validated but that were identified
-    										 in pooled Y2H screens, tested positive in Y2H pairwise test and sequence confirmed.</div>
-    									</div>
-    								</div>
-    								<div class="row">
-        								<div class="col-sm-7">
-        								    {{ form_widget(form.literature) }}<h4>{{ form_label(form.literature) }}</h4>
-    									</div>
-    									<div class="col-sm-2">
-    										<img class='help_query' src='{{ asset("assets/images/help.png")}}' width="16px" height="16px"/>
-    										<div class="hidden">Literature: Include interactions that were curated from small-scale studies with at least two
-    										 experimental evidences of which at least one stems from a binary interaction detection assay.</div>
-    									</div>
-    								</div>
-    							</div>
-    					</div>
-    				</div>
-    				{{ form_end(form) }}
-    			</div>
-    		</div>
+    						<div id="advanced_search" class="collapse">
+        						<div class="row">
+                					<div class="col-sm-6">
+            					    	<div class="row" style='margin: 20px;'>
+            								<h4><label>Filter Interactions</label></h4>
+            							</div>
+            							<div class="row"  style='margin-left: 20px;'>
+            								<div style="display: table;">
+            									<div style="display: table-cell;">
+            									    {{ form_widget(form.query_query) }}
+            									</div>
+            									<div style="display: table-cell;">
+            									<i class="help_query glyphicon glyphicon-question-sign" style='margin-left: 20px;' ></i>
+            									
+            									<div class="hidden">
+            										Only show interactions among query proteins.
+                                                </div>
+            									</div>
+            								</div>
+            							</div>
+            						</div>
+            						<div class="col-sm-6">
+            						    <div class="row" style='margin: 20px;'>
+            								<h4><label>Output</label></h4>
+            							</div>
+                						<div class="row" style='display: inline-flex; margin: 20px 20px 0px 20px;'>
+                							<div class="input-group input-group-sm" style='margin: 0px;'>
+                								{{ form_widget(form.text_output) }}
+                							</div>
+            								<i class="help_query glyphicon glyphicon-question-sign" style='margin-left: 20px;' ></i>
+        									
+        									<div class="hidden">
+        										Only provide results as text output, useful if big queries and network display too slow.
+                                            </div>
+                						</div>
+                					</div>
+                				</div>	
+                				<div class="row">
+                					<div class="col-sm-6">
+                					    <div class="row" style='display: inline-flex; margin: 20px;'>
+            								<h4><label>Tissue Expression</label></h4>
+        									<i class="help_query glyphicon glyphicon-question-sign" style='margin-left: 20px;' ></i>
+        									
+        									<div class="hidden">
+        										Select the tissue(s) by which you want to filter the results, i.e. only display proteins known to be expressed in the selected tissues (based on GTEx data). See the About section for more details.
+                                            </div>
+            							</div>
+            							<div class="row" style='margin: 20px;'>
+                							<div class="border" style="height: 300px; overflow-y: scroll;">
+                            					{% for tissue_name, tissue in tissue_array %}
+                            					    {% set attr_field = attribute(form, tissue) %}
+    
+                            					    <div class="row" style='margin: 20px;'>
+                            	
+                                                 			{{ form_widget(attr_field) }}
+                            						</div>
+                            						
+                        					    {% endfor %}
+                    					    </div>
+                    					 </div>
+                					</div>
+                					<div class="col-sm-6">
+                					   <div class="row" style='display: inline-flex; margin: 20px;'>
+                							<h4 style="font-weight: 700;">Minimum Confidence</br>Score</h4>
 
+                						</div>
+                						<div class="row" style='display: inline-flex; margin: 20px;'>
+                							<div class="input-group input-group-sm" style='min-width: 120px;' >
+                								<div id="min_interaction_score">
+                									<div id="min_interaction_score_handle" class="ui-slider-handle"></div>
+                								</div>
+                								{{ form_widget(form.min_interaction_score) }}
+                							</div>
+                							<i class="help_query glyphicon glyphicon-question-sign" style='margin-left: 20px;' ></i>
+        									
+        									<div class="hidden">
+        										Select a score cutoff to filter out PPIs from the results that display a score below that threshold. See the About section for more details.
+                                            </div>
+                						</div>
+            					        <div class="row" style='margin: 20px;'>
+            								<h4><label>Interaction Status</label></h4>
+            							</div>
+            							<div class="row" style='margin: 20px;'>
+            								<div style="display: table">
+            								{% for interaction_category in interaction_categories_array %}
+                								<div style="display: table-row;">
+                									<div style="display: table-cell;">
+                                     			        {% set attr_field = attribute(form, interaction_category[1]) %}
+                                             			{{ form_widget(attr_field) }}
+                                         			
+                                         			<h4>{{ form_label(attr_field) }}</h4>
+                								    </div>
+                								    <div style="display: table-cell;">
+                										<i class="help_query glyphicon glyphicon-question-sign" style='margin-left: 20px;'></i>
+                										<div class="hidden">{{ interaction_category[0].categoryname }}: {{ interaction_category[0].description }}</div>
+            										</div>
+            									</div>            									
+            								{% endfor %}
+            								</div>
+            							</div>
+                					</div>
+                				</div>
+                					<div class="row hidden">
+                						<div class="col-sm-8">
+                						
+                							<h4>Subcellular Location</h4>
+                							<div class="border" style="height: 300px; overflow-y: scroll;">
+                            					{% for subcellular_location_name, subcellular_location in subcellular_location_array %}
+                            					    {% set attr_field = attribute(form, subcellular_location) %}
+                            					    <div class="row" style='margin: 20px;'>
+                            	
+                                                 			{{ form_widget(attr_field) }}
+                            						</div>
+                        					    {% endfor %}
+                    					    </div>
+                    					</div>
+                					</div>
+                					
+            				</div>
+        				{{ form_end(form) }}
+        			</div>
+        		</div>
+    			</div>
+        	</div>
+       </div>
     </div>
+   <div class="shadow"></div>
 </main>
 <footer>
 	<div class="shadow"></div>
@@ -208,70 +332,22 @@
 </footer>
 {% endblock %} 
 {% block javascripts %}
+	<script>var Url = "{{ url }}";</script>
     <script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.ui.touch-punch.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.qtip.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.qtip.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/js/search.js') }}"></script>
     <script>
-        $(function() {
-
-    	   $('.help_query').each(function() { // Notice the .each() loop, discussed below
-    	        $(this).qtip({
-    	            content: {
-    	                text: $(this).next('div').html()
-    	            },
-    	    		position: {
-    	    			my: 'left center',
-    	    			at: 'right center'
-    	    		},
-    	    		style: {
-    	    			classes: 'qtip-bootstrap',
-    	    			tip: {
-    	    				width: 10,
-    	    				height: 8
-    	    			}
-    	    		},
-    	            show: 'click',
-    	            hide: 'unfocus'
-    	        });
-    	    });
-
-
-        	
-            $( "#min_interaction_score" ).slider({
-        
-        		step: 0.01,
-                min: 0,
-                max: 1,
-                value: 0,
-                change:function( event, ui ) {
-                  $("#search_min_interaction_score").val(ui.value);
-                },
-                slide: function( event, ui ) {
-                  $("#min_interaction_score_handle").html(ui.value);
-                }
-              });
-            
-            $("#min_interaction_score_handle").html($( "#min_interaction_score" ).slider( "value" ));
-        
-        	
-        	$("#form_identifier").autocomplete({
-        		source: function(request, response){
-        
-        			url = 'http://localhost/php_eclipse_workspace/openPIP/web/app.php/search/autocomplete/' + request.term;
-        			
-        
-        			$.getJSON(url, function(data){
-        				response(data);
-        			});
-        		},
-        		minLength: 2,
-        	});
-        	
-        	
-        });
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-387720-9', 'auto');
+      ga('send', 'pageview');
     
     </script>
 {% endblock %}

@@ -17,11 +17,15 @@ class Identifier
 	 */
 	protected $id;
 	
-    /**
-     * @ORM\ManyToOne(targetEntity="Protein", inversedBy="identifiers")
-     * @ORM\JoinColumn(name="protein_id", referencedColumnName="id")
-     */
-	protected $protein;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Protein", inversedBy="identifiers")
+	 * @ORM\JoinTable(name="protein_identifier",
+	 *      joinColumns={@ORM\JoinColumn(name="identifier_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="protein_id", referencedColumnName="id")}
+	 *      )
+	 */
+	protected $proteins;
 	
 	/**
 	 * @ORM\Column(type="string", length=100, nullable=true)
@@ -33,7 +37,10 @@ class Identifier
 	 */
 	protected $naming_convention;
 	
+	public function __construct() {
+		$this->proteins = new \Doctrine\Common\Collections\ArrayCollection();
 	
+	}
 
     /**
      * Get id
@@ -112,5 +119,39 @@ class Identifier
     public function getProtein()
     {
         return $this->protein;
+    }
+
+    /**
+     * Add protein
+     *
+     * @param \AppBundle\Entity\Protein $protein
+     *
+     * @return Identifier
+     */
+    public function addProtein(\AppBundle\Entity\Protein $protein)
+    {
+        $this->proteins[] = $protein;
+
+        return $this;
+    }
+
+    /**
+     * Remove protein
+     *
+     * @param \AppBundle\Entity\Protein $protein
+     */
+    public function removeProtein(\AppBundle\Entity\Protein $protein)
+    {
+        $this->proteins->removeElement($protein);
+    }
+
+    /**
+     * Get proteins
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProteins()
+    {
+        return $this->proteins;
     }
 }

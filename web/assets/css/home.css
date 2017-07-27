@@ -3,13 +3,8 @@
 
 body{
 	background-color: #f9f9f9;
-	min-width: 1020px;
 }
 
-main{
-	min-width: 1020px;
-	
-}
 
 h3{
 	margin: 0px;
@@ -34,6 +29,15 @@ h4{
 
 .panel{
 	 width: 96%;
+	 margin: 0px;
+}
+
+@media (max-width: 991px){
+	
+	.panel{
+	 width: 96%;
+	 margin: 20px auto;
+	}
 }
 
 .right_col {
@@ -204,9 +208,7 @@ border-radius: 0;
 }
 
 .announcement_panel{
-	height: 92%;
-	overflow: scroll;
-	overflow-x: hidden;
+
 	margin: auto;
 }
 
@@ -237,12 +239,13 @@ border-radius: 0;
 }
 
 .home_panel{
-	width: 96%;
 
 	background-color: #FFFFFF;
 	border: 1px solid #cccccc;
+	width: 96%;
+
 	padding: 20px;
-	margin: 20px auto 20px;
+	margin: 20px auto;
 }
 
 .db_content {

@@ -17,11 +17,15 @@ class Identifier
 	 */
 	protected $id;
 	
-    /**
-     * @ORM\ManyToOne(targetEntity="Protein", inversedBy="identifiers")
-     * @ORM\JoinColumn(name="protein_id", referencedColumnName="id")
-     */
-	protected $protein;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Protein", inversedBy="identifiers")
+	 * @ORM\JoinTable(name="protein_identifier",
+	 *      joinColumns={@ORM\JoinColumn(name="identifier_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="protein_id", referencedColumnName="id")}
+	 *      )
+	 */
+	protected $proteins;
 	
 	/**
 	 * @ORM\Column(type="string", length=100, nullable=true)
@@ -33,7 +37,10 @@ class Identifier
 	 */
 	protected $naming_convention;
 	
+	public function __construct() {
+		$this->proteins = new \Doctrine\Common\Collections\ArrayCollection();
 	
+	}
 
     /**
      * Get id

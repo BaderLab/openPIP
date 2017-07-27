@@ -15,9 +15,24 @@ class Protein
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
-	protected $id;
+	public $id;
 	
 
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Protein", mappedBy="isoforms")
+	 */
+	private $proteins;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Protein", inversedBy="proteins")
+	 * @ORM\JoinTable(name="protein_isoform",
+	 *      joinColumns={@ORM\JoinColumn(name="protein_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="isoform_id", referencedColumnName="id")}
+	 *      )
+	 */
+	private $isoforms;
+	
 	
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection|Organism[]
@@ -30,9 +45,10 @@ class Protein
      */
 	public $domains;
 	
-   /**
-     * @ORM\OneToMany(targetEntity="Identifier", mappedBy="protein")
-     */
+	/**
+	 * @var \Doctrine\Common\Collections\ArrayCollection|Identifier[]
+	 * @ORM\ManyToMany(targetEntity="Identifier", mappedBy="proteins")
+	 */
     public $identifiers;
 	
    /**
@@ -40,34 +56,80 @@ class Protein
      */
     public $interactions;
     
+    
     /**
-     * @ORM\OneToMany(targetEntity="External_Link", mappedBy="protein")
+     * @ORM\OneToMany(targetEntity="Experiment", mappedBy="protein", cascade={"persist"})
+     */
+    public $experiments;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="External_Link", mappedBy="protein", cascade={"persist"})
      */
     public $external_links;
     
+    /**
+     * @ORM\OneToOne(targetEntity="Tissue_Expression")
+     * @ORM\JoinColumn(name="tissue_expression_id", referencedColumnName="id")
+     */
+    public $tissue_expression;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Subcellular_Location_Expression")
+     * @ORM\JoinColumn(name="subcellular_location_expression_id", referencedColumnName="id")
+     */
+    public $subcellular_location_expression;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="User" , inversedBy="proteins")
+     * @ORM\JoinTable(name="user_protein",
+     *      joinColumns={
+     *      		@ORM\JoinColumn(name="protein_id", referencedColumnName="id")
+     *      	},
+     *      inverseJoinColumns={
+     *      		@ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *      	}
+     * 		)
+     */
+    public $users;
+    
     
 	public function __construct() {
+		$this->users= new \Doctrine\Common\Collections\ArrayCollection();
 		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->domains = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->identifiers = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->organisms = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->external_links = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->isoforms = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->experiments= new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	/**
 	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
-	protected $name;
+	protected $uniprot_id;
+	
+	/**
+	 * @ORM\Column(type="string", length=100, nullable=true)
+	 */
+	protected $ensembl_id;
+	
+	/**
+	 * @ORM\Column(type="string", length=100, nullable=true)
+	 */
+	protected $entrez_id;
+	
+	/**
+	 * @ORM\Column(type="string", length=100, nullable=true)
+	 */
+	protected $gene_name;
 	
 	/**
 	 * @ORM\Column(type="string", length=1000, nullable=true)
 	 */
 	protected $sequence;
 	
-	/**
-	 * @ORM\Column(type="string", length=100, nullable=true)
-	 */
-	protected $gene_name;
 	
 	/**
 	 * @ORM\Column(type="string", length=10000, nullable=true)
@@ -76,43 +138,23 @@ class Protein
 	
 	
 
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return Protein
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
 
     /**
      * Set sequence
      *
      * @param string $sequence
+     *
      * @return Protein
      */
     public function setSequence($sequence)
@@ -125,7 +167,7 @@ class Protein
     /**
      * Get sequence
      *
-     * @return string 
+     * @return string
      */
     public function getSequence()
     {
@@ -133,9 +175,10 @@ class Protein
     }
 
     /**
-     * Set gene_name
+     * Set geneName
      *
      * @param string $geneName
+     *
      * @return Protein
      */
     public function setGeneName($geneName)
@@ -146,9 +189,9 @@ class Protein
     }
 
     /**
-     * Get gene_name
+     * Get geneName
      *
-     * @return string 
+     * @return string
      */
     public function getGeneName()
     {
@@ -159,6 +202,7 @@ class Protein
      * Set description
      *
      * @param string $description
+     *
      * @return Protein
      */
     public function setDescription($description)
@@ -171,7 +215,7 @@ class Protein
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -179,65 +223,33 @@ class Protein
     }
 
     /**
-     * Add interactions
+     * Add organism
      *
-     * @param \AppBundle\Entity\Interaction $interactions
+     * @param \AppBundle\Entity\Organism $organism
+     *
      * @return Protein
      */
-    public function addInteraction(\AppBundle\Entity\Interaction $interactions)
+    public function addOrganism(\AppBundle\Entity\Organism $organism)
     {
-        $this->interactions[] = $interactions;
+        $this->organisms[] = $organism;
 
         return $this;
     }
 
     /**
-     * Remove interactions
+     * Remove organism
      *
-     * @param \AppBundle\Entity\Interaction $interactions
+     * @param \AppBundle\Entity\Organism $organism
      */
-    public function removeInteraction(\AppBundle\Entity\Interaction $interactions)
+    public function removeOrganism(\AppBundle\Entity\Organism $organism)
     {
-        $this->interactions->removeElement($interactions);
-    }
-
-    /**
-     * Get interactions
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getInteractions()
-    {
-        return $this->interactions;
-    }
-
-    /**
-     * Add organisms
-     *
-     * @param \AppBundle\Entity\Organism $organisms
-     * @return Protein
-     */
-    public function addOrganism(\AppBundle\Entity\Organism $organisms)
-    {
-        $this->organisms[] = $organisms;
-
-        return $this;
-    }
-
-    /**
-     * Remove organisms
-     *
-     * @param \AppBundle\Entity\Organism $organisms
-     */
-    public function removeOrganism(\AppBundle\Entity\Organism $organisms)
-    {
-        $this->organisms->removeElement($organisms);
+        $this->organisms->removeElement($organism);
     }
 
     /**
      * Get organisms
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getOrganisms()
     {
@@ -245,32 +257,33 @@ class Protein
     }
 
     /**
-     * Add domains
+     * Add domain
      *
-     * @param \AppBundle\Entity\Domain $domains
+     * @param \AppBundle\Entity\Domain $domain
+     *
      * @return Protein
      */
-    public function addDomain(\AppBundle\Entity\Domain $domains)
+    public function addDomain(\AppBundle\Entity\Domain $domain)
     {
-        $this->domains[] = $domains;
+        $this->domains[] = $domain;
 
         return $this;
     }
 
     /**
-     * Remove domains
+     * Remove domain
      *
-     * @param \AppBundle\Entity\Domain $domains
+     * @param \AppBundle\Entity\Domain $domain
      */
-    public function removeDomain(\AppBundle\Entity\Domain $domains)
+    public function removeDomain(\AppBundle\Entity\Domain $domain)
     {
-        $this->domains->removeElement($domains);
+        $this->domains->removeElement($domain);
     }
 
     /**
      * Get domains
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getDomains()
     {
@@ -278,37 +291,74 @@ class Protein
     }
 
     /**
-     * Add identifiers
+     * Add identifier
      *
-     * @param \AppBundle\Entity\Identifier $identifiers
+     * @param \AppBundle\Entity\Identifier $identifier
+     *
      * @return Protein
      */
-    public function addIdentifier(\AppBundle\Entity\Identifier $identifiers)
+    public function addIdentifier(\AppBundle\Entity\Identifier $identifier)
     {
-        $this->identifiers[] = $identifiers;
+        $this->identifiers[] = $identifier;
 
         return $this;
     }
 
     /**
-     * Remove identifiers
+     * Remove identifier
      *
-     * @param \AppBundle\Entity\Identifier $identifiers
+     * @param \AppBundle\Entity\Identifier $identifier
      */
-    public function removeIdentifier(\AppBundle\Entity\Identifier $identifiers)
+    public function removeIdentifier(\AppBundle\Entity\Identifier $identifier)
     {
-        $this->identifiers->removeElement($identifiers);
+        $this->identifiers->removeElement($identifier);
     }
 
     /**
      * Get identifiers
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getIdentifiers()
     {
         return $this->identifiers;
     }
+
+    /**
+     * Add interaction
+     *
+     * @param \AppBundle\Entity\Interaction $interaction
+     *
+     * @return Protein
+     */
+    public function addInteraction(\AppBundle\Entity\Interaction $interaction)
+    {
+        $this->interactions[] = $interaction;
+
+        return $this;
+    }
+
+    /**
+     * Remove interaction
+     *
+     * @param \AppBundle\Entity\Interaction $interaction
+     */
+    public function removeInteraction(\AppBundle\Entity\Interaction $interaction)
+    {
+        $this->interactions->removeElement($interaction);
+    }
+
+    /**
+     * Get interactions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInteractions()
+    {
+        return $this->interactions;
+    }
+
+
 
     /**
      * Add externalLink
@@ -342,5 +392,159 @@ class Protein
     public function getExternalLinks()
     {
         return $this->external_links;
+    }
+
+    /**
+     * Set tissueExpression
+     *
+     * @param \AppBundle\Entity\Tissue_Expression $tissueExpression
+     *
+     * @return Protein
+     */
+    public function setTissueExpression(\AppBundle\Entity\Tissue_Expression $tissueExpression = null)
+    {
+        $this->tissue_expression = $tissueExpression;
+
+        return $this;
+    }
+
+    /**
+     * Get tissueExpression
+     *
+     * @return \AppBundle\Entity\Tissue_Expression
+     */
+    public function getTissueExpression()
+    {
+        return $this->tissue_expression;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \AppBundle\Entity\User $user
+     *
+     * @return Protein
+     */
+    public function addUser(\AppBundle\Entity\User $user)
+    {
+        $this->users[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AppBundle\Entity\User $user
+     */
+    public function removeUser(\AppBundle\Entity\User $user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * Set uniprotId
+     *
+     * @param string $uniprotId
+     *
+     * @return Protein
+     */
+    public function setUniprotId($uniprotId)
+    {
+        $this->uniprot_id = $uniprotId;
+
+        return $this;
+    }
+
+    /**
+     * Get uniprotId
+     *
+     * @return string
+     */
+    public function getUniprotId()
+    {
+        return $this->uniprot_id;
+    }
+
+    /**
+     * Set ensemblId
+     *
+     * @param string $ensemblId
+     *
+     * @return Protein
+     */
+    public function setEnsemblId($ensemblId)
+    {
+        $this->ensembl_id = $ensemblId;
+
+        return $this;
+    }
+
+    /**
+     * Get ensemblId
+     *
+     * @return string
+     */
+    public function getEnsemblId()
+    {
+        return $this->ensembl_id;
+    }
+
+    /**
+     * Set subcellularLocationExpression
+     *
+     * @param \AppBundle\Entity\Subcellular_Location_Expression $subcellularLocationExpression
+     *
+     * @return Protein
+     */
+    public function setSubcellularLocationExpression(\AppBundle\Entity\Subcellular_Location_Expression $subcellularLocationExpression = null)
+    {
+        $this->subcellular_location_expression = $subcellularLocationExpression;
+
+        return $this;
+    }
+
+    /**
+     * Get subcellularLocationExpression
+     *
+     * @return \AppBundle\Entity\Subcellular_Location_Expression
+     */
+    public function getSubcellularLocationExpression()
+    {
+        return $this->subcellular_location_expression;
+    }
+
+    /**
+     * Set entrezId
+     *
+     * @param string $entrezId
+     *
+     * @return Protein
+     */
+    public function setEntrezId($entrezId)
+    {
+        $this->entrez_id = $entrezId;
+
+        return $this;
+    }
+
+    /**
+     * Get entrezId
+     *
+     * @return string
+     */
+    public function getEntrezId()
+    {
+        return $this->entrez_id;
     }
 }

@@ -18,28 +18,22 @@ class SearchType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
-            ->add('identifier', TextType::class)                   
+			->add('identifier', TextareaType::class, array(
+					'label' => false,
+					'attr' => array('style' => "min-height: 20px; height: 100px; width: 100%; resize: vertical;")
+					
+			))                   
             ->add('query_query', CheckboxType::class, array(
                     'label' => 'Query-Query',
                     'required' => false,
                     'attr' => array('value' => 'query_query')))
                                        
             ->add('min_interaction_score', TextType::class, array(
-                    'attr' => array('label' => 'Minimum Interaction Score', 'class' => 'hidden', 'value' => 0, 'style' => "width: 240px;")))
-            ->add('published', CheckboxType::class, array(
-                    'required' => false,
-                    'attr' => array('value' => 'published', 'checked' => 'checked')))
-            ->add('validated', CheckboxType::class, array(
-                    'required' => false,
-                    'attr' => array('value' => 'validated', 'checked' => 'checked')))
-            ->add('verified', CheckboxType::class, array(
-                    'required' => false,
-                    'attr' => array('value' => 'verified', 'checked' => 'checked')))
-            ->add('literature', CheckboxType::class, array(
-                    'required' => false,
-                    'attr' => array('value' => 'literature', 'checked' => 'checked')))
 
-		;
+                    'attr' => array('class' => 'hidden', 'value' => 0, 'style' => "width: 240px;")))
+            ;
+
+            
 	}
 
 	/**
