@@ -1,40 +1,34 @@
 
 
-
 var allInteractionArray = SearchResultsJSON['edges'];
-
 var allProteinArray = SearchResultsJSON['nodes'];
-
 var queryProteinIdArray = SearchResultsJSON['query_protein_id_array'];
-
 var proteinOfIntrestName = '';
 var Layout = 'cola';
 if(allInteractionArray.length > 800){Layout = 'cose';}
 var currentProteinArray = allProteinArray;
 var currentInteractionArray = allInteractionArray;
-
-$(function(){ 
 	
-	enableScroll();
-	if(TextOutput == 'text_output' || allInteractionArray.length > 8000){
-		filterProteinsAndInteractions();
-		setTextOutput();
-	}else{
+enableScroll();
+if(TextOutput == 'text_output' || allInteractionArray.length > 8000){
+	filterProteinsAndInteractions();
+	setTextOutput();
+}else{
 
-	 	setNetworkTableEvent();
-		setMinimizeAndMaximizeClickEvents();
-		setReactomeLinkClickEvent();
-		setCategoryCheckboxEvents();
-		setTissueExpressionCheckboxEvents();
-		setScoreSliderEvent();
-		setDownloadEvents();
-		createInteractionTable();
-		setNodeAndEdgeSummayValues();
-		var cy = updateCytoscapeNetwork();
-		$(".description").readmore({lessLink: "<a>Read less</a>"});
-		$('.footable').trigger('footable_initialized');
-	}
-});
+ 	setNetworkTableEvent();
+	setMinimizeAndMaximizeClickEvents();
+	setReactomeLinkClickEvent();
+	setCategoryCheckboxEvents();
+	setTissueExpressionCheckboxEvents();
+	setScoreSliderEvent();
+	setDownloadEvents();
+	createInteractionTable();
+	setNodeAndEdgeSummayValues();
+	var cy = updateCytoscapeNetwork();
+	$(".description").readmore({lessLink: "<a>Read less</a>"});
+	$('.footable').trigger('footable_initialized');
+}
+
 
 //*****************************************************************************************//
 
@@ -45,14 +39,11 @@ function updateCytoscapeNetwork(){
 	displayMessageIfNoInteractions();
 
 	var cy = createCytoscapeNetwork(cytoscapeJSON);
-		
 
-	
  	updateInteractionsTable();
  	addCytoscapeQtips(cy);
  	addInteractorQtips();
  	setNodeAndEdgeSummayValues();
- 	
  	updateEnrichedTerms();
  	setLayoutClickEvent(cy);
  	updateExternalLinks();
@@ -63,8 +54,6 @@ function updateCytoscapeNetwork(){
  	setNodeHoveEvent(cy)
  	setFootable();
  	reloadPageSize();
- 	
-
 	return cy;
 
 }
@@ -1099,9 +1088,7 @@ function setNodeAndEdgeSummayValues(){
 }
 
 function displayMessageIfNoInteractions(){
-	alert(currentInteractionArray.length);
 	if(currentInteractionArray.length == 0){	
-		alert('yes');
 		$("#no_interactions_found").removeClass("hidden");
 	}else{
 		$("#no_interactions_found").addClass("hidden");	
