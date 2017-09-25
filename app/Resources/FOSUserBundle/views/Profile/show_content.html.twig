@@ -165,17 +165,44 @@
         					<div class="hidden">
         					    <div class="container">
         					        <div class="row">
-        								<h4>Newtwork Name</h4>
+        								<h5 style="color: {{ main_color_scheme }}">Newtwork Name</h5>
         							</div>
         							<div class="row">
         								{{ interaction_network.Name }}
         							</div>
-        	
         							<div class="row">
-        								<h4>Newtwork Query</h4>
+        								<h5 style="color: {{ main_color_scheme }}; margin-top: 20px;">Search</h5>
+        							</div>
+        							<div class="row">
+        					            <a href="{{url}}search_results/{{ interaction_network.Query }}" target="_blank">Go to Network</a>
+        					      	</div>
+        							<div class="row">
+        								<h5 style="color: {{ main_color_scheme }}; margin-top: 20px; margin-bottom: 0px;">Query Parameters</h5>
+        							</div>
+        							
+        							<div class="row">
+        								<h5 style="color: #666666">Newtwork Query</h5>
         							</div>
         							<div class="row">
         					            {{ interaction_network.InteractorQueryString }}
+        					      	</div>
+        					      	<div class="row">
+        								<h5 style="color: #666666">Score</h5>
+        							</div>
+        							<div class="row">
+        					            {{ interaction_network.ScoreParameter }}
+        					      	</div>
+        					      	<div class="row">
+        								<h5 style="color: #666666">Category</h5>
+        							</div>
+        							<div class="row">
+        					            {{ interaction_network.CategoryArray }}
+        					      	</div>
+        					      	<div class="row">
+        								<h5 style="color: #666666">TissueExpression</h5>
+        							</div>
+        							<div class="row">
+        					            {{ interaction_network.TissueExpressionArray }}
         					      	</div>
         					    </div>
         					</div>

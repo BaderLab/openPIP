@@ -30,6 +30,7 @@ class Admin_SettingsType extends AbstractType
             ->add('title', 'text', array('label' => 'Title', 'attr' => array('style' => "width: 300px;") ))
             ->add('short_title', 'text', array('label' => 'Short Title', 'attr' => array('style' => "width: 200px;")))
             ->add('url', 'text', array('label' => 'Url', 'attr' => array('style' => "width: 300px;")))
+            ->add('version', 'text', array('label' => 'Version', 'attr' => array('style' => "width: 300px;")))
             ->add('home_page', 'textarea', array('label' => 'Home Page', 'attr' => array('class' => 'tinymce', 'style' => "height: 400px;")))
             ->add('about', 'textarea', array('attr' => array('label' => 'About', 'class' => 'tinymce', 'style' => "height: 400px;")))
             ->add('faq', 'textarea', array('attr' => array('label' => 'FAQ', 'class' => 'tinymce', 'style' => "height: 400px;")))

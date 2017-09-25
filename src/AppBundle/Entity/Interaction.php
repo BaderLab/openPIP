@@ -43,10 +43,18 @@ class Interaction
     
     
     /**
-     * @ORM\ManyToOne(targetEntity="Domain", inversedBy="interactions")
-     * @ORM\JoinColumn(name="domain", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="Interaction", inversedBy="domains")
+     * @ORM\JoinTable(name="interaction_domain",
+     *      joinColumns={@ORM\JoinColumn(name="domain_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")}
+     *      )
      */
-    protected $domain;
+    
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection|Domain[]
+     * @ORM\ManyToMany(targetEntity="Domain", mappedBy="interactions")
+     */
+    protected $domains;
     
     /**
      * @ORM\ManyToOne(targetEntity="Protein", inversedBy="interactions")
@@ -75,7 +83,7 @@ class Interaction
     	$this->interaction_support_informations = new \Doctrine\Common\Collections\ArrayCollection();
     	$this->datasets = new \Doctrine\Common\Collections\ArrayCollection();
     	$this->experiments= new \Doctrine\Common\Collections\ArrayCollection();
-
+    	$this->domains= new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -93,6 +101,9 @@ class Interaction
      */
     protected $binding_end;
 
+
+
+
     /**
      * Get id
      *
@@ -101,148 +112,6 @@ class Interaction
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Add interactionSupportInformation
-     *
-     * @param \AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation
-     *
-     * @return Interaction
-     */
-    public function addInteractionSupportInformation(\AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation)
-    {
-        $this->interaction_support_informations[] = $interactionSupportInformation;
-
-        return $this;
-    }
-
-    /**
-     * Remove interactionSupportInformation
-     *
-     * @param \AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation
-     */
-    public function removeInteractionSupportInformation(\AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation)
-    {
-        $this->interaction_support_informations->removeElement($interactionSupportInformation);
-    }
-
-    /**
-     * Get interactionSupportInformations
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getInteractionSupportInformations()
-    {
-        return $this->interaction_support_informations;
-    }
-
-    /**
-     * Add dataset
-     *
-     * @param \AppBundle\Entity\Dataset $dataset
-     *
-     * @return Interaction
-     */
-    public function addDataset(\AppBundle\Entity\Dataset $dataset)
-    {
-        $this->datasets[] = $dataset;
-
-        return $this;
-    }
-
-    /**
-     * Remove dataset
-     *
-     * @param \AppBundle\Entity\Dataset $dataset
-     */
-    public function removeDataset(\AppBundle\Entity\Dataset $dataset)
-    {
-        $this->datasets->removeElement($dataset);
-    }
-
-    /**
-     * Get datasets
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDatasets()
-    {
-        return $this->datasets;
-    }
-
-
-
-    /**
-     * Set domain
-     *
-     * @param \AppBundle\Entity\Domain $domain
-     *
-     * @return Interaction
-     */
-    public function setDomain(\AppBundle\Entity\Domain $domain = null)
-    {
-        $this->domain = $domain;
-
-        return $this;
-    }
-
-    /**
-     * Get domain
-     *
-     * @return \AppBundle\Entity\Domain
-     */
-    public function getDomain()
-    {
-        return $this->domain;
-    }
-
-    /**
-     * Set interactorA
-     *
-     * @param \AppBundle\Entity\Protein $interactorA
-     *
-     * @return Interaction
-     */
-    public function setInteractorA(\AppBundle\Entity\Protein $interactorA = null)
-    {
-        $this->interactor_A = $interactorA;
-
-        return $this;
-    }
-
-    /**
-     * Get interactorA
-     *
-     * @return \AppBundle\Entity\Protein
-     */
-    public function getInteractorA()
-    {
-        return $this->interactor_A;
-    }
-
-    /**
-     * Set interactorB
-     *
-     * @param \AppBundle\Entity\Protein $interactorB
-     *
-     * @return Interaction
-     */
-    public function setInteractorB(\AppBundle\Entity\Protein $interactorB = null)
-    {
-        $this->interactor_B = $interactorB;
-
-        return $this;
-    }
-
-    /**
-     * Get interactorB
-     *
-     * @return \AppBundle\Entity\Protein
-     */
-    public function getInteractorB()
-    {
-        return $this->interactor_B;
     }
 
     /**
@@ -318,6 +187,74 @@ class Interaction
     }
 
     /**
+     * Add interactionSupportInformation
+     *
+     * @param \AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation
+     *
+     * @return Interaction
+     */
+    public function addInteractionSupportInformation(\AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation)
+    {
+        $this->interaction_support_informations[] = $interactionSupportInformation;
+
+        return $this;
+    }
+
+    /**
+     * Remove interactionSupportInformation
+     *
+     * @param \AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation
+     */
+    public function removeInteractionSupportInformation(\AppBundle\Entity\Interaction_Support_Information $interactionSupportInformation)
+    {
+        $this->interaction_support_informations->removeElement($interactionSupportInformation);
+    }
+
+    /**
+     * Get interactionSupportInformations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInteractionSupportInformations()
+    {
+        return $this->interaction_support_informations;
+    }
+
+    /**
+     * Add dataset
+     *
+     * @param \AppBundle\Entity\Dataset $dataset
+     *
+     * @return Interaction
+     */
+    public function addDataset(\AppBundle\Entity\Dataset $dataset)
+    {
+        $this->datasets[] = $dataset;
+
+        return $this;
+    }
+
+    /**
+     * Remove dataset
+     *
+     * @param \AppBundle\Entity\Dataset $dataset
+     */
+    public function removeDataset(\AppBundle\Entity\Dataset $dataset)
+    {
+        $this->datasets->removeElement($dataset);
+    }
+
+    /**
+     * Get datasets
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDatasets()
+    {
+        return $this->datasets;
+    }
+
+    /**
      * Add interactionCategory
      *
      * @param \AppBundle\Entity\Interaction_Category $interactionCategory
@@ -383,6 +320,88 @@ class Interaction
     public function getInteractionNetworks()
     {
         return $this->interaction_networks;
+    }
+
+    /**
+     * Add domain
+     *
+     * @param \AppBundle\Entity\Domain $domain
+     *
+     * @return Interaction
+     */
+    public function addDomain(\AppBundle\Entity\Domain $domain)
+    {
+        $this->domains[] = $domain;
+
+        return $this;
+    }
+
+    /**
+     * Remove domain
+     *
+     * @param \AppBundle\Entity\Domain $domain
+     */
+    public function removeDomain(\AppBundle\Entity\Domain $domain)
+    {
+        $this->domains->removeElement($domain);
+    }
+
+    /**
+     * Get domains
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDomains()
+    {
+        return $this->domains;
+    }
+
+    /**
+     * Set interactorA
+     *
+     * @param \AppBundle\Entity\Protein $interactorA
+     *
+     * @return Interaction
+     */
+    public function setInteractorA(\AppBundle\Entity\Protein $interactorA = null)
+    {
+        $this->interactor_A = $interactorA;
+
+        return $this;
+    }
+
+    /**
+     * Get interactorA
+     *
+     * @return \AppBundle\Entity\Protein
+     */
+    public function getInteractorA()
+    {
+        return $this->interactor_A;
+    }
+
+    /**
+     * Set interactorB
+     *
+     * @param \AppBundle\Entity\Protein $interactorB
+     *
+     * @return Interaction
+     */
+    public function setInteractorB(\AppBundle\Entity\Protein $interactorB = null)
+    {
+        $this->interactor_B = $interactorB;
+
+        return $this;
+    }
+
+    /**
+     * Get interactorB
+     *
+     * @return \AppBundle\Entity\Protein
+     */
+    public function getInteractorB()
+    {
+        return $this->interactor_B;
     }
 
     /**

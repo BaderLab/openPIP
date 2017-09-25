@@ -22,12 +22,18 @@ class SearchType extends AbstractType
 					'label' => false,
 					'attr' => array('style' => "min-height: 20px; height: 100px; width: 100%; resize: vertical;")
 					
-			))                   
+			))  
+			
             ->add('query_query', CheckboxType::class, array(
                     'label' => 'Query-Query',
                     'required' => false,
                     'attr' => array('value' => 'query_query')))
-                                       
+                    
+            ->add('query_interactor', CheckboxType::class, array(
+                    'label' => 'Query-Interactor',
+                    'required' => false,
+                    'attr' => array('value' => 'query_interactor')))
+                    		
             ->add('min_interaction_score', TextType::class, array(
 
                     'attr' => array('class' => 'hidden', 'value' => 0, 'style' => "width: 240px;")))

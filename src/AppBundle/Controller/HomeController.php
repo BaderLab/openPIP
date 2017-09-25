@@ -15,6 +15,7 @@ use AppBundle\Entity\Identifier;
 use AppBundle\Entity\Subcellular_Location_Expression;
 use Symfony\Component\DomCrawler\Crawler;
 use AppBundle\Utils\Functions;
+use AppBundle\Entity\Domain;
 
 /**
  * Home controller.
@@ -33,6 +34,163 @@ class HomeController extends Controller
 	 */
 	public function homeAction(Request $request)
 	{
+		
+		
+		$em = $this->getDoctrine()->getManager();
+		$em->getConfiguration()->setSQLLogger(null);
+		
+		$query = $em->createQuery(
+				'SELECT i
+					    FROM AppBundle:Interaction i
+					    WHERE i.id > :ida
+						AND i.id < :idb'
+				);
+		$query->setParameter('ida', 2000);
+		$query->setParameter('idb', 4001);
+		$interaction_array = $query->getResult();
+		
+		
+		foreach($interaction_array as $interaction){
+			
+			
+			$interactor_A = $interaction->getInteractorA();
+			
+			
+			$domain = new Domain();
+			
+			$domain->setType('SH2');
+			$domain->setName('PLCG1-1');
+			$domain->setDescription('NA');
+			$domain->setSequence('CAVKALFDYKAQREDELTFIKSAIIQNVEKQEGGWWRGDYGGKKQLWFPSNYVEEMV');
+			$domain->setStartPosition('182');
+			$domain->setEndPosition('455');
+			
+			$domain->setInteraction($interaction);
+			$domain->setProtein($interactor_A);
+			$em->persist($domain);
+			
+			
+		}
+		$em->flush();
+		/*
+		foreach($interaction_array as $interaction){
+			
+			
+			$interactor_A = $interaction->getInteractorA();
+			
+			
+			$domain = new Domain();
+			
+			$domain->setType('SH3');
+			$domain->setName('ABL2-1');
+			$domain->setDescription('NA');
+			$domain->setSequence('NLFVALYDFVASGDNTLSITKGEKLRVLGYNQNGEWSEVRSKNGQGWVPSNYITPVN');
+			$domain->setStartPosition('182');
+			$domain->setEndPosition('455');
+			
+			$domain->setInteraction($interaction);
+			$domain->setProtein($interactor_A);
+			$em->persist($domain);
+			
+			
+		}
+		
+		$em->flush();
+		
+		
+
+		foreach($protein_array as $protein){
+			
+			$domain = new Domain();
+			
+			$domain->setType('SH2');
+			$domain->setName('PLCG1-1');
+			$domain->setDescription('NA');
+			$domain->setSequence('CAVKALFDYKAQREDELTFIKSAIIQNVEKQEGGWWRGDYGGKKQLWFPSNYVEEMV');
+			$domain->setStartPosition('182');
+			$domain->setEndPosition('455');
+			
+			$domain->setProtein($protein);
+			
+			$em->persist($domain);
+			
+			
+		}
+		
+		$em->flush();
+		*/
+			/*
+		$array_1 = array();
+		$array = array();
+		
+		$handle = fopen('D:\\research_project\\comparisons\\initial_vs_6_weeks_non_responder\\sort2.txt', 'r');
+		while ($file_data = fgetcsv($handle, 0, "\t"))
+		{
+			$gene = $file_data[0];
+			$array_1[] = $gene;
+
+		}
+		
+		$handle2 = fopen('D:\\research_project\\comparisons\\initial_vs_6_weeks_non_responder\\sort.txt', 'r');
+		while ($file_data2 = fgetcsv($handle2, 0, "\t"))
+		{
+			
+			list ($gene_name, $fc) = $file_data2;
+			
+			if(in_array($gene_name, $array_1)){
+				
+				$array[$gene_name]= $fc;
+			}
+
+			
+		}
+		
+		$handle3 = fopen('D:\\research_project\\comparisons\\initial_vs_6_weeks_non_responder\\sorted.txt', 'w');
+
+		foreach($array as $key2 => $value2){
+			fwrite($handle3, "$key2\t$value2\n");
+			
+		}
+		
+	
+		$out_array = array();
+		
+		foreach($array as $key => $value_array){
+			
+			
+			$out_value = 0;
+			
+			foreach($value_array as $value){
+				if($value > 0){
+					if ( $value > $out_value){
+						
+						$out_value = $value;
+					}
+				}elseif($value < 0){
+					if ( $value < $out_value){
+						
+						$out_value = $value;
+					}
+					
+				}
+				
+			}
+			
+			
+			$out_array[$key] = $out_value;
+			
+			
+		}
+		
+		$handle2 = fopen('D:\\research_project\\comparisons\\initial_vs_6_weeks_non_responder\\sorted.txt', 'w');
+		//fwrite($handle2, json_encode($out_array));
+		
+		foreach($out_array as $key2 => $value2){
+			fwrite($handle2, "$key2\t$value2\n");
+		
+		}
+		
+		*/
 		/*
 		$functions = $this->get('app.functions');
 		$connection =  $functions->mysql_connect();

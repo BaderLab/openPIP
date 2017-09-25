@@ -183,18 +183,24 @@
                                 	<div class="col-sm-8">
                                 	<div id="all_terms_valid" class="border hidden" style="white-space:nowrap; display: inline-flex; padding: 6px; margin-top: 10px;">
                                         <i class="glyphicon glyphicon glyphicon-ok" style='margin: 2px 10px 0px 0px;'></i>
-                                        <div style="margin: 2px 4px 0px 0px;">All Terms Present in {{ short_title }}</div>
+                                        <div style="margin: 2px 4px 0px 0px;">All <span class="number_present_terms"></span> Terms Present in {{ short_title }}</div>
                                 	</div>
-                                	<div id="search_terms_not_found" class="hidden" style=" white-space:nowrap; display: inline-flex; padding: 6px; margin-top: 10px;">
+                                	<div class="search_terms_not_found hidden row" style=" white-space:nowrap; display: inline-flex; padding: 0px 6px 6px 6px; margin: 0px;">
                                         <h4>Terms Not Present in {{ short_title }}</h4>
                                 	</div>
-                                	<div id="invalid_terms_array" data="" class="border hidden" style="padding:10px; margin-top:10px; max-height: 100px; overflow-x: hidden; overflow-y: scroll;" >
+                                	<div class="row" style="margin: 0px; padding: 0px;">
+                                	<div id="invalid_terms_array" data="" class="border hidden" style="padding:10px ; margin-top:10px; max-height: 100px; overflow-x: hidden; overflow-y: scroll;" >
                                 	
                                 	</div>
                                 	<div id="remove_invalid_terms" class="invalid_term btn btn-default hidden" style="margin-top:10px;"><i class="glyphicon glyphicon glyphicon-remove" style="margin: 2px 10px 0px 0px;"></i>Remove Terms</div>
                                 	 
                                	 	</div>
-                                
+                               	 	
+                               	 	<div class="search_terms_not_found hidden row" style=" white-space:nowrap;  padding: 6px 6px 0 6px; margin: 10px 0px 0px 0px;">
+                                        <p style=" white-space:nowrap; margin: 0px;">Number of Terms Present in {{ short_title }}: <span class="number_present_terms"></span></p>
+                                        <p style=" white-space:nowrap; margin: 5px 0;">Number of Terms Not Present in {{ short_title }}: <span class="number_not_present_terms"></span></p>
+                                	</div>
+                                	</div>
                                </div>	
     							
     						</div>
@@ -208,6 +214,20 @@
             								<div style="display: table;">
             									<div style="display: table-cell;">
             									    {{ form_widget(form.query_query) }}
+            									</div>
+            									<div style="display: table-cell;">
+            									<i class="help_query glyphicon glyphicon-question-sign" style='margin-left: 20px;' ></i>
+            									
+            									<div class="hidden">
+            										Only show interactions among query proteins.
+                                                </div>
+            									</div>
+            								</div>
+            							</div>
+            							<div class="row"  style='margin-left: 20px;'>
+            								<div style="display: table;">
+            									<div style="display: table-cell;">
+            									    {{ form_widget(form.query_interactor) }}
             									</div>
             									<div style="display: table-cell;">
             									<i class="help_query glyphicon glyphicon-question-sign" style='margin-left: 20px;' ></i>

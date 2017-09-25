@@ -157,11 +157,12 @@ class SearchController extends Controller
 		
 		
 		$query_query = $form["query_query"]->getData();
-		
+		$query_interactor = $form["query_interactor"]->getData();
 		
 		$form_data_array["category_array"] = $category_array;
 		$form_data_array["tissue_parameter_array"] = $tissue_parameter_array;
 		$form_data_array["query_query"] = $query_query;
+		$form_data_array["query_interactor"] = $query_interactor;
 		$form_data_array["min_interaction_score"] = $min_interaction_score;
 		
 		$pattern = '/[;,\s\t\n]/';
@@ -179,6 +180,10 @@ class SearchController extends Controller
 		
 		if($query_query){
 			$option_array['filter'] = 'query_query';
+		}
+		
+		if($query_interactor){
+			$option_array['filter'] = 'query_interactor';
 		}
 		
 		if($min_interaction_score){

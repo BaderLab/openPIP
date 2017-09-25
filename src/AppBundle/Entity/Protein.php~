@@ -19,6 +19,21 @@ class Protein
 	
 
 	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Protein", mappedBy="isoforms")
+	 */
+	private $proteins;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Protein", inversedBy="proteins")
+	 * @ORM\JoinTable(name="protein_isoform",
+	 *      joinColumns={@ORM\JoinColumn(name="protein_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="isoform_id", referencedColumnName="id")}
+	 *      )
+	 */
+	private $isoforms;
+	
+	
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection|Organism[]
      * @ORM\ManyToMany(targetEntity="Organism", mappedBy="proteins")
@@ -30,9 +45,10 @@ class Protein
      */
 	public $domains;
 	
-   /**
-     * @ORM\OneToMany(targetEntity="Identifier", mappedBy="protein")
-     */
+	/**
+	 * @var \Doctrine\Common\Collections\ArrayCollection|Identifier[]
+	 * @ORM\ManyToMany(targetEntity="Identifier", mappedBy="proteins")
+	 */
     public $identifiers;
 	
    /**
@@ -41,10 +57,14 @@ class Protein
     public $interactions;
     
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="Experiment", mappedBy="protein", cascade={"persist"})
+     */
+    public $experiments;
+    
     
     /**
-     * @ORM\OneToMany(targetEntity="External_Link", mappedBy="protein")
+     * @ORM\OneToMany(targetEntity="External_Link", mappedBy="protein", cascade={"persist"})
      */
     public $external_links;
     
@@ -81,6 +101,8 @@ class Protein
 		$this->identifiers = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->organisms = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->external_links = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->isoforms = new \Doctrine\Common\Collections\ArrayCollection();
+		$this->experiments= new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	/**
@@ -500,5 +522,29 @@ class Protein
     public function getSubcellularLocationExpression()
     {
         return $this->subcellular_location_expression;
+    }
+
+    /**
+     * Set entrezId
+     *
+     * @param string $entrezId
+     *
+     * @return Protein
+     */
+    public function setEntrezId($entrezId)
+    {
+        $this->entrez_id = $entrezId;
+
+        return $this;
+    }
+
+    /**
+     * Get entrezId
+     *
+     * @return string
+     */
+    public function getEntrezId()
+    {
+        return $this->entrez_id;
     }
 }

@@ -50,6 +50,12 @@ class Protein
 	 * @ORM\ManyToMany(targetEntity="Identifier", mappedBy="proteins")
 	 */
     public $identifiers;
+    
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection|Identifier[]
+     * @ORM\ManyToMany(targetEntity="Complex", mappedBy="proteins")
+     */
+    public $complexes;
 	
    /**
      * @ORM\OneToMany(targetEntity="Interaction", mappedBy="protein")
@@ -103,6 +109,7 @@ class Protein
 		$this->external_links = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->isoforms = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->experiments= new \Doctrine\Common\Collections\ArrayCollection();
+		$this->complexes= new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	/**
@@ -546,5 +553,107 @@ class Protein
     public function getEntrezId()
     {
         return $this->entrez_id;
+    }
+
+    /**
+     * Add protein
+     *
+     * @param \AppBundle\Entity\Protein $protein
+     *
+     * @return Protein
+     */
+    public function addProtein(\AppBundle\Entity\Protein $protein)
+    {
+        $this->proteins[] = $protein;
+
+        return $this;
+    }
+
+    /**
+     * Remove protein
+     *
+     * @param \AppBundle\Entity\Protein $protein
+     */
+    public function removeProtein(\AppBundle\Entity\Protein $protein)
+    {
+        $this->proteins->removeElement($protein);
+    }
+
+    /**
+     * Get proteins
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProteins()
+    {
+        return $this->proteins;
+    }
+
+    /**
+     * Add isoform
+     *
+     * @param \AppBundle\Entity\Protein $isoform
+     *
+     * @return Protein
+     */
+    public function addIsoform(\AppBundle\Entity\Protein $isoform)
+    {
+        $this->isoforms[] = $isoform;
+
+        return $this;
+    }
+
+    /**
+     * Remove isoform
+     *
+     * @param \AppBundle\Entity\Protein $isoform
+     */
+    public function removeIsoform(\AppBundle\Entity\Protein $isoform)
+    {
+        $this->isoforms->removeElement($isoform);
+    }
+
+    /**
+     * Get isoforms
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIsoforms()
+    {
+        return $this->isoforms;
+    }
+
+    /**
+     * Add experiment
+     *
+     * @param \AppBundle\Entity\Experiment $experiment
+     *
+     * @return Protein
+     */
+    public function addExperiment(\AppBundle\Entity\Experiment $experiment)
+    {
+        $this->experiments[] = $experiment;
+
+        return $this;
+    }
+
+    /**
+     * Remove experiment
+     *
+     * @param \AppBundle\Entity\Experiment $experiment
+     */
+    public function removeExperiment(\AppBundle\Entity\Experiment $experiment)
+    {
+        $this->experiments->removeElement($experiment);
+    }
+
+    /**
+     * Get experiments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getExperiments()
+    {
+        return $this->experiments;
     }
 }

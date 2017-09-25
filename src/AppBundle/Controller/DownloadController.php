@@ -53,12 +53,7 @@ class DownloadController extends Controller
     		$add_dataset = $form["add_dataset"]->getData();
     		$request_dataset_id = $form["request_dataset"]->getData();
     		$request_file_format = $form["request_file_format"]->getData();
-    		
-    		
-    		$handle = fopen('D:\\test\\test.txt', 'w');
-    		fwrite($handle, $request_dataset_id );
-    		
-    		
+
     		$doctrine_manager = $this->getDoctrine()->getManager();
     		$dataset = $this->getDoctrine()
     		->getRepository('AppBundle:Dataset')
@@ -209,34 +204,45 @@ class DownloadController extends Controller
     public function psi_mitabAction(Request $request)
     {
     	
-    	$JSONinteraction_array = $request->get('psi_mitab_interaction_data');
+    	$JSONinteraction_array = $request->get('data_request_data');
+    	$JSONquery_parameters = $request->get('data_request_query_parameters');
+    	$JSONquery_id_array = $request->get('data_request_query_id_array');
     	
-    	$handle = fopen('D:\\test\\test.txt', 'w');
-    	//fwrite($handle, $JSONinteraction_array);
-    	
+    	$query_id_array = json_decode($JSONquery_id_array, true);
     	$interaction_array = json_decode($JSONinteraction_array, true);
+    	$query_parameters = json_decode($JSONquery_parameters, true);
 
-    	$add_user_interaction_network = $request->get('add_psi_mitab_interaction_user_interaction_network');
-    	$query_string = $request->get('psi_mitab_search_query');
-    	
-    	
-    	$content = "Unique identifier for interactor A\tUnique identifier for interactor B\tAlternative identifier for interactor A\tAlternative identifier for interactor B\tAliases for A\tAliases for B\tInteraction detection methods\tFirst author\tIdentifier of the publication\tNCBI Taxonomy identifier for interactor A\tNCBI Taxonomy identifier for interactor B\tInteraction types	Source databases\tInteraction identifier(s)\tConfidence score\tComplex expansion\tBiological role A\tBiological role B\tExperimental role A\tExperimental role B\tInteractor type A\tInteractor type B\tXref for interactor A\tXref for interactor B\tXref for the interaction\tAnnotations for interactor A\tAnnotations for interactor B\tAnnotations for the interaction\tNCBI Taxonomy identifier for the host organism\tParameters of the interaction\tCreation date\tUpdate date\tChecksum for interactor A\tChecksum for interactor B\tChecksum for interaction\tnegative\tFeature(s) for interactor A\tFeature(s) for interactor B\tStoichiometry for interactor A\tStoichiometry for interactor B\tParticipant identification method for interactor A\tParticipant identification method for interactor B\r\n";        
-    	fwrite($handle, 'YES');
-    	
-    	
-    	if($add_user_interaction_network){
+    	$add_user_interaction_network = $request->get('add_user_interaction_network');
+    	$query_string = $request->get('data_request_search_query');
     		
-    		self::addUserNetwork($query_string, $interaction_array);
+    	$content = "Unique identifier for interactor A\tUnique identifier for interactor B\tAlternative identifier for interactor A\tAlternative identifier for interactor B\tAliases for A\tAliases for B\tInteraction detection methods\tFirst author\tIdentifier of the publication\tNCBI Taxonomy identifier for interactor A\tNCBI Taxonomy identifier for interactor B\tInteraction types	Source databases\tInteraction identifier(s)\tConfidence score\tComplex expansion\tBiological role A\tBiological role B\tExperimental role A\tExperimental role B\tInteractor type A\tInteractor type B\tXref for interactor A\tXref for interactor B\tXref for the interaction\tAnnotations for interactor A\tAnnotations for interactor B\tAnnotations for the interaction\tNCBI Taxonomy identifier for the host organism\tParameters of the interaction\tCreation date\tUpdate date\tChecksum for interactor A\tChecksum for interactor B\tChecksum for interaction\tnegative\tFeature(s) for interactor A\tFeature(s) for interactor B\tStoichiometry for interactor A\tStoichiometry for interactor B\tParticipant identification method for interactor A\tParticipant identification method for interactor B\r\n";        
+    	
+    	if($add_user_interaction_network === true){
+    	   
+    		self::addUserNetwork($query_string, $interaction_array, $query_parameters);
     	}
     	
     	
     	foreach($interaction_array as $interaction){
-    		fwrite($handle, 'YES2');
-    		fwrite($handle, json_encode($interaction['interactor_A']));
+
     		$dataset_array = $interaction['dataset_array'];
     		
     		$dataset_author_array = array();
     		$dataset_reference_array = array();
+    		
+    		$interaction_id_A = $interaction['interactor_A']['protein_id'];
+    		$interaction_id_B = $interaction['interactor_B']['protein_id'];
+    		
+    		$query_status_A = 'non_query';
+    		$query_status_B = 'non_query';
+    		
+    		if(in_array($interaction_id_A, $query_id_array)){
+    			$query_status_A = 'query';
+    		}
+    		
+    		if(in_array($interaction_id_B, $query_id_array)){
+    			$query_status_B = 'query';
+    		}
     		
     		foreach($dataset_array as $dataset){
     			
@@ -249,11 +255,32 @@ class DownloadController extends Controller
     		$dataset_author_string = join(";", $dataset_author_array);
     		
     		$dataset_reference_string = join(";", $dataset_reference_array);
+    		
+    		$uniprot_id_A = str_replace(',', '|', $interaction['interactor_A']['protein_uniprot_id']);
+    		$uniprot_id_B = str_replace(',', '|', $interaction['interactor_B']['protein_uniprot_id']);
+    		
+    		$score = $interaction['score'];
+    		
+    		if(!$interaction['score']){
+    			$score = '-';
+    			
+    		}
+    		
+    		if($uniprot_id_A == ''){
+    			
+    			$uniprot_id_A = '-';
+    		}
+    		if($uniprot_id_B == ''){
+    			
+    			$uniprot_id_B = '-';
+    		}
 
-    		$content .= $interaction['interactor_A']['protein_uniprot_id'] . "\t" . $interaction['interactor_B']['protein_uniprot_id'] . "\t" . $interaction['interactor_A']['protein_ensembl_id'] . "\t" . $interaction['interactor_B']['protein_ensembl_id'] . "\t" . $interaction['interactor_A']['protein_gene_name'] . "\t" . $interaction['interactor_B']['protein_gene_name'] . "\t-\t$dataset_author_string\t$dataset_reference_string\t9606\t9606\t-\t-\t-\t" . $interaction['score'] . "\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t" . $interaction['interaction_category_array']['highest_category_status'] . "\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\r\n";
+    		$content .= $uniprot_id_A . "\t" . $uniprot_id_B . "\t" . $interaction['interactor_A']['protein_ensembl_id'] . "\t" . $interaction['interactor_B']['protein_ensembl_id'] . "\t" . $interaction['interactor_A']['protein_gene_name'] . "\t" . $interaction['interactor_B']['protein_gene_name'] . "\t-\t$dataset_author_string\t$dataset_reference_string\t9606\t9606\t-\t-\t-\t" . $score . "\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t$query_status_A\t$query_status_B\t" . $interaction['interaction_category_array']['highest_category_status'] . "\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\t-\r\n";
     		
     	}
-
+    	
+    	
+    	$content .= self::getQueryParameterFooter($query_parameters);
     	
     	$response = new Response();
     	
@@ -273,19 +300,25 @@ class DownloadController extends Controller
      */
     public function interaction_csvAction(Request $request)
     {
+    	  	
+    	$JSONinteraction_array = $request->get('data_request_data');
+    	$JSONquery_parameters = $request->get('data_request_query_parameters');
+    	$JSONquery_id_array = $request->get('data_request_query_id_array');
     	
-    	$JSONinteraction_array = $request->get('csv_interaction_data');
+    	$query_id_array = json_decode($JSONquery_id_array, true);
     	$interaction_array = json_decode($JSONinteraction_array, true);
-    	$add_user_interaction_network = $request->get('add_csv_interaction_user_interaction_network');
-    	$query_string = $request->get('csv_search_query');
+    	$query_parameters = json_decode($JSONquery_parameters, true);
+    	
+    	$add_user_interaction_network = $request->get('add_user_interaction_network');
+    	$query_string = $request->get('data_request_search_query');
     	
     	
-    	if($add_user_interaction_network){
+    	if($add_user_interaction_network === true){
     		
     		self::addUserNetwork($query_string, $interaction_array);
     	}
     	
-    	$content = "Unique identifier for interactor A,Unique identifier for interactor B,Alternative identifier for interactor A,Alternative identifier for interactor B,Aliases for A,Aliases for B,First author,Identifier of the publication,Confidence score,Interaction Status\n";
+    	$content = "Unique identifier for interactor A,Unique identifier for interactor B,Alternative identifier for interactor A,Alternative identifier for interactor B,Aliases for A,Aliases for B,Query Status Interactor A,Query Status Interactor B,First author,Identifier of the publication,Confidence score,Interaction Status\n";
     	
     	foreach($interaction_array as $interaction){
     		
@@ -293,6 +326,20 @@ class DownloadController extends Controller
     		
     		$dataset_author_array = array();
     		$dataset_reference_array = array();
+    		
+    		$interaction_id_A = $interaction['interactor_A']['protein_id'];
+    		$interaction_id_B = $interaction['interactor_B']['protein_id'];
+    		
+    		$query_status_A = 'non_query';
+    		$query_status_B = 'non_query';
+    		
+    		if(in_array($interaction_id_A, $query_id_array)){
+    			$query_status_A = 'query';
+    		}
+    		
+    		if(in_array($interaction_id_B, $query_id_array)){
+    			$query_status_B = 'query';
+    		}
     		
     		foreach($dataset_array as $dataset){
     			
@@ -306,11 +353,31 @@ class DownloadController extends Controller
     		
     		$dataset_reference_string = join(";", $dataset_reference_array);
     		
+    		$uniprot_id_A = str_replace(',', '|', $interaction['interactor_A']['protein_uniprot_id']);
+    		$uniprot_id_B = str_replace(',', '|', $interaction['interactor_B']['protein_uniprot_id']);
     		
-    		$content .= $interaction['interactor_A']['protein_uniprot_id'] . "," . $interaction['interactor_B']['protein_uniprot_id'] . "," . $interaction['interactor_A']['protein_ensembl_id'] . "," . $interaction['interactor_B']['protein_ensembl_id'] . "," . $interaction['interactor_A']['protein_gene_name'] . "," . $interaction['interactor_B']['protein_gene_name'] . ",$dataset_author_string,$dataset_reference_string," . $interaction['score'] . "," . $interaction['interaction_category_array']['highest_category_status'] . "\r\n";
+    		$score = $interaction['score'];
+    		
+    		if(!$interaction['score']){
+    			$score = '-';
+    			
+    		}
+    		
+    		if($uniprot_id_A == ''){
+    			
+    			$uniprot_id_A = '-';
+    		}
+    		if($uniprot_id_B == ''){
+    			
+    			$uniprot_id_B = '-';
+    		}
+    	
+
+    		$content .= $uniprot_id_A . "," . $uniprot_id_B . "," . $interaction['interactor_A']['protein_ensembl_id'] . "," . $interaction['interactor_B']['protein_ensembl_id'] . "," . $interaction['interactor_A']['protein_gene_name'] . "," . $interaction['interactor_B']['protein_gene_name'] . "," . $query_status_A . "," . $query_status_B . ",$dataset_author_string,$dataset_reference_string," . $score . "," . $interaction['interaction_category_array']['highest_category_status'] . "\r\n";
     		
     	}
     	
+    	$content .= self::getQueryParameterFooter($query_parameters);
     	
     	$response = new Response();
     	
@@ -333,19 +400,40 @@ class DownloadController extends Controller
     public function interactor_csvAction(Request $request)
     {
     	
-    	$JSONprotein_array = $request->get('csv_interactor_data');
     	
+    	$JSONprotein_array = $request->get('data_request_data');
+    	$JSONquery_parameters = $request->get('data_request_query_parameters');
+    	$JSONquery_id_array = $request->get('data_request_query_id_array');
+    	
+    	$query_id_array = json_decode($JSONquery_id_array, true);
     	$protein_array = json_decode($JSONprotein_array, true);
+    	$query_parameters = json_decode($JSONquery_parameters, true);
     	
-    	$content = "Gene Name,UniProt ID,Ensembl ID,Entrez ID,Description,Tissue Expression,Subcellular Location\n";
+    	$query_string = $request->get('data_request_search_query');
+    	
+    	
+    	$content = "Gene Name,UniProt ID,Ensembl ID,Entrez ID,Description,Query Status,Tissue Expression,Subcellular Location\n";
+    	
+    	
     	
     	foreach($protein_array as $protein){
     		
-    		$content .= $protein['protein_gene_name'] . "," . $protein['protein_uniprot_id'] . "," . $protein['protein_ensembl_id']  . "," . $protein['protein_entrez_id'] . ',' . $protein['protein_description'] . "\n";
+    		$uniprot_id = str_replace(',', '|', $protein['protein_uniprot_id']); 
+    		
+    		$protein_id = $protein['protein_id'];
+    		
+    		$query_status = 'non_query';
+    		
+    		if(in_array($protein_id, $query_id_array)){
+    			$query_status = 'query';
+    		}
+    		
+    		
+    		$content .= $protein['protein_gene_name'] . "," . $uniprot_id . "," . $protein['protein_ensembl_id']  . "," . $protein['protein_entrez_id'] . ',' . '"' . $protein['protein_description'] . '"' . ',' . $query_status ."\n";
     		
     	}
     	
-    	
+    	$content .= self::getQueryParameterFooter($query_parameters);
     	$response = new Response();
     	
     	$response->headers->set('Content-Type', 'text/csv');
@@ -367,18 +455,33 @@ class DownloadController extends Controller
     public function multi_fastaAction(Request $request)
     {
     	
-    	$JSONprotein_array = $request->get('fasta_data');
+    	$JSONprotein_array = $request->get('data_request_data');
+    	$JSONquery_parameters = $request->get('data_request_query_parameters');
+    	$JSONquery_id_array = $request->get('data_request_query_id_array');
     	
+    	$query_id_array = json_decode($JSONquery_id_array, true);
     	$protein_array = json_decode($JSONprotein_array, true);
+    	$query_parameters = json_decode($JSONquery_parameters, true);
     	
+    	$query_string = $request->get('data_request_search_query');
     	$content = null;
     	
     	foreach($protein_array as $protein){
     		
-    		$content .= ">Gene Name:" . $protein['protein_gene_name'] . ",UniProt ID:" . $protein['protein_uniprot_id'] . ",Ensembl ID:" . $protein['protein_ensembl_id']  . ",Entrez ID:" . $protein['protein_entrez_id'] . "\r\n" . $protein['protein_sequence'] . "\r\n";
+    		$uniprot_id = str_replace(',', '|', $protein['protein_uniprot_id']); 
+    		
+    		$protein_id = $protein['protein_id'];
+    		
+    		$query_status = 'non_query';
+    		
+    		if(in_array($protein_id, $query_id_array)){
+    			$query_status = 'query';
+    		}
+    		
+    		$content .= ">Gene Name:" . $protein['protein_gene_name'] . ",UniProt ID:" . $uniprot_id . ",Ensembl ID:" . $protein['protein_ensembl_id']  . ",Entrez ID:" . $protein['protein_entrez_id'] . ",Query Status:$query_status" . "\r\n" . $protein['protein_sequence'] . "\r\n";
     	}
     	
-    	
+    	$content .= self::getQueryParameterFooter($query_parameters);
     	$response = new Response();
     	
     	$response->headers->set('Content-Type', 'text/csv');
@@ -453,16 +556,56 @@ class DownloadController extends Controller
     
     
     
+    public function getQueryParameterFooter($query_parameters){
     
+    	$version_query_parameter = $query_parameters[0];
+    	$score_parameter = $query_parameters[1];
+    	$category_parameter_array= $query_parameters[2];
+    	$tissue_expression_parameter_array= $query_parameters[3];
+    	$date = getdate();
+    	
+	    $content = "\r\n";
+	    $content .= "##\r\n";
+	    $content .= "## Date Downloaded: " . $date['month'] . ' ' . $date['mday'] . ' ' . $date['year'] . "\r\n";
+	    $content .= "## Database Version: " . $version_query_parameter  . "\r\n";
+	    $content .= "## Query Parameters\r\n";
+	    $content .= "## Score: " . $score_parameter  . "\r\n";
+	    $content .= "## Interaction Catagories: ";
+	    
+	    $catagory_array = array();
+	    
+	    foreach($category_parameter_array as $category => $category_parameter){
+	    	
+	    	if($category_parameter == true){
+	    		$catagory_array[] = $category;
+	    	}
+	    }
+	    
+	    $catagory_string = join(',', $catagory_array);
+	    $content .= $catagory_string . "\r\n";
+	    
+	    $content .= "## Tissue Expression: ";
+	    
+	    $tissue_expression_array = array();
+	    
+	    foreach($tissue_expression_parameter_array as $tissue => $tissue_expression_parameter){
+	    	
+	    	if($tissue_expression_parameter == true){
+	    		$tissue_expression_array[] = $tissue;
+	    	}
+	    }
+	    
+	    $tissue_string = join(',', $tissue_expression_array);
+	    
+	    if($tissue_string == ''){
+	    	$content .= 'None' . "\r\n";
+	    }else{
+	    	$content .= $tissue_string . "\r\n";
+	    }
     
-    
-    
-    
-    
-    
-    
-    
-    
+	    return $content;
+	    
+    }
     
     
     
@@ -1825,7 +1968,7 @@ class DownloadController extends Controller
 	    }
     }
     
-    public function addUserNetwork($query_string, $interaction_array){
+    public function addUserNetwork($query_string, $interaction_array, $query_parameters){
 	    
     	$user = $this->get('security.token_storage')->getToken()->getUser();
 	    
@@ -1849,6 +1992,63 @@ class DownloadController extends Controller
 	    	$em->persist($interaction);
 	    	
 	    }
+	    
+	    
+	    
+	    
+	    $score_parameter = $query_parameters[1];
+	    $category_array =  $query_parameters[2];
+	    $tissue_expression_array =  $query_parameters[3];
+	    
+	    
+
+	    $category_string_array = array();
+	    $query_category_string_array = array();
+	    foreach($category_array as $key => $value){
+	    	
+	    	if($value == true){
+	    		$category_string_array[] = $key;
+	    	}
+	    	if($value == false){
+	    		$query_category_string_array[] = $key .'=false';
+	    	}
+	    }
+	    $category_array_string = join(',', $category_string_array);
+	    $query_category_string = join('&', $query_category_string_array);
+	    
+	    $tissue_expression_string_array = array();
+	    $query_tissue_expression_array = array();
+	    foreach($tissue_expression_array as $key => $value){
+	    	
+	    	if($value == true){
+	    		$tissue_expression_string_array[] = $key;
+	    		$query_tissue_expression_array[] = $key .'=true';
+	    	}
+
+	    }
+	    $tissue_expression_array_string = join(',', $tissue_expression_string_array);
+	    $query_tissue_expression = join('&', $query_tissue_expression_array);
+	    
+	    $interaction_network->setScoreParameter($score_parameter);
+	    if($score_parameter){
+	    	$query_score_parameter = 'score=' . $score_parameter;
+			
+		}
+	    
+	    
+	    $interaction_network->setCategoryArray($category_array_string);
+	    
+	    
+	    $interaction_network->setTissueExpressionArray($tissue_expression_array_string);
+	    
+	    $array = [$query_score_parameter, $query_category_string, $query_tissue_expression];
+	    $string = join('&', $array);
+	    
+	    $query = $query_string;
+	    $query .= '?' . $string;
+	    $interaction_network->setQuery($query);
+
+	    
 	    
 	    $interaction_network->addUser($user);
 	    $user->addInteractionNetwork($interaction_network);

@@ -297,6 +297,8 @@ function validateSearchTerms() {
 		urlTermValidation = Url + 'term_validation' + searchIdentifierValue;
 	}
 	
+	var termCountArray = searchIdentifierValue.split(",");
+	var termCount = termCountArray.length;
 
 	$.getJSON(urlTermValidation, function(data){
 		var invalidTermsString = '';
@@ -308,28 +310,33 @@ function validateSearchTerms() {
 			invalidTerms = invalidTerms + '<div class="row" style="margin:0px;">' + value  + '</div>';
 		});
 		
+		var invalidTermCount = data.length;
+		var validTermCount = termCount - invalidTermCount;	
+		
 		invalidTermsString = invalidTermsString.replace(/^,/, "");
 		if(invalidTerms){
 			
 			$("#all_terms_valid").addClass('hidden');
-			$("#search_terms_not_found").removeClass('hidden');
+			$(".search_terms_not_found").removeClass('hidden');
 			$("#invalid_terms_array").removeClass('hidden');
 			$("#remove_invalid_terms").removeClass('hidden');
 			$("#invalid_terms_array").attr('data', invalidTermsString);
 			$("#invalid_terms_array").html(invalidTerms);
-			
-			
-			
+			$(".number_present_terms").html(validTermCount);
+			$(".number_not_present_terms").html(invalidTermCount);
+
 		}else{
 			
-			if(searchIdentifierValue != ''){
-				
+			if($("#search_identifier").val() != ''){
+
 				$("#all_terms_valid").removeClass('hidden');
 			}
 			
-			$("#search_terms_not_found").addClass('hidden');
+			$(".search_terms_not_found").addClass('hidden');
 			$("#invalid_terms_array").addClass('hidden');                			
 			$("#remove_invalid_terms").addClass('hidden');
+			$(".number_present_terms").html(validTermCount);
+			
 		}
 		
 		

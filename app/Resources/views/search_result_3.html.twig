@@ -73,9 +73,9 @@
 				stroke-linejoin="miter" d="m62.56,29.2-24.77-16.15" class="child"
 				stroke="{{logo_color_scheme}}" stroke-linecap="butt"
 				stroke-width="1.07676673" fill="none" /> </g> </svg>
-		<div style="padding: 12px;">
+		<div style="padding: 12px; display: inline-flex">
 			<h3 style="color: {{ header_color_scheme }}">
-				<strong>{{ title }}</strong>
+				<strong>{{ title }}</strong><span style="font-size: small" > (version {{ version }})</span>
 			</h3>
 		</div>
 	</nav>
@@ -154,7 +154,7 @@
 
 
 <div id="data_request_logged_out" class="hidden large">
-	<div id="logged_out_form">
+	<div id="logged_out_form" class="message_panel">
 		<div class="container">
 			<div class="row">
 				<h3 class="bold" style="text-align: center; color: {{ main_color_scheme }}">Download Unpublished Data</h3>
@@ -178,7 +178,7 @@
 </div>
 
 <div id="data_request_logged_in" class="hidden large">
-	<div id="logged_in_form">
+	<div id="logged_in_form" class="message_panel">
 		<div class="container">
 			<div class="row">
 				<h3 class="bold" style="text-align: center; color: {{ main_color_scheme }}">Download Unpublished Data</h3>
@@ -203,12 +203,48 @@
 	</div>
 </div>
 
+<div id="cy_message" class="hidden large">
+    <div class="message_panel">
+    	<div class="container">
+    		<div class="row">
+    			<h3 class="bold" style="text-align: center; color: {{ main_color_scheme }}">cyREST Not Active</h3>
+    			
+    		</div>
+    		<div class="row">
+    			<p>
+    				<strong>To export network to Cytoscape:</strong>
+    			</p>
+    			<ul>
+    				<li><a href="http://www.cytoscape.org/">Cytoscape</a> must be installed and open</li>
+    				<li>The <a href="http://apps.cytoscape.org/apps/cyrest">cyREST</a> App must be instaled</li>
+    			</ul>
+    		</div>
+    				
+    		<div class="row">
+    			<div style="float: left;">
+    				<div class="cancel_cy_message btn btn-default" style="float: left;">
+    					<i class="glyphicon glyphicon-ban-circle"></i> <span>Close</span>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </div>		
+</div>
+
+<form id="data_download_form" action="" method="post" class="hidden">
+  <input id="add_user_interaction_network" type="hidden" name="add_user_interaction_network" value=''/>
+  <input id="data_request_data" type="hidden" name="data_request_data" value=''/>
+  <input id="data_request_query_parameters" type="hidden" name="data_request_query_parameters" value=''/>
+  <input id="data_request_query_id_array" type="hidden" name="data_request_query_id_array" value=''/>
+  <input id="data_request_search_query" type="hidden" name="data_request_search_query" value='{{ search_query }}'/>
+</form>
+
 <div id="se-pre-con" class="se-pre-con">
-    <div class="loader" style="text-align: center;">
+    <div class="loader" style="text-align: center; background: #f2f2f2;">
         <div class="row" style="display: inline-flex;">
-        	<h3 style="color: #545454">Loading Network Data</h3>
+        	<h3 style="color: {{ main_color_scheme }}; font-weight: bold;">Loading Network Data</h3>
         </div>
-        <div id="loading_border">
+        <div id="loading_border" style="background: #FFFFFF">
     		<ul class="bokeh">
     			<li></li>
     			<li></li>
@@ -242,6 +278,10 @@
 				<div class="row">
 					<strong>Query: </strong>
 					{{ query_parameters.SearchTermSummary }}
+				</div>
+				<div class="row">
+					<strong>Proteins Found: </strong>
+					{{ found_protein_summary }}
 				</div>
 				<div class="row">
 					<strong>Proteins Not Found: </strong>
@@ -301,7 +341,7 @@
 					<div id="cy-nav" class="collapse navbar-collapse"
 						style="padding-left: 0px;">
 						<ul id="cy_nav_menu_list" class="nav navbar-nav cy-nav">
-						
+				
 							<li class="dropdown"><a class="dropdown-toggle"
 								data-toggle="dropdown" href="#">Filter <span class="caret"></span></a>
 								<ul class="dropdown-menu">
@@ -392,6 +432,7 @@
 									class="caret"></span></a>
 								<ul class="dropdown-menu">
 									<li><a id="cola" class='layout link'>Cola</a></li>
+									<li><a id="euler" class='layout link'>Euler</a></li>
 									<li><a id="cose" class='layout link'>Cose</a></li>
 									<li><a id="concentric" class='layout link'>Concentric</a></li>
 									<li><a id="circle" class='layout link'>Circle</a></li>
@@ -408,39 +449,19 @@
 									<h5 style="margin-left: 20px;">Network Data</h5>							
 									
 									<li>
-    									<form id="psi_mitab_interaction_download_form" action="{{ url }}download/interaction_psi_mitab/" method="post">
-                                          <a id="psi_mitab_interaction" class="data_request_links link">Interactions (PSI-MI Tab 2.7)</a>
-                                          <input id="add_psi_mitab_interaction_user_interaction_network" type="hidden" name="add_psi_mitab_interaction_user_interaction_network" value=''/>
-                                          <input id="psi_mitab_interaction_data" type="hidden" name="psi_mitab_interaction_data" value=''/>
-                                          <input id="psi_mitab_search_query" type="hidden" name="psi_mitab_search_query" value='{{ search_query }}'/>
-                                          <input id="psi_mitab_query_parameters" type="hidden" name="psi_mitab_query_parameters" value=''/>
-                                        </form>
+                                       <a id="psi_mitab_interaction" class="data_request_links link">Interactions (PSI-MI Tab 2.7)</a>
 									</li>
 									<li>
-									    <form id="csv_interaction_download_form" action="{{ url }}download/interaction_csv/" method="post">
-                                          <a id="csv_interaction" class="data_request_links link">Interactions (CSV)</a>
-                                          <input id="add_csv_interaction_user_interaction_network" type="hidden" name="add_csv_interaction_user_interaction_network" value=''/>
-                                          <input id="csv_interaction_data" type="hidden" name="csv_interaction_data" value=''/>
-                                          <input id="csv_search_query" type="hidden" name="csv_search_query" value='{{ search_query }}'/>
-                                          <input id="csv_query_parameters" type="hidden" name="csv_query_parameters" value=''/>
-                                        </form>
+                                       <a id="csv_interaction" class="data_request_links link">Interactions (CSV)</a>
 									</li>
 									<li>
-									    <form id="csv_interactor_download_form" action="{{ url }}download/interactor_csv/" method="post">
-                                          <a id="csv_interactor" class="data_request_links link">Interactors (CSV)</a>
-                                          <input id="add_csv_interactor_user_interaction_network" type="hidden" name="add_csv_interactor_user_interaction_network" value=''/>
-                                          <input id="csv_interactor_data" type="hidden" name="csv_interactor_data" value=''/>
-                                        </form>
+                                       <a id="csv_interactor" class="data_request_links link">Interactors (CSV)</a>
 									</li>
 									<li>
-									    <form id="fasta_download_form" action="{{ url }}download/multi_fasta/" method="post">
-                                          <a id="fasta" class="data_request_links link">Protein Sequences (FASTA)</a>
-                                          <input id="add_fasta_data_user_interaction_network" type="hidden" name="add_fasta_data_user_interaction_network" value=''/>
-                                          <input id="fasta_data" type="hidden" name="fasta_data" value=''/>
-                                        </form>
-									</li>									
-									
-								</ul></li>
+                                       <a id="fasta" class="data_request_links link">Protein Sequences (FASTA)</a>						
+									</li>
+								</ul>
+							</li>
 
 							<li class="dropdown">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#">External Links <span class="caret"></span></a>
@@ -450,7 +471,11 @@
         							<li id="reactome_link_li"></li>
         							<li id="pathway_commons_link_li"></li>
         							<li id="david_link_li"></li>
-        							<li id="gprofiler_link_li"></li>							
+        							<li id="gprofiler_link_li"></li>
+        							<li id="cbioportal_link_li"></li>
+        							<li id="complex_portal_link_li"></li>	
+        							<li id="intact_link_li"></li>
+        													
 								</ul></li>
 									
 								</ul>
@@ -508,7 +533,9 @@
 	<div class="col-sm-12">
 		
 		<div id='cy'>
-			<div id="no_interactions_found" style="margin-top: 20%; text-align: center; z-index:1000;"><h4>No Interactions Found</h4></div>
+			<div id="no_interactions_found" class="hidden" style="margin-top: 20%; text-align: center; z-index:1000;"><h4>No Interactions Found</h4></div>
+			<button id="export_cy" class="btn btn-default hidden" style="position: absolute; left: 10px; bottom: 10px; z-index: 2"><img src="{{ url }}assets/images/cy3logoOrange.svg" width="32px" height="38px"/></button>
+			
 		</div>
 		<div id='no_cy' class="hidden" >
 			<div style="margin-top: 40px; text-align: center;"><h4>Interaction Network too Large to Display</h4></div>
@@ -945,6 +972,7 @@
 		</div>
 	</div>
 </div>
+
 <div class="shadow" style="height: 2px;"></div>
 </main>
 <main id="main_text_output" style="display: none; background: #ffffff;">
@@ -969,20 +997,31 @@
 
 <script>
 var CategoryArray = {{ interaction_categories_array|json_encode|raw }};
+
+var queryParameters = new Object();
+queryParameters.CategoryParameterArray = {{ query_parameters.CategoryArray|json_encode|raw }};
+queryParameters.TissueExpressionParameterArray = {{ query_parameters.TissueExpressionArray|json_encode|raw }};
+queryParameters.SubcellularLocationExpressionArray = {{ query_parameters.SubcellularLocationExpressionArray|json_encode|raw }};
+queryParameters.ScoreParameter = {{ query_parameters.ScoreParameter }};
+queryParameters.SearchTerm = "{{ query_parameters.SearchTermParameter }}";
+queryParameters.TextOutput = "{{ query_parameters.TextOutput }}";
+
 var CategoryParameterArray = {{ query_parameters.CategoryArray|json_encode|raw }};
 var TissueExpressionParameterArray = {{ query_parameters.TissueExpressionArray|json_encode|raw }};
 var SubcellularLocationExpressionArray = {{ query_parameters.SubcellularLocationExpressionArray|json_encode|raw }};
 var ScoreParameter = {{ query_parameters.ScoreParameter }};
 var SearchTerm = "{{ query_parameters.SearchTermParameter }}";
 var TextOutput = "{{ query_parameters.TextOutput }}";
+
 var SearchResultsJSON = '';
 var QueryNodeColor = "{{ query_node_color }}";
 var InteractorNodeColor = "{{ interactor_node_color }}";
 var MainColorScheme = "{{ main_color_scheme }}";
 var loggedIn = "{{ login_status }}";
 var Url = "{{ url }}";
+var Version = "{{ version }}";
 
-
+console.time();
 $.ajax({
     type: "POST",
     url:  Url + "search_results_interactions",
@@ -1004,7 +1043,7 @@ $.ajax({
 
 });
 
-
+console.time();
 
 
 </script>
@@ -1022,11 +1061,13 @@ $.ajax({
 <script src="{{ asset('assets/js/cytoscape.min.js') }}"></script>
 <script src="{{ asset('assets/js/cytoscape-qtip.js') }}"></script>
 <script src="{{ asset('assets/js/cytoscape-panzoom.js') }}"></script>
+<script src="{{ asset('assets/js/cytoscape-expand-collapse.js') }}"></script>
 <script src="{{ asset('assets/js/cola.js') }}"></script>
 <script src="{{ asset('assets/js/cytoscape-cola.js') }}"></script>
+<script src="{{ asset('assets/js/cytoscape-euler.js') }}"></script>
 <script src="{{ asset('assets/js/jquery.qtip.min.js') }}"></script>
 <script src="{{ asset('bundles/spectrum/spectrum.js') }}"></script>
-<script src="{{ asset('assets/js/readmore.min.js') }}"></script>
+<script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/Readmore.js/2.2.0/readmore.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
 <script src="{{ asset('assets/js/search_results.js') }}"></script>
 

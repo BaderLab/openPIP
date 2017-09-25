@@ -2,13 +2,22 @@
 
 var allInteractionArray = SearchResultsJSON['edges'];
 var allProteinArray = SearchResultsJSON['nodes'];
+var allDomainArray = SearchResultsJSON['domains'];
+
+
+var allComplexArray = SearchResultsJSON['complexes']['complex'];
+var allProteinComplexArray = SearchResultsJSON['complexes']['protein_complex'];
+var allComplexProteinArray = SearchResultsJSON['complexes']['complex_protein'];
+
 var queryProteinIdArray = SearchResultsJSON['query_protein_id_array'];
+var searchTerm = SearchResultsJSON['search_term'];
+
 var proteinOfIntrestName = '';
 var Layout = 'cola';
 if(allInteractionArray.length > 800){Layout = 'cose';}
 var currentProteinArray = allProteinArray;
 var currentInteractionArray = allInteractionArray;
-	
+var cy = '';	
 enableScroll();
 if(TextOutput == 'text_output' || allInteractionArray.length > 8000){
 	filterProteinsAndInteractions();
@@ -25,8 +34,12 @@ if(TextOutput == 'text_output' || allInteractionArray.length > 8000){
 	createInteractionTable();
 	setNodeAndEdgeSummayValues();
 	var cy = updateCytoscapeNetwork();
+
 	$(".description").readmore({lessLink: "<a>Read less</a>"});
 	$('.footable').trigger('footable_initialized');
+	
+	
+	
 }
 
 
@@ -38,7 +51,7 @@ function updateCytoscapeNetwork(){
 	var cytoscapeJSON = createCytoscapeJSON();
 	displayMessageIfNoInteractions();
 
-	var cy = createCytoscapeNetwork(cytoscapeJSON);
+	cy = createCytoscapeNetwork(cytoscapeJSON);
 
  	updateInteractionsTable();
  	addCytoscapeQtips(cy);
@@ -48,12 +61,16 @@ function updateCytoscapeNetwork(){
  	setLayoutClickEvent(cy);
  	updateExternalLinks();
  	setPanZoomForNonMobile(cy);
+ 	setCytoscapeExportForNonMobile();
  	setPngDownloadClickEvent(cy);
  	setInteractionRowClickEvent(cy);
  	setEnrichmentRowClickEvent(cy);
  	setNodeHoveEvent(cy)
  	setFootable();
  	reloadPageSize();
+ 	setCytoscapeExportEvents();
+ 	
+
 	return cy;
 
 }
@@ -67,6 +84,21 @@ function createCytoscapeJSON(){
 	
 	nodesJSON = [];
 	edgesJSON = [];
+	
+	var complexesContainingMoreThanOneInteractor = getComplexesContainingMoreThanOneInteractor();	
+	
+	for (j = 0; j < complexesContainingMoreThanOneInteractor.length; ++j) {
+
+		var complex_id = complexesContainingMoreThanOneInteractor[j];
+		
+		var complex = allComplexArray[complex_id];
+		
+		var complexId = complex['complex_id'];
+		var complexName = complex['name'];
+		var complexDescription = complex['description'];
+		
+		nodesJSON.push({id: complexId, data: { id: complexId}, style: { "label": complexName, 'background-color': '#A041F2'}, classes: "nodes"});
+	}
 	
  	for (i = 0; i < currentProteinArray.length; ++i) {
  		
@@ -82,14 +114,64 @@ function createCytoscapeJSON(){
  		var subcellularLocationExpressionArray = currentProteinArray[i].subcellular_location_expression_array;
  		var nodeProteinId = proteinId;
  		
- 		
+ 		if(jQuery.isEmptyObject(subcellularLocationExpressionArray) == true){
+ 			
+ 			subcellularLocationExpressionArray = {};
+ 		}
+ 		if(jQuery.isEmptyObject(tissueExpressionArray) == true){
+ 			
+ 			tissueExpressionArray = {};
+ 		}
 
- 		nodesJSON.push({group: "nodes",data: { id: nodeProteinId, uniprot_id: uniprotId, ensembl_id: ensemblId, entrez_id: entrezId, protein_name: proteinName, gene_name: geneName, description: proteinDescription, external_links: linkArray, tissue_expression_array: tissueExpressionArray, subcellular_location_expression_array: subcellularLocationExpressionArray}, classes: "nodes"},);
+		if(proteinId in allDomainArray ){
 
+			var domain = allDomainArray[proteinId];
+			var domainType = domain.type;
+
+ 			nodesJSON.push({id: nodeProteinId, group: "nodes",data: { id: nodeProteinId, name: geneName, uniprot_id: uniprotId, ensembl_id: ensemblId, entrez_id: entrezId, protein_name: proteinName, gene_name: geneName, description: proteinDescription, external_links: linkArray, tissue_expression_array: tissueExpressionArray, subcellular_location_expression_array: subcellularLocationExpressionArray, query: 'non-query'}, classes: "nodes has_domain"},);
+ 			
+			var proteinDomainArray = allDomainArray[proteinId];
+
+			$.each(proteinDomainArray, function( index, domain ) {
+
+				var domainType = domain.type;
+
+	 			nodesJSON.push({id: nodeProteinId + '_domain_' + domainType, group: "nodes",data: {id: nodeProteinId + '_domain_' + domainType, parent: nodeProteinId, type: domainType}, classes: "domains"});
+
+			});
+ 		}else{
+ 			nodesJSON.push({id: nodeProteinId, group: "nodes",data: { id: nodeProteinId, name: geneName, uniprot_id: uniprotId, ensembl_id: ensemblId, entrez_id: entrezId, protein_name: proteinName, gene_name: geneName, description: proteinDescription, external_links: linkArray, tissue_expression_array: tissueExpressionArray, subcellular_location_expression_array: subcellularLocationExpressionArray, query: 'non-query'}, classes: "nodes"},);
+ 		}
+		
+		if(allProteinComplexArray){
+	 		if(proteinId in allProteinComplexArray ){
+	 		 	
+				var complexesForProtein = allProteinComplexArray[[proteinId]];
+	
+				for (j = 0; j < complexesForProtein.length; ++j) {
+					var complex_id = complexesForProtein[j];
+					if(complexesContainingMoreThanOneInteractor.indexOf(complex_id) != -1){
+						
+						var complex = allComplexArray[complex_id];
+						
+						var complexId = complex['complex_id'];
+						var complexName = complex['name'];
+						var complexDescription = complex['description'];
+						
+				 		edgesJSON.push({
+							group: "edges",
+							data: { id: complexId + '_' + nodeProteinId, name: complexName, source: complexId, target: nodeProteinId},
+							style: { "line-color": '#A041F2', 'line-style': 'dashed'},
+				 		});
+					}			
+				}
+	 		}
+		}
  	}
- 	
+
  	for (i = 0; i <  currentInteractionArray.length; ++i) {
- 		
+ 		var interactionId = currentInteractionArray[i]['interaction_id']
+ 		var sourceProteinId = currentInteractionArray[i]['interactor_A']['protein_id'];
  		var sourceProteinId = currentInteractionArray[i]['interactor_A']['protein_id'];
  		var sourceProteinName = currentInteractionArray[i]['interactor_A']['protein_uniprot_id'];
  		var sourceProteinGeneName = currentInteractionArray[i]['interactor_A']['protein_gene_name'];
@@ -99,7 +181,6 @@ function createCytoscapeJSON(){
  		var scoreData = currentInteractionArray[i]['score'];
  		var experimentArray = currentInteractionArray[i]['experiment_array'];
  		
- 	
 		var highestCategoryStatus = currentInteractionArray[i]['interaction_category_array']['highest_category_status'];
 
  		var sourceNodeId = sourceProteinId;
@@ -110,19 +191,31 @@ function createCytoscapeJSON(){
  			lineColor = "#ccc";	
  		}
  		
- 		
  		var targetNodeId = targetProteinId;
  		var edgeID = sourceProteinId + "_" + targetProteinId;
  		widthData = getEdgeWidth(scoreData);
  		
+ 		if(sourceNodeId in allDomainArray){
+ 			
+			var proteinDomainArray = allDomainArray[sourceNodeId];
+			$.each(proteinDomainArray, function( index, domain ) {
+				if(interactionId == domain.interaction_id){
+				var domainType = domain.type;
+				sourceNodeId = sourceNodeId + '_domain_' + domainType;
+				}
+			});
+
+ 		}
+
  		edgesJSON.push({
 			group: "edges",
-			data: { id: edgeID, source: sourceNodeId, target: targetNodeId, interaction: sourceProteinGeneName + ' - ' + targetProteinGeneName, score: scoreData, experiment_array: experimentArray, highest_category_status: highestCategoryStatus},
+			data: { id: edgeID, name: sourceProteinGeneName + ' - ' + targetProteinGeneName, source: sourceNodeId, target: targetNodeId, interaction: sourceProteinGeneName + ' - ' + targetProteinGeneName, score: scoreData, experiment_array: experimentArray, highest_category_status: highestCategoryStatus},
 			style: { "line-color": lineColor, 'width': widthData},		
  		});
-
+ 		
  	}
  	
+ 	console.log(edgesJSON);
  	var cytoscapeJSON = nodesJSON.concat(edgesJSON);
 	
 	return cytoscapeJSON;
@@ -130,17 +223,10 @@ function createCytoscapeJSON(){
 
 function createCytoscapeNetwork(cytoscapeJSON){
 	
-	var cy = cytoscape({	
+	cy = cytoscape({	
 		container: document.getElementById('cy'),
 	  	elements: cytoscapeJSON,
-	  	layout: { 
-			name: Layout,
-			avoidOverlap: true,
-			equidistant: true,
-			minNodeSpacing: 50,
-	 		randomize: true
-		},
-		
+
 	  	style: [{
  				selector: '.nodes',
  				css: 
@@ -153,10 +239,35 @@ function createCytoscapeNetwork(cytoscapeJSON){
                      'padding-left': '10px',
                      'padding-bottom': '10px',
                      'padding-right': '10px',
-                     'text-align': 'center',
                      'background-color': InteractorNodeColor
      			}
  			},
+ 			{
+ 				selector: '.has_domain',
+ 				css: 
+ 				{
+                     'content': 'data(gene_name)',
+                     'text-valign': 'top',
+     			}
+ 			},
+ 			
+ 			
+ 			
+	  		{
+				selector: '.domains',
+				css: 
+				{
+                 'content': 'data(type)',
+                 'text-valign': 'center',
+                 'color': 'white',
+                 'text-outline-width': 2,
+                 'padding-top': '10px',
+                 'padding-left': '10px',
+                 'padding-bottom': '10px',
+                 'padding-right': '10px',
+                 'background-color': '#CCCCCC'
+ 			   }
+			},
             {
              	selector: '.edge',
              	css: 
@@ -164,11 +275,74 @@ function createCytoscapeNetwork(cytoscapeJSON){
              	  'line-color' : '#AAAAAA'
              	}
 	}]});
+	
+	var api = cy.expandCollapse({
+		fisheye: true,
+		animate: true,
+		undoable: false
+	});
 
+	
+	cy.nodes().on("expandcollapse.aftercollapse", function(event) { var node = this;  node.style({'text-valign': 'center', 'border-width': '3px', 'border-color': '#A041F2'})});
+	cy.nodes().on("expandcollapse.afterexpand", function(event) { var node = this;  node.style({'text-valign': 'top', 'border-width': '3px', 'border-color': '#A041F2' })});
+	api.collapseAll();
+	
+	var layoutRun =  cy.layout({ 
+		name: Layout,
+		avoidOverlap: true,
+		equidistant: true,
+		minNodeSpacing: 50,
+ 		randomize: true,
+ 		fit: true,
+	 		nodeRepulsion       : 10000,
+ 	 		nodeOverlap         : 100,
+
+	});
+	layoutRun.run();
 	setQueryNodeColor(cy);
 	cy.minZoom(0.1);
 	return cy;
 }
+
+
+
+
+function getComplexesContainingMoreThanOneInteractor(){
+
+	var complexContainingOneInteractorArray = [];
+	var complexesContainingMoreThanOneInteractorArray = [];
+	
+	for (i = 0; i < currentProteinArray.length; ++i) {	
+		var proteinId = currentProteinArray[i].protein_id;
+		if(allProteinComplexArray){
+		if(proteinId in allProteinComplexArray){	
+			var complexesForProtein = allProteinComplexArray[proteinId];
+			for (j = 0; j < complexesForProtein.length; ++j) {	
+				complexContainingOneInteractorArray.push(complexesForProtein[j]);	
+			}
+		}
+		}
+	}	
+	
+	var complexesContainingMoreThanOneInteractorArray = complexContainingOneInteractorArray.reduce(function(list, item, index, array) { 
+		  if (array.indexOf(item, index + 1) !== -1 && list.indexOf(item) === -1) {
+		    list.push(item);
+		  }
+		  return list;
+		}, []);
+
+	
+	return complexesContainingMoreThanOneInteractorArray;
+}
+
+
+
+
+
+
+
+
+
 
 //*****************************************************************************************//
 
@@ -415,127 +589,6 @@ function filterInteractionCatagoryAndScore(){
 	return currentInteractionArray;
 }
 
-function addQtips(cy){
-
-	cy.$('.nodes').qtip({
-			content: 
-				function(){ 
-				var proteinName = this.data('protein_name');
-				var searchTerm = this.data('search_term');
-				var geneName = this.data('gene_name');
-				var uniprotId = this.data('uniprot_id');
-				var ensemblId = this.data('ensembl_id');
-				var entrezId = this.data('entrez_id');
-				var proteinDescription = this.data('description');
-				var linkArray = this.data('external_links');
-				var returnLinks = '<div class="row">';
-	
-				$.each(linkArray, function(database, links) {
-	
-					returnLinks += '<div class="row">' + database + '</div>';
-					returnLinks += '<div class="row">';
-					for (i = 0; i < links.length; ++i) {
-						link_id = links[i]['link_id'];
-						link = links[i]['link'];
-						returnLinks += '<a href="' + link + '" target="_blank">' + link_id + '</a> ';
-					}
-					returnLinks += '</div>';
-				});
-				
-				returnLinks += '</div>';			
-				
-				var Qtip = '<div class="container" style="padding-top: 20px; width: 100%; max-width: 540px;">' + 
-				'<div class="row" style="margin-bottom: 20px;"><div class="col-sm-10"><h3 style="font-weight: bold; color:' +  
-				MainColorScheme + ';">' + geneName + '</h3> <div class="shadow"></div> </div></div><div class="col-sm-7">' + 
-				'<div class="row"><h4 style="font-weight: bold; color: ' +  MainColorScheme + ';">Actions</h4></div>' + 
-				'<div class="row"><a href="'+ Url + 'search_results/' + geneName + '" target="_blank">Search for ' +
-				geneName + '</a></div><div class="row"><a href="'+ Url + 'protein_sequence/' +  geneName + '"  target="_blank">' + 
-				'Show protein sequence</a></div><div class="row"><h4  style="font-weight: bold; color: ' +  MainColorScheme + ';">' +
-				'Description</h4></div><div class="row"><span class="more">' + proteinDescription + '</span></div></div>' + 
-				'<div class="col-sm-5"><div class="row"><h4  style="font-weight: bold; color: ' +  MainColorScheme + ';">' +
-				'Links</h4></div>' + 
-				'<div class="row">Uniprot</div><div class="row">' +
-				'<a href="http://www.uniprot.org/uniprot/' + uniprotId + '" class="link" target="_blank">' + uniprotId + '</a></div>' +
-				'<div class="row">Ensembl</div><div class="row">' +
-				'<a href="http://www.ensembl.org/id/' + ensemblId + '" class="link" target="_blank">' + ensemblId + '</a></div>' +
-				'<div class="row">Entrez</div><div class="row">' +
-				'<a href="https://www.ncbi.nlm.nih.gov/gene/' + entrezId + '" class="link" target="_blank">' + entrezId + '</a></div></div>' +
-				'</div>' + 
-				'<script>$(document).ready(function() {var showChar = 300;var ellipsestext = "...";var moretext = "Read More";var lesstext = "Show less";$(".more").each(function() {var content = $(this).html();if(content.length > showChar) {var c = content.substr(0, showChar);var h = content.substr(showChar, content.length - showChar);var html = c + \'<span class="moreellipses">\' + ellipsestext + \'&nbsp;</span><span class="morecontent"><span>\' + h + \'</span>&nbsp;&nbsp;<a href="" class="morelink">Read More</a></span>\';$(this).html(html);}});$(".morelink").on("click", function(){if($(this).hasClass("less")) {$(this).removeClass("less");$(this).html(moretext);} else {$(this).addClass("less");$(this).html(lesstext);}$(this).parent().prev().toggle();$(this).prev().toggle();return false;});});</' + 'script>';
-				
-
-				
-				return Qtip;	
-			},
-			position: {
-			   my: 'center',
-			   at: 'center',
-			   target: $(window),
-			   viewport: $('#cy'),
-			   adjust: { screen: true },
-			   screen: "flip"
-			},
-			style: {
-				classes: 'qtip-bootstrap',
-				tip: {
-					width: 8,
-					height: 8
-				}
-			},
-		});
-	
-		cy.edges().qtip({
-			content: function(){ 
-				return 'Interaction: ' + 
-				this.data('interaction') + 
-				'<br/>' +
-				'Score: ' + 
-				this.data('score'); 
-			},
-			position: {
-			   my: 'center',
-			   at: 'center',
-			   target: $(window),
-			   viewport: $('#cy')
-			},
-			style: {
-				classes: 'qtip-bootstrap',
-				tip: {
-					width: 12,
-					height: 8
-				}
-			}
-		});
-		
-	 $('.interactor_qtip').each(function() {
-		 
-		 var qtipData = $(this).attr('data');
-		 qtipData = qtipData.replace(/,/g, '_');
-		 
-	     $(this).qtip({
-	         content: {
-	             text: $('.' + qtipData).html()
-	         },
-	 		position: {
-	 			viewport: $('#cy'),
-	 			my: 'left center',
-	 			at: 'right center'
-	 		},
-	 		style: {
-	 			classes: 'qtip-bootstrap',
-	 			tip: {
-	 				width: 12,
-	 				height: 8
-	 			}
-	 		},
-	         show: 'click',
-	         hide: 'unfocus'
-	     });
-	 });
-	 
-
-
-}
 
 function addCytoscapeQtips(cy){
 	
@@ -876,20 +929,29 @@ function setLayoutClickEvent(cy){
  	$('.layout').on("click", function(event){
  	    
  		var layoutType = event.target.id;
- 
- 		cy.layout({ 
+ 	
+ 		var layoutRun =  cy.layout({ 
  			name: layoutType,
- 		    nodeSpacing: 10,
- 		    edgeLengthVal: 65,
  			avoidOverlap: true,
  			equidistant: true,
  			minNodeSpacing: 50,
- 			
- 		}); 
+ 	 		randomize: true,
+ 	 		nodeRepulsion: 10000,
+ 	 		nodeOverlap: 10,
+ 	 		animate: 'end',
+ 	 		animationDuration: 500,
+ 	 		animationThreshold: 500,
+ 	 		fit: true,
+ 	 		springCoeff: edge => 0.00008,
+ 		});
+ 		layoutRun.run();
+ 		
  		cy.style().selector('$node').style({'content': 'data(gene_name)'}).update();
  
  		Layout = layoutType;
- 
+ 		
+
+ 		
  	});	
 	
 }
@@ -949,60 +1011,169 @@ function setTissueExpressionCheckboxEvents(){
 }
 
 
+
+
+function setCytoscapeExportEvents(){
+
+	$('#export_cy').on('click', function(){	
+		
+		var networkSUID = null;
+		cyRestActive = checkIfCyRestIsActive();	
+		
+		if(cyRestActive){
+			
+			networkSUID = exportNetwork();
+			var styleExists = checkStyleExists(networkSUID);    	    	
+			if(styleExists == false){
+				exportStyle(networkSUID);	
+			}     	
+			applyStyleToNetwork(networkSUID);
+			fitNetworkToWindow(networkSUID);
+		}else{
+			$("#cy_message").removeClass("hidden");
+		    $(".qtip").addClass("hidden");
+		    $("body").addClass("noscroll");
+		}		
+	});
+}
+
+function checkIfCyRestIsActive(){
+	
+	var cyRestActive = false;
+	$.ajax({
+	    type: "GET",
+	    url: "http://localhost:1234/v1",
+	    async: false,
+	    crossDomain: true,
+	}).success(function(success){	
+		if(success){
+			cyRestActive = true;
+		}
+	});
+	
+	return cyRestActive;
+}
+
+function exportNetwork(){
+	
+	var networkSUID = null;
+	$.ajax({
+	    type: "POST",
+	    url: "http://localhost:1234/v1/networks?format=json",
+	    data: JSON.stringify(cy.json()),
+	    async: false,
+	    headers: {
+	        "Content-Type": "application/json"
+	    },
+	    crossDomain: true,
+	    dataType: "json",
+	}).success(function(networkId){networkSUID = networkId.networkSUID});
+	
+	return networkSUID;
+}
+
+
+function checkStyleExists(networkSUID){
+	
+	var styleExists = true;
+	$.ajax({
+	    type: "GET",
+	    url: "http://localhost:1234/v1/styles/HuRI",
+	    async: false,
+	    crossDomain: true,
+	}).error(function (xhr, ajaxOptions, thrownError){
+	    if(xhr.status==404) {
+	    	styleExists = false;
+	    }
+	});
+	
+	return styleExists;
+}
+
+function exportStyle(networkSUID){
+	var style = {"title":"HuRI","defaults":[{"visualProperty":"COMPOUND_NODE_PADDING","value":10},{"visualProperty":"COMPOUND_NODE_SHAPE","value":"ROUND_RECTANGLE"},{"visualProperty":"DING_RENDERING_ENGINE_ROOT","value":"org.cytoscape.view.presentation.property.NullVisualProperty$NullDataTypeImpl@621bbc96"},{"visualProperty":"EDGE","value":"DefaultVisualizableVisualProperty(id=EDGE, name=Edge Visual Property)"},{"visualProperty":"EDGE_BEND","value":""},{"visualProperty":"EDGE_CURVED","value":true},{"visualProperty":"EDGE_LABEL","value":""},{"visualProperty":"EDGE_LABEL_COLOR","value":"#000000"},{"visualProperty":"EDGE_LABEL_FONT_FACE","value":"SansSerif.plain,plain,10"},{"visualProperty":"EDGE_LABEL_FONT_SIZE","value":18},{"visualProperty":"EDGE_LABEL_TRANSPARENCY","value":255},{"visualProperty":"EDGE_LABEL_WIDTH","value":200},{"visualProperty":"EDGE_LINE_TYPE","value":"SOLID"},{"visualProperty":"EDGE_PAINT","value":"#808080"},{"visualProperty":"EDGE_SELECTED","value":false},{"visualProperty":"EDGE_SELECTED_PAINT","value":"#FF0000"},{"visualProperty":"EDGE_SOURCE_ARROW_SELECTED_PAINT","value":"#FFFF00"},{"visualProperty":"EDGE_SOURCE_ARROW_SHAPE","value":"NONE"},{"visualProperty":"EDGE_SOURCE_ARROW_UNSELECTED_PAINT","value":"#000000"},{"visualProperty":"EDGE_STROKE_SELECTED_PAINT","value":"#FF0000"},{"visualProperty":"EDGE_STROKE_UNSELECTED_PAINT","value":"#404040"},{"visualProperty":"EDGE_TARGET_ARROW_SELECTED_PAINT","value":"#FFFF00"},{"visualProperty":"EDGE_TARGET_ARROW_SHAPE","value":"NONE"},{"visualProperty":"EDGE_TARGET_ARROW_UNSELECTED_PAINT","value":"#000000"},{"visualProperty":"EDGE_TOOLTIP","value":""},{"visualProperty":"EDGE_TRANSPARENCY","value":200},{"visualProperty":"EDGE_UNSELECTED_PAINT","value":"#404040"},{"visualProperty":"EDGE_VISIBLE","value":true},{"visualProperty":"EDGE_WIDTH","value":5},{"visualProperty":"NETWORK","value":"DefaultVisualizableVisualProperty(id=NETWORK, name=Network Visual Property)"},{"visualProperty":"NETWORK_BACKGROUND_PAINT","value":"#666666"},{"visualProperty":"NETWORK_CENTER_X_LOCATION","value":0},{"visualProperty":"NETWORK_CENTER_Y_LOCATION","value":0},{"visualProperty":"NETWORK_CENTER_Z_LOCATION","value":0},{"visualProperty":"NETWORK_DEPTH","value":0},{"visualProperty":"NETWORK_EDGE_SELECTION","value":true},{"visualProperty":"NETWORK_HEIGHT","value":400},{"visualProperty":"NETWORK_NODE_SELECTION","value":true},{"visualProperty":"NETWORK_SCALE_FACTOR","value":1},{"visualProperty":"NETWORK_SIZE","value":550},{"visualProperty":"NETWORK_TITLE","value":""},{"visualProperty":"NETWORK_WIDTH","value":550},{"visualProperty":"NODE","value":"DefaultVisualizableVisualProperty(id=NODE, name=Node Visual Property)"},{"visualProperty":"NODE_BORDER_PAINT","value":"#FFFFFF"},{"visualProperty":"NODE_BORDER_STROKE","value":"SOLID"},{"visualProperty":"NODE_BORDER_TRANSPARENCY","value":150},{"visualProperty":"NODE_BORDER_WIDTH","value":2},{"visualProperty":"NODE_CUSTOMGRAPHICS_1","value":"org.cytoscape.ding.customgraphics.NullCustomGraphics,0,[ Remove Graphics ],"},{"visualProperty":"NODE_CUSTOMGRAPHICS_2","value":"org.cytoscape.ding.customgraphics.NullCustomGraphics,0,[ Remove Graphics ],"},{"visualProperty":"NODE_CUSTOMGRAPHICS_3","value":"org.cytoscape.ding.customgraphics.NullCustomGraphics,0,[ Remove Graphics ],"},{"visualProperty":"NODE_CUSTOMGRAPHICS_4","value":"org.cytoscape.ding.customgraphics.NullCustomGraphics,0,[ Remove Graphics ],"},{"visualProperty":"NODE_CUSTOMGRAPHICS_5","value":"org.cytoscape.ding.customgraphics.NullCustomGraphics,0,[ Remove Graphics ],"},{"visualProperty":"NODE_CUSTOMGRAPHICS_6","value":"org.cytoscape.ding.customgraphics.NullCustomGraphics,0,[ Remove Graphics ],"},{"visualProperty":"NODE_CUSTOMGRAPHICS_7","value":"org.cytoscape.ding.customgraphics.NullCustomGraphics,0,[ Remove Graphics ],"},{"visualProperty":"NODE_CUSTOMGRAPHICS_8","value":"org.cytoscape.ding.customgraphics.NullCustomGraphics,0,[ Remove Graphics ],"},{"visualProperty":"NODE_CUSTOMGRAPHICS_9","value":"org.cytoscape.ding.customgraphics.NullCustomGraphics,0,[ Remove Graphics ],"},{"visualProperty":"NODE_CUSTOMGRAPHICS_POSITION_1","value":"C,C,c,0.00,0.00"},{"visualProperty":"NODE_CUSTOMGRAPHICS_POSITION_2","value":"C,C,c,0.00,0.00"},{"visualProperty":"NODE_CUSTOMGRAPHICS_POSITION_3","value":"C,C,c,0.00,0.00"},{"visualProperty":"NODE_CUSTOMGRAPHICS_POSITION_4","value":"C,C,c,0.00,0.00"},{"visualProperty":"NODE_CUSTOMGRAPHICS_POSITION_5","value":"C,C,c,0.00,0.00"},{"visualProperty":"NODE_CUSTOMGRAPHICS_POSITION_6","value":"C,C,c,0.00,0.00"},{"visualProperty":"NODE_CUSTOMGRAPHICS_POSITION_7","value":"C,C,c,0.00,0.00"},{"visualProperty":"NODE_CUSTOMGRAPHICS_POSITION_8","value":"C,C,c,0.00,0.00"},{"visualProperty":"NODE_CUSTOMGRAPHICS_POSITION_9","value":"C,C,c,0.00,0.00"},{"visualProperty":"NODE_CUSTOMGRAPHICS_SIZE_1","value":0},{"visualProperty":"NODE_CUSTOMGRAPHICS_SIZE_2","value":0},{"visualProperty":"NODE_CUSTOMGRAPHICS_SIZE_3","value":0},{"visualProperty":"NODE_CUSTOMGRAPHICS_SIZE_4","value":0},{"visualProperty":"NODE_CUSTOMGRAPHICS_SIZE_5","value":0},{"visualProperty":"NODE_CUSTOMGRAPHICS_SIZE_6","value":0},{"visualProperty":"NODE_CUSTOMGRAPHICS_SIZE_7","value":0},{"visualProperty":"NODE_CUSTOMGRAPHICS_SIZE_8","value":0},{"visualProperty":"NODE_CUSTOMGRAPHICS_SIZE_9","value":0},{"visualProperty":"NODE_CUSTOMPAINT_1","value":"DefaultVisualizableVisualProperty(id=NODE_CUSTOMPAINT_1, name=Node Custom Paint 1)"},{"visualProperty":"NODE_CUSTOMPAINT_2","value":"DefaultVisualizableVisualProperty(id=NODE_CUSTOMPAINT_2, name=Node Custom Paint 2)"},{"visualProperty":"NODE_CUSTOMPAINT_3","value":"DefaultVisualizableVisualProperty(id=NODE_CUSTOMPAINT_3, name=Node Custom Paint 3)"},{"visualProperty":"NODE_CUSTOMPAINT_4","value":"DefaultVisualizableVisualProperty(id=NODE_CUSTOMPAINT_4, name=Node Custom Paint 4)"},{"visualProperty":"NODE_CUSTOMPAINT_5","value":"DefaultVisualizableVisualProperty(id=NODE_CUSTOMPAINT_5, name=Node Custom Paint 5)"},{"visualProperty":"NODE_CUSTOMPAINT_6","value":"DefaultVisualizableVisualProperty(id=NODE_CUSTOMPAINT_6, name=Node Custom Paint 6)"},{"visualProperty":"NODE_CUSTOMPAINT_7","value":"DefaultVisualizableVisualProperty(id=NODE_CUSTOMPAINT_7, name=Node Custom Paint 7)"},{"visualProperty":"NODE_CUSTOMPAINT_8","value":"DefaultVisualizableVisualProperty(id=NODE_CUSTOMPAINT_8, name=Node Custom Paint 8)"},{"visualProperty":"NODE_CUSTOMPAINT_9","value":"DefaultVisualizableVisualProperty(id=NODE_CUSTOMPAINT_9, name=Node Custom Paint 9)"},{"visualProperty":"NODE_DEPTH","value":0},{"visualProperty":"NODE_FILL_COLOR","value":"#C80000"},{"visualProperty":"NODE_HEIGHT","value":40},{"visualProperty":"NODE_LABEL","value":""},{"visualProperty":"NODE_LABEL_COLOR","value":"#FFFFFF"},{"visualProperty":"NODE_LABEL_FONT_FACE","value":"Arial Bold,plain,12"},{"visualProperty":"NODE_LABEL_FONT_SIZE","value":18},{"visualProperty":"NODE_LABEL_POSITION","value":"C,C,c,0.00,0.00"},{"visualProperty":"NODE_LABEL_TRANSPARENCY","value":255},{"visualProperty":"NODE_LABEL_WIDTH","value":200},{"visualProperty":"NODE_NESTED_NETWORK_IMAGE_VISIBLE","value":true},{"visualProperty":"NODE_PAINT","value":"#787878"},{"visualProperty":"NODE_SELECTED","value":false},{"visualProperty":"NODE_SELECTED_PAINT","value":"#FFFF00"},{"visualProperty":"NODE_SHAPE","value":"ELLIPSE"},{"visualProperty":"NODE_SIZE","value":50},{"visualProperty":"NODE_TOOLTIP","value":""},{"visualProperty":"NODE_TRANSPARENCY","value":240},{"visualProperty":"NODE_VISIBLE","value":true},{"visualProperty":"NODE_WIDTH","value":60},{"visualProperty":"NODE_X_LOCATION","value":0},{"visualProperty":"NODE_Y_LOCATION","value":0},{"visualProperty":"NODE_Z_LOCATION","value":0}],"mappings":[{"mappingType":"passthrough","mappingColumn":"name","mappingColumnType":"String","visualProperty":"NODE_LABEL"},{"mappingType":"discrete","mappingColumn":"query","mappingColumnType":"String","visualProperty":"NODE_FILL_COLOR","map":[{"key":"non-query","value":"#3C78D8"},{"key":"query","value":"#CC0000"}]},{"mappingType":"discrete","mappingColumn":"highest_category_status","mappingColumnType":"String","visualProperty":"EDGE_STROKE_UNSELECTED_PAINT","map":[{"key":"Published","value":"#6AA84F"},{"key":"Validated","value":"#E69138"},{"key":"Verified","value":"#A61C00"}]}]}
+	
+	$.ajax({
+	    type: "POST",
+	    url: "http://localhost:1234/v1/styles",
+	    data: JSON.stringify(style),
+	    async: false,
+	    headers: {
+	        "Content-Type": "application/json"
+	    },
+	    crossDomain: true,
+	    dataType: "json",
+	});
+
+}
+
+function applyStyleToNetwork(networkSUID){
+
+	$.ajax({
+	    type: "GET",
+	    url: "http://localhost:1234/v1/apply/styles/HuRI/" + networkSUID,
+	    async: false,
+	    crossDomain: true,
+	});
+
+}
+
+function fitNetworkToWindow(networkSUID){
+	
+	$.ajax({
+	    type: "GET",
+	    url: "http://localhost:1234/v1/apply/fit/" + networkSUID,
+	    async: false,
+	    crossDomain: true,
+	});
+}
+
+
+
+
+
 function setDownloadEvents(){
 	
 	
 	$('#download_unpublished_data_link').on("click", function(){
 
 		var isChecked = $('#recieve_updates_on_interaction_network').is(":checked");
+		alert(isChecked);
 		var requestType = $("#request_type").val();
 		
-		var Parameters = [ScoreParameter, CategoryParameterArray , TissueExpressionParameterArray];
+		var Parameters = [Version, ScoreParameter, CategoryParameterArray , TissueExpressionParameterArray];
 	
 		switch(requestType) {
 		    case 'psi_mitab_interaction':
-		    	if(isChecked){
-		    		$('#add_psi_mitab_interaction_user_interaction_network').val(true);
-		    	}else{
-		    		$('#add_psi_mitab_interaction_user_interaction_network').val(false);
-		    	}
-		    	$('#psi_mitab_interaction_data').val(JSON.stringify(currentInteractionArray));
-		    	$('#psi_mitab_query_parameters').val(JSON.stringify(Parameters));
-		    	$('#psi_mitab_interaction_download_form').submit();
-		    	$("#data_request_logged_in").addClass("hidden");
+		    	$('#data_request_data').val(JSON.stringify(currentInteractionArray));
+		    	$("#data_download_form").attr("action", Url + "download/interaction_psi_mitab/");
 		        break;
 		    case 'csv_interaction':
-		    	if(isChecked){
-		    		$('#add_csv_interaction_user_interaction_network').val(true);
-		    	}else{
-		    		$('#add_csv_interaction_user_interaction_network').val(false);
-		    	}
-		    	$('#csv_interaction_data').val(JSON.stringify(currentInteractionArray));
-		    	$('#csv_query_parameters').val(JSON.stringify(Parameters));
-		    	$('#csv_interaction_download_form').submit();
-		    	$("#data_request_logged_in").addClass("hidden");
+		    	$('#data_request_data').val(JSON.stringify(currentInteractionArray));
+		    	$("#data_download_form").attr("action", Url + "download/interaction_csv/");
 		        break;
 		    case 'csv_interactor':
-		    	if(isChecked){
-		    		$('#add_csv_interactor_user_interaction_network').val(true);
-		    	}else{
-		    		$('#add_csv_interactor_user_interaction_network').val(false);
-		    	}
-		    	$('#csv_interactor_data').val(JSON.stringify(currentProteinArray));
-		    	$('#csv_interactor_download_form').submit();
-		    	$("#data_request_logged_in").addClass("hidden");
+		    	$('#data_request_data').val(JSON.stringify(currentProteinArray));
+		    	$("#data_download_form").attr("action", Url + "download/interactor_csv/");
 		        break;
 		    case 'fasta':
-		    	if(isChecked){
-		    		$('#add_fasta_data_user_interaction_network').val(true);
-		    	}else{
-		    		$('#add_fasta_data_user_interaction_network').val(false);
-		    	}
-		    	$('#fasta_data').val(JSON.stringify(currentProteinArray));
-		    	$('#fasta_download_form').submit();
-		    	$("#data_request_logged_in").addClass("hidden");
+		    	$('#data_request_data').val(JSON.stringify(currentProteinArray));
+		    	$("#data_download_form").attr("action", Url + "download/multi_fasta/");
 		        break;
 		}
+		
+		
+    	if(isChecked){
+    		$('#add_user_interaction_network').val(true);
+    	}else{
+    		$('#add_user_interaction_network').val(false);
+    	}
+		
+    	
+    	$('#data_request_query_parameters').val(JSON.stringify(Parameters));
+    	$('#data_request_query_id_array').val(JSON.stringify(queryProteinIdArray));
+    	$('#data_download_form').submit();
+    	$("#data_request_logged_in").addClass("hidden");
 
 	});
 	
@@ -1115,15 +1286,51 @@ function getEdgeWidth(scoreData){
 
 function setPanZoomForNonMobile(cy){
 
+    var isMobile = checkMobile();
+	if(isMobile == false){
+		cy.panzoom({});
+	}
+	
+}
+
+function setCytoscapeExportForNonMobile(){
+	
+    var isMobile = checkMobile();
+	if(isMobile == false){	
+		$("#export_cy").removeClass('hidden');
+		$("#export_cy").qtip({
+            content: {
+                text: "Export Network to Cytoscape"
+            },
+    		position: {
+    			my: 'left center',
+    			at: 'right center'
+    		},
+    		style: {
+    			classes: 'qtip-bootstrap',
+  
+    			tip: {
+    				width: 24,
+    				height: 20
+    			}
+    		},
+    	    show: {
+    	        event: 'mouseenter'
+    	    },
+
+        });
+	}
+}
+
+
+function checkMobile(){
+	
     var isMobile = false;
 
  	if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) 
      || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) isMobile = true;
 
-	if(isMobile == false){
-		cy.panzoom({});
-	}
-	
+	return isMobile;
 }
 
 function setPngDownloadClickEvent(cy){
@@ -1255,8 +1462,8 @@ function setNodeHoveEvent(cy){
  	    timer = setTimeout(function(){
      		cy.nodes().style({ 'opacity' : 0.2});
      		cy.edges().style({ 'opacity' : 0.2});
-     		e.cyTarget.style({ 'opacity' : 1});
-     		e.cyTarget.neighborhood().style({ 'opacity' : 1});
+     		e.target.style({ 'opacity' : 1});
+     		e.target.neighborhood().style({ 'opacity' : 1});
  	    }, 700);
 
  	}).on("mouseout", function(){
@@ -1337,7 +1544,8 @@ function setQueryNodeColor(cy){
 
 		var queryProteinId = queryProteinIdArray[i];
 		var selectID = '#' + queryProteinId;	
-		cy.$(selectID).style({'background-color': QueryNodeColor });	
+		cy.$(selectID).style({'background-color': QueryNodeColor });
+		cy.$(selectID).data({'query' : 'query'});
 	}
 }
 
@@ -1394,12 +1602,41 @@ function createInteractionTable(){
 				uniprot_id_B = uniprot_id_B.replace(/,/g, '_')
 			}
 
+			var queryProteinA = false;
+			
+			if($.inArray( interaction['interactor_A']['protein_id'], queryProteinIdArray ) != -1){
+				queryProteinA = true;
+				
+			}
+
+			var queryProteinB = false;
+			
+			if($.inArray( interaction['interactor_B']['protein_id'], queryProteinIdArray ) != -1){
+				queryProteinB = true;
+				
+			}
 			
 			var interaction_row = '<tr id="' + interaction['interactor_A']['protein_id'] + '_' + interaction['interactor_B']['protein_id'] +  '" class="interaction_row">' +
 			'<td><a data="' + uniprot_id_A + '_' +  interaction['interactor_A']['protein_gene_name'] + 
-			'" class="interactor_qtip link">' + interaction['interactor_A']['protein_gene_name'] + '</a></td>' +
+			'" class="interactor_qtip link"'; 
+			
+			if(queryProteinA){				
+				interaction_row = interaction_row + " style='color:" + QueryNodeColor + "'>";
+			}else{
+				interaction_row = interaction_row + " style='color: #3C78D8'>";
+			}
+			
+			interaction_row = interaction_row + interaction['interactor_A']['protein_gene_name'] + '</a></td>' +
 			'<td><a data="' + uniprot_id_B + '_' +  interaction['interactor_B']['protein_gene_name'] + 
-			'" class="interactor_qtip link">' + interaction['interactor_B']['protein_gene_name'] + '</a></td>' +
+			'" class="interactor_qtip link"';
+			
+			if(queryProteinB){				
+				interaction_row = interaction_row + " style='color:" + QueryNodeColor + "'>";
+			}else{
+				interaction_row = interaction_row + " style='color: #3C78D8'>";
+			}
+			
+			interaction_row = interaction_row + interaction['interactor_B']['protein_gene_name'] + '</a></td>' +
 			'<td>' + score + '</td><td>';
 	
 			$.each(interaction['dataset_array'], function(j, dataset){
@@ -1448,8 +1685,8 @@ function createInteractionTable(){
 					
 						'<div class="row"><h4 style="font-weight: bold; color: ' + MainColorScheme + '">Actions</h4></div>' +
 						
-						'<div class="row"><a href="' + protein.protein_gene_name + '" target="_blank" class="link">Search for ' + protein.protein_gene_name + '</a></div>';
-						
+						'<div class="row"><a href="' + protein.protein_gene_name + '" target="_blank" class="link">Search for ' + protein.protein_gene_name + '</a></div>' +
+						'<div class="row"><a href="'+ Url + 'search_results/' + searchTerm + ',' + protein.protein_gene_name + '" target="_blank">Add to Current Search</a></div>';
 			if(uniprotIdString){
 				protein_qtip = protein_qtip + '<div class="row"><a href="' + Url + 'protein_sequence/' +  protein.protein_uniprot_id + '" target="_blank" class="link">Show protein sequence</a></div>';
 				
@@ -1469,7 +1706,7 @@ function createInteractionTable(){
 						'<div class="row">';
 						
 			if(uniprotIdString){			
-				protein_qtip = protein_qtip + '<div class="row"><strong>Uniprot</strong></div><div class="row">';
+				protein_qtip = protein_qtip + '<div class="row"><strong style="color: #666666">Uniprot</strong></div><div class="row">';
 			}			
 						
 			$.each(uniprotIdArray, function(i, uniprotId){		
@@ -1477,10 +1714,10 @@ function createInteractionTable(){
 			});	
 						
 						
-			protein_qtip = protein_qtip + '</div><div class="row"><strong>Ensembl</strong></div><div class="row">' +
+			protein_qtip = protein_qtip + '</div><div class="row"><strong style="color: #666666">Ensembl</strong></div><div class="row">' +
 						'<a href="http://www.ensembl.org/id/' + protein.protein_ensembl_id + '" class="link" target="_blank">' + protein.protein_ensembl_id + '</a></div>';
 			if(protein.protein_entrez_id){
-				protein_qtip = protein_qtip + '<div class="row"><strong>Entrez</strong></div><div class="row">'+
+				protein_qtip = protein_qtip + '<div class="row"><strong style="color: #666666">NCBI Gene</strong></div><div class="row">'+
 				'<a href="https://www.ncbi.nlm.nih.gov/gene/' + protein.protein_entrez_id + '" class="link" target="_blank">' + protein.protein_entrez_id + '</a></div>';
 			}
 			
@@ -1506,8 +1743,11 @@ function updateExternalLinks(){
 	var pathwayCommonsUrl = "http://www.pathwaycommons.org/pcviz/#pathsbetween/";
 	var davidUrl = "http://david.abcc.ncifcrf.gov/api.jsp?type=ENTREZ_GENE_ID&ids=";
 	var gProfiler = "http://biit.cs.ut.ee/gprofiler/index.cgi?organism=hsapiens&query=";
-	
-	
+	var intAct = "http://www.ebi.ac.uk/intact/query/";
+	var complexPortal = "http://www.ebi.ac.uk/complexportal/complex/search?query=";
+	var cBioPortal = "http://www.cbioportal.org/ln?q=";
+
+
 	$.each(currentProteinArray, function(i, protein){ 
 		geneManiaUrl = geneManiaUrl + protein.protein_gene_name + '%7C'; 
 		stringUrl =  stringUrl + protein.protein_gene_name + '%0D';
@@ -1515,9 +1755,18 @@ function updateExternalLinks(){
 		pathwayCommonsUrl = pathwayCommonsUrl + protein.protein_gene_name + ',';
 		davidUrl = davidUrl + protein.protein_entrez_id + ',';
 		gProfiler =  gProfiler + protein.protein_gene_name + ' ';
+		complexPortal = complexPortal + protein.protein_gene_name + '%20';
+		cBioPortal = cBioPortal + protein.protein_gene_name + '%20';
 		
+		if($.inArray( protein.protein_id, queryProteinIdArray ) != -1){
+			intAct = intAct +  protein.protein_gene_name + '%20';
+			
+		}
+
 	});
 
+
+	
 	stringUrl =  stringUrl + '&species=9606';
 	davidUrl = davidUrl + '&tool=summary';
 	
@@ -1526,7 +1775,11 @@ function updateExternalLinks(){
 	$("#reactome_link_li").prepend('<a id="reactome_link" style="cursor: pointer;" data="' + reactomeUrl + '">Reactome</a>');
 	$("#pathway_commons_link_li").prepend('<a href="' + pathwayCommonsUrl + '" target="_blank">Pathway Commons</a>');
 	$("#david_link_li").prepend('<a href="' + davidUrl + '" target="_blank">DAVID</a>');
-	$("#gprofiler_link_li").prepend('<a href="' + gProfiler + '" target="_blank">gProfiler</a>');						
+	$("#gprofiler_link_li").prepend('<a href="' + gProfiler + '" target="_blank">gProfiler</a>');
+	$("#cbioportal_link_li").prepend('<a href="' + cBioPortal + '" target="_blank">cBioPortal</a>');
+	$("#intact_link_li").prepend('<a href="' + intAct + '" target="_blank">IntAct (Query)</a>');
+	$("#complex_portal_link_li").prepend('<a href="' + complexPortal + '" target="_blank">Complex Portal</a>');
+
 	setReactomeLinkClickEvent();
 }
 
@@ -1615,3 +1868,35 @@ function setTextOutput(){
 		download('results.csv', returnCsv);
 	});
 }
+
+
+function whatisVariable(variable){
+
+	
+	
+	var typeVar = typeof variable;
+	
+	var nullVar = false;
+	if(variable === null){
+		nullVar = true;
+		
+	}
+	
+	var undefinedVar = false;
+	if(variable === undefined){
+		undefinedVar = true;
+		
+	}
+	
+	var undefinedVar = false;
+	if(variable === ''){
+		undefinedVar = true;
+		
+	}
+	
+	
+
+
+
+}
+

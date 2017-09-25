@@ -17,19 +17,23 @@ class Domain
 	 */
 	protected $id;
 
-   /**
-     * @ORM\OneToMany(targetEntity="Interaction", mappedBy="domain")
-     */
-	private $interactions;
+	/**
+	 * @ORM\ManyToMany(targetEntity="Interaction", inversedBy="domains")
+	 * @ORM\JoinTable(name="interaction_domain",
+	 *      joinColumns={@ORM\JoinColumn(name="domain_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="interaction_id", referencedColumnName="id")}
+	 *      )
+	 */
+	protected $interactions;
 	
 	/**
 	 * @var \Doctrine\Common\Collections\ArrayCollection|Organism[]
 	 * @ORM\ManyToMany(targetEntity="Organism", mappedBy="domains")
 	 */
-	private $organisms;
+	protected $organisms;
 	
     /**
-     * @ORM\ManyToOne(targetEntity="Protein", inversedBy="identifiers")
+     * @ORM\ManyToOne(targetEntity="Protein", inversedBy="domains")
      * @ORM\JoinColumn(name="protein_id", referencedColumnName="id")
      */
 	protected $protein;
@@ -38,7 +42,7 @@ class Domain
 
 		$this->data_files = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->organisms = new \Doctrine\Common\Collections\ArrayCollection();
-
+		$this->interactions = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	
@@ -72,10 +76,12 @@ class Domain
 	 */
 	protected $sequence;
 
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -86,6 +92,7 @@ class Domain
      * Set type
      *
      * @param string $type
+     *
      * @return Domain
      */
     public function setType($type)
@@ -98,7 +105,7 @@ class Domain
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -109,6 +116,7 @@ class Domain
      * Set name
      *
      * @param string $name
+     *
      * @return Domain
      */
     public function setName($name)
@@ -121,194 +129,11 @@ class Domain
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set start
-     *
-     * @param string $start
-     * @return Domain
-     */
-    public function setStart($start)
-    {
-        $this->start = $start;
-
-        return $this;
-    }
-
-    /**
-     * Get start
-     *
-     * @return string 
-     */
-    public function getStart()
-    {
-        return $this->start;
-    }
-
-    /**
-     * Set end
-     *
-     * @param string $end
-     * @return Domain
-     */
-    public function setEnd($end)
-    {
-        $this->end = $end;
-
-        return $this;
-    }
-
-    /**
-     * Get end
-     *
-     * @return string 
-     */
-    public function getEnd()
-    {
-        return $this->end;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return Domain
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set sequence
-     *
-     * @param string $sequence
-     * @return Domain
-     */
-    public function setSequence($sequence)
-    {
-        $this->sequence = $sequence;
-
-        return $this;
-    }
-
-    /**
-     * Get sequence
-     *
-     * @return string 
-     */
-    public function getSequence()
-    {
-        return $this->sequence;
-    }
-
-    /**
-     * Add interactions
-     *
-     * @param \AppBundle\Entity\Interaction $interactions
-     * @return Domain
-     */
-    public function addInteraction(\AppBundle\Entity\Interaction $interactions)
-    {
-        $this->interactions[] = $interactions;
-
-        return $this;
-    }
-
-    /**
-     * Remove interactions
-     *
-     * @param \AppBundle\Entity\Interaction $interactions
-     */
-    public function removeInteraction(\AppBundle\Entity\Interaction $interactions)
-    {
-        $this->interactions->removeElement($interactions);
-    }
-
-    /**
-     * Get interactions
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getInteractions()
-    {
-        return $this->interactions;
-    }
-
- 
-
-    /**
-     * Add organisms
-     *
-     * @param \AppBundle\Entity\Organism $organisms
-     * @return Domain
-     */
-    public function addOrganism(\AppBundle\Entity\Organism $organisms)
-    {
-        $this->organisms[] = $organisms;
-
-        return $this;
-    }
-
-    /**
-     * Remove organisms
-     *
-     * @param \AppBundle\Entity\Organism $organisms
-     */
-    public function removeOrganism(\AppBundle\Entity\Organism $organisms)
-    {
-        $this->organisms->removeElement($organisms);
-    }
-
-    /**
-     * Get organisms
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOrganisms()
-    {
-        return $this->organisms;
-    }
-
-    /**
-     * Set protein
-     *
-     * @param \AppBundle\Entity\Protein $protein
-     * @return Domain
-     */
-    public function setProtein(\AppBundle\Entity\Protein $protein = null)
-    {
-        $this->protein = $protein;
-
-        return $this;
-    }
-
-    /**
-     * Get protein
-     *
-     * @return \AppBundle\Entity\Protein 
-     */
-    public function getProtein()
-    {
-        return $this->protein;
     }
 
     /**
@@ -358,6 +183,134 @@ class Domain
     {
         return $this->end_position;
     }
-    
 
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Domain
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set sequence
+     *
+     * @param string $sequence
+     *
+     * @return Domain
+     */
+    public function setSequence($sequence)
+    {
+        $this->sequence = $sequence;
+
+        return $this;
+    }
+
+    /**
+     * Get sequence
+     *
+     * @return string
+     */
+    public function getSequence()
+    {
+        return $this->sequence;
+    }
+
+    /**
+     * Set interaction
+     *
+     * @param \AppBundle\Entity\Interaction $interaction
+     *
+     * @return Domain
+     */
+    public function setInteraction(\AppBundle\Entity\Interaction $interaction = null)
+    {
+        $this->interaction = $interaction;
+
+        return $this;
+    }
+
+    /**
+     * Get interaction
+     *
+     * @return \AppBundle\Entity\Interaction
+     */
+    public function getInteraction()
+    {
+        return $this->interaction;
+    }
+
+    /**
+     * Add organism
+     *
+     * @param \AppBundle\Entity\Organism $organism
+     *
+     * @return Domain
+     */
+    public function addOrganism(\AppBundle\Entity\Organism $organism)
+    {
+        $this->organisms[] = $organism;
+
+        return $this;
+    }
+
+    /**
+     * Remove organism
+     *
+     * @param \AppBundle\Entity\Organism $organism
+     */
+    public function removeOrganism(\AppBundle\Entity\Organism $organism)
+    {
+        $this->organisms->removeElement($organism);
+    }
+
+    /**
+     * Get organisms
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getOrganisms()
+    {
+        return $this->organisms;
+    }
+
+    /**
+     * Set protein
+     *
+     * @param \AppBundle\Entity\Protein $protein
+     *
+     * @return Domain
+     */
+    public function setProtein(\AppBundle\Entity\Protein $protein = null)
+    {
+        $this->protein = $protein;
+
+        return $this;
+    }
+
+    /**
+     * Get protein
+     *
+     * @return \AppBundle\Entity\Protein
+     */
+    public function getProtein()
+    {
+        return $this->protein;
+    }
 }

@@ -35,6 +35,12 @@ class Admin_Settings
      * @ORM\Column(name="`url`", type="string", length=200, nullable=true)
      */
     protected $url;
+    
+    /**
+     *
+     * @ORM\Column(name="`version`", type="string", length=200, nullable=true)
+     */
+    protected $version;
 
     /**
      * @ORM\Column(name="`home_page`", type="text", length=8000, nullable=true)
@@ -778,5 +784,29 @@ class Admin_Settings
     public function getFaq()
     {
         return $this->faq;
+    }
+
+    /**
+     * Set version
+     *
+     * @param string $version
+     *
+     * @return Admin_Settings
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return string
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 }
