@@ -1770,7 +1770,7 @@ function updateExternalLinks(){
 	stringUrl =  stringUrl + '&species=9606';
 	davidUrl = davidUrl + '&tool=summary';
 	
-	$("#gene_mania_link_li").prepend('<a href="' + geneManiaUrl + '" target="_blank">GeneMania</a>');
+	$("#gene_mania_link_li").prepend('<a href="' + geneManiaUrl + '" target="_blank">GeneMANIA</a>');
 	$("#string_link_li").prepend('<a href="' + stringUrl + '" target="_blank">STRING</a>');
 	$("#reactome_link_li").prepend('<a id="reactome_link" style="cursor: pointer;" data="' + reactomeUrl + '">Reactome</a>');
 	$("#pathway_commons_link_li").prepend('<a href="' + pathwayCommonsUrl + '" target="_blank">Pathway Commons</a>');
