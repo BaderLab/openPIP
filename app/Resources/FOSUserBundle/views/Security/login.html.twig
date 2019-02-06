@@ -6,81 +6,88 @@
 	<link rel="stylesheet" href="{{ asset('assets/css/data_manager.css') }}">	
 {% endblock %}
 {% block title %}{{ short_title }} | Login{% endblock %}
-{% block fos_user_content %}
-<header>
-	<nav class="navbar navbar-default main_header" style="background-color: {{ main_color_scheme }};">
-        <svg id="svg2" class="main_logo left " xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="40.026" width="69.124" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
-            <metadata id="metadata7">
-              <rdf:RDF>
-               <cc:Work rdf:about="">
-                <dc:format>image/svg+xml</dc:format>
-                <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-                <dc:title/>
-               </cc:Work>
-              </rdf:RDF>
-             </metadata>
-             <g id="g3770" stroke-miterlimit="4" stroke-dasharray="none">
-              <path id="path2987" d="m48.576,17.582c0,9.2489-7.5012,16.746-16.754,16.746-9.2532,0-16.754-7.4977-16.754-16.746,0-9.2489,7.5012-16.746,16.754-16.746,9.2532,0,16.754,7.4977,16.754,16.746z" stroke-opacity="0.56084655000000005" class="parent" stroke="#000000" stroke-width="0.04307067000000000" fill="#e6e6e6"/>
-              <path id="path2991-1" d="m31.367,23.78c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
-              <path id="path2991-7" d="m42.899,13.341c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
-              <path id="path2991-4" d="m67.986,29.163c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
-              <path id="path2991-0" d="m10.903,34.545c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
-              <path id="path3807" stroke-linejoin="miter" d="m25.95,23.82-20.47,10.76" class="child" stroke="{{ logo_color_scheme }}" stroke-linecap="butt" stroke-width="1.07676673" fill="none"/>
-              <path id="path2991-9-45" d="m69.063,5.4793c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
-              <path id="path3807-1" stroke-linejoin="miter" d="m63.64,5.5195-25.848,7.5356" class="child" stroke="{{ logo_color_scheme }}" stroke-linecap="butt" stroke-width="1.07676673" fill="none"/>
-              <path id="path3807-1-5" stroke-linejoin="miter" d="m62.56,29.2-24.77-16.15" class="child" stroke="{{ logo_color_scheme }}" stroke-linecap="butt" stroke-width="1.07676673" fill="none"/>
-             </g>
-        </svg>
-		<div style="padding: 12px;">
-			<h3 style="color: {{ header_color_scheme }}">
-				<strong>{{ title }}</strong>
-			</h3>
-		</div>
-	</nav>
+{% block nav %}
 	<nav class="navbar navbar-default">
-		<div class="container-fluid" style="padding: 0px;">
-			<div class="navbar-header tor_ibin_header" >
-				<button type="button" class="navbar-toggle left" data-toggle="collapse" data-target="#myNavbar">
-					<span class="icon-bar"></span> 
-					<span class="icon-bar"></span> 
-					<span class="icon-bar"></span>
+		<div class="container-fluid">
+			{% if login_status == false %}
+			<div class="navbar-header tor_ibin_header">
+				<h5 class="nav-header" style="color: {{ main_color_scheme }}">
+					{{ short_title }}
+				</h5>
+				<button type="button" class="navbar-toggle right"
+					data-toggle="collapse" data-target="#myNavbar"
+					style="margin-left: 30px;">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
 				</button>
 			</div>
-			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
-				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+			<div id="myNavbar" class="collapse navbar-collapse"
+				style="padding-left: 0px;">
 				<ul class="nav navbar-nav ">
-					<li><a href="{{ path('home') }}">Home</a></li>
-					<li><a href="{{ path('search') }}">Search</a></li>
-					<li><a href="{{ path('search') }}">Downloads</a></li>
-					<li><a href="{{ path('about') }}">About</a></li>
-					<li><a href="{{ path('faq') }}">FAQ</a></li>
-					<li><a href="{{ path('contact') }}">Contact</a></li>
+					<li id="nav_home"><a href="{{ path('home') }}">Home</a></li>
+					<li id="nav_search"><a href="{{ path('search_results') }}">Search</a></li>
+					<li id="nav_download"><a href="{{ path('download') }}">Downloads</a></li>
+					<li id="nav_about"><a href="{{ path('about') }}">About</a></li>
+					<li id="nav_contact"><a href="{{ path('contact') }}">Contact</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="{{ path('user_register') }}">Register</a></li>
-					<li class="active"><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+					<li id="nav_login" class="active"><a href="{{ path('fos_user_security_login') }}">Login</a></li>
 				</ul>
-    		</div>
+			</div>
+			{% elseif login_status == true %}
+			<div class="navbar-header tor_ibin_header">
+				<h5 class="nav-header" style="color: {{ main_color_scheme }}">
+					{{ short_title }}
+					Admin
+				</h5>
+				<button type="button" class="navbar-toggle right"
+					data-toggle="collapse" data-target="#myNavbar"
+					style="margin-left: 30px;">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="myNavbar" class="collapse navbar-collapse"
+				style="padding-left: 0px;">
+				<ul class="nav navbar-nav ">
+					<li id="nav_home"><a href="{{ path('admin_home') }}">Home</a></li>
+					<li id="nav_search"><a href="{{ path('admin_search') }}">Search</a></li>
+					<li id="nav_download"><a href="{{ path('admin_download') }}">Downloads</a></li>
+					<li id="nav_about"><a href="{{ path('about') }}">About</a></li>
+					<li id="nav_contact" class="active"><a href="{{ path('contact') }}">Contact</a></li>
+					<li id="nav_announcement_manager"><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+					<li id="nav_data_manager"><a href="{{ path('data_manager') }}">Data</a></li>
+					<li id="nav_file_manager"><a
+						href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="active"><a href="{{ path('user_logout') }}">Logout</a></li>
+				</ul>
+			</div>
+			{% endif %}
+
 		</div>
 		<div class="shadow"></div>
 	</nav>
-</header>
-
+{% endblock %}
+{% block fos_user_content %}
 <div class="container">
-	<div id='login'>
+	<div id='login' style="padding:40px; background:#ffffff; border: 1px solid #ccc">
+		<div class="row" style="margin:10px 0 10px 0;">
 		<form action="{{ path("fos_user_security_check") }}" method="post">
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
 			<div class="form-group">
-				<label for="username">{{ 'Username'|trans }}</label> 
-				<input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
+				<label for="username">{{ 'Username'|trans }}: </label> 
+				<input type="text" id="username" style="background:#e7e7e7;" name="_username" value="{{ last_username }}" required="required" />
 			</div>
 			<div class="form-group">
-				<label for="password">{{ 'Password'|trans }}</label> 
-				<input type="password" id="password" name="_password" required="required" />
+				<label for="password">{{ 'Password'|trans }}: </label> 
+				<input type="password" id="password" style="background:#e7e7e7;" name="_password" required="required" />
 			</div>
 			<input type="submit" class="btn btn-success" id="_submit" name="_submit" value="{{ 'Login'|trans }}" />
 		</form>
-		
+		</div>
 		<a href="{{ path('fos_user_resetting_request') }}">Forgot password ?</a>
 	</div>
 </div>

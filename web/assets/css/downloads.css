@@ -1,6 +1,13 @@
 @CHARSET "ISO-8859-1";
 
+body *{
+font-family: Century Gothic, sans-serif;
+	
+	
+}
+
 body{
+	
 	background-color: #f8f8f8;
 }
 
@@ -9,7 +16,7 @@ body{
 	background-color: #ffffff;
 	border: 1px solid #cccccc;
 	padding: 20px;
-	margin: 20px auto 20px;
+	margin: 40px auto 20px;
 	
 }
 
@@ -63,8 +70,23 @@ body{
 }
 
 
+#particles-js2{height:100px; width:99%; margin: 5px auto 0px; position:absolute; background:transparent;}
+#particles-js1{height:100px; width:99%; margin: 5px auto 0px; border-left: 3px solid  #bfbfbf; border-right: 3px solid  #bfbfbf;  border-top: 3px solid #bfbfbf; background-image: url(../images/bg-fireworks-colour5.svg); background-repeat: no-repeat; background-size: cover;  background-attachment: fixed; background-position: 50% 50%; } 
+
+#particles-js4{height:640px; width:99%; margin: 0px auto 5px; position:absolute; background:transparent;}
+#particles-js3{height:640px; width:99%; margin: 0px auto 5px; border-left: 3px solid  #bfbfbf; border-right: 3px solid  #bfbfbf;  border-bottom: 3px solid #bfbfbf; background-image: url(../images/bg-fireworks-colour5.svg); background-repeat: no-repeat; background-size: cover;  background-attachment: fixed; background-position: 50% 50%; } 
+
 .btn-default{
 	background-color: #F2F2F2;
 	
+}
+
+.panel1{
+
+	background-color: #FFFFFF;
+	border: 1px solid #cccccc;
+	width: 99%;
+	padding: 20px;
+	margin: 5px auto 0px;
 }
 

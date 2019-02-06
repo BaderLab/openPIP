@@ -41,6 +41,11 @@ class Interaction
     */
     private $interaction_networks;
     
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection|Identifier[]
+     * @ORM\ManyToMany(targetEntity="Annotation", mappedBy="interactions")
+     */
+    public $annotations;
     
     /**
      * @ORM\ManyToMany(targetEntity="Interaction", inversedBy="domains")
@@ -68,12 +73,12 @@ class Interaction
      */
     protected $interactor_B;
     
-    /**
-     * @ORM\OneToMany(targetEntity="Experiment", mappedBy="interaction")
-     * @ORM\JoinColumn(name="experiment_id", referencedColumnName="id")
-     */
-    protected $experiments;
 
+
+    
+    
+    
+    
     
     public function __construct()
     {
@@ -82,8 +87,8 @@ class Interaction
     	$this->interaction_categories= new \Doctrine\Common\Collections\ArrayCollection();
     	$this->interaction_support_informations = new \Doctrine\Common\Collections\ArrayCollection();
     	$this->datasets = new \Doctrine\Common\Collections\ArrayCollection();
-    	$this->experiments= new \Doctrine\Common\Collections\ArrayCollection();
     	$this->domains= new \Doctrine\Common\Collections\ArrayCollection();
+    	$this->annotations = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -102,7 +107,11 @@ class Interaction
     protected $binding_end;
 
 
-
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    protected $removed;
+    
 
     /**
      * Get id
@@ -137,6 +146,33 @@ class Interaction
     {
         return $this->score;
     }
+    
+    
+    /**
+     * Set removed
+     *
+     * @param string $removed
+     *
+     * @return Interaction
+     */
+    public function setRemoved($removed)
+    {
+        $this->removed = $removed;
+        
+        return $this;
+    }
+    
+    /**
+     * Get removed
+     *
+     * @return string
+     */
+    public function getRemoved()
+    {
+        return $this->removed;
+    }
+    
+    
 
     /**
      * Set bindingStart
@@ -436,5 +472,39 @@ class Interaction
     public function getExperiments()
     {
         return $this->experiments;
+    }
+    
+    /**
+     * Add annotation
+     *
+     * @param \AppBundle\Entity\Annotation $annotation
+     *
+     * @return Interaction
+     */
+    public function addAnnotation(\AppBundle\Entity\Annotation $annotation)
+    {
+        $this->annotations[] = $annotation;
+        
+        return $this;
+    }
+    
+    /**
+     * Remove annotation
+     *
+     * @param \AppBundle\Entity\Annotation $annotation
+     */
+    public function removeAnnotation(\AppBundle\Entity\Annotation $annotation)
+    {
+        $this->annotations->removeElement($annotation);
+    }
+    
+    /**
+     * Get annotation
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAnnotations()
+    {
+        return $this->annotations;
     }
 }

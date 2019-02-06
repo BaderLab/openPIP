@@ -116,11 +116,7 @@ class Dataset
 	 */
 	protected $file_path;
 	
-	/**
-	 * @ORM\OneToMany(targetEntity="Experiment", mappedBy="dataset")
-	 * @ORM\JoinColumn(name="experiment_id", referencedColumnName="id")
-	 */
-	protected $experiments;
+
 
     /**
      * Get id
@@ -167,9 +163,9 @@ class Dataset
      *
      * @param \AppBundle\Entity\Interaction $interactions
      */
-    public function removeInteraction(\AppBundle\Entity\Interaction $interactions)
+    public function removeInteraction(\AppBundle\Entity\Interaction $interaction)
     {
-        $this->interactions->removeElement($interactions);
+        $this->interactions->removeElement($interaction);
     }
 
     /**

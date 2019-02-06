@@ -24,31 +24,59 @@
 				</button>
 			</div>
 			<div id="myNavbar" class="collapse navbar-collapse">
-    		    {% if login_status == false %}
+			{% if login_status == false %}
+			<div class="navbar-header tor_ibin_header" >
+				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
+				<ul class="nav navbar-nav ">
+					<li><a href="{{ path('home') }}">Home</a></li>
+					<li class="active"><a href="{{ path('search') }}">Search</a></li>
+					<li><a href="{{ path('download') }}">Downloads</a></li>
+					<li><a href="{{ path('about') }}">About</a></li>
+					<li><a href="{{ path('faq') }}">FAQ</a></li>
+					<li><a href="{{ path('contact') }}">Contact</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="{{ path('user_register') }}">Register</a></li>
+					<li style=""><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+				</ul>
+    		</div>
+    		{% elseif login_status == true %}
+    				<div class="navbar-header tor_ibin_header" >
+						<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} {% if admin_status == true %}Admin{% endif %}</h5>
+        				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span>
+        				</button>
+        			</div>
+    			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
     				<ul class="nav navbar-nav ">
     					<li><a href="{{ path('home') }}">Home</a></li>
     					<li class="active"><a href="{{ path('search') }}">Search</a></li>
     					<li><a href="{{ path('download') }}">Downloads</a></li>
     					<li><a href="{{ path('about') }}">About</a></li>
+    					<li><a href="{{ path('faq') }}">FAQ</a></li>
+    					<li><a href="{{ path('contact') }}">Contact</a></li>
+    					{% if admin_status == true %}
+        					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+        					<li><a href="{{ path('data_manager') }}">Data</a></li>
+        					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+        					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+    					{% endif %}
     				</ul>
     				<ul class="nav navbar-nav navbar-right">
-    					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+    					<li><a href="{{ path('fos_user_profile_show') }}">Profile</a></li>
+    					<li style="margin-left: 0px;"><a href="{{ path('user_logout') }}">Logout</a></li>
     				</ul>
-    			{% elseif login_status == true %}
-    				<ul class="nav navbar-nav ">
-    					<li><a href="{{ path('admin_home') }}">Home</a></li>
-    					<li class="active"><a href="{{ path('admin_search') }}">Search</a></li>
-    					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
-    					<li><a href="{{ path('admin_about') }}">About</a></li>
-    					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
-    					<li><a href="{{ path('data_manager') }}">Data</a></li>
-    					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
-    					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
-    				</ul>
-    				<ul class="nav navbar-nav navbar-right">
-    					<li><a href="{{ path('user_logout') }}">Logout</a></li>
-    				</ul>
-    			{% endif %}
+    			</div>
+    		{% endif %}
 			</div>
 		</div>
 		<div class="shadow"></div>

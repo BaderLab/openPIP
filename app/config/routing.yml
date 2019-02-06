@@ -2,9 +2,6 @@ app:
     resource: "@AppBundle/Controller/"
     type:     annotation
 
-homepage:
-  path : /
-  defaults:  { _controller: AppBundle:Home:home }     
     
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
@@ -34,3 +31,16 @@ fos_user_change_password:
 fos_user_group:
     resource: "@FOSUserBundle/Resources/config/routing/group.xml"
     prefix: /group
+  
+      
+homepage:
+  path : /
+  defaults:  { _controller: AppBundle:Home:home }         
+
+search_results:
+    path:      /search/{search_term}
+    defaults:  {_controller: AppBundle:SearchController, search_term:no_search}
+search_results:
+    path:      /search_results/{search_term}
+    defaults:  {_controller: AppBundle:SearchController, search_term:no_search}
+    

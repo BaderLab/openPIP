@@ -3,6 +3,9 @@
  */
 $(function() {
 
+   interactionCategoryDefaults(InteractionCategories)
+	
+	
    $('.help_query').each(function() { // Notice the .each() loop, discussed below
         $(this).qtip({
             content: {
@@ -71,12 +74,8 @@ $(function() {
     	
     });
 
-    
-    
-    
     var seperator = '';
     var invalidTerms = [];
-    
     
 	$("#search_identifier").autocomplete({
         	source: function(request, response){
@@ -105,13 +104,12 @@ $(function() {
 				request.term = request.term.replace(/%20/g, ",");
 				request.term = request.term.replace(/ /g, ",");
 
-				urlAutocomplete = Url + 'autocomplete/' + request.term;
+				urlAutocomplete = Url + 'app.php/autocomplete/' + request.term;
 
-				$.getJSON(urlAutocomplete, function(data){
-					
+				$.getJSON(urlAutocomplete, function(data){					
 					response(data.autocomplete);
-					
 				});
+
 		},
 		select: function(event,ui) { 
 		    this.value=ui.item.value; 
@@ -130,7 +128,6 @@ $(function() {
 	    .attr( "data-value", item.value)
 	    .append( item.label )
 	    .appendTo( ul );
-
 	};
 	
 	
@@ -242,6 +239,19 @@ $(function() {
 	
 });
 
+
+function interactionCategoryDefaults(InteractionCategories){
+	
+	$.each(InteractionCategories, function (index, interaction_category) {
+		var selected_by_default = interaction_category[2];	
+		if(selected_by_default == 0){
+			var id = 'search_' + interaction_category[1]
+			$('#' + id).prop('checked', false);
+		}
+	});
+}
+
+
 function cleanArray(actual) {
 	  var newArray = new Array();
 	  for (var i = 0; i < actual.length; i++) {
@@ -291,16 +301,20 @@ function validateSearchTerms() {
 
 	if(searchIdentifierValue == '/'){
 		
-		urlTermValidation = Url + 'term_validation';
+		urlTermValidation = Url + 'app.php/term_validation';
 	}else{
 		
-		urlTermValidation = Url + 'term_validation' + searchIdentifierValue;
+		urlTermValidation = Url + 'app.php/term_validation' + searchIdentifierValue;
 	}
 	
 	var termCountArray = searchIdentifierValue.split(",");
 	var termCount = termCountArray.length;
 
+
+	
 	$.getJSON(urlTermValidation, function(data){
+		
+
 		var invalidTermsString = '';
 		var invalidTerms = '';
 		$.each(data, function (index, value) {

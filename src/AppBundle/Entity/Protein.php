@@ -40,6 +40,12 @@ class Protein
      */
 	public $organisms;
 	
+	/**
+	 * @var \Doctrine\Common\Collections\ArrayCollection|Identifier[]
+	 * @ORM\ManyToMany(targetEntity="Annotation", mappedBy="proteins")
+	 */
+	public $annotations;
+	
    /**
      * @ORM\OneToMany(targetEntity="Domain", mappedBy="protein")
      */
@@ -63,28 +69,12 @@ class Protein
     public $interactions;
     
     
-    /**
-     * @ORM\OneToMany(targetEntity="Experiment", mappedBy="protein", cascade={"persist"})
-     */
-    public $experiments;
-    
     
     /**
      * @ORM\OneToMany(targetEntity="External_Link", mappedBy="protein", cascade={"persist"})
      */
     public $external_links;
     
-    /**
-     * @ORM\OneToOne(targetEntity="Tissue_Expression")
-     * @ORM\JoinColumn(name="tissue_expression_id", referencedColumnName="id")
-     */
-    public $tissue_expression;
-    
-    /**
-     * @ORM\OneToOne(targetEntity="Subcellular_Location_Expression")
-     * @ORM\JoinColumn(name="subcellular_location_expression_id", referencedColumnName="id")
-     */
-    public $subcellular_location_expression;
     
     /**
      * @ORM\ManyToMany(targetEntity="User" , inversedBy="proteins")
@@ -108,14 +98,19 @@ class Protein
 		$this->organisms = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->external_links = new \Doctrine\Common\Collections\ArrayCollection();
 		$this->isoforms = new \Doctrine\Common\Collections\ArrayCollection();
-		$this->experiments= new \Doctrine\Common\Collections\ArrayCollection();
 		$this->complexes= new \Doctrine\Common\Collections\ArrayCollection();
+		$this->annotations = new \Doctrine\Common\Collections\ArrayCollection();
 	}
 	
 	/**
 	 * @ORM\Column(type="string", length=100, nullable=true)
 	 */
 	protected $uniprot_id;
+	
+	/**
+	 * @ORM\Column(type="string", length=200, nullable=true)
+	 */
+	protected $protein_name;
 	
 	/**
 	 * @ORM\Column(type="string", length=100, nullable=true)
@@ -133,7 +128,7 @@ class Protein
 	protected $gene_name;
 	
 	/**
-	 * @ORM\Column(type="string", length=1000, nullable=true)
+	 * @ORM\Column(type="string", length=10000, nullable=true)
 	 */
 	protected $sequence;
 	
@@ -143,8 +138,10 @@ class Protein
 	 */
 	protected $description;
 	
-	
-
+	/**
+	 * @ORM\Column(type="string", length=10, nullable=true)
+	 */
+	protected $number_of_interactions_in_database;
 
     /**
      * Get id
@@ -156,29 +153,101 @@ class Protein
         return $this->id;
     }
 
-
     /**
-     * Set sequence
+     * Set uniprotId
      *
-     * @param string $sequence
+     * @param string $uniprotId
      *
      * @return Protein
      */
-    public function setSequence($sequence)
+    public function setUniprotId($uniprotId)
     {
-        $this->sequence = $sequence;
+        $this->uniprot_id = $uniprotId;
 
         return $this;
     }
 
     /**
-     * Get sequence
+     * Get uniprotId
      *
      * @return string
      */
-    public function getSequence()
+    public function getUniprotId()
     {
-        return $this->sequence;
+        return $this->uniprot_id;
+    }
+    
+    /**
+     * Set uniprotIdCorrect
+     *
+     * @param string $uniprotId
+     *
+     * @return Protein
+     */
+    public function setUniprotIdCorrect($uniprotIdCorrect)
+    {
+        $this->uniprot_id_correct = $uniprotIdCorrect;
+        
+        return $this;
+    }
+    
+    /**
+     * Get uniprotIdCorrect
+     *
+     * @return string
+     */
+    public function getUniprotIdCorrect()
+    {
+        return $this->uniprot_id_correct;
+    }
+    
+
+    /**
+     * Set ensemblId
+     *
+     * @param string $ensemblId
+     *
+     * @return Protein
+     */
+    public function setEnsemblId($ensemblId)
+    {
+        $this->ensembl_id = $ensemblId;
+
+        return $this;
+    }
+
+    /**
+     * Get ensemblId
+     *
+     * @return string
+     */
+    public function getEnsemblId()
+    {
+        return $this->ensembl_id;
+    }
+
+    /**
+     * Set entrezId
+     *
+     * @param string $entrezId
+     *
+     * @return Protein
+     */
+    public function setEntrezId($entrezId)
+    {
+        $this->entrez_id = $entrezId;
+
+        return $this;
+    }
+
+    /**
+     * Get entrezId
+     *
+     * @return string
+     */
+    public function getEntrezId()
+    {
+        return $this->entrez_id;
     }
 
     /**
@@ -206,6 +275,30 @@ class Protein
     }
 
     /**
+     * Set sequence
+     *
+     * @param string $sequence
+     *
+     * @return Protein
+     */
+    public function setSequence($sequence)
+    {
+        $this->sequence = $sequence;
+
+        return $this;
+    }
+
+    /**
+     * Get sequence
+     *
+     * @return string
+     */
+    public function getSequence()
+    {
+        return $this->sequence;
+    }
+
+    /**
      * Set description
      *
      * @param string $description
@@ -227,6 +320,98 @@ class Protein
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Get number_of_interactions_in_database
+     *
+     * @return string
+     */
+    public function getNumberOfInteractionsInDatabase()
+    {
+        return $this->number_of_interactions_in_database;
+    }
+    
+    /**
+     * Set number_of_interactions_in_database
+     *
+     * @param string $number_of_interactions_in_database
+     *
+     * @return Protein
+     */
+    public function setNumberOfInteractionsInDatabase($number_of_interactions_in_database)
+    {
+        $this->number_of_interactions_in_database = $number_of_interactions_in_database;
+        
+        return $this;
+    }
+    
+    /**
+     * Add protein
+     *
+     * @param \AppBundle\Entity\Protein $protein
+     *
+     * @return Protein
+     */
+    public function addProtein(\AppBundle\Entity\Protein $protein)
+    {
+        $this->proteins[] = $protein;
+
+        return $this;
+    }
+
+    /**
+     * Remove protein
+     *
+     * @param \AppBundle\Entity\Protein $protein
+     */
+    public function removeProtein(\AppBundle\Entity\Protein $protein)
+    {
+        $this->proteins->removeElement($protein);
+    }
+
+    /**
+     * Get proteins
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProteins()
+    {
+        return $this->proteins;
+    }
+
+    /**
+     * Add isoform
+     *
+     * @param \AppBundle\Entity\Protein $isoform
+     *
+     * @return Protein
+     */
+    public function addIsoform(\AppBundle\Entity\Protein $isoform)
+    {
+        $this->isoforms[] = $isoform;
+
+        return $this;
+    }
+
+    /**
+     * Remove isoform
+     *
+     * @param \AppBundle\Entity\Protein $isoform
+     */
+    public function removeIsoform(\AppBundle\Entity\Protein $isoform)
+    {
+        $this->isoforms->removeElement($isoform);
+    }
+
+    /**
+     * Get isoforms
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIsoforms()
+    {
+        return $this->isoforms;
     }
 
     /**
@@ -261,6 +446,40 @@ class Protein
     public function getOrganisms()
     {
         return $this->organisms;
+    }
+
+    /**
+     * Add annotation
+     *
+     * @param \AppBundle\Entity\Annotation $annotation
+     *
+     * @return Protein
+     */
+    public function addAnnotation(\AppBundle\Entity\Annotation $annotation)
+    {
+        $this->annotations[] = $annotation;
+
+        return $this;
+    }
+
+    /**
+     * Remove annotation
+     *
+     * @param \AppBundle\Entity\Annotation $annotation
+     */
+    public function removeAnnotation(\AppBundle\Entity\Annotation $annotation)
+    {
+        $this->annotations->removeElement($annotation);
+    }
+
+    /**
+     * Get annotations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAnnotations()
+    {
+        return $this->annotations;
     }
 
     /**
@@ -332,6 +551,40 @@ class Protein
     }
 
     /**
+     * Add complex
+     *
+     * @param \AppBundle\Entity\Complex $complex
+     *
+     * @return Protein
+     */
+    public function addComplex(\AppBundle\Entity\Complex $complex)
+    {
+        $this->complexes[] = $complex;
+
+        return $this;
+    }
+
+    /**
+     * Remove complex
+     *
+     * @param \AppBundle\Entity\Complex $complex
+     */
+    public function removeComplex(\AppBundle\Entity\Complex $complex)
+    {
+        $this->complexes->removeElement($complex);
+    }
+
+    /**
+     * Get complexes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComplexes()
+    {
+        return $this->complexes;
+    }
+
+    /**
      * Add interaction
      *
      * @param \AppBundle\Entity\Interaction $interaction
@@ -364,7 +617,6 @@ class Protein
     {
         return $this->interactions;
     }
-
 
 
     /**
@@ -401,29 +653,7 @@ class Protein
         return $this->external_links;
     }
 
-    /**
-     * Set tissueExpression
-     *
-     * @param \AppBundle\Entity\Tissue_Expression $tissueExpression
-     *
-     * @return Protein
-     */
-    public function setTissueExpression(\AppBundle\Entity\Tissue_Expression $tissueExpression = null)
-    {
-        $this->tissue_expression = $tissueExpression;
 
-        return $this;
-    }
-
-    /**
-     * Get tissueExpression
-     *
-     * @return \AppBundle\Entity\Tissue_Expression
-     */
-    public function getTissueExpression()
-    {
-        return $this->tissue_expression;
-    }
 
     /**
      * Add user
@@ -457,203 +687,5 @@ class Protein
     public function getUsers()
     {
         return $this->users;
-    }
-
-    /**
-     * Set uniprotId
-     *
-     * @param string $uniprotId
-     *
-     * @return Protein
-     */
-    public function setUniprotId($uniprotId)
-    {
-        $this->uniprot_id = $uniprotId;
-
-        return $this;
-    }
-
-    /**
-     * Get uniprotId
-     *
-     * @return string
-     */
-    public function getUniprotId()
-    {
-        return $this->uniprot_id;
-    }
-
-    /**
-     * Set ensemblId
-     *
-     * @param string $ensemblId
-     *
-     * @return Protein
-     */
-    public function setEnsemblId($ensemblId)
-    {
-        $this->ensembl_id = $ensemblId;
-
-        return $this;
-    }
-
-    /**
-     * Get ensemblId
-     *
-     * @return string
-     */
-    public function getEnsemblId()
-    {
-        return $this->ensembl_id;
-    }
-
-    /**
-     * Set subcellularLocationExpression
-     *
-     * @param \AppBundle\Entity\Subcellular_Location_Expression $subcellularLocationExpression
-     *
-     * @return Protein
-     */
-    public function setSubcellularLocationExpression(\AppBundle\Entity\Subcellular_Location_Expression $subcellularLocationExpression = null)
-    {
-        $this->subcellular_location_expression = $subcellularLocationExpression;
-
-        return $this;
-    }
-
-    /**
-     * Get subcellularLocationExpression
-     *
-     * @return \AppBundle\Entity\Subcellular_Location_Expression
-     */
-    public function getSubcellularLocationExpression()
-    {
-        return $this->subcellular_location_expression;
-    }
-
-    /**
-     * Set entrezId
-     *
-     * @param string $entrezId
-     *
-     * @return Protein
-     */
-    public function setEntrezId($entrezId)
-    {
-        $this->entrez_id = $entrezId;
-
-        return $this;
-    }
-
-    /**
-     * Get entrezId
-     *
-     * @return string
-     */
-    public function getEntrezId()
-    {
-        return $this->entrez_id;
-    }
-
-    /**
-     * Add protein
-     *
-     * @param \AppBundle\Entity\Protein $protein
-     *
-     * @return Protein
-     */
-    public function addProtein(\AppBundle\Entity\Protein $protein)
-    {
-        $this->proteins[] = $protein;
-
-        return $this;
-    }
-
-    /**
-     * Remove protein
-     *
-     * @param \AppBundle\Entity\Protein $protein
-     */
-    public function removeProtein(\AppBundle\Entity\Protein $protein)
-    {
-        $this->proteins->removeElement($protein);
-    }
-
-    /**
-     * Get proteins
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProteins()
-    {
-        return $this->proteins;
-    }
-
-    /**
-     * Add isoform
-     *
-     * @param \AppBundle\Entity\Protein $isoform
-     *
-     * @return Protein
-     */
-    public function addIsoform(\AppBundle\Entity\Protein $isoform)
-    {
-        $this->isoforms[] = $isoform;
-
-        return $this;
-    }
-
-    /**
-     * Remove isoform
-     *
-     * @param \AppBundle\Entity\Protein $isoform
-     */
-    public function removeIsoform(\AppBundle\Entity\Protein $isoform)
-    {
-        $this->isoforms->removeElement($isoform);
-    }
-
-    /**
-     * Get isoforms
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getIsoforms()
-    {
-        return $this->isoforms;
-    }
-
-    /**
-     * Add experiment
-     *
-     * @param \AppBundle\Entity\Experiment $experiment
-     *
-     * @return Protein
-     */
-    public function addExperiment(\AppBundle\Entity\Experiment $experiment)
-    {
-        $this->experiments[] = $experiment;
-
-        return $this;
-    }
-
-    /**
-     * Remove experiment
-     *
-     * @param \AppBundle\Entity\Experiment $experiment
-     */
-    public function removeExperiment(\AppBundle\Entity\Experiment $experiment)
-    {
-        $this->experiments->removeElement($experiment);
-    }
-
-    /**
-     * Get experiments
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getExperiments()
-    {
-        return $this->experiments;
     }
 }

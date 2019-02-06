@@ -1,11 +1,37 @@
 @CHARSET "ISO-8859-1";
 
-
-main{
-	
-	background-color: #F4F4F4;
+body, body * {
+    font-family: Century Gothic, sans-serif;
 }
 
+h1,h2,h3{
+	font-family: Impact, Charcoal, sans-serif;
+}
+main{
+
+	background-color: #e9eee9;
+}
+ 
+.menu_item:hover {background-color: #f1f1f1;}
+
+.dropdown-menu > li > div > a {
+    display: block;
+    padding: 3px 5px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    text-decoration: none;
+    vertical-align:middle;
+}
+
+#huri_img {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
 
 .row{
 	
@@ -132,11 +158,11 @@ main{
 
 #cy {
     height: 760px;
-    width: 90%;
+    width: 100%;
     left: 0;
     top: 0;
     border: 1px solid #ccc;
-    margin: 0px auto 20px;
+    margin: 0px auto 0px;
     background-color: #FFFFFF;
 }
 
@@ -353,20 +379,19 @@ h3{
     padding: 20px;
 }
 
+textarea {
+    resize: both;
+    overflow: auto;
+}
 
 
-.message_panel{
-	
-	border: 1px solid #ccc;
-	padding: 20px;
-	max-width: 400px;
-	background: #ffffff;
-	z-index: 1002;
-	margin: auto;
+.search_box{
+	min-width:100%;
+min-height:100%;
 }
 
 .network_menu{
-	width: 90%;
+	width: 100%;
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
@@ -567,7 +592,7 @@ h3{
 
 	
 	.network_menu {
-	    width: 90%;
+	    width: 100%;
 	    border-top: 1px solid #ccc;
 	    border-left: 1px solid #ccc;
 	    border-right: 1px solid #ccc;
@@ -638,15 +663,25 @@ h3{
 	margin: 260px auto;
 	max-width: 400px;
 	padding: 20px;
+	text-align: center; 
+	background: #f2f2f2;
 
+}
+
+.no_ie{
+	border: 1px solid #ccc;
+	background: #ffffff; 
+	margin: 260px auto;
+	max-width: 400px;
+	padding: 20px;
+	text-align: center; 
+	background: #f2f2f2;
 
 }
 
 #summary{
 	
-	width: 90%;
-    border: 1px solid #ccc;
-    border-top: 0px;
+	width: 100%;
     margin: auto;
     background-color: #FFFFFF;
     padding: 10px 10px 0px 10px;
@@ -801,3 +836,7 @@ h3{
     from { }
     to { -webkit-transform: rotate(-360deg); transform: rotate(-360deg); }
 }
+
+#particles-js{height:200px; border-radius: 50%; width:200px; margin: 5px auto 0px; background-image: url(../images/bg-fireworks-colour5.svg); background-repeat: no-repeat; background-size: cover;  background-attachment: fixed; background-position: 50% 50%; } 
+
+

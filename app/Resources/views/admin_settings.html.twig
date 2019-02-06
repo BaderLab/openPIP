@@ -10,35 +10,6 @@
 
 {% block content %}
 <header>
-	<nav class="navbar navbar-default main_header" style="background-color: {{ main_color_scheme }};">
-        <svg id="svg2" class="main_logo left " xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="40.026" width="69.124" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
-            <metadata id="metadata7">
-              <rdf:RDF>
-               <cc:Work rdf:about="">
-                <dc:format>image/svg+xml</dc:format>
-                <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-                <dc:title/>
-               </cc:Work>
-              </rdf:RDF>
-             </metadata>
-             <g id="g3770" stroke-miterlimit="4" stroke-dasharray="none">
-              <path id="path2987" d="m48.576,17.582c0,9.2489-7.5012,16.746-16.754,16.746-9.2532,0-16.754-7.4977-16.754-16.746,0-9.2489,7.5012-16.746,16.754-16.746,9.2532,0,16.754,7.4977,16.754,16.746z" stroke-opacity="0.56084655000000005" class="parent" stroke="#000000" stroke-width="0.04307067000000000" fill="#e6e6e6"/>
-              <path id="path2991-1" d="m31.367,23.78c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
-              <path id="path2991-7" d="m42.899,13.341c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
-              <path id="path2991-4" d="m67.986,29.163c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
-              <path id="path2991-0" d="m10.903,34.545c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
-              <path id="path3807" stroke-linejoin="miter" d="m25.95,23.82-20.47,10.76" class="child" stroke="{{ logo_color_scheme }}" stroke-linecap="butt" stroke-width="1.07676673" fill="none"/>
-              <path id="path2991-9-45" d="m69.063,5.4793c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z" class="child" stroke="{{ logo_color_scheme }}" stroke-width="0.08252774" fill="{{ logo_color_scheme }}"/>
-              <path id="path3807-1" stroke-linejoin="miter" d="m63.64,5.5195-25.848,7.5356" class="child" stroke="{{ logo_color_scheme }}" stroke-linecap="butt" stroke-width="1.07676673" fill="none"/>
-              <path id="path3807-1-5" stroke-linejoin="miter" d="m62.56,29.2-24.77-16.15" class="child" stroke="{{ logo_color_scheme }}" stroke-linecap="butt" stroke-width="1.07676673" fill="none"/>
-             </g>
-        </svg>
-		<div style="padding: 12px;">
-			<h3 style="color: {{ header_color_scheme }}">
-				<strong>{{ title }}</strong>
-			</h3>
-		</div>
-	</nav>
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header tor_ibin_header">
@@ -56,6 +27,7 @@
 					<li><a href="{{ path('admin_search') }}">Search</a></li>
 					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
 					<li><a href="{{ path('about') }}">About</a></li>
+					<li><a href="{{ path('faq') }}">FAQ</a></li>
 					<li><a href="{{ path('contact') }}">Contact</a></li>
 					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
 					<li><a href="{{ path('data_manager') }}">Data</a></li>
@@ -71,7 +43,6 @@
 	</nav>
 </header>
 <main style="background-color: #EEEEEE;">
-	<div class="se-pre-con"></div>
     <div class="container">
     	{% if updated == true  %}
     	<div class="row">
@@ -79,37 +50,61 @@
    		</div>
    		{% endif %}
     	<div class="row">
-    		<ul class="nav nav-tabs">
+    		<ul class="nav nav-tabs" style="min-width: 580px;">
     			<li class="active tab"><a data-toggle="tab" href="#global_settings">Global Settings</a></li>
     			<li class="tab"><a data-toggle="tab" href="#home_page">Home Page</a></li>
     			<li class="tab"><a data-toggle="tab" href="#search">Search</a></li>
     			<li class="tab"><a data-toggle="tab" href="#about">About</a></li>
+    			<li class="tab"><a data-toggle="tab" href="#faq">FAQs</a></li>
     			<li class="tab"><a data-toggle="tab" href="#contact">Contact</a></li>
     			<li class="tab"><a data-toggle="tab" href="#download">Downloads</a></li>
     		</ul>
     	</div>
     	{{ form_start(form) }}
-    	<div class="row tab-panel">
+    	<div class="row tab-panel" style="min-width: 580px;">
     		<div class="tab-content">
     		    <div id="global_settings" class="tab-pane fade in active">
     		    
     		    
     				<div class="container">
         				<div class="row">
-            				<div class="col-lg-4">
-            					<div class="container admin_settings_panel">
-        				    		<div class="row" style="margin-top: 0px;">
-                            			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
-                            				<h4 style="color: {{ header_color_scheme }}">Titles</h4>
-                            			</div>
-                            		</div>
-                            		<div class="row admin_settings_content">
-                    					<div class="row">{{ form_label(form.title) }} {{ form_widget(form.title) }}</div>
-                    					<div class="row">{{ form_label(form.short_title) }} {{ form_widget(form.short_title) }}</div>
-                    				</div>
-                    			</div>
-            				</div>	
-            				<div class="col-lg-4">
+        					<div class="container admin_settings_panel">
+    				    		<div class="row" style="margin-top: 0px;">
+                        			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
+                        				<h4 style="color: {{ header_color_scheme }}">Titles</h4>
+                        			</div>
+                        		</div>
+                        		<div class="row admin_settings_content">
+                					<div class="row">{{ form_label(form.title) }} {{ form_widget(form.title) }}</div>
+                					<div class="row">{{ form_label(form.short_title) }} {{ form_widget(form.short_title) }}</div>
+                				</div>
+                			</div>	
+                		</div>
+                		<div class="row">
+							<div class="container admin_settings_panel">
+    				    		<div class="row" style="margin-top: 0px;">
+                        			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
+                        				<h4 style="color: {{ header_color_scheme }}">Version</h4>
+                        			</div>
+                        		</div>
+                        		<div class="row admin_settings_content">
+                					<div class="row">{{ form_label(form.version) }} {{ form_widget(form.version) }}</div>
+                				</div>
+                			</div>
+                		</div>		
+                		<div class="row">
+                			<div class="container admin_settings_panel">		
+                				<div class="row" style="margin-top: 0px;">
+                        			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
+                        				<h4 style="color: {{ header_color_scheme }}">Url</h4>
+                        			</div>
+                        		</div>
+                        		<div class="row admin_settings_content">
+                					<div class="row">{{ form_label(form.url) }} {{ form_widget(form.url) }}</div>
+                				</div>
+                			</div>
+						</div>
+						<div class="row">
             					<div class="container admin_settings_panel">
             				        <div class="row" style="margin-top: 0px;">
                             			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
@@ -148,25 +143,24 @@
                 	                </div>
                 	            </div>
             	            </div>
-    					</div>
-    					<div class="row">
-        					<div class="container admin_settings_panel" style="width: 96%;">
-    							<div class="row"  style="margin-top: 0px;">
-                        			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
-                        				<h4 style="color: {{ header_color_scheme }}">Footer</h4>
-                        			</div>
-                        		</div>
-                        		<div class="row admin_settings_content">
-        							<div class="row">{{ form_widget(form.footer) }}</div>
-        						</div>
-        					</div>
-        				</div>
-        				<div class="row">
-        				    <div class="col-lg-10">
-        					</div>
+        					<div class="row">
+            					<div class="container admin_settings_panel">
+        							<div class="row"  style="margin-top: 0px;">
+                            			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
+                            				<h4 style="color: {{ header_color_scheme }}">Footer</h4>
+                            			</div>
+                            		</div>
+                            		<div class="row admin_settings_content">
+            							<div class="row">{{ form_widget(form.footer) }}</div>
+            						</div>
+            					</div>
+            				</div>
 
-        					<div class="col-lg-2">
-        						<a href="{{ path('user_register') }}" class="btn btn-primary" style="background-color: {{ main_color_scheme }};">Register New Admin</a>
+        				<div class="row">
+        					<div style="width: 90%;">
+        						<div style="float: right;"> 
+        							<a href="{{ path('user_register') }}" class="btn btn-primary" style="background-color: {{ main_color_scheme }};">Register New Admin</a>
+        						</div>
         					</div>
         				</div>
     				</div>
@@ -180,7 +174,7 @@
     			<div id="search" class="tab-pane fade">
     				<div class="container">
     					<div class="row">
-    						<div class="col-lg-4 admin_settings_panel"  style="padding: 0px; margin: 10px;">
+    						<div class="admin_settings_panel"  style="padding: 0px; margin: 10px;">
     				             <div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
                     				<h4 style="color: {{ header_color_scheme }}">Examples</h4>
                     			</div>
@@ -190,7 +184,7 @@
                 					<div class="row">{{ form_label(form.example_1) }} {{ form_widget(form.example_1) }}</div>
         						</div>   						
     						</div>
-    						<div class="col-lg-3 admin_settings_panel"  style="padding: 0px; margin: 10px;">
+    						<div class="admin_settings_panel"  style="padding: 0px; margin: 10px;">
     				             <div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
                     				<h4 style="color: {{ header_color_scheme }}">Network Color Schemes</h4>
                     			</div>
@@ -211,39 +205,47 @@
                 					        {{ form_widget(form.interactor_node_color) }}
                 					    </div>   
                 					</div>
-                         			<div class="row">
-                         				<div class="col-sm-7">
-                         			        {{ form_label(form.published_edge_color) }}
-                         			    </div>
-                         			    <div class="col-sm-3">
-                         			        {{ form_widget(form.published_edge_color) }}
-                         				</div>
-                         			</div>
-                					<div class="row">
-                						<div class="col-sm-7">
-                						    {{ form_label(form.validated_edge_color) }} 
-                          			    </div>
-                         			    <div class="col-sm-3">               						       
-                						    {{ form_widget(form.validated_edge_color) }}
-                						</div>
-                					</div>	
-                					<div class="row">
-                						<div class="col-sm-7">
-                					        {{ form_label(form.verified_edge_color) }} 
-                           			    </div>
-                         			    <div class="col-sm-3">                  					        
-                					        {{ form_widget(form.verified_edge_color) }}
-                					    </div>
-                					</div>    
-                					<div class="row">
-                						<div class="col-sm-7">
-                					        {{ form_label(form.literature_edge_color) }} 
-                           			    </div>
-                         			    <div class="col-sm-3">   		        
-                					        
-                					        {{ form_widget(form.literature_edge_color) }}
-                						   </div>
-        							</div>   						
+            					    <div class="row">
+            					    	<div style="display: table; width: 100%;">
+                					    	<div style="display: table-row; padding-top: 10px;">
+                                 			    <div style="display: table-cell;padding-top: 10px; padding-right: 10px; width: 100px;">
+                                 			       	<strong>Name</strong>
+                                 				</div>
+                                 				<div style="display: table-cell;padding-top: 10px; padding-right: 10px; width: 30px;">
+                                                    <strong>Order</strong>
+                                 			    </div>
+        
+                                 			    <div style="display: table-cell;padding-top: 10px; padding-right: 10px; width: 60px;">
+                                 			        <strong>Color Scheme</strong>
+                                 				</div>
+                                 				<div style="display: table-cell;padding-top: 10px; padding-right: 10px; width: 300px;">
+                                 			       <strong> Description</strong>
+                                 				</div>
+                             				</div>
+                             			
+
+                    					
+                    					{% for interaction_category in form.interaction_categories %}
+                    					
+                                 			<div style="display: table-row; ">
+                                 			    <div style="display: table-cell;padding-top: 10px; padding-right: 10px; width: 100px;">
+                                 			        {{ form_widget(interaction_category.category_name) }}
+                                 				</div>
+                                 				<div style="display: table-cell;padding-top: 10px; padding-right: 10px; width: 30px;">
+                                                    {{ form_widget(interaction_category.order) }}
+                                 			    </div>
+    
+                                 			    <div style="display: table-cell;padding-top: 10px; padding-right: 10px; width: 60px;">
+                                 			        {{ form_widget(interaction_category.color_scheme) }}
+                                 				</div>
+                                 				<div style="display: table-cell;padding-top: 10px; padding-right: 10px; width: 300px;">
+                                 			        {{ form_widget(interaction_category.description) }}
+                                 				</div>
+                                 			</div>
+    
+                             			{% endfor %}
+                             			</div>
+									</div>
     							</div>
     						</div>
 						</div>
@@ -252,6 +254,11 @@
     			<div id="about" class="tab-pane fade">
     				<div class="container">
     					<div class="row">{{ form_label(form.about) }} {{ form_widget(form.about) }}</div>
+    				</div>
+    			</div>
+    			<div id="faq" class="tab-pane fade">
+    				<div class="container">
+    					<div class="row">{{ form_label(form.faq) }} {{ form_widget(form.faq) }}</div>
     				</div>
     			</div>
     			<div id="contact" class="tab-pane fade">
@@ -450,109 +457,42 @@
                 "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
             ]
         });
-        $('.published_edge_color').spectrum({
-            color: "{{ published_edge_color }}",
-            showInput: true,
-            className: "full-spectrum",
-            showInitial: true,
-            showPalette: true,
-            showSelectionPalette: true,
-            maxSelectionSize: 10,
-            preferredFormat: "hex",
-            palette: [
-                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
-                "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
-                "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
-                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
-                "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
-                "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
-                "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
-                "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
-                "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
-                "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
-                "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
-                "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
-                "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
-            ]
-        });
-        $('.validated_edge_color').spectrum({
-            color: "{{ validated_edge_color }}",
-            showInput: true,
-            className: "full-spectrum",
-            showInitial: true,
-            showPalette: true,
-            showSelectionPalette: true,
-            maxSelectionSize: 10,
-            preferredFormat: "hex",
-            palette: [
-                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
-                "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
-                "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
-                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
-                "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
-                "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
-                "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
-                "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
-                "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
-                "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
-                "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
-                "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
-                "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
-            ]
-        });
-        $('.verified_edge_color').spectrum({
-            color: "{{ verified_edge_color }}",
-            showInput: true,
-            className: "full-spectrum",
-            showInitial: true,
-            showPalette: true,
-            showSelectionPalette: true,
-            maxSelectionSize: 10,
-            preferredFormat: "hex",
-            palette: [
-                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
-                "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
-                "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
-                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
-                "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
-                "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
-                "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
-                "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
-                "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
-                "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
-                "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
-                "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
-                "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
-            ]
-        });
-        $('.literature_edge_color').spectrum({
-            color: "{{ literature_edge_color }}",
-            showInput: true,
-            className: "full-spectrum",
-            showInitial: true,
-            showPalette: true,
-            showSelectionPalette: true,
-            maxSelectionSize: 10,
-            preferredFormat: "hex",
-            palette: [
-                ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
-                "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
-                ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
-                "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
-                ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
-                "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
-                "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
-                "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
-                "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
-                "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
-                "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
-                "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
-                "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
-                "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
-            ]
-        });
+
+
+
+        {% for key, interaction_category in interaction_categories_array %}
+
+            $('#admin_settings_interaction_categories_{{key}}_color_scheme').spectrum({
+                color: "{{ interaction_category[0].colorscheme }}",
+                showInput: true,
+                className: "full-spectrum",
+                showInitial: true,
+                showPalette: true,
+                showSelectionPalette: true,
+                maxSelectionSize: 10,
+                preferredFormat: "hex",
+                palette: [
+                    ["rgb(0, 0, 0)", "rgb(67, 67, 67)", "rgb(102, 102, 102)",
+                    "rgb(204, 204, 204)", "rgb(217, 217, 217)","rgb(255, 255, 255)"],
+                    ["rgb(152, 0, 0)", "rgb(255, 0, 0)", "rgb(255, 153, 0)", "rgb(255, 255, 0)", "rgb(0, 255, 0)",
+                    "rgb(0, 255, 255)", "rgb(74, 134, 232)", "rgb(0, 0, 255)", "rgb(153, 0, 255)", "rgb(255, 0, 255)"], 
+                    ["rgb(230, 184, 175)", "rgb(244, 204, 204)", "rgb(252, 229, 205)", "rgb(255, 242, 204)", "rgb(217, 234, 211)", 
+                    "rgb(208, 224, 227)", "rgb(201, 218, 248)", "rgb(207, 226, 243)", "rgb(217, 210, 233)", "rgb(234, 209, 220)", 
+                    "rgb(221, 126, 107)", "rgb(234, 153, 153)", "rgb(249, 203, 156)", "rgb(255, 229, 153)", "rgb(182, 215, 168)", 
+                    "rgb(162, 196, 201)", "rgb(164, 194, 244)", "rgb(159, 197, 232)", "rgb(180, 167, 214)", "rgb(213, 166, 189)", 
+                    "rgb(204, 65, 37)", "rgb(224, 102, 102)", "rgb(246, 178, 107)", "rgb(255, 217, 102)", "rgb(147, 196, 125)", 
+                    "rgb(118, 165, 175)", "rgb(109, 158, 235)", "rgb(111, 168, 220)", "rgb(142, 124, 195)", "rgb(194, 123, 160)",
+                    "rgb(166, 28, 0)", "rgb(204, 0, 0)", "rgb(230, 145, 56)", "rgb(241, 194, 50)", "rgb(106, 168, 79)",
+                    "rgb(69, 129, 142)", "rgb(60, 120, 216)", "rgb(61, 133, 198)", "rgb(103, 78, 167)", "rgb(166, 77, 121)",
+                    "rgb(91, 15, 0)", "rgb(102, 0, 0)", "rgb(120, 63, 4)", "rgb(127, 96, 0)", "rgb(39, 78, 19)", 
+                    "rgb(12, 52, 61)", "rgb(28, 69, 135)", "rgb(7, 55, 99)", "rgb(32, 18, 77)", "rgb(76, 17, 48)"]
+                ]
+            });
+
+
+		{% endfor %}
+
+
+        
     </script>
 {% endblock %}

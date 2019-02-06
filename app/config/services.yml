@@ -37,6 +37,7 @@ services:
     app.functions:
       class: AppBundle\Utils\Functions
       shared: false
+      arguments: ['@doctrine.orm.entity_manager', '@security.context', '@security.authorization_checker']
       
     app.interaction_data:
       class: AppBundle\Utils\InteractionData

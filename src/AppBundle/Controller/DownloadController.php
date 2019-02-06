@@ -35,7 +35,7 @@ class DownloadController extends Controller
      */
     public function downloadAction(Request $request)
     {
-        
+    	$functions = $this->get('app.functions');
     	
     	$form = $this->createFormBuilder()
     	->add('add_dataset', CheckboxType::class, array(
@@ -138,14 +138,8 @@ class DownloadController extends Controller
         	$dataset_data_file_array[] = array($dataset, $data_file_array);
         	
         }
-        
-        
-        
-        
-        
-        $admin_settings = $this->getDoctrine()
-        ->getRepository('AppBundle:Admin_Settings')
-        ->find(1);
+
+        $admin_settings =  $functions->getAdminSettings();
         
 		$title = $admin_settings->getTitle();
 		$short_title = $admin_settings->getShortTitle();
@@ -157,21 +151,8 @@ class DownloadController extends Controller
         $download = $admin_settings->getDownload();
         $show_downloads = $admin_settings->getShowDownloads();
         $show_download_all = $admin_settings->getShowDownloadAll();
-        
-        $login_status = false;
-        
-        $is_fully_authenticated = $this->get('security.context')
-        ->isGranted('IS_AUTHENTICATED_FULLY');
-        
-        if($is_fully_authenticated){
-            $login_status =  true;
-        }
-        
-        $admin_status = false;
-        
-        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-        	$admin_status = true;
-        }
+        $login_status = $functions->getLoginStatus();
+        $admin_status = $functions->GetAdminStatus();
         
         return $this->render('download.html.twig', array(
                 'form' => $form->createView(),
@@ -187,7 +168,8 @@ class DownloadController extends Controller
                 'show_download_all' => $show_download_all,
         		'dataset_array' => $dataset_data_file_array,
         		'login_status' => $login_status,
-        		'admin_status' => $admin_status
+        		'admin_status' => $admin_status,
+        		'page' => 'download'
         
         ));
     }
@@ -1998,8 +1980,7 @@ class DownloadController extends Controller
 	    
 	    $score_parameter = $query_parameters[1];
 	    $category_array =  $query_parameters[2];
-	    $tissue_expression_array =  $query_parameters[3];
-	    
+
 	    
 
 	    $category_string_array = array();
@@ -2015,20 +1996,7 @@ class DownloadController extends Controller
 	    }
 	    $category_array_string = join(',', $category_string_array);
 	    $query_category_string = join('&', $query_category_string_array);
-	    
-	    $tissue_expression_string_array = array();
-	    $query_tissue_expression_array = array();
-	    foreach($tissue_expression_array as $key => $value){
-	    	
-	    	if($value == true){
-	    		$tissue_expression_string_array[] = $key;
-	    		$query_tissue_expression_array[] = $key .'=true';
-	    	}
 
-	    }
-	    $tissue_expression_array_string = join(',', $tissue_expression_string_array);
-	    $query_tissue_expression = join('&', $query_tissue_expression_array);
-	    
 	    $interaction_network->setScoreParameter($score_parameter);
 	    if($score_parameter){
 	    	$query_score_parameter = 'score=' . $score_parameter;
@@ -2038,10 +2006,7 @@ class DownloadController extends Controller
 	    
 	    $interaction_network->setCategoryArray($category_array_string);
 	    
-	    
-	    $interaction_network->setTissueExpressionArray($tissue_expression_array_string);
-	    
-	    $array = [$query_score_parameter, $query_category_string, $query_tissue_expression];
+	    $array = [$query_score_parameter, $query_category_string];
 	    $string = join('&', $array);
 	    
 	    $query = $query_string;

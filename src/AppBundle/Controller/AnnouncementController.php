@@ -100,7 +100,8 @@ class AnnouncementController extends Controller
         $logo_color_scheme = $admin_settings->getLogoColorScheme();
         $button_color_scheme = $admin_settings->getButtonColorScheme();
 	    $short_title = $admin_settings->getShortTitle();
-	
+	    $title = $admin_settings->getTitle();
+	    
 	    return $this->render('announcement_edit.html.twig', array(
 	            'announcement' => $announcement,
 	            'edit_form' => $editForm->createView(),
@@ -109,7 +110,7 @@ class AnnouncementController extends Controller
                 'header_color_scheme' => $header_color_scheme,
                 'logo_color_scheme' => $logo_color_scheme,
                 'button_color_scheme' => $button_color_scheme,
-	            
+	    		'title' => $title,
 		        'short_title' => $short_title
 	    ));
 	}

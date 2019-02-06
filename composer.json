@@ -30,11 +30,13 @@
 		"punkave/symfony2-file-uploader-bundle" : "dev-master",
 		"symfony/dom-crawler" : "3.1.*",
 		"symfony/css-selector" : "^3.1",
-		"friendsofsymfony/jsrouting-bundle" : "^1.6"
+		"symfony/phpunit-bridge" : "^4.0",
+		"friendsofsymfony/jsrouting-bundle" : "^1.6",
+		"symfony/stopwatch" : "^3.3",
+		"phpunit/php-code-coverage" : "^4.0"
 	},
 	"require-dev" : {
-		"sensio/generator-bundle" : "~3.0",
-		"symfony/phpunit-bridge" : "~2.7"
+		"sensio/generator-bundle" : "~3.0"
 	},
 	"scripts" : {
 		"post-install-cmd" : [

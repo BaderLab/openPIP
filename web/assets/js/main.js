@@ -1,4 +1,5 @@
 
+
 $("#new_announcement").on("click", showAnnouncmentForm);
 $("#cancel_announcement").on("click", hideAnnouncmentForm);
 $(".dataset_request_links").on("click", showDatasetRequestForm);
@@ -17,6 +18,21 @@ $(document).on('click','.navbar-collapse.in',function(e) {
 $(".edit_name").on("click", showNameForm);
 $(".hide_edit_name").on("click", hideNameForm);
 $(".cancel_cy_message").on("click", hideCyMessage);
+$(".cancel_many_interactions_message").on("click", hideTooManyInteractionsMessage);
+
+
+function showTooManyInteractionsMessage(){
+	$("#too_many_interactions_message").removeClass("hidden");
+    $(".qtip").addClass("hidden");
+    $("body").addClass("noscroll");
+}
+	
+function hideTooManyInteractionsMessage(){
+
+	$("#too_many_interactions_message").addClass("hidden");
+    $("body").removeClass("noscroll");
+}	
+
 
 
 function showCyMessage(){

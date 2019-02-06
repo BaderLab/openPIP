@@ -5,6 +5,41 @@ body{
 	background-color: #f9f9f9;
 }
 
+#cy {
+	position:relative;
+  height:  400px;
+  width: 100%;
+  border: 1px solid #cccccc;
+}
+
+
+#cy2 {
+	position:relative;
+  height:  400px;
+  width: 100%;
+}
+
+#cy3 {
+	position:relative;
+  height:  400px;
+  width: 100%;
+}
+
+#cy4 {
+	position:relative;
+  height:  400px;
+  width: 100%;
+}
+
+#eat {
+  position: absolute;
+  left: 1em;
+  top: 1em;
+  font-size: 1em;
+  z-index: -1;
+  color: #c88;
+}
+
 
 h3{
 	margin: 0px;
@@ -39,6 +74,115 @@ h4{
 	 margin: 20px auto;
 	}
 }
+
+.carousel-fade .carousel-inner .item {
+  opacity: 0;
+  transition-property: opacity;
+}
+
+.carousel-fade .carousel-inner .active {
+  opacity: 1;
+}
+
+.carousel-fade .carousel-inner .active.left,
+.carousel-fade .carousel-inner .active.right {
+  left: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+.carousel-fade .carousel-inner .next.left,
+.carousel-fade .carousel-inner .prev.right {
+  opacity: 1;
+}
+
+.carousel-fade .carousel-control {
+  z-index: 2;
+}
+
+.carousel-fade .carousel-inner .item {transition-duration: 2s}
+
+
+.slider {
+	position: absolute;
+  width: 100px;
+  height: 100px;
+  top:22px;
+  right:25px;
+}
+.slide1,.slide2,.slide3,.slide4,.slide5{
+	background-repeat: no-repeat;
+  position: absolute;
+    max-width: 100px;
+  height: 100px;
+  width: 100px;
+  height: 100px;
+}
+.slide1 {
+	background-size: cover;
+    animation:fade 12s infinite;
+-webkit-animation:fade 12s infinite;
+
+} 
+.slide2 {
+      background-size: cover;
+    animation:fade2 12s infinite;
+-webkit-animation:fade2 12s infinite;
+}
+.slide3 {
+      background-size: cover;
+    animation:fade3 12s infinite;
+-webkit-animation:fade3 12s infinite;
+}
+.slide4 {
+      background-size: cover;
+    animation:fade4 12s infinite;
+-webkit-animation:fade4 12s infinite;
+}
+.slide5 {
+      background-size: cover;
+    animation:fade5 12s infinite;
+-webkit-animation:fade5 12s infinite;
+}
+
+.slider_features {
+	position: relative;
+
+}
+.slide_features1,.slide_features2,.slide_features3,.slide_features4,.slide_features5{
+	background-repeat: no-repeat;
+  position: absolute;
+
+}
+.slide_features1 {
+	background-size: cover;
+    animation:fade 4s infinite;
+-webkit-animation:fade 4s infinite;
+
+} 
+.slide_features2 {
+      background-size: cover;
+    animation:fade2 4s infinite;
+-webkit-animation:fade2 4s infinite;
+}
+.slide_features3 {
+      background-size: cover;
+    animation:fade3 4s infinite;
+-webkit-animation:fade3 4s infinite;
+}
+.slide_features4 {
+      background-size: cover;
+    animation:fade4 4s infinite;
+-webkit-animation:fade4 4s infinite;
+}
+.slide_features5 {
+      background-size: cover;
+    animation:fade5 4s infinite;
+-webkit-animation:fade5 4s infinite;
+}
+
+
+
 
 .right_col {
     position: absolute;
@@ -238,14 +382,22 @@ border-radius: 0;
 	
 }
 
-.home_panel{
+.home_panel1{
 
 	background-color: #FFFFFF;
 	border: 1px solid #cccccc;
-	width: 96%;
-
+	width: 99%;
 	padding: 20px;
-	margin: 20px auto;
+	margin: 5px auto 0px;
+}
+
+.home_panel2{
+
+	background-color: #FFFFFF;
+	border: 1px solid #cccccc;
+	width: 99%;
+	padding: 20px;
+	margin: 0px auto 5px;
 }
 
 .db_content {
@@ -281,5 +433,128 @@ border-radius: 0;
 	left: 0px;
 	top: 126px;
 }
+
+
+.qtip-bootstrap {
+    font-size: 14px;
+    line-height: 20px;
+    color: #333333;
+    padding: 1px;
+    background-color: #ffffff;
+    border: 1px solid #2a7fffff;
+
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0px 0px 10px #5599ffff;
+    -moz-box-shadow: 0px 0px 10px #5599ffff;
+    box-shadow: 0px 0px 10px #5599ffff;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+}
+
+
+.workflow:hover{
+	cursor:pointer;
+	border: 1px solid #2a7fffff;
+	box-shadow: 0px 0px 10px #5599ffff;
+}
+
+.glyphicon {
+	font-size: 75px
+}
+
+@media (max-width: 815px) {
+
+	.glyphicon {
+    	font-size: 40px;
+	}
+	
+	
+	
+	
+}
+#slideshow_margin{	
+	margin-left: 15px;
+}
+#announcement_head{
+	
+	margin-left: auto; 
+}
+#announcement_body{
+	
+	margin-left: autto; 
+}
+#mission_div{
+	
+	margin-left: auto
+}
+#method_div{
+	
+	max-width: 800px;
+}
+
+#particles-js2{height:400px; width:99%; margin: 5px auto 0px; position:absolute; background:transparent;}
+#particles-js1{height:400px; width:99%; margin: 5px auto 0px; border-left: 3px solid  #bfbfbf; border-right: 3px solid  #bfbfbf;  border-top: 3px solid #bfbfbf; background-image: url(../images/bg-fireworks-colour5.svg); background-repeat: no-repeat; background-size: cover;  background-attachment: fixed; background-position: 50% 50%; } 
+
+#particles-js4{height:400px; width:99%; margin: 0px auto 0px; position:absolute; background:transparent;}
+#particles-js3{height:400px; width:99%; margin: 0px auto 0px; border-left: 3px solid #bfbfbf; border-right: solid 3px #bfbfbf; background-image: url(../images/bg-fireworks-colour5.svg); background-repeat: no-repeat; background-size: cover;  background-attachment: fixed; background-position: 50% 50%; } 
+
+#particles-js6{height:130px; width:99%; margin: 0px auto 0px; position:absolute; background:transparent;}
+#particles-js5{height:130px; width:99%; margin: 0px auto 0px; border-left: 3px solid  #bfbfbf; border-right: 3px solid  #bfbfbf;  border-bottom: 3px solid #bfbfbf; background-image: url(../images/bg-fireworks-colour5.svg); background-repeat: no-repeat; background-size: cover;  background-attachment: fixed; background-position: 50% 50%; } 
+
+
+@media (max-width: 756px) {
+	.slider {
+	  position: absolute;
+	  width: 100px;
+	  height: 100px;
+	  top:22px;
+	  right:120px;
+	}
+	#particles-js2{height:560px; width:99%; margin: 5px auto 0px; position:absolute; background:transparent;}
+	#particles-js{height:560px; width:99%; margin: 5px auto 0px; background-image: url(../images/bg-fireworks-colour5.svg); background-repeat: no-repeat; background-size: cover;  background-attachment: fixed; background-position: 50% 50%; } 
+}
+
+@media (max-width: 784px) {
+	#slideshow_margin{	
+	margin-left: 0px;
+}
+#announcement_head{
+	
+	margin: auto; 
+}
+#announcement_body{
+	
+	margin: auto; 
+}
+#slideshow_margin{
+display:block;
+
+   margin: auto; 
+}
+#carouselExampleIndicators{
+	display:block;
+
+   margin: auto; 
+}
+#cy_div{
+
+	margin: auto; 
+}
+#mission_div{
+	
+	margin: auto
+}
+#method_div{
+	
+	max-width: 400px;
+}
+	#particles-js3{ height:740px; width:99%; margin: 0px auto 0px; padding:20px; background:transparent;}
+	#particles-js4{height:740px; width:99%; margin: 0px auto 0px; position:absolute; left:5px; background-image: url(../images/bg-fireworks-colour5.svg); background-repeat: no-repeat; background-size: cover;  background-attachment: fixed; background-position: 50% 50%; } 
+}
+
+
 
 *

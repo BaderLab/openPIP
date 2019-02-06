@@ -168,7 +168,7 @@ class AdminSettingsController extends Controller
             $updated = true;
         }
 
-        return $this->render('admin_settings_2.html.twig', array(
+        return $this->render('admin_settings.html.twig', array(
                 'form' => $form->createView(),
                 'title' => $title,
                 'home_page' => $home_page,

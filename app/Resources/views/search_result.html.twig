@@ -1,503 +1,633 @@
-{% extends 'base.html.twig' %}
+ {% extends 'base.html.twig' %}
 {% block stylesheets %}
-<link rel="stylesheet"
-	href="{{ asset('assets/css/bootstrap.min.css') }}">
-<link rel="stylesheet"
-	href="{{ asset('assets/css/jquery-ui.min.css') }}">
-<link rel="stylesheet"
-	href="{{ asset('bundles/footable/css/footable.core.css') }}">
+<link href='https://fonts.googleapis.com/css?family=Didact Gothic' rel='stylesheet'>
+
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/footable/css/footable.core.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/jquery.qtip.css') }}">
-<link rel="stylesheet"
-	href="{{ asset('assets/css/cytoscape.js-panzoom.css') }}">
-<link rel="stylesheet"
-	href="{{ asset('bundles/font-awesome-4.0.3/css/font-awesome.css') }}">
-<link rel="stylesheet"
-	href="{{ asset('bundles/spectrum/spectrum.css') }}">
-<link rel="stylesheet"
-	href="{{ asset('assets/css/awesome-bootstrap-checkbox.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/cytoscape.js-panzoom.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/spectrum/spectrum.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/search.css') }}">
-<link rel="stylesheet"
-	href="{{ asset('assets/css/search_results.css') }}">
-<link rel='shortcut icon'
-	href='{{ asset('assets/images/tor_ibin_icon.ico') }}' />
+<link rel="stylesheet" href="{{ asset('assets/css/search_results.css') }}">
+
+<link rel='shortcut icon' href='{{ asset('assets/images/tor_ibin_icon.ico') }}' />
+<script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.disablescroll.min.js') }}"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<script>$(window).disablescroll();</script>
+
 {% endblock %}
 {% block title %}
 {{ short_title }}
 | Results
 {% endblock%}
-{% block content %}
-<header>
-	<nav class="navbar navbar-default main_header"
-		style="background-color: {{ main_color_scheme }};">
-		<svg id="svg2" class="main_logo left "
-			xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-			xmlns="http://www.w3.org/2000/svg" height="40.026" width="69.124"
-			version="1.1" xmlns:cc="http://creativecommons.org/ns#"
-			xmlns:dc="http://purl.org/dc/elements/1.1/"> <metadata
-				id="metadata7"> <rdf:RDF> <cc:Work rdf:about=""> <dc:format>image/svg+xml</dc:format> <dc:typerdf:resource ="http://purl.org/dc/dcmitype/StillImage"/> <dc:title /> </cc:Work> </rdf:RDF> </metadata> <g
-				id="g3770" stroke-miterlimit="4" stroke-dasharray="none"> <path
-				id="path2987"
-				d="m48.576,17.582c0,9.2489-7.5012,16.746-16.754,16.746-9.2532,0-16.754-7.4977-16.754-16.746,0-9.2489,7.5012-16.746,16.754-16.746,9.2532,0,16.754,7.4977,16.754,16.746z"
-				stroke-opacity="0.56084655000000005" class="parent" stroke="#000000"
-				stroke-width="0.04307067000000000" fill="#e6e6e6" /> <path
-				id="path2991-1"
-				d="m31.367,23.78c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z"
-				class="child" stroke="{{logo_color_scheme}}"
-				stroke-width="0.08252774" fill="{{logo_color_scheme}}" /> <path
-				id="path2991-7"
-				d="m42.899,13.341c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z"
-				class="child" stroke="{{logo_color_scheme}}"
-				stroke-width="0.08252774" fill="{{logo_color_scheme}}" /> <path
-				id="path2991-4"
-				d="m67.986,29.163c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z"
-				class="child" stroke="{{logo_color_scheme}}"
-				stroke-width="0.08252774" fill="{{logo_color_scheme}}" /> <path
-				id="path2991-0"
-				d="m10.903,34.545c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z"
-				class="child" stroke="{{logo_color_scheme}}"
-				stroke-width="0.08252774" fill="{{logo_color_scheme}}" /> <path
-				id="path3807" stroke-linejoin="miter" d="m25.95,23.82-20.47,10.76"
-				class="child" stroke="{{logo_color_scheme}}" stroke-linecap="butt"
-				stroke-width="1.07676673" fill="none" /> <path id="path2991-9-45"
-				d="m69.063,5.4793c0,2.992-2.4267,5.4175-5.42,5.4175-2.9934,0-5.42-2.4255-5.42-5.4175s2.4267-5.4175,5.42-5.4175c2.9934,0,5.42,2.4255,5.42,5.4175z"
-				class="child" stroke="{{logo_color_scheme}}"
-				stroke-width="0.08252774" fill="{{logo_color_scheme}}" /> <path
-				id="path3807-1" stroke-linejoin="miter"
-				d="m63.64,5.5195-25.848,7.5356" class="child"
-				stroke="{{logo_color_scheme}}" stroke-linecap="butt"
-				stroke-width="1.07676673" fill="none" /> <path id="path3807-1-5"
-				stroke-linejoin="miter" d="m62.56,29.2-24.77-16.15" class="child"
-				stroke="{{logo_color_scheme}}" stroke-linecap="butt"
-				stroke-width="1.07676673" fill="none" /> </g> </svg>
-		<div style="padding: 12px;">
-			<h3 style="color: {{ header_color_scheme }}">
-				<strong>{{ title }}</strong>
-			</h3>
-		</div>
-	</nav>
-	<nav class="navbar navbar-default">
+{% block nav %}
+	<nav class="navbar navbar-default " style="background-color:#f9f8f8;">
 		<div class="container-fluid">
-			{% if login_status == false %}
-			<div class="navbar-header tor_ibin_header">
-				<h5 class="nav-header" style="color: {{ main_color_scheme }}">
-					{{ short_title }}
-				</h5>
-				<button type="button" class="navbar-toggle right"
-					data-toggle="collapse" data-target="#myNavbar"
-					style="margin-left: 30px;">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-			</div>
-			<div id="myNavbar" class="collapse navbar-collapse"
-				style="padding-left: 0px;">
-				<ul class="nav navbar-nav ">
-					<li><a href="{{ path('home') }}">Home</a></li>
-					<li class="active"><a href="{{ path('search') }}">Search</a></li>
-					<li><a href="{{ path('download') }}">Downloads</a></li>
-					<li><a href="{{ path('about') }}">About</a></li>
-					<li><a href="{{ path('contact') }}">Contact</a></li>
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="{{ path('fos_user_security_login') }}">Login</a></li>
-				</ul>
-			</div>
-			{% elseif login_status == true %}
-			<div class="navbar-header tor_ibin_header">
-				<h5 class="nav-header" style="color: {{ main_color_scheme }}">
-					{{ short_title }}
-					Admin
-				</h5>
-				<button type="button" class="navbar-toggle right"
-					data-toggle="collapse" data-target="#myNavbar"
-					style="margin-left: 30px;">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-			</div>
-			<div id="myNavbar" class="collapse navbar-collapse"
-				style="padding-left: 0px;">
-				<ul class="nav navbar-nav ">
-					<li><a href="{{ path('admin_home') }}">Home</a></li>
-					<li class="active"><a href="{{ path('admin_search') }}">Search</a></li>
-					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
-					<li><a href="{{ path('about') }}">About</a></li>
-					<li><a href="{{ path('contact') }}">Contact</a></li>
-					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
-					<li><a href="{{ path('data_manager') }}">Data</a></li>
-					<li><a
-						href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
-					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="{{ path('user_logout') }}">Logout</a></li>
-				</ul>
-			</div>
-			{% endif %}
+				{% if login_status == false %}
+    			<div class="navbar-header tor_ibin_header" >
+    				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+    					<span class="icon-bar"></span> 
+    					<span class="icon-bar"></span> 
+    					<span class="icon-bar"></span>
+    				</button>
+    			</div>
+    			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 20px; font-family: Century Gothic, sans-serif">
+        				<ul class="nav navbar-nav ">
+        					<li><a href="{{ path('home') }}">Home</a></li>
+        					<li class="active"><a href="{{ path('search_results') }}">Search</a></li>
+        					<li><a href="{{ path('download') }}">Downloads</a></li>
+        					<li><a href="{{ path('about') }}">About</a></li>
+        					<li><a href="{{ path('faq') }}">FAQ</a></li>
+        					<li><a href="{{ path('contact') }}">Contact</a></li>
+        				</ul>
+        				<ul class="nav navbar-nav navbar-right">
+        					<li><a href="{{ path('user_register') }}">Register</a></li>
+        					<li style="margin-left: 0px;"><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+        				</ul>
+        		{% elseif login_status == true %}
+    				<div class="navbar-header tor_ibin_header" >
+						<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+        				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span>
+        				</button>
+        			</div>
+    	
+    				<ul class="nav navbar-nav ">
+    					<li><a href="{{ path('home') }}">Home</a></li>
+    					<li class="active"><a href="{{ path('search_results') }}">Search</a></li>
+    					<li><a href="{{ path('download') }}">Downloads</a></li>
+    					<li><a href="{{ path('about') }}">About</a></li>
+    					<li ><a href="{{ path('faq') }}">FAQ</a></li>
+    					<li><a href="{{ path('contact') }}">Contact</a></li>
+    					{% if admin_status == true %}
+    					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+    					<li><a href="{{ path('data_manager') }}">Data</a></li>
+    					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+    					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+    					{% endif %}
+    				</ul>
+    				<ul class="nav navbar-nav navbar-right">
+    					<li><a href="{{ path('fos_user_profile_show') }}">Profile</a></li>
+    					<li style="margin-left: 0px;"><a href="{{ path('user_logout') }}">Logout</a></li>
+    				</ul>
+    			{% endif %}
 
 		</div>
-		<div class="shadow"></div>
 	</nav>
-</header>
+	<div class="shadow"></div>
+{% endblock %}
 
-<main>
+{% block content %}
 
+<main id="main">
 
-<div id="data_request" class="hidden large">
-	{{ form_start(form) }}
-	<div id="download_request_form">
-		<div class="container">
-			<div class="hidden">
-				{{ form_widget(form.request)}}
-			</div>
-			<div class="row">
-				<h3 class="bold" style="color: {{ main_color_scheme }}">Submit
-					Email to Download Unpublished Data</h3>
-				<p style='margin-top: 20px;'>
-					<strong>An email will be sent to the address you provide
-						with a link to the network data.</strong>
-				</p>
-				<p style='margin-top: 20px;'>
-					<strong>Check your Junk/Spam folder if you don't see the
-						email in your inbox.</strong>
-				</p>
-				<p style='margin-top: 20px;'>
-					<strong>When the unpublished dataset is updated you will
-						be notified by email.</strong>
-				</p>
-				<p style='margin-top: 20px;'>
-					<strong>To download data without unpublished data repeat
-						search with the interaction status validated/verified unselected.</strong>
-				</p>
-			</div>
-			</br>
-			<div class="row" style='margin-top: 10px;'>
-				{{ form_widget(form.email) }}
-			</div>
-			<div class="row" style='margin-top: 30px;'>
-				<div class="col-lg-4" style="padding-left: 0px;">
-
-					<button id="down_data" type="submit" class="btn btn-default"
-						style="float: left; margin-right: 10px;">
-						<i class="glyphicon glyphicon-download-alt"></i> <span>Download
-							Dataset</span>
-					</button>
-				</div>
-				<div class="col-lg-8">
-					<div id="cancel_data_request" class="btn btn-default"
-						style="float: right;">
-						<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
-					</div>
-				</div>
-			</div>
-		</div>
+<div id="overlay_container" style="padding:20px 0px 20px 0px; width:96%">
+	<div id="overlay_network_no_ie" class="no_ie" style="display: none">
+    	<div class="row" style="display: inline-flex;">
+            <h3 style="color: {{ main_color_scheme }}; font-weight: bold;">Internet Explorer is not currently supoported.</br>  </br>Please use Chrome, FireFox or Safari.</h3>
+        </div>
 	</div>
-	{{ form_end(form) }}
-</div>
-{% if number_of_edges > 100 %}
-<div id="se-pre-con" class="se-pre-con">
+    <div id="overlay_network_data_request_logged_out" class="overlay_network" style="display:none;">
+    	<div id="logged_out_form" class="message_panel">
+        	<div class="message_inner_panel">
+    			<div class="row">
+    				<h3 class="bold" style="text-align: center; color: {{ main_color_scheme }}">Download Unpublished Data</h3>
+    				<p style='margin-top: 20px;'>
+    					<strong>Please register or login to download unpublished data.</strong>
+    				</p>
+    			</div>
+    			<div class="row" style='margin-top: 30px;padding: 0px 20px 0px 20px;margin-top:40px;'>
+    				<div style="padding-left: 0px; float: left;">
+    					<a class="btn btn-default" href="{{ path('user_register') }}">Register</a>
+    					<a class="btn btn-default" href="{{ path('fos_user_security_login') }}">Login</a>
+    				</div>
+    				<div style="float: right;">
+    					<div class="cancel_data_request btn btn-default" style="float: right;">
+    						<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
+    					</div>
+    				</div>
+    			</div>
+        	</div>
+        </div>
+    </div>
+    <div id="overlay_network_data_request_logged_in" style="display:none;" class="overlay_network">
+    	<div id="logged_in_form" class="message_panel">
+    		<div class="message_inner_panel">
+    			<div class="row">
+    				<h3 class="bold" style="text-align: center; color: {{ main_color_scheme }}">Download Unpublished Data</h3>
+    			</div>
+    			<div class="row" style="vertical-align: middle;">
+    				<div style="display:inline-flex;"><input id="recieve_updates_on_interaction_network" name="recieve_updates_on_interaction_network" type="checkbox"/><div style="margin-left: 10px; margin-top: 5px;">Recieve Updates on Interaction Network</div></div>
+    				<input id="request_type" class="hidden" value="" />
+    			</div>
+    			<div class="row" style="padding: 0px 20px 0px 20px;margin-top:40px;">
+    				<div style="padding-left: 0px; float: left;">
+    					<button id="download_data_link" class="btn btn-default" style="float: left; margin-right: 10px;"><i class="glyphicon glyphicon-download-alt"></i> Download Dataset</button>
+    				</div>
+    				<div style="float: right;">
+    					<div class="cancel_data_request btn btn-default" style="float: right;">
+    						<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
+    					</div>
+    				</div>
+    				<a id="data_download" href="" download="" style="display:none;">click</a>
+    			</div>
+        	</div>		
+    	</div>
+    </div>
+    <div id="overlay_network_cy_rest" class="overlay_network" style="display:none;">
+        <div class="message_panel">
+        	<div class="message_inner_panel">
+        		<div class="row">
+        			<h3 class="bold" style="text-align: center; color: {{ main_color_scheme }}">cyREST Not Active</h3>	
+        		</div>
+        		<div class="row">
+        			<p><strong>To export network to Cytoscape:</strong></p>
+        			<ul>
+        				<li><a href="http://www.cytoscape.org/">Cytoscape</a> must be installed and open</li>
+        				<li>The <a href="http://apps.cytoscape.org/apps/cyrest">cyREST</a> App must be instaled</li>
+        			</ul>
+        		</div>		
+        		<div class="row" style="padding: 0px 40px 0px 20px;">
+        			<div style="float: center;">
+        				<div class="cancel_cy_message btn btn-default" style="float: center;">
+        					<i class="glyphicon glyphicon-ban-circle"></i> <span>Close</span>
+        				</div>
+        			</div>
+        		</div>
+            </div>
+        </div>		
+    </div>
+    <div id="overlay_network_loader_image" class="overlay_network" style="visibility: hidden;">
+    	<div id="loader_image_panel" class="loader_image_panel">
+    		<div id="loader_image_inner_panel">
+        		<div class="row">
 
-    <div class="loader" style="text-align: center;">
-      <div class="row">
-        <h4>Network Data is Loading</h4> 
-        
-        
-      </div>
+               </div>
+               <div class="row">
+               `	<span class='unselectable' style='font-size:20px; font-family: "Ubuntu", sans-serif; color:#e2e2e3;'>Loading Network Data</span>
+               </div>
+        	</div>
+        </div>
+    </div>
+    <div id="direct_download_message" class="overlay_network" style="display:none;">
+		<div id="direct_download_panel">
+    		<div id="direct_download_inner_panel">
+            	<div class="container">
+            		<div class="row">
+            			<h3 class="bold" style="text-align: center; color: {{ main_color_scheme }}">Results Ready for Download</h3>
+            		</div>
+            		<div class="row">
+            			<p><strong>The results of your query are available for download below.</strong></p>
+            			<p style="display:none;"><strong>Your query returned too many interactions to be display in the portal. The results of your query are available for download below.</strong></p>
+            		</div>
+            		<div class="row">
+            		  <label for="download_format">Download Format:</label>
+                      <select class="form-control" id="direct_download_format">
+                        <option value='psi_mi_tab'>Interactions (PSI-MI Tab 2.7)</option>
+                        <option value='sif'>Interactions (SIF)</option>
+                        <option value='interactions_csv'>Interactions (CSV)</option>
+                        <option value='interactors_csv'>Interactors (CSV)</option>
+                        <option value='fasta'>Protein Sequences (FASTA)</option>
+                      </select>
+            		</div>	
+            		<div class="row">
+            			<div style="float: left;">
+            				<div id='file_download' class="btn btn-default" style="float: left;">
+            					<i class="glyphicon glyphicon glyphicon-save"></i> <span>Download</span>
+            				</div>
+            			</div>
+            			<div style="float: right;">
+            				<div class="cancel_many_interactions_message btn btn-default" style="float: left;">
+            					<i class="glyphicon glyphicon-ban-circle"></i> <span>Close</span>
+            				</div>
+            			</div>
+            		</div>
+            		
+            	</div>
+            </div>
+        </div>		
+    </div>
+    <div id="network_content">
+    <div class="row network_row">
+    		<div id="network_menu" class='network_menu'>
+    			<nav class="navbar navbar-default"
+    				style="min-height: 0px; border: 0px; z-index: 2;">
+    				<div class="navbar-header">
+    					<button type="button" class="navbar-toggle" data-toggle="collapse"
+    						data-target="#cy-nav">
+    						<span class="icon-bar"></span> 
+    						<span class="icon-bar"></span> 
+    						<span class="icon-bar"></span>
+    					</button>
+    				</div>
+    				<div class="container-fluid">
+    					<div id="cy-nav" class="collapse navbar-collapse"
+    						style="padding-left: 0px;">
+    						<ul id="cy_nav_menu_list" class="nav navbar-nav cy-nav">
+    							<li id="search_dropdown_toggle_li" class="dropdown network_dropdown"><a id="search_dropdown_toggle" href="#">Search <span class="caret"></span></a>
+    								<ul id="search_tab" class="dropdown-menu">
+    									<li style="padding: 20px 0px 10px 0px; min-width: 400px;" class="search_box">
+    										<div class="container">
+    											<ul class="nav nav-tabs" style="margin:0px; "href data-target="#productBreakdown">
+    												<li class="active"><a data-toggle="tab" data-target="#query" class="search_tabs" style="cursor:pointer;">Query</a></li>
+    												<li><a data-toggle="tab" data-target="#interactors" class="search_tabs" style="cursor:pointer;">Interactors</a></li>
+    	 										</ul>
+    											<div class="tab-content border" style="padding: 20px; width: 100%; border-top: 0px;">
+    												<div id="query" class="tab-pane fade in active search_box" style="padding-top: 10px;">
+    												    <div class="row">
+    														<a id="random_query" style="cursor:pointer;">Random</a>, Examples: <a id="example_query_1" style="cursor:pointer;">1</a>, <a id="example_query_2" style="cursor:pointer;">2</a>, <a id="example_query_3" style="cursor:pointer;">3</a>
+    													</div>
+    													<div class="row">
+    														<textarea id="search_identifier" style="min-height: 100px; width: 90%;"></textarea>
+    													</div>
+    													<div class="row" style='display: table; width: 100%;'>
+    														<div id="all_terms_valid" class="border hidden"
+    															style="white-space: nowrap; display: inline-flex; padding: 6px; margin-top: 10px; margin-bottom: 10px;">
+    															<i class="glyphicon glyphicon glyphicon-ok"
+    																style='margin: 2px 10px 0px 0px;'></i>
+    															<div style="margin: 2px 4px 0px 0px;">
+    																<span class="number_present_terms"></span> Present in {{ short_title }}
+    															</div>
+    														</div>
+    														<div class="search_terms_not_found_query hidden row"
+    															style="white-space: nowrap; display: inline-flex; padding: 0px 6px 6px 6px; margin: 0px;">
+    															<h4>
+    																Terms Not Present in {{ short_title }}
+    															</h4>
+    														</div>
+    														<div class="row" style="margin: 0px; padding: 0px;">
+    															<div id="invalid_terms_array" data=""
+    																class="border hidden"
+    																style="padding: 10px; margin-top: 10px; max-height: 100px; overflow-x: hidden; overflow-y: scroll;">
+    															</div>
+    															<div id="remove_invalid_terms"
+    																class="invalid_term btn btn-default hidden"
+    																style="margin-top: 10px; margin-bottom: 10px;">
+    																<i class="glyphicon glyphicon glyphicon-remove" style="margin: 2px 10px 0px 0px;"></i>Remove Terms
+    															</div>
+    														</div>
+                                                             <div class="row" style="border-top:1px solid #cccccc; padding-top:10px;">
+                                                             	<input id="filter_parameter_query_query" type="checkbox" name="query_query" value="query_query" style="float: left;">
+                        											<div style="margin-left: 25px; margin-top: 5px;">
+            														Query-Query
+            														<i id='query_query_info' class='glyphicon glyphicon glyphicon-info-sign' style='cursor: pointer; float:right; color:#8c8c8c; margin: 1px 0px 0px 10px;'></i>
+                    											</div>
+                    										</div>
+                    										<div class="row" style="padding-top:10px;">
+                                                             	<input id="filter_parameter_query_interactor" type="checkbox" name="query_interactor" value="query_interactor" style="float: left;">
+                        											<div style="margin-left: 25px; margin-top: 5px;">
+            														Query-Interactor
+            														<i id='query_interactor_info' class='glyphicon glyphicon glyphicon-info-sign' style='cursor: pointer; float:right; color:#8c8c8c; margin: 1px 0px 0px 10px;'>
+            														</i>
+                    											</div>
+                    										</div>
+    														<div class="search_terms_not_found hidden row"
+    															style="white-space: nowrap; padding: 6px 6px 0 6px; margin: 10px 0px 0px 0px;">
+    															<p style="white-space: nowrap; margin: 0px;">
+    																Number of Terms Present in
+    																{{ short_title }}
+    																: <span class="number_present_terms"></span>
+    															</p>
+    															<p style="white-space: nowrap; margin: 5px 0;">
+    																Number of Terms Not Present in
+    																{{ short_title }}
+    																: <span class="number_not_present_terms"></span>
+    															</p>
+    														</div>
+    													</div>
+    												    <div class="row" style="border-top:1px solid #cccccc; padding-top:10px;">
+                                                         	<input id="return_data_file" type="checkbox" name="return_data_file" value="return_data_file" style="float: left;">
+                    										<div style="margin-left: 25px; margin-top: 5px;">
+        														Return Data File
+        														<i id="data_file_query_info" class='glyphicon glyphicon glyphicon-info-sign' style='cursor: pointer; float:right; color:#8c8c8c; margin: 1px 0px 0px 10px;'>
+        														</i>
+                											</div>
+                										</div>
+    													<div class="row" style="border-top:1px solid #cccccc;">
+    														<button id="submit_query" class="btn btn-default right" style="margin-right:10%; margin-top:10px;">Update</button>
+    													</div>
+    												</div>
+    												<div id="interactors" class="tab-pane fade search_box">
+    													<textarea id="interactor_list" style="min-height: 100px; width: 90%;"></textarea>
+    													<div class="row">
+    														<div id="all_terms_valid_interactor" class="border hidden" style="white-space: nowrap; display: inline-flex; padding: 6px; margin-top: 10px;">
+    															<i class="glyphicon glyphicon glyphicon-ok" style='margin: 2px 10px 0px 0px;'></i>
+    															<div style="margin: 2px 4px 0px 0px;"> All <span class="number_present_terms_interactor"></span> Terms Present in {{ short_title }}
+    															</div>
+    														</div>
+    														<div class="search_terms_not_found_interactor hidden row" style="white-space: nowrap; display: inline-flex; padding: 0px 6px 6px 6px; margin: 0px;">
+    															<h4>Terms Not Present in {{ short_title }}</h4>
+    														</div>
+    														<div class="row" style="margin: 0px; padding: 0px;">
+    															<div id="invalid_terms_array_interactor" data="" class="border hidden" style="padding: 10px; margin-top: 10px; max-height: 100px; overflow-x: hidden; overflow-y: scroll;">
+    															</div>
+    															<div id="remove_invalid_terms_interactor" class="invalid_term btn btn-default hidden" style="margin-top: 10px;">
+    																<i class="glyphicon glyphicon glyphicon-remove" style="margin: 2px 10px 0px 0px;"></i>Remove Terms
+    															</div>
+    														</div>
+    														<div class="search_terms_not_found_interactor hidden row" style="white-space: nowrap; padding: 6px 6px 0 6px; margin: 10px 0px 0px 0px;">
+    															<p style="white-space: nowrap; margin: 0px;">
+    																Number of Terms Present in {{ short_title }}
+    																: <span class="number_present_terms_interactor"></span>
+    															</p>
+    															<p style="white-space: nowrap; margin: 5px 0;">
+    																Number of Terms Not Present in
+    																{{ short_title }}
+    																: <span class="number_not_present_terms_interactor"></span>
+    															</p>
+    														</div>
+    													</div>
+    													<div class="row" style="border-top:1px solid #cccccc; padding-top:10px;">
+                											<input type="checkbox" id="return_data_file_interactor" style="float: left; margin-top: 5px;">
+                    											<div style="margin-left: 25px; margin-top: 5px;">
+        														Return Data File
+        														<i id='data_file_interactor_info' class='glyphicon glyphicon glyphicon-info-sign' style='cursor: pointer; float:right; color:#8c8c8c; margin: 1px 0px 0px 10px;'>
+        														</i>
+                											</div>
+                										</div>
+    													<div class="row" style="border-top:1px solid #cccccc;">
+    														<button id="submit_interactors" class="btn btn-default right" style="margin-right:10%; margin-top:10px;">Update</button>
+    													</div>
+    												</div>
+    											</div>
+    									</li>
+    								</ul>
+    							</li>
+    							<li id="filter_dropdown_toggle_li" class="dropdown network_dropdown"><a id="filter_dropdown_toggle" href="#">Filter <span class="caret"></span></a>
+    								<ul class="dropdown-menu">
+    									<li style="padding: 20px 0px 10px 0px;  width: 600px;" class="no_hover">
+        									<div class="container" style="width:95%;">
+        										<div class="row">
+                									<div class="col-sm-6">
+                										<div class="row">
+                											<h5 style='float:left;'>Minimum Score</h5>
+                											<i id='score_info' class='glyphicon glyphicon glyphicon-info-sign' style='cursor: pointer; float:right; color:#8c8c8c; margin: 9px 0px 10px 0px;'>
+                    										</i>
+                										</div>
+                										<div class="row" style="margin-bottom:20px;">
+                											<div id="min_interaction_score">
+                												<div id="min_interaction_score_handle"
+                													class="ui-slider-handle"></div>
+                											</div>
+                										</div>
+                										<div class="row" style="border-top:1px solid #cccccc; padding-top:10px;">
+            												<h5 style='float:left;'>Interaction Status</h5>
+            												<i id='interaction_status_info' class='glyphicon glyphicon glyphicon-info-sign' style='cursor: pointer; float:right; color:#8c8c8c;  margin: 9px 0px 10px 0px;'>
+                    										</i>
+                										</div>
+                										<div class="row">
+                											{% for category in interaction_categories_array %}
+                												<div style="display:inline-flex;">
+                    												<input type="checkbox" id="{{ category['category_name']}}_checkbox" class="checkbox"
+                    												name="{{ category['category_name'] }}_checkbox" data="{{ category['category_name'] }}" value="checkbox_{{ category['category_name'] }}"
+                    												{% if query_parameters.CategoryArray[category['category_name']][0] == 'true' %}
+                    												checked {% endif %}>
+                    												<div style="margin-left: 10px; margin-top: 5px;">
+                    												    {{ category['category_name']  }}
+                    												</div>
+                												</div>
+                												<br> 
+                											{% endfor %}	
+                										</div>
+                										<div class="row" style="border-top:1px solid #cccccc; padding-top:10px;">
+                											<input type="checkbox" id="tissue_expression_node_size" style="float: left; margin-top: 5px;">
+                    											<div style="margin-left: 25px; margin-top: 5px;">
+                    											Show tissue expression
+                    											<i id='tissue_expression_info' class='glyphicon glyphicon glyphicon-info-sign' style='cursor: pointer; float:right; color:#8c8c8c;  margin: 0px 0px 10px 0px;'>
+                    											</i>
+                											</div>
+                										</div>
+                										<div class="row">               										
+                											<input type="checkbox" id="tissue_specificity_node_color" style="float: left; margin-top: 5px;"><div style="margin-left: 25px; margin-top: 5px;">Reflect tissue specificity<i id='tissue_specificity_info' class='glyphicon glyphicon glyphicon-info-sign' style='cursor: pointer; float:right; color:#8c8c8c; margin: 1px 0px 0px 10px;'></i></div>
+                										</div>
+                									</div>	
+        											<div class="col-sm-6">
+        											{% for array in annotation_form_array %} 					
+                                					    <div class="row">
+                            								<h4 style='float:left;'><label>{{ array[0] }}</label></h4>
+                            								<i id='tissue_expression_filter_info' class='glyphicon glyphicon glyphicon-info-sign' style='cursor: pointer; float:right; color:#8c8c8c;  margin: 2px 0px 10px 0px;'>
+                    										</i>
+                            							</div>
+                            							<div class="border" style="height: 300px; overflow-y: scroll;">
+                                  						    {% for name, field in array[2] %}
+                        						               <div class="row">
+                            						               	<div style='display: inline-flex; padding-left: 10px;'>
+                        												<input type="checkbox" id="{{ field }}_checkbox" class="checkbox annotation_checkbox" name="{{ field }}_checkbox" data="{{ field }}" value="checkbox_{{ field }}" {% if query_parameters.AnnotationArray[field] == 'true' %}checked {% endif %}>
+                        												<div style="margin-left: 10px; margin-top: 5px;">{{ name }}</div>
+                													</div>
+            													</div>
+                                    						{% endfor %}
+                                					    </div>
+                                					  {% endfor %}
+        											</div>
+        										</div>
+    											<div class="row" style="border-top:1px solid #cccccc;">
+    												<button id="filter_update" class="btn btn-default right" style="margin-right:10%; margin-top:10px;">Update</button>
+    											</div>
+    										</div>
+    									</li>
+    								</ul>
+    							</li>
+    							<li id="layout_dropdown_toggle_li" class="dropdown network_dropdown"><a id="layout_dropdown_toggle" href="#">Layout <span class="caret"></span></a>
+    								<ul class="dropdown-menu">
+    									<li data="cola" class="menu_item" style="overflow: hidden;"><a data="cola" class='layout link close_dropdown' style="padding: 0px; padding-left: 7px; overflow: hidden;"><div data="cola" style="display:inline-block; float:left;"><div data="cola" style="padding: 3px 5px;float:left;">Cola</div></div><img data="cola" height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle; float:right;" src="{{ url }}assets/images/cola_layout.png"/></a></li>
+        								<li data="cose" class="menu_item" style="overflow: hidden;"><a data="cose" class='layout link close_dropdown' style="padding: 0px; padding-left: 7px; overflow: hidden;"><div data="cose" style="display:inline-block; float:left;"><div data="cose" style="padding: 3px 5px;float:left;">Cose</div></div><img data="cose" height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle; float:right;" src="{{ url }}assets/images/cose_layout.png"/></a></li>
+        								<li data="concentric" class="menu_item" style="overflow: hidden;"><a data="concentric" class='layout link close_dropdown' style="padding: 0px; padding-left: 7px; overflow: hidden;"><div data="concentric" style="display:inline-block; float:left;"><div data="concentric" style="padding: 3px 5px;float:left;">Concentric</div></div><img data="concentric" height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle; float:right;" src="{{ url }}assets/images/concentric_layout.png"/></a></li>
+        								<li data="circle" class="menu_item" style="overflow: hidden;"><a data="circle" class='layout link close_dropdown' style="padding: 0px; padding-left: 7px; overflow: hidden;"><div data="circle" style="display:inline-block; float:left;"><div data="circle" style="padding: 3px 5px;float:left;">Circle</div></div><img data="circle" height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle; float:right;" src="{{ url }}assets/images/circle_layout.png"/></a></li>
+        								<li data="grid" class="menu_item" style="overflow: hidden;"><a data="grid" class='layout link close_dropdown' style="padding: 0px; padding-left: 7px; overflow: hidden;"><div data="grid" style="display:inline-block; float:left;"><div data="grid" style="padding: 3px 5px;float:left;">Grid</div></div><img data="grid" height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle; float:right;" src="{{ url }}assets/images/grid_layout.png"/></a></li>
+    								</ul>
+    							</li>
+    							<li id="download_dropdown_toggle_li" class="dropdown network_dropdown"><a id="download_dropdown_toggle" href="#">Downloads <span class="caret"></span></a>
+    								<div id="unpublished_dataset" class="hidden"></div>
+    								<ul class="dropdown-menu">
+    									<h5 style="margin: 7px 5px 0px 7px; border-bottom:1px solid #ccc;"><div style="display:inline-flex"><div style="padding: 3px 5px; margin-bottom:5px;">Image</div></div><img height="20" width="30" style="margin: 0px 10px 10px 0px; vertical-align:middle; float:right;" src="{{ url }}assets/images/image_download.png"/></h5>
+    									<li><a id='png' class="png link" download="network.png" style="padding-left: 10px;">Image (PNG)</a></li>
+    									<h5 style="margin: 7px 5px 0px 7px; border-bottom:1px solid #ccc;"><div style="display:inline-flex"><div style="padding: 3px 5px; margin-bottom:5px;">Network Data</div></div><img height="20" width="30" style="margin: 0px 10px 0px 0px; vertical-align:middle; float:right;" src="{{ url }}assets/images/file_download.png"/></h5>							
+    									<li><a id="psi_mitab_interaction" class="data_request_links link close_dropdown" data="psi_mi_tab" style="padding-left: 10px;">Interactions (PSI-MI Tab 2.7)</a></li>
+    									<li><a id="sif_interaction" class="data_request_links link close_dropdown" data="sif" style="padding-left: 10px;">Interactions (SIF)</a></li>
+    									<li><a id="csv_interaction" class="data_request_links link close_dropdown" data="interactions_csv" style="padding-left: 10px;">Interactions (CSV)</a></li>
+    									<li><a id="csv_interactor" class="data_request_links link close_dropdown" data="interactors_csv" style="padding-left: 10px;">Interactors (CSV)</a></li>
+    									<li><a id="fasta" class="data_request_links link close_dropdown" data="fasta" style="padding-left: 10px;">Protein Sequences (FASTA)</a></li>
+    								</ul>
+    							</li>
+    							<li id="external_links_dropdown_toggle_li" class="dropdown network_dropdown"><a id="external_links_dropdown_toggle" href="#">External Links <span class="caret"></span></a>
+    								<ul class="dropdown-menu">
+    							        <li id="gprofiler_link_li" class="close_dropdown menu_item"></li>
+            							<li id="reactome_link_li" class="close_dropdown menu_item"></li>
+            							<li id="gene_mania_link_li" class="close_dropdown menu_item"></li>
+            							<li id="pathway_commons_link_li" class="close_dropdown menu_item"></li>
+            							<li id="david_link_li" class="close_dropdown menu_item"></li>	
+            							<li id="string_link_li" class="close_dropdown menu_item"></li>
+            							<li id="cbioportal_link_li" class="close_dropdown menu_item"></li>
+            							<li id="complex_portal_link_li" class="close_dropdown menu_item"></li>	
+            							<li id="intact_link_li" class="close_dropdown menu_item"></li>						
+    								</ul></li>	
+    							</ul>
+    						<ul id="cy_nav_menu_list_legend" class="nav navbar-nav cy-nav-right navbar-right ">
+    						
+    								<li id="summary_dropdown_toggle_li" class="dropdown network_dropdown"><a id="summary_dropdown_toggle"  href="#">Summary <span class="caret"></span></a>
+        								<ul id="search_tab" class="dropdown-menu">
+        									<li style="padding: 20px 0px 10px 0px;  min-width: 400px;" class="search_box">
+            									<div class="container">
+            											<div id="summary" >
+                                            				<div class="row">
+                                            					<h4 style="color: {{ main_color_scheme }}; font-weight: bold;">Search Query</h4>
+                                            				</div>
+                                            				<div class="row">
+                                            					<strong>Proteins Found: </strong>
+                                            					<div id="proteins_found_summary" style="border:1px solid #cccccc; height:80px; overflow: auto;"></div>
+                                            				</div>
+                                            				<div class="row">
+                                            					<strong>Proteins Not Found: </strong>
+                                            					<div id="proteins_not_found_summary" style="border:1px solid #cccccc; height:80px; overflow: auto;"></div>
+                                            				</div>
+                                            				<div class="row">
+                                            					<strong>Proteins Filtered Out: </strong>
+                                            					<div id="proteins_filtered_out_summary" style="border:1px solid #cccccc; height:80px; overflow: auto;"></div>
+                                            				</div>
+                                            				<div class="row">
+                                            					<h4 style="color: {{ main_color_scheme }}; font-weight: bold;">Statistics</h4>
+                                            				</div>
+                                            				<div class="row">
+                                            					<strong>Number of Proteins: </strong>
+                                            					<div id="node_number"  style="display: inline"></div>
+                                            				</div>
+                                            				<div class="row">
+                                            					<strong>Number of Interactions: </strong>
+                                            					<div id="edge_number"  style="display: inline"></div>
+                                            				</div>
+                                            				<div class="row">
+                                            					<strong>Average Node Degree: </strong>
+                                            					<div id="average_node_degree"  style="display: inline"></div>
+                                            				</div>
+                                            			<br class="clear" />
+                                            		</div>
+            									</div>
+        									</li>
+        								</ul>
+        							</li>
+    								<li id="legend_dropdown_toggle_li" class="dropdown open"><a href="#">Legend <span class="caret"></span></a>
+    								<ul class="dropdown-menu" style="padding: 10px; width:200px;">
+    									<li >        						
+    									
+    									<div style="display: table">
+    									<div style="display: table-row;">
+            								<div style="display: table-cell;">
+            									<strong>Query:</strong>
+            								</div>
+            								<div style="display: table-cell;">
+            									<div
+            										style="width: 13px; height: 13px; border-radius: 50%; margin: 0px 0px 0px 6px; background: #cc0000"></div>
+            								</div>
+            							</div>
+            							<div style="display: table-row;">
+            								<div style="display: table-cell;">
+            									<strong>Interactor:</strong>
+            								</div>
+            								<div style="display: table-cell;">
+            									<div
+            										style="width: 13px; height: 13px; border-radius: 50%; margin: 2px 0px 0px 6px; background: #3c78d8"></div>
+            								</div>
+            							</div>
+            							
+            							
+            							{% for interaction_category in interaction_categories_array %}
+                							<div style="display: table-row;">
+                								<div style="display: table-cell;">
+                									<strong>{{ interaction_category['category_name'] }}:</strong>
+                								</div>
+                								<div style="display: table-cell;">
+                									<div
+                										style="width: 60px; height: 6px; margin: 0px 0px 2px 6px; background: {{ interaction_category['color_scheme'] }}"></div>
+                								</div>
+                							</div>
+            							{% endfor %}
+                						<div style="display: table-row;">
+            								<div style="display: table-cell;">
+            									<strong>HuRI and Literature:</strong>
+            								</div>
+            								<div style="display: table-cell;">
+            									<div
+            										style="width: 60px; height: 6px; margin: 0px 0px 2px 6px; background: #ff55dd"></div>
+            								</div>
+            							</div>
+            						</div></li>
+    								
+    								</ul>
+    							</li>
+    						</ul>
+    					</div>
+    				</div>
+    			</nav>
+    		</div>
 
     </div>
-
-
-</div>
-{% endif %}
-
-
-<div class="row network_row" style="background-color: #F0F0F0;">
-	<div class="col-sm-12">
-		<div id='summary_menu' class='summary_menu_min'
-			style="padding: 8px; background-color: #F8F8F8;">
-
-			<h4
-				style="color: {{ main_color_scheme }}; font-weight: bold; float: left;"">Summary</h4>
-
-			<strong><a id="minimize" class="link hidden"
-				style="float: right;">[ - ]</a></strong> <strong><a id="maximize"
-				class="link" style="float: right;">[ + ]</a></strong>
-
-		</div>
-	</div>
-
-</div>
-
-<div class="row network_row " style="background-color: #F0F0F0;">
-	<div class="col-sm-12">
-		<div id="summary" class="hidden">
-		
-			<div class="col-lg-2">
-				<div class="row">
-					<h4 style="color: {{ main_color_scheme }}; font-weight: bold;">Search
-						Query</h4>
-				</div>
-				<div class="row">
-					<strong>Query: </strong>
-					{{ query_parameters.SearchTermSummary }}
-				</div>
-				<div id="query_parameter" class="hidden">{{ search_query }}</div>
-			</div>
-			<div class="col-lg-5" style="padding-right: 0px;">
-				<div class="row">
-					<h4 style="color: {{ main_color_scheme }}; font-weight: bold;">Parameters</h4>
-				</div>
-				<div class="row">
-					<div class="col-lg-2" style="padding-left: 0px;">						
-						<div class="row">
-    						<strong>Filter: </strong>
-    						{{ query_parameters.FilterParameter }}
-						</div>
-						<div id="filter_parameter" class="hidden">{{ query_parameters.FilterParameter }}</div>
-					</div>
-					<div class="col-lg-3" style="padding-left: 0px;">
-						<div class="row">
-    						<strong>Minimum Score: </strong>
-    						<div id="score_parameter" style="display: inline">{{ query_parameters.ScoreParameter }}</div>
-						</div>
-					</div>
-					<div class="col-lg-6" style="padding-left: 0px;">
-						<div class="row">
-						<strong>Interaction Status:</strong>
-
-						<div id="interaction_status"  style="display: inline">{{ query_parameters.PublicationStatusSummary }}</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
-			<div class="col-lg-4">
-				<div class="row">
-					<h4 style="color: {{ main_color_scheme }}; font-weight: bold;">Statistics</h4>
-				</div>
-				<div class="row">
-    				<div class="col-lg-4" style="padding-left: 0px;">
-
-    					<strong>Number of Proteins: </strong>
-
-    					<div id="node_number"  style="display: inline">{{ number_of_nodes }}</div>
-
-    				</div>
-    				<div class="col-lg-6" style="padding-left: 0px;">
-
-    					<strong>Number of Interactions: </strong>
-
-    					<div id="edge_number"  style="display: inline">{{ number_of_edges }}</div>
-
-    				</div>
-				</div>
-			</div>
-			<br class="clear" />
-		</div>
-	</div>
-</div>
-<div class="shadow"></div>
-<div class="row network_row"
-	style="background-color: #E9E9E9; padding-top: 20px;">
-	<div class="col-sm-12">
-		<div class='network_menu'>
-			<nav class="navbar navbar-default"
-				style="min-height: 0px; border: 0px;">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse"
-						data-target="#cy-nav">
-						<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-							class="icon-bar"></span>
-					</button>
-				</div>
-				<div class="container-fluid">
-
-
-					<div id="cy-nav" class="collapse navbar-collapse"
-						style="padding-left: 0px;">
-						<ul class="nav navbar-nav cy-nav">
-							<li class="dropdown hover_li"><a
-								class="dropdown-toggle" data-toggle="dropdown" href="#">Download
-									Image <span class="caret"></span>
-							</a>
-								<ul class="dropdown-menu">
-									<li><a id='png' class="png link" download>PNG</a></li>
-								</ul></li>
-							<li class="dropdown"><a class="dropdown-toggle"
-								data-toggle="dropdown" href="#">Download Network Data <span
-									class="caret"></span></a>
-								<div id="unpublished_dataset" class="hidden">{{ unpublished_dataset }}</div>
-								<ul class="dropdown-menu">								
-									{% if unpublished_dataset == true %}
-									<li><a id="psi_mitab"
-										data="psimi_tab:{{ search_query }}"
-										class="data_request_links link">PSI-MI Tab 2.7</a></li>
-									<li><a id="interaction_csv"
-										data="interaction_csv:{{ search_query }}"
-										class="data_request_links link">CSV Interactions</a></li>
-									{% else %}
-									<li><a id="psi_mitab"
-										href="{{path('psi_mitab', {'search_term': search_query })}}"
-										class="link">PSI-MI Tab 2.7</a></li>
-									<li><a id="interaction_csv"
-										href="{{path('interaction_csv', {'search_term': search_query })}}"
-										class="link">CSV Interactions</a></li>
-									{% endif %}
-									<li><a id="interactor_csv"
-										href="{{path('interactor_csv', {'search_term': search_query })}}"
-										class="link">CSV Interactors</a></li>
-									<li><a id="multi_fasta"
-										href="{{path('multi_fasta', {'search_term': search_query })}}"
-										class="link">Protein Sequences (FASTA)</a></li>
-								</ul></li>
-							<li class="dropdown"><a class="dropdown-toggle"
-								data-toggle="dropdown" href="#">Change Layout <span
-									class="caret"></span></a>
-								<ul class="dropdown-menu">
-									<li><a id="cola" class='layout link'>Cola</a></li>
-									<li><a id="cose" class='layout link'>Cose</a></li>
-									<li><a id="concentric" class='layout link'>Concentric</a></li>
-									<li><a id="circle" class='layout link'>Circle</a></li>
-									<li><a id="grid" class='layout link'>Grid</a></li>
-								</ul>
-							</li>
-							<li class="dropdown"><a class="dropdown-toggle"
-								data-toggle="dropdown" href="#">Filter <span class="caret"></span></a>
-								<ul class="dropdown-menu">
-									<li style="padding: 20px;" class="no_hover">
-										<div class="row">
-											<div id="min_interaction_score">
-												<div id="min_interaction_score_handle"
-													class="ui-slider-handle"></div>
-											</div>
-										</div>
-										<div class="row">
-										
-											<input type="checkbox" id="published_checkbox"
-												name="published_checkbox" value="checkbox_published"
-												{% if query_parameters.PublishedParameter == 'true' %}
-												checked {% endif %}>Published<br> <input
-												type="checkbox" id="validated_checkbox"
-												name="validated_checkbox" value="checkbox_validated"
-												{% if query_parameters.ValidatedParameter == 'true'  %}
-												checked {% endif %}>Validated<br> <input
-												type="checkbox" id="verified_checkbox"
-												name="verified_checkbox" value="checkbox_verified"
-												{% if query_parameters.VerifiedParameter == 'true'  %}
-												checked {% endif %}>Verified<br> <input
-												type="checkbox" id="literature_checkbox"
-												name="literature_checkbox" value="checkbox_literature"
-												{% if query_parameters.LiteratureParameter == 'true'  %}
-												checked {% endif %}>Literature<br>
-										</div>
-									</li>
-								</ul>
-							</li>
-									
-								</ul>
-								<ul class="nav navbar-nav cy-nav-right navbar-right ">
-								<li class="dropdown"><a class="dropdown-toggle"
-								data-toggle="dropdown" href="#">Legend<span class="caret"></span></a>
-								<ul class="dropdown-menu" style="padding: 10px;">
-									<li >        						
-									
-									<div style="display: table">
-									<div style="display: table-row;">
-        								<div style="display: table-cell;">
-        									<strong>Query:</strong>
-        								</div>
-        								<div style="display: table-cell;">
-        									<div
-        										style="width: 13px; height: 13px; border-radius: 50%; margin: 0px 0px 0px 6px; background: #cc0000"></div>
-        								</div>
-        							</div>
-        							<div style="display: table-row;">
-        								<div style="display: table-cell;">
-        									<strong>Interactor:</strong>
-        								</div>
-        								<div style="display: table-cell;">
-        									<div
-        										style="width: 13px; height: 13px; border-radius: 50%; margin: 2px 0px 0px 6px; background: #3c78d8"></div>
-        								</div>
-        							</div>
-        							<div style="display: table-row;">
-        								<div style="display: table-cell;">
-        									<strong>Published:</strong>
-        								</div>
-        								<div style="display: table-cell;">
-        									<div
-        										style="width: 40px; height: 6px; margin: 0px 0px 2px 6px; background: #6aa84f"></div>
-        								</div>
-        							</div>
-        							<div style="display: table-row;">
-        								<div style="display: table-cell;">
-        									<strong>Literature:</strong>
-        								</div>
-        								<div style="display: table-cell;">
-        									<div
-        										style="width: 40px; height: 6px; margin: 0px 0px 2px 6px; background: #f1c232"></div>
-        								</div>
-        							</div>
-        							<div style="display: table-row;">
-        								<div style="display: table-cell;">
-        									<strong>Validated:</strong>
-        								</div>
-        								<div style="display: table-cell;">
-        									<div
-        										style="width: 40px; height: 6px; margin: 0px 0px 2px 6px; background: #e69138"></div>
-        								</div>
-        							</div>
-        							<div style="display: table-row;">
-        								<div style="display: table-cell;">
-        									<strong>Verified:</strong>
-        								</div>
-        								<div style="display: table-cell;">
-        									<div
-        										style="width: 40px; height: 6px; margin: 0px 0px 2px 6px; background: #a61c00"></div>
-        								</div>
-        							</div>
-        						</div></li>
-								
-								</ul>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</nav>
-		</div>
-	</div>
-</div>
-<div class="row network_row" style="background-color: #E9E9E9;">
-	<div class="col-sm-12">
-
-		<div id='cy'></div>
-	</div>
+        <div class="row network_row" >
+        		<div>
+        			<div id='cy'><div id="no_interactions_found" class="hidden" style="text-align: center; z-index:1000;"><img id="huri_img" width=314 height=188 src="{{ url }}assets/images/huri_image2.png" style="display:none;"/></div></div>			
+        			<button id="export_cy" class="btn btn-default hidden" style="position: absolute; left: 40px; bottom: 40px; z-index: 2"><img src="{{ url }}assets/images/cy3logoOrange.svg" width="34px" height="38px"/></button> 
+        			<button id="toggle_hover_highlighting_cy" class="btn btn-default hidden" style="position: absolute; left: 40px; bottom: 100px; z-index: 2"><img id="toggle_hover_image" src="{{ url }}assets/images/hover_highlight3.png" width="34px" height="38px"/></button> 
+        		</div>
+        		<div id='no_cy' class="hidden" >
+        			<div style="margin-top: 40px; text-align: center;"><h4>Interaction Network too Large to Display</h4></div>
+        		
+        		</div>
+        	</div>
+    </div>
 </div>
 <div class="shadow"></div>
 
-
+<div id="overlay_container_network_table">
+<div id="overlay_network_table" style="display: none">
+</div>
 <div class="row result_row"
-	style="background-color: #F0F0F0; margin-bottom: 0px; overflow: auto;">
+	style="background-color: #f0f0f1; margin-bottom: 0px; overflow: auto;">
 	<div class="tab-content" style="padding-top: 0;">
-		<div id="network" class="border tab-pane fade in active"
+			<div id="network" class="border tab-pane fade in active"
 			style="padding-top: 0;">
-			<div class="row "
-				style="border-bottom: 1px solid #ccc; background-color: #F8F8F8; margin: 0px;">
-				<div class="col-sm-12" style="padding: 0px;">
-					<ul class="nav nav-pills list-inline" style="margin: 0px;">
-						<li class="active"><a data-toggle="pill" href="#interactions"><strong>Interactions</strong></a></li>
-						<li><a data-toggle="pill" href="#go_enrichment"><strong>GO
-									Enrichment</strong></a></li>
-									
-						<li><a data-toggle="pill" href="#pathways"><strong>Pathway Enrichment</strong></a></li>			
+		<div class="row " style="border-bottom: 1px solid #ccc; background-color: #F8F8F8; margin: 0px;">
+				<div id="target" class="col-sm-12" style="padding: 0px;">
 
-					</ul>
-				</div>
+    				<div class="navbar-header" style="display: table; width: 100%;">
+    					<div style="text-align: left; display: table-cell; vertical-align: middle;">
+    						<h4 id="selected_network_table_tab" style="color: {{ main_color_scheme }}; font-weight: bold; margin-left: 16px; ">Interactions</h4>
+    					</div>
+    					<div style="text-align: right; display: table-cell;">
+        					<button  id="collapse_menu" type="button" class="info-navbar-toggle" data-toggle="collapse"
+        						data-target="#interaction_info">
+        						<span class="icon-bar"></span> 
+        						<span class="icon-bar"></span> 
+        						<span class="icon-bar"></span>
+        					</button>
+    					</div>
+    				</div>
+    				<div class="container-fluid" style="padding: 0px;">
+    					<div id="interaction_info" class="collapse navbar-collapse" style="padding: 0px;">
+        					<ul id="network_table_tabs" class="nav navbar-nav" style="margin: 0px; background: #ffffff; border-top: 1px solid #ccc;">
+        						<li id="interactions_network_table_tab_list" class="active network_table_tab_list"><a id="interactions_tab" class="network_table_tab" data-toggle="tab" href="#interactions"><strong>Interactions</strong></a></li>
+        						<li class="network_table_tab_list"><a id="interactor_tab" class="network_table_tab" data-toggle="tab" href="#interactor_list_table"><strong>Interactors</strong></a></li>	
+        						<li class="network_table_tab_list"><a class="network_table_tab" data-toggle="tab" href="#go_enrichment"><strong>GO Enrichment</strong></a></li>	
+        						<li class="network_table_tab_list"><a class="network_table_tab" data-toggle="tab" href="#pathways"><strong>Pathway Enrichment</strong></a></li>			
+        						<li class="network_table_tab_list"><a class="network_table_tab" data-toggle="tab" href="#complexes"><strong>Complex Enrichment</strong></a></li>
+        						{% for annotation_type in annotation_types %}
+        							{% if annotation_type.ShowInTable == 1 %}
+            							<li class="network_table_tab_list"><a class="network_table_tab" data-toggle="tab" href="#{{ annotation_type.Type }}"><strong>{{ annotation_type.Label }}</strong></a></li>
+        						    {% endif %}
+        						{% endfor %}
+        					</ul>
+    					</div>
+    				</div>
+    			</div>
 			</div>
 			<div class="tab-content" style="padding: 0px; width: 100%">
-				<div id="interactions" class="tab-pane fade in active"
-					style="padding-top: 0;">
+				<div id="interactions" class="network_table_tab_pane tab-pane fade in active" style="padding-top: 0;">
 					<div class="row "
 						style="border-bottom: 1px solid #ccc; background-color: #F8F8F8; margin: 0px; padding: 6px;">
 						<div class="col-sm-4">
@@ -519,191 +649,86 @@
 						</div>
 					</div>
 					<div class="container">
+					<table id="search_result_table" class="footable table"
+                    	data-filter="#filter" data-filtering="true" data-paging="true"
+                    	data-filter-minimum="3" data-limit-navigation="5" style="max-width: 700px;">
+                    	<thead>
+                    		<tr>
+                    			<th><nobr>Interactor A</nobr></th>
+                    			<th><nobr>Interactor B</nobr></th>
+                    			<th>Score</th>
+                    			<th data-sort-ignore="true">Dataset</th>
+                    		</tr>
+                    	</thead>
+                    	<tbody id="interaction_rows">
+                    	</tbody>
+                    	<tfoot>
+                    		<tr>
+                    			<td colspan="5" style="text-align: center;">
+                    				<div class="pagination pagination-centered"></div>
+                    			</td>
+                    		</tr>
+                    	</tfoot>
+                    </table>
+					<div id="hide_rows" hidden></div>
+					<div id="protein_qtips" hidden></div>
 
-						{% if interaction_array|length > 0 %}
-						<table id="search_result_table" class="footable table"
-							data-filter="#filter" data-filtering="true"
-							data-filter-minimum="3" data-limit-navigation="5" style="max-width: 700px;">
-							<thead>
-								<tr>
-									<th><nobr>Interactor A</nobr></th>
-									<th><nobr>Interactor B</nobr></th>
-									<th>Score</th>
-									<th>Dataset</th>
-								</tr>
-							</thead>
-							<tbody id="interaction_rows">
-
-								{% for interaction in interaction_array %}
-
-								<tr
-									id="{{ interaction['interactor_A']['protein_id'] }}_{{ interaction['interactor_A']['protein_uniprot_id'] }}_{{ interaction['interactor_B']['protein_id'] }}_{{ interaction['interactor_B']['protein_uniprot_id']}}"
-									class="interaction_row">
-									<td><a class="interactor_qtip link">{{
-            									interaction['interactor_A']['protein_gene_name'] }}</a>
-										<div class="hidden">
-											<div class="container"
-												style="padding-top: 20px; width: 100%;">
-												<div class="row" style="margin-bottom: 20px;">
-													<div class="col-sm-10">
-														<h3
-															style='font-weight: bold; color:  {{ main_color_scheme }};'>
-															{{ interaction['interactor_A']['protein_gene_name'] }}
-														</h3>
-														<div class="shadow"></div>
-													</div>
-												</div>
-												<div class="col-sm-7">
-													<div class="row">
-														<h4
-															style='font-weight: bold; color:  {{ main_color_scheme }};'>Actions</h4>
-													</div>
-													<div class="row">
-														<a href="{{ interaction['interactor_B']['protein_gene_name'] }}"
-															target="_blank" class='link'>Search for {{
-            													interaction['interactor_B']['protein_gene_name'] }}</a>
-													</div>
-													<div class="row">
-														<a
-															href="../protein_sequence/{{ interaction['interactor_B']['protein_gene_name'] }}"
-															target="_blank" class='link'>Show protein sequence</a>
-													</div>
-													<div class="row">
-														<h4
-															style='font-weight: bold; color:  {{ main_color_scheme }};'>Description</h4>
-													</div>
-													<div class="row">
-														<span class="more">{{
-            													interaction['interactor_A']['protein_description'] }}</span>
-													</div>
-												</div>
-												<div class="col-sm-5">
-													<div class="row">
-														<h4
-															style='font-weight: bold; color:  {{ main_color_scheme }};'>Links</h4>
-													</div>
-													<div class="row">
-														{% for database,link_array in
-            												interaction['interactor_A']['protein_external_links'] %}
-            												
-            												
-														<div class="row">
-															{{ database }}
-														</div>
-														<div class="row">
-															{% for links in link_array %}
-															<a href="{{ links['link'] }}" class='link' target="_blank">{{ links['link_id'] }}</a>
-															{% endfor %}
-														</div>
-														{% endfor %}
-													</div>
-												</div>
-											</div>
-										</div></td>
-									<td><a class="interactor_qtip  link">{{
-            									interaction['interactor_B']['protein_gene_name'] }}</a>
-										<div class="hidden">
-											<div class="container"
-												style="padding-top: 20px; width: 100%;">
-												<div class="row" style="margin-bottom: 20px;">
-													<div class="col-sm-10">
-
-
-
-														<h3
-															style='font-weight: bold; color:  {{ main_color_scheme }};'>
-															{{ interaction['interactor_B']['protein_gene_name'] }}
-														</h3>
-
-
-														<div class="shadow"></div>
-
-													</div>
-
-												</div>
-
-
-												<div class="col-sm-7">
-													<div class="row">
-														<h4
-															style='font-weight: bold; color:  {{ main_color_scheme }};'>Actions</h4>
-													</div>
-													<div class="row">
-														<a href="{{ interaction['interactor_B']['protein_gene_name'] }}"
-															target="_blank" class='link'>Search for {{
-            													interaction['interactor_B']['protein_gene_name'] }}</a>
-													</div>
-													<div class="row">
-														<a
-															href="../protein_sequence/{{ interaction['interactor_B']['protein_gene_name'] }}"
-															target="_blank" class='link'>Show protein sequence</a>
-													</div>
-
-
-													<div class="row">
-														<h4
-															style='font-weight: bold; color:  {{ main_color_scheme }};'>Description</h4>
-													</div>
-													<div class="row">
-														<span class="more">{{
-            													interaction['interactor_B']['protein_description'] }}</span>
-													</div>
-												</div>
-												<div class="col-sm-5">
-													<div class="row">
-														<h4
-															style='font-weight: bold; color:  {{ main_color_scheme }};'>Links</h4>
-													</div>
-													<div class="row">
-														{% for database,link_array in
-            												interaction['interactor_B']['protein_external_links']  %}
-														<div class="row">
-															{{ database }}
-														</div>
-														<div class="row">
-															{% for links in link_array %}
-															<a href="{{ links['link'] }}" class='link' target="_blank">{{ links['link_id'] }}</a>
-															{% endfor %}
-														</div>
-														{% endfor %}
-													</div>
-												</div>
-											</div>
-										</div></td>
-									<td>{{ interaction['score'] }}</td>
-									<td>{% for dataset in interaction['dataset_array'] %} 
-									        {% if dataset['interaction_status'] != 'published' %}
-												
-												<a class="link reference_qtip">{{ dataset['name'] }}</a>
-												<div class="hidden">
-											        {{ dataset['description'] }}
-												</div> 
-												</br> 
-										    {% else %} 
-											<a class="link"
-										href="http://www.ncbi.nlm.nih.gov/pubmed/{{ dataset['dataset_reference'] }}"
-										target="_blank"> {{ dataset['dataset_author'] }} ({{ dataset['year'] }})
-									</a> </br> {% endif %} {% endfor %}</td>
-								</tr>
-								{% endfor %}
-							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="5" style="text-align: center;">
-										<div class="pagination pagination-centered"></div>
-									</td>
-								</tr>
-							</tfoot>
-						</table>
-						<div id="hide_rows" hidden></div>
-						
-						{% else %}
-						<p>No Interactions Found</p>
-						{% endif %}
 					</div>
 				</div>
-				<div id="go_enrichment" class="tab-pane fade"
+				<div id="interactor_list_table" class="network_table_tab_pane tab-pane fade"
 					style="padding-top: 0;">
+					<div class="row "
+						style="border-bottom: 1px solid #ccc; background-color: #F8F8F8; margin: 0px; padding: 6px;">
+						<div class="col-sm-4">
+							<div class="input-group input-group-sm"
+								style="margin-bottom: 0px; margin-top: 3px;">
+								<lable for="change-page-size_interactor"
+									style="margin-right: 10px; color: {{ main_color_scheme }};">Page Size:</lable>
+								<select id="change-page-size_interactor">
+									<option value="10" selected>10</option>
+									<option value="50">50</option>
+									<option value="100">100</option>
+									<option value="10000">All</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-8"">
+							<input type="text" id="filter_interactor" style="float: right;" placeholder="Search" />
+						</div>
+					</div>
+					<div class="container">
+					<table id="search_result_table_interactor" class="footable table"
+                    	data-filter="#filter_interactor" data-filtering="true" data-paging="true"
+                    	data-filter-minimum="3" data-limit-navigation="5" style="max-width: 700px;">
+        				<colgroup>
+							<col span="1" style="width: 25%;">
+							<col span="1" style="width: 25%;">
+							<col span="1" style="width: 25%;">
+							<col span="1" style="width: 25%;">
+						</colgroup>
+                    	<thead>
+                    		<tr>
+                    			<th><nobr>Gene Name</nobr></th>
+                    			<th data-type="numeric" data-sorted="true"><nobr>Interactions</br>in Network</nobr></th>
+                    			<th data-type="numeric" data-sorted="true"><nobr>Interactions</br>in Database</nobr></th>
+                    			<th data-type="numeric" data-sorted="true"><nobr>Ratio Network/Database</nobr></th>
+                    		</tr>
+                    	</thead>
+                    	<tbody id="interactor_rows">
+                    	</tbody>
+                    	<tfoot>
+                    		<tr>
+                    			<td colspan="5" style="text-align: center;">
+                    				<div class="pagination pagination-centered"></div>
+                    			</td>
+                    		</tr>
+                    	</tfoot>
+                    </table>
+					<div id="hide_rows" hidden></div>
+					<div id="protein_qtips" hidden></div>
+					</div>
+				</div>
+				<div id="go_enrichment" class="network_table_tab_pane tab-pane fade" style="padding-top: 0;">
 					<ul class="nav nav-pills"
 						style="margin: 0px; border-bottom: 1px solid #ccc;">
 						<li class="active"><a data-toggle="pill"
@@ -717,74 +742,128 @@
 						<div id="bioiogical_process" class="tab-pane fade in active"
 							style="padding: 0px; border: 0px;">
 							<div class="row">
-								<table class="footable table" style="max-width: 700px;">
+								<table data-paging="true" data-limit-navigation="5" class="footable table" style="max-width: 700px;">
 									<colgroup>
 										<col span="1" style="width: 20%;">
 										<col span="1" style="width: 60%;">
-										<col span="1" style="width: 15%;">
+										<col span="1" style="width: 20%;">
 									</colgroup>
 									<thead>
 										<tr>
-											<th>GO Term Code</th>
+											<th  data-sort-ignore="true">GO Term Code</th>
 											<th>GO Term</th>
-											<th>p-value</th>
+											<th data-sorted="true" data-sort-value="number">p-value</th>
+
 										</tr>
 									</thead>
 									<tbody  id="BP_table" class="enrichment_table">
 									</tbody>
+									<tfoot>
+        								<tr>
+        									<td colspan="5" style="text-align: center;">
+        										<div class="pagination pagination-centered"></div>
+        									</td>
+        								</tr>
+        							</tfoot>
 								</table>
 							</div>
 						</div>
 						<div id="molecular_function" class="tab-pane fade"
 							style="padding: 0px; border: 0px;">
 							<div class="row">
-								<table class="footable table" style="max-width: 700px;">
+								<table  data-paging="true" data-limit-navigation="5" class="footable table" style="max-width: 700px;">
 									<colgroup>
 										<col span="1" style="width: 20%;">
 										<col span="1" style="width: 60%;">
-										<col span="1" style="width: 15%;">
+										<col span="1" style="width: 20%;">
 									</colgroup>
 									<thead>
 										<tr>
-											<th>GO Term Code</th>
+											<th  data-sort-ignore="true">GO Term Code</th>
 											<th>GO Term</th>
-											<th>p-value</th>
+											<th data-sorted="true" data-sort-value="number">p-value</th>
 										</tr>
 									</thead>
 									<tbody id="MF_table" class="enrichment_table">
 									</tbody>
+									<tfoot>
+        								<tr>
+        									<td colspan="5" style="text-align: center;">
+        										<div class="pagination pagination-centered"></div>
+        									</td>
+        								</tr>
+        							</tfoot>
 								</table>
 							</div>
 						</div>
 						<div id="cellular_component" class="tab-pane fade"
 							style="padding: 0px; border: 0px;">
 							<div class="row">
-								<table class="footable table" style="max-width: 700px;">
+								<table data-paging="true" data-limit-navigation="5"  class="footable table" style="max-width: 700px;">
 									<colgroup>
 										<col span="1" style="width: 20%;">
 										<col span="1" style="width: 60%;">
-										<col span="1" style="width: 15%;">
+										<col span="1" style="width: 20%;">
 									</colgroup>
 									<thead>
 										<tr>
-											<th>GO Term Code</th>
+											<th  data-sort-ignore="true">GO Term Code</th>
 											<th>GO Term</th>
-											<th>p-value</th>
+											<th data-sorted="true" data-sort-value="number">p-value</th>
 										</tr>
 									</thead>
 									<tbody id="CC_table" class="enrichment_table">
 									</tbody>
+									<tfoot>
+        								<tr>
+        									<td colspan="5" style="text-align: center;">
+        										<div class="pagination pagination-centered"></div>
+        									</td>
+        								</tr>
+        							</tfoot>
 								</table>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div id="pathways" class="tab-pane fade" style="padding-top: 0;">
+				<div id="pathways" class="network_table_tab_pane tab-pane fade" style="padding-top: 0;">
     				<div class="tab-content" style="padding: 0px; width: 100%">
     
 
     							<div class="row">
-    								<table class="footable table" style="max-width: 700px;">
+    								<table data-paging="true" data-limit-navigation="5" class="footable table" style="max-width: 700px;">
+    									<colgroup>
+    										<col span="1" style="width: 20%;">
+    										<col span="1" style="width: 60%;">
+    										<col span="1" style="width: 20%;">
+    									</colgroup>
+    									<thead>
+    										<tr>
+    											<th data-sort-ignore="true">Reactome ID</th>
+    											<th>Pathway</th>
+    											<th data-sort-value="number" >p-value</th>
+    										</tr>
+    									</thead>
+    									<tbody  id="rea_table"  class="enrichment_table">
+    									</tbody>
+    									<tfoot>
+            								<tr>
+            									<td colspan="5" style="text-align: center;">
+            										<div class="pagination pagination-centered"></div>
+            									</td>
+            								</tr>
+            							</tfoot>
+    								</table>
+    							</div>
+    						</div>
+
+    				</div>
+    				<div id="complexes" class="network_table_tab_pane tab-pane fade" style="padding-top: 0;">
+    					<div class="tab-content" style="padding: 0px; width: 100%">
+    
+
+    							<div class="row">
+    								<table data-paging="true" data-limit-navigation="5"  class="footable table" style="max-width: 700px;">
     									<colgroup>
     										<col span="1" style="width: 25%;">
     										<col span="1" style="width: 60%;">
@@ -792,58 +871,144 @@
     									</colgroup>
     									<thead>
     										<tr>
-    											<th>Reactome ID</th>
-    											<th>Pathway</th>
-    											<th>p-value</th>
+    											<th data-sort-ignore="true">CORUM ID</th>
+    											<th>Complex</th>
+    											<th data-sort-value="number">p-value</th>
     										</tr>
     									</thead>
-    									<tbody  id="rea_table"  class="enrichment_table">
+    									<tbody  id="cor_table"  class="enrichment_table">
     									</tbody>
+    									<tfoot>
+            								<tr>
+            									<td colspan="5" style="text-align: center;">
+            										<div class="pagination pagination-centered"></div>
+            									</td>
+            								</tr>
+            							</tfoot>
     								</table>
     							</div>
     						</div>
 
     				</div>
+        			{% for annotation_type in annotation_types %}
+            			{% if annotation_type.ShowInTable == 1 %}
+        					<div id="{{ annotation_type.Type }}" class="network_table_tab_pane tab-pane fade" style="padding-top: 0;">
+            					<div class="tab-content" style="padding: 0px; width: 100%">
+        							<div class="row">
+        								<table data-paging="true" data-limit-navigation="5"  class="footable table" style="max-width: 700px;">
+        									<colgroup>
+        										<col span="1" style="width: 100%;">
+        									</colgroup>
+        									<thead>
+        										<tr>
+        											<th>{{ annotation_type.FilterName }}</th>
+        										</tr>
+        									</thead>
+        									<tbody  id="{{ annotation_type.Type }}_table"  class="enrichment_table">
+        									</tbody>
+        									<tfoot>
+                								<tr>
+                									<td colspan="5" style="text-align: center;">
+                										<div class="pagination pagination-centered"></div>
+                									</td>
+                								</tr>
+                							</tfoot>
+        								</table>
+        							</div>
+        						</div>
+        					</div>
+        				{% endif %}	 
+					{% endfor %}     				
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<div class="shadow"></div>
+<div class="shadow" style="height: 1px;"></div>
+</main>
+<main id="main_text_output" style="display: none; background: #ffffff;">
+<div style="padding: 10px; background: #f0f0f0;">
+<button id="download" class="btn btn-default" style="background: #f8f8f8;">Download</button>
+</div>
+<div class="shadow" style="margin-bottom: 10px;"></div>
+<div id="text_output">
+
+</div>
+<div class="shadow" style="margin-top: 10px; height: 1px;"></div>
 </main>
 
 <footer>
-	<div class="row">
+	<div class="row" style="background: #f9f8f8;">
 		{{ footer | raw }}
 	</div>
+	
 </footer>
 
 {% endblock %}
 {% block javascripts %}
+<script>
+var CategoryArray = {{ interaction_categories_array|json_encode|raw }};
 
-{{ tinymce_init() }}
+var queryParameters = new Object();
+queryParameters.CategoryParameterArray = {{ query_parameters.CategoryArray|json_encode|raw }};
+queryParameters.TissueExpressionParameterArray = {{ query_parameters.TissueExpressionArray|json_encode|raw }};
+queryParameters.SubcellularLocationExpressionArray = {{ query_parameters.SubcellularLocationExpressionArray|json_encode|raw }};
+queryParameters.ScoreParameter = {{ query_parameters.ScoreParameter }};
+queryParameters.SearchTerm = "{{ query_parameters.SearchTermParameter }}";
+queryParameters.TextOutput = "{{ query_parameters.TextOutput }}";
+queryParameters.AnnotationParameterArray = {{ query_parameters.AnnotationArray|json_encode|raw }};
+queryParameters.SearchTermParameter = "{{ query_parameters.SearchTermParameter }}";
+queryParameters.FilterParameter = {{ query_parameters.FilterParameter|json_encode|raw  }};
+queryParameters.SearchTermArray = {{ query_parameters.SearchTermArray|json_encode|raw  }};
+
+
+var CategoryParameterArray = {{ query_parameters.CategoryArray|json_encode|raw }};
+var TissueExpressionParameterArray = {{ query_parameters.TissueExpressionArray|json_encode|raw }};
+var SubcellularLocationExpressionArray = {{ query_parameters.SubcellularLocationExpressionArray|json_encode|raw }};
+var AnnotationParameterArray = {{ query_parameters.AnnotationArray|json_encode|raw }};
+
+var ScoreParameter = {{ query_parameters.ScoreParameter }};
+var SearchTerm = "{{ query_parameters.SearchTermParameter }}";
+var TextOutput = "{{ query_parameters.TextOutput }}";
+var AnnotationArray = {{ query_parameters.AnnotationArray|json_encode|raw }};
+var AnnotationTypes = {{ annotation_types|json_encode|raw }};
+var AnnotationTypesArray = {{ annotation_types_array|json_encode|raw }};
+var SearchResultsJSON = JSON.parse({{ json|json_encode|raw }});
+var QueryNodeColor = "{{ query_node_color }}";
+var InteractorNodeColor = "{{ interactor_node_color }}";
+var MainColorScheme = "{{ main_color_scheme }}";
+var loggedIn = "{{ login_status }}";
+var Url = "{{ url }}";
+var Version = "{{ version }}";
+
+</script>
 <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-<script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
-<script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('assets/js/jquery.ui.touch-punch.min.js') }}"></script>
-<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('bundles/footable/demos/js/bootstrap-tab.js') }}"></script>
 <script src="{{ asset('bundles/footable/demos/js/demos.js') }}"></script>
 <script src="{{ asset('bundles/footable/js/footable.js') }}"></script>
 <script src="{{ asset('bundles/footable/js/footable.paginate.js') }}"></script>
 <script src="{{ asset('bundles/footable/js/footable.filter.js') }}"></script>
+<script src="{{ asset('bundles/footable/js/footable.sort.js') }}"></script>
 <script src="{{ asset('assets/js/cytoscape.min.js') }}"></script>
 <script src="{{ asset('assets/js/cytoscape-qtip.js') }}"></script>
 <script src="{{ asset('assets/js/cytoscape-panzoom.js') }}"></script>
+<script src="{{ asset('assets/js/cytoscape-expand-collapse.js') }}"></script>
 <script src="{{ asset('assets/js/cola.js') }}"></script>
 <script src="{{ asset('assets/js/cytoscape-cola.js') }}"></script>
+<script src="{{ asset('assets/js/cytoscape-euler.js') }}"></script>
 <script src="{{ asset('assets/js/jquery.qtip.min.js') }}"></script>
 <script src="{{ asset('bundles/spectrum/spectrum.js') }}"></script>
+<script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/Readmore.js/2.2.0/readmore.js') }}"></script>
+<script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src="http://threejs.org/examples/js/libs/stats.min.js"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
-
-<script src="{{ asset('assets/js/main.js') }}"></script>
+<script src="{{ asset('assets/js/search_results.js') }}"></script>
 <script
-	src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+	src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}">
+</script>
+
+
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -854,1769 +1019,5 @@
   ga('send', 'pageview');
 
 </script>
-<script id="document_js">
-
-	$(window).on('beforeunload', function() {
-	   $(window).scrollTop(0);
-	});
-
-
-    $(function(){    
-
-		
-
-
-    	var PublishedParameter = {{ query_parameters.PublishedParameter }};
-    	var ValidatedParameter = {{ query_parameters.ValidatedParameter }};
-    	var VerifiedParameter = {{ query_parameters.VerifiedParameter }};
-    	var LiteratureParameter = {{ query_parameters.LiteratureParameter }};
-    	var ScoreParameter = {{ query_parameters.ScoreParameter }};
-		var Layout = 'cola';
-    	
-    	var proteinOfIntrestName = '';
-		var cy = cytoscape({	
-			container: document.getElementById('cy'),
-    	  	elements: 
-          	{
-    	     	nodes: [],      
-    	     	edges: []
-    	  	},
-    	  	style: 
-		  	[
-    	  		{
-    				selector: '.nodes',
-    				css: 
-    				{
-                        'content': 'data(gene_name)',
-                        'text-valign': 'center',
-                        'color': 'white',
-                        'text-outline-width': 2,
-                        'padding-top': '10px',
-                        'padding-left': '10px',
-                        'padding-bottom': '10px',
-                        'padding-right': '10px',
-                        'text-align': 'center',
-                        'background-color': '{{ interactor_node_color }}'
-        			}
-    			},
-                {
-                	selector: '.edge',
-                	css: 
-                    {
-                	  'line-color' : '#AAAAAA'
-                	}
-                }
-			]
-		});
-    
-    	var result = {{ json | raw }};
-
-    	var nodeArray = result.nodes;
-    	var edgeArray = result.edges;
-    	var queryNodeIdArray = result.query_node_id_array;
-
-    	
-    	for (i = 0; i < nodeArray.length; ++i) {
-
-    		var proteinId = nodeArray[i].protein_id;
-    		var proteinName = nodeArray[i].protein_uniprot_id;
-    		var geneName = nodeArray[i].protein_gene_name;
-    		var proteinDescription = nodeArray[i].protein_description;
-    		var linkArray = nodeArray[i].protein_external_links;
-    		var nodeProteinId = proteinId + "_" + proteinName;
-
-    		cy.add([{ 
-    			group: "nodes",
-    			data: { id: nodeProteinId, protein_name: proteinName, gene_name: geneName, description: proteinDescription, external_links: linkArray },
-    			classes: "nodes"
-
-    			
-    		}]).css({ 'transition-property': 'opacity', 'transition-duration': '10s', 'width': widthData });
-    		
-    	}
-
-    	for (i = 0; i < queryNodeIdArray.length; ++i) {
-
-    		var queryNodeId = queryNodeIdArray[i];
-    		var selectID = '#' + queryNodeId
-    		
-    		cy.$(selectID).style({'background-color': "{{ query_node_color }}" });
-    		
-    	}
-
-    	for (i = 0; i <  edgeArray.length; ++i) {
-    		
-    		var sourceProteinId = edgeArray[i]['interactor_A']['protein_id'];
-    		var sourceProteinName = edgeArray[i]['interactor_A']['protein_uniprot_id'];
-    		var sourceProteinGeneName = edgeArray[i]['interactor_A']['protein_gene_name'];
-    		var targetProteinId = edgeArray[i]['interactor_B']['protein_id'];
-    		var targetProteinName = edgeArray[i]['interactor_B']['protein_uniprot_id'];
-    		var targetProteinGeneName = edgeArray[i]['interactor_B']['protein_gene_name'];
-    		var scoreData = edgeArray[i]['score'];
-			var highestPublicationStatus = edgeArray[i]['publication_array']['highest_publication_status'];
-			var publishedStatus = edgeArray[i]['publication_array']['published'];
-			var validatedStatus = edgeArray[i]['publication_array']['validated'];
-			var verifiedStatus = edgeArray[i]['publication_array']['verified'];
-			var literatureStatus = edgeArray[i]['publication_array']['literature'];
-	
-    		
-    		var sourceNodeId = sourceProteinId + "_" + sourceProteinName;
-
-    		var targetNodeId = targetProteinId + "_" + targetProteinName;
-    		var edgeID = sourceProteinId + "_" + sourceProteinName + "_" + targetProteinId + "_" + targetProteinName;
-        	var widthData = 1;
-    		if (scoreData <= 0.20){
-    			widthData = 2;
-    		}else if(scoreData <= 0.40 && scoreData > 0.20){
-    			widthData = 3;
-    		}else if(scoreData <= 0.60 && scoreData > 0.40){
-    			widthData = 4;
-    		}else if(scoreData <= 0.80 && scoreData > 0.60){
-    			widthData = 5;
-    		}else if(scoreData <= 1 && scoreData > 0.80){
-    			widthData = 6;
-    		}
-
-
-
-    		
-        		cy.add([{ 
-            		group: "edges",
-            		data: { 
-            			id: edgeID, 
-            			source: sourceNodeId, 
-            			target: targetNodeId, 
-            			interaction: sourceProteinGeneName + '-' + targetProteinGeneName,
-            			score: scoreData,
-            			highest_publication_status: highestPublicationStatus,
-            			published_status: publishedStatus,
-            			validated_status: validatedStatus,
-            			verified_status: verifiedStatus,
-            			literature_status: literatureStatus,
-            			
-            			} 
-            	}]).css({ 'transition-property': 'opacity', 'transition-duration': '3s', 'width': widthData });
-    
-    	        if(highestPublicationStatus == 'published'){
-    	        	cy.$('#' + edgeID).style({'line-color': "{{ published_edge_color }}" });
-    	        }else if(highestPublicationStatus == 'validated'){
-    	        	cy.$('#' + edgeID).style({'line-color': "{{ validated_edge_color }}" });
-    	        }else if(highestPublicationStatus == 'verified'){
-    	        	cy.$('#' + edgeID).style({'line-color': "{{ verified_edge_color }}" });
-    	        }else if(highestPublicationStatus == 'literature'){
-    	        	cy.$('#' + edgeID).style({'line-color': "{{ literature_edge_color }}" });
-    	        }
-
-
-    	}
-
-    	var edgeClone = cy.edges().clone();
-    	var nodeClone = cy.nodes().clone();
-		
-
-       	cy.edges().each(function(i, ele){
-			if(ele.attr('score' ) < {{ query_parameters.ScoreParameter }}){
-				
-				ele.remove();
-			}
-        });
-        
-		cy.nodes().each(function(j, ele_node){
-			if(ele_node.degree() == 0){
-
-				ele_node.remove();
-			}
-		});
-    	
-    	cy.center();
-
-    	cy.layout({ 
-    		name: 'cola',
-    		avoidOverlap: true,
-    		equidistant: true,
-    		minNodeSpacing: 50,
-    		randomize: true
-    	});
-
-    	cy.minZoom(0.01);
-    	cy.maxZoom(8);
-
-
-
-
-
-       	cy.$('.nodes').qtip({
-    		content: 
-    			function(){ 
-    			var proteinName = this.data('protein_name');
-    			var searchTerm = this.data('search_term');
-    			var geneName = this.data('gene_name');
-    			var proteinDescription = this.data('description');
-    			var linkArray = this.data('external_links');
-    			var returnLinks = '<div class="row">';
-
-    			$.each(linkArray, function(database, links) {
-
-    				returnLinks += '<div class="row">' + database + '</div>';
-    				returnLinks += '<div class="row">';
-    				for (i = 0; i < links.length; ++i) {
-    					link_id = links[i]['link_id'];
-    					link = links[i]['link'];
-    					returnLinks += '<a href="' + link + '" target="_blank">' + link_id + '</a> ';
-    				}
-    				returnLinks += '</div>';
-    			});
-    			
-    			returnLinks += '</div>';			
-    			
-    			return '<div class="container" style="padding-top: 20px; width: 100%;"><div class="row" style="margin-bottom: 20px;"><div class="col-sm-10"><h3 style="font-weight: bold; color: {{ main_color_scheme }};">' + geneName + '</h3> <div class="shadow"></div> </div></div><div class="col-sm-7"><div class="row"><h4 style="font-weight: bold; color: {{ main_color_scheme }};">Actions</h4></div><div class="row"><a href="http://interactome.dfci.harvard.edu/huri/search_results/' +  geneName + '" target="_blank">Search for ' + geneName + '</a></div><div class="row"><a href="http://interactome.dfci.harvard.edu/huri/protein_sequence/' +  geneName + '"  target="_blank">Show protein sequence</a></div><div class="row"><h4  style="font-weight: bold; color: {{ main_color_scheme }};">Description</h4></div><div class="row"><span class="more">' + proteinDescription + '</span></div></div><div class="col-sm-5"><div class="row"><h4  style="font-weight: bold; color: {{ main_color_scheme }};">Links</h4></div>' + returnLinks + '</div><script>$(document).ready(function() {var showChar = 300;var ellipsestext = "...";var moretext = "Read More";var lesstext = "Show less";$(".more").each(function() {var content = $(this).html();if(content.length > showChar) {var c = content.substr(0, showChar);var h = content.substr(showChar, content.length - showChar);var html = c + \'<span class="moreellipses">\' + ellipsestext + \'&nbsp;</span><span class="morecontent"><span>\' + h + \'</span>&nbsp;&nbsp;<a href="" class="morelink">Read More</a></span>\';$(this).html(html);}});$(".morelink").on("click", function(){if($(this).hasClass("less")) {$(this).removeClass("less");$(this).html(moretext);} else {$(this).addClass("less");$(this).html(lesstext);}$(this).parent().prev().toggle();$(this).prev().toggle();return false;});});</' + 'script>';
-
-    		},
-    		position: {
-			   my: 'center',
-			   at: 'center',
-    		   target: $(window),
-    		   viewport: $(window)
-
-    		},
-    		style: {
-    			classes: 'qtip-bootstrap',
-    			tip: {
-    				width: 16,
-    				height: 8
-    			}
-    		},
-    	});
-
-    	
-
-
-    	cy.edges().qtip({
-    		content: function(){ 
-    			return 'Interaction: ' + 
-    			this.data('interaction') + 
-    			'<br/>' +
-    			'Score: ' + 
-    			this.data('score'); 
-    		},
-    		position: {
- 			   my: 'center',
-			   at: 'center',
-    		   target: $(window),
-    		   viewport: $(window)
-    		},
-    		style: {
-    			classes: 'qtip-bootstrap',
-    			tip: {
-    				width: 16,
-    				height: 8
-    			}
-    		}
-    	});
-    	
-        $('.interactor_qtip').each(function() { 
-            $(this).qtip({
-                content: {
-                    text: $(this).next('div').html()
-                },
-        		position: {
-        			viewport: $(window),
-        			my: 'left center',
-        			at: 'right center'
-        		},
-        		style: {
-        			classes: 'qtip-bootstrap',
-        			tip: {
-        				width: 16,
-        				height: 8
-        			}
-        		},
-                show: 'click',
-                hide: 'unfocus'
-            });
-        });
-        
-        $('.reference_qtip').each(function() {
-            $(this).qtip({
-                content: {
-                    text: $(this).next('div').html()
-                },
-        		position: {
-        			viewport: $(window),
-        			my: 'right center',
-        			at: 'left center'
-        		},
-        		style: {
-        			classes: 'qtip-bootstrap',
-        			tip: {
-        				width: 16,
-        				height: 8
-        			}
-        		},
-                show: 'click',
-                hide: 'unfocus'
-            });
-        });
-
-
-
-
-
-
-
-    	var timer;
-    	
-    	cy.nodes().on("mouseover", function(){
-    		$( '.interaction_row' ).each(function(){ $(this).css('background', '#ffffff');});
-    		$( '.enrichment_row' ).each(function(){ $(this).css('background', '#ffffff');});
-    	    var that = this;
-    	    timer = setTimeout(function(){
-        	    
-    	    	cy.nodes().style({ 'opacity' : 0.2});
-        		cy.edges().style({ 'opacity' : 0.2});
-        		that.style({ 'opacity' : 1});
-        		that.neighborhood().style({ 'opacity' : 1});
-    	    }, 700);
-
-    	}).on("mouseout", function(){
-    	    clearTimeout(timer);
-    		cy.nodes().style({ 'opacity' : 1});
-    		cy.edges().style({ 'opacity' : 1});
-    	    
-    	});
-
-    	cy.edges().on("click", function(){
-    		$( '.interaction_row' ).each(function(){ $(this).css('background', '#ffffff');});
-    		$( '.enrichment_row' ).each(function(){ $(this).css('background', '#ffffff');});
-    		cy.nodes().style({ 'opacity' : 0.2});
-    		cy.edges().style({ 'opacity' : 0.2});
-    		this.style({ 'opacity' : 1});
-    		this.connectedNodes().style({ 'opacity' : 1});
-    	});
-
-
-    	$('.layout').on("click", function(event){
-    	    
-    		var layoutType = event.target.id;
-    
-    		
-    		cy.layout({ 
-    			name: layoutType,
-    		    nodeSpacing: 10,
-    		    edgeLengthVal: 65,
-    			avoidOverlap: true,
-    			equidistant: true,
-    			minNodeSpacing: 50,
-    			
-    		}); 
-    		cy.style().selector('$node').style({'content': 'data(gene_name)'}).update();
-    
-    		Layout = layoutType;
-    
-    	});
-
-		var nodeGOEnrichment = [];
-		cy.nodes().each(function(j, ele_node){
-			
-			nodeGOEnrichment.push(ele_node.attr('gene_name'));
-			  				
-		});
-		var requestTerm = nodeGOEnrichment.join();
-		updateGOEnrichment(requestTerm);
-    	
-		
-
-        $('.interaction_row').click(  
-
-            	function(){
-
-                	if($(this).hasClass("selected")){
-                		$(this).removeClass("selected");
-                		$( '.interaction_row' ).each(function(){ $(this).css('background', '#ffffff');});
-                		$( '.enrichment_row' ).each(function(){ $(this).css('background', '#ffffff');});
-        	    		cy.nodes().style({ 'opacity' : 1});
-        	    		cy.edges().style({ 'opacity' : 1});
-
-                    }else{
-                		$( '.interaction_row' ).each(function(){ $(this).css('background', '#ffffff');});
-                		$( '.enrichment_row' ).each(function(){ $(this).css('background', '#ffffff');});
-                		$(this).addClass("selected");
-            			 $(this).css('background', '#d9d9d9');
-            			 var id = $(this).attr('id');
-        	    		cy.nodes().style({ 'opacity' : 0.2});
-        	    		cy.edges().style({ 'opacity' : 0.2});
-        	    		cy.$('#' + id).style({ 'opacity' : 1});
-        	    		cy.$('#' + id).connectedNodes().style({ 'opacity' : 1});
-
-                    }
-         
-                }
-  
-             );
-
-        $('.enrichment_table').on("click", '.enrichment_row', function(){
-
-                	if($(this).hasClass("selected")){
-                		$(this).removeClass("selected");
-                		$( '.interaction_row' ).each(function(){ $(this).css('background', '#ffffff');});
-                		$( '.enrichment_row' ).each(function(){ $(this).css('background', '#ffffff');});
-        	    		cy.nodes().style({ 'opacity' : 1});
-        	    		cy.edges().style({ 'opacity' : 1});
-
-                    }else{
-                    	$( '.interaction_row' ).each(function(){ $(this).css('background', '#ffffff');});
-                		$( '.enrichment_row' ).each(function(){ $(this).css('background', '#ffffff');});
-                		$(this).addClass("selected");
-            			 $(this).css('background', '#d9d9d9');
-            			 var id = $(this).attr('id');
-						 var data = $(this).attr('data');
-						 var proteins = data.split(",");
-            			 
-        	    		cy.nodes().style({ 'opacity' : 0.2});
-        	    		cy.edges().style({ 'opacity' : 0.2});
-
-
-        	    		var highlightednodes = [];
-
-        	    		proteins.forEach(function(protein, index){
-
-        	    			cy.nodes().each(function(j, ele_node){ 
-
-            	    			if(ele_node.data('gene_name') == protein){
-
-            	    				var node_id = ele_node.attr('id');
-
-            	    				cy.$('#' + node_id).style({ 'opacity' : 1});
-
-            	    				highlightednodes.push(ele_node);
-                	    		}
-
-            	    			
-							});
-
-            	    	});
-
-            	    	
-        	    		highlightednodes.forEach(function(highlightednode_1, index_1){
-
-            	    		highlightednodes.forEach(function(highlightednode_2, index_2){
-
-            	    			var id_1 = highlightednode_1.data('id');
-            	    			var id_2 = highlightednode_2.data('id');
-            	    			
-            	    			var edge_id = id_1 + '_' + id_2; 
-            	    			cy.$('#' + edge_id).style({ 'opacity' : 1});
-    							
-                    	    });
-							
-                	    });
-
-
-                    }
-         
-                }
-  
-             );
-
-        var isMobile = false;
-
-     	if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) 
-         || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) isMobile = true;
-
-
-		if(isMobile == false){
-
-			cy.panzoom({});
-		}
-		
-
-    	
-    	$('#png').on('click', function(){
-    		var png64 = cy.png({bg: '#ffffff'});
-    		$('#png').attr('href', png64);
-    	});
-    
-
-        $( "#min_interaction_score" ).slider({
-            
-    		step: 0.01,
-            min: 0,
-            max: 1,
-            value: {{ query_parameters.ScoreParameter }},
-            change:function( event, ui ) {
-                nodeClone.each(function(i, ele){
-                	var nodeCloneId = ele.attr('id');
-                	
-					if(checkNodeExists(nodeCloneId, cy.nodes()) == false){
-                	  	ele.restore();
-    
-                    	ele.on("mouseover", function(){
-                    		$( '.interaction_row' ).each(function(){ $(ele).css('background', '#ffffff');});
-    
-                    	    timer = setTimeout(function(){
-                        		cy.nodes().style({ 'opacity' : 0.2});
-                        		cy.edges().style({ 'opacity' : 0.2});
-                        		ele.style({ 'opacity' : 1});
-                        		ele.neighborhood().style({ 'opacity' : 1});
-                    	    }, 700);
-    
-                    	}).on("mouseout", function(){
-                    	    clearTimeout(timer);
-                    		cy.nodes().style({ 'opacity' : 1});
-                    		cy.edges().style({ 'opacity' : 1});
-                    	    
-                    	});
-
-                	}
-
-          	  	});
-
-                cy.edges().each(function(i, ele){
-
-        			if(ele.attr('score' ) < ui.value){
-        				
-        				ele.remove();
-          				Id = ele.attr('id');
-        				$("#" + Id).detach().appendTo("#hide_rows");
-
-        			}
-                });
-
-               edgeClone.each(function(i, ele){
-            	   var edgeCloneId = ele.attr('id');
-
-					if(ele.attr('score' ) >= ui.value ){
-						if(checkPublished(ele) || checkValidated(ele) || checkVerified(ele) || checkLiterature(ele)){
-							
-							if(checkEdgeExists(edgeCloneId, cy.edges()) == false){
-    							restoreEdge(ele);
-    	          				Id = ele.attr('id');
-    	          				$("#" + Id).detach().appendTo("#interaction_rows");
-    	          				
-							}
-						}
-
-			    		
-					}
-               });
-               reloadPageSize();
-
-    			cy.nodes().each(function(j, ele_node){
-    				if(ele_node.degree() == 0){
-    
-    					ele_node.remove();
-    				}
-    			});
-
-    	    	cy.layout({ 
-    	    		name: Layout,
-    	    		avoidOverlap: true,
-    	    		equidistant: true,
-    	    		minNodeSpacing: 50,
-    	    	});
-
-               	cy.$('.nodes').qtip({
-            		content: 
-            			function(){ 
-            			var proteinName = this.data('protein_name');
-            			var searchTerm = this.data('search_term');
-            			var geneName = this.data('gene_name');
-            			var proteinDescription = this.data('description');
-            			var linkArray = this.data('external_links');
-            			var returnLinks = '<div class="row">';
-
-            			$.each(linkArray, function(database, links) {
-
-            				returnLinks += '<div class="row">' + database + '</div>';
-            				returnLinks += '<div class="row">';
-            				for (i = 0; i < links.length; ++i) {
-            					link_id = links[i]['link_id'];
-            					link = links[i]['link'];
-            					returnLinks += '<a href="' + link + '" target="_blank">' + link_id + '</a> ';
-            				}
-            				returnLinks += '</div>';
-            			});
-            			
-            			returnLinks += '</div>';			
-            			
-            			return '<div class="container" style="padding-top: 20px; width: 100%;"><div class="row" style="margin-bottom: 20px;"><div class="col-sm-10"><h3 style="font-weight: bold; color: {{ main_color_scheme }};">' + geneName + '</h3> <div class="shadow"></div> </div></div><div class="col-sm-7"><div class="row"><h4 style="font-weight: bold; color: {{ main_color_scheme }};">Actions</h4></div><div class="row"><a href="http://interactome.dfci.harvard.edu/huri/search_results/' +  geneName + '" target="_blank">Search for ' + geneName + '</a></div><div class="row"><a href="http://interactome.dfci.harvard.edu/huri/protein_sequence/' +  geneName + '"  target="_blank">Show protein sequence</a></div><div class="row"><h4  style="font-weight: bold; color: {{ main_color_scheme }};">Description</h4></div><div class="row"><span class="more">' + proteinDescription + '</span></div></div><div class="col-sm-5"><div class="row"><h4  style="font-weight: bold; color: {{ main_color_scheme }};">Links</h4></div>' + returnLinks + '</div><script>$(document).ready(function() {var showChar = 300;var ellipsestext = "...";var moretext = "Read More";var lesstext = "Show less";$(".more").each(function() {var content = $(this).html();if(content.length > showChar) {var c = content.substr(0, showChar);var h = content.substr(showChar, content.length - showChar);var html = c + \'<span class="moreellipses">\' + ellipsestext + \'&nbsp;</span><span class="morecontent"><span>\' + h + \'</span>&nbsp;&nbsp;<a href="" class="morelink">Read More</a></span>\';$(this).html(html);}});$(".morelink").on("click", function(){if($(this).hasClass("less")) {$(this).removeClass("less");$(this).html(moretext);} else {$(this).addClass("less");$(this).html(lesstext);}$(this).parent().prev().toggle();$(this).prev().toggle();return false;});});</' + 'script>';
-
-            		},
-            		position: {
-            			viewport: $(window),
-            			my: 'top center',
-            			at: 'bottom center'
-            		},
-            		style: {
-            			classes: 'qtip-bootstrap',
-            			tip: {
-            				width: 16,
-            				height: 8
-            			}
-            		},
-            	});
-
-            	for (i = 0; i < queryNodeIdArray.length; ++i) {
-
-            		var queryNodeId = queryNodeIdArray[i];
-            		var selectID = '#' + queryNodeId
-            		
-            		cy.$(selectID).style({'background-color': "{{ query_node_color }}" });
-            		
-            	}
-            	
-
-    	    	 ScoreParameter = ui.value;
-    	    	 $("#score_parameter").html( ScoreParameter );
-	   			$("#node_number").html( cy.nodes().length );
-    			$("#edge_number").html( cy.edges().length );
-    			var nodeGOEnrichment = [];
-    			cy.nodes().each(function(j, ele_node){
-    				
-    				nodeGOEnrichment.push(ele_node.attr('gene_name'));
-        			  				
-    			});
-    			var requestTerm = nodeGOEnrichment.join();
-    			updateGOEnrichment(requestTerm);
-    			updateUnpublished(cy.edges());
-    			updateDownloads();
-            },
-            slide: function( event, ui ) {
-              $("#min_interaction_score_handle").html(ui.value);
-            }
-          });
-
-        $("#min_interaction_score_handle").html($( "#min_interaction_score" ).slider( "value" ));
-        $("#min_interaction_score").draggable();
-
-
-
-
-
-        
-
-        
-        if(!$("#published_checkbox").is(":checked")){
-
-        	 cy.edges().each(function(i, ele){
-     			if(ele.attr('highest_publication_status' ) == 'published'){
-     				
-     				ele.remove();
-     			}
-             });
-
- 			cy.nodes().each(function(j, ele_node){
-				if(ele_node.degree() == 0){
-
-					ele_node.remove();
-				}
-			});
-
-        }
-
-        if(!$("#validated_checkbox").is(":checked")){
-
-         	 cy.edges().each(function(i, ele){
-        			if(ele.attr('highest_publication_status' ) == 'validated'){
-        				
-        				ele.remove();
-        			}
-                });
-
- 			cy.nodes().each(function(j, ele_node){
-				if(ele_node.degree() == 0){
-
-					ele_node.remove();
-				}
-			});
-
-        }
-
-        if(!$("#verified_checkbox").is(":checked")){
-
-          	 cy.edges().each(function(i, ele){
-       			if(ele.attr('highest_publication_status' ) == 'verified'){
-       				
-       				ele.remove();
-       			}
-               });
-
- 			cy.nodes().each(function(j, ele_node){
-				if(ele_node.degree() == 0){
-
-					ele_node.remove();
-				}
-			});
-
-        }
-
-        if(!$("#literature_checkbox").is(":checked")){
-
-       	 cy.edges().each(function(i, ele){
-  			if(ele.attr('highest_publication_status' ) == 'literature'){
-  				
-  				ele.remove();
-  			}
-          });
-
-        }
-
-        
-        $("#published_checkbox").change(function() {
-            if(!this.checked) {
-               	 cy.edges().each(function(i, ele){
-          			if(ele.attr('highest_publication_status' ) == 'published'){
-          				
-          				ele.remove();
-          				Id = ele.attr('id');
-        				$("#" + Id).detach().appendTo("#hide_rows");
-        				reloadPageSize();
-          				
-          				
-           			}
-                  });
-    
-      			cy.nodes().each(function(j, ele_node){
-     				if(ele_node.degree() == 0){
-    
-     					ele_node.remove();
-     				}
-     			});
-
-
-    			$("#node_number").html( cy.nodes().length );
-    			$("#edge_number").html( cy.edges().length );
-    			$("#interaction_status").html( getInteractionStatusSummary());
-    			var nodeGOEnrichment = [];
-    			cy.nodes().each(function(j, ele_node){
-    				
-    				nodeGOEnrichment.push(ele_node.attr('gene_name'));
-        			  				
-    			});
-
-    			updateGOEnrichment(nodeGOEnrichment);
-    			updateUnpublished(cy.edges());
-    			updateDownloads();
-    			
-    	    	cy.layout({ 
-    	    		name: Layout,
-    	    		avoidOverlap: true,
-    	    		equidistant: true,
-    	    		minNodeSpacing: 50,
-    	    	});
-
- 
-            }
-            if(this.checked) {
-                    nodeClone.each(function(i, ele){
-
-
-                    	var nodeCloneId = ele.attr('id');
-                    	
-						if(checkNodeExists(nodeCloneId, cy.nodes()) == false){
-            			
-                	  	ele.restore();
-
-                    	ele.on("mouseover", function(){
-                    		$( '.interaction_row' ).each(function(){ $(ele).css('background', '#ffffff');});
-
-                    	    timer = setTimeout(function(){
-                        		cy.nodes().style({ 'opacity' : 0.2});
-                        		cy.edges().style({ 'opacity' : 0.2});
-                        		ele.style({ 'opacity' : 1});
-                        		ele.neighborhood().style({ 'opacity' : 1});
-                    	    }, 700);
-
-                    	}).on("mouseout", function(){
-                    	    clearTimeout(timer);
-                    		cy.nodes().style({ 'opacity' : 1});
-                    		cy.edges().style({ 'opacity' : 1});
-                    	    
-                    	});
-
-                    	
-						}
-              	  	});
-
-                    
-                
-                    cy.edges().each(function(i, ele){
-            			if(ele.attr('score' ) < ScoreParameter){
-            				
-            				ele.remove();
-            			}
-                    });
-
-                   edgeClone.each(function(i, ele){
-                	   var edgeCloneId = ele.attr('id');
-
-    					if(ele.attr('score' ) >= ScoreParameter ){
-    						if(checkPublished(ele) || checkValidated(ele) || checkVerified(ele) || checkLiterature(ele)){
-    							
-    							if(checkEdgeExists(edgeCloneId, cy.edges()) == false){
-
-
-        							restoreEdge(ele);
-        	          				Id = ele.attr('id');
-        	          				$("#" + Id).detach().appendTo("#interaction_rows");
-        	          				reloadPageSize();
-
-        						}
-    						}
-    					}
-                   });
-
-        			cy.nodes().each(function(j, ele_node){
-        				if(ele_node.degree() == 0){
-        
-        					ele_node.remove();
-        				}
-        			});
-
-
-        			$("#node_number").html( cy.nodes().length );
-        			$("#edge_number").html( cy.edges().length );
-        			$("#interaction_status").html( getInteractionStatusSummary());
-        			var nodeGOEnrichment = [];
-        			cy.nodes().each(function(j, ele_node){
-        				
-        				nodeGOEnrichment.push(ele_node.attr('gene_name'));
-            			  				
-        			});
-
-        			updateGOEnrichment(nodeGOEnrichment);
-        			updateUnpublished(cy.edges());
-        			updateDownloads();
-        			
-        	    	cy.layout({ 
-        	    		name: Layout,
-        	    		avoidOverlap: true,
-        	    		equidistant: true,
-        	    		minNodeSpacing: 50,
-        	    	});
-
-                   	cy.$('.nodes').qtip({
-                		content: 
-                			function(){ 
-                			var proteinName = this.data('protein_name');
-                			var searchTerm = this.data('search_term');
-                			var geneName = this.data('gene_name');
-                			var proteinDescription = this.data('description');
-                			var linkArray = this.data('external_links');
-                			var returnLinks = '<div class="row">';
-
-                			$.each(linkArray, function(database, links) {
-
-                				returnLinks += '<div class="row">' + database + '</div>';
-                				returnLinks += '<div class="row">';
-                				for (i = 0; i < links.length; ++i) {
-                					link_id = links[i][0];
-                					link = links[i][1];
-                					returnLinks += '<a href="' + link + '" target="_blank">' + link_id + '</a> ';
-                				}
-                				returnLinks += '</div>';
-                			});
-                			
-                			returnLinks += '</div>';			
-                			
-                			return '<div class="container" style="padding-top: 20px; width: 100%;"><div class="row" style="margin-bottom: 20px;"><div class="col-sm-10"><h3 style="font-weight: bold; color: {{ main_color_scheme }};">' + geneName + '</h3> <div class="shadow"></div> </div></div><div class="col-sm-7"><div class="row"><h4 style="font-weight: bold; color: {{ main_color_scheme }};">Actions</h4></div><div class="row"><a href="http://interactome.dfci.harvard.edu/huri/search_results/' +  geneName + '" target="_blank">Search for ' + geneName + '</a></div><div class="row"><a href="http://interactome.dfci.harvard.edu/huri/protein_sequence/' +  geneName + '"  target="_blank">Show protein sequence</a></div><div class="row"><h4  style="font-weight: bold; color: {{ main_color_scheme }};">Description</h4></div><div class="row"><span class="more">' + proteinDescription + '</span></div></div><div class="col-sm-5"><div class="row"><h4  style="font-weight: bold; color: {{ main_color_scheme }};">Links</h4></div>' + returnLinks + '</div><script>$(document).ready(function() {var showChar = 300;var ellipsestext = "...";var moretext = "Read More";var lesstext = "Show less";$(".more").each(function() {var content = $(this).html();if(content.length > showChar) {var c = content.substr(0, showChar);var h = content.substr(showChar, content.length - showChar);var html = c + \'<span class="moreellipses">\' + ellipsestext + \'&nbsp;</span><span class="morecontent"><span>\' + h + \'</span>&nbsp;&nbsp;<a href="" class="morelink">Read More</a></span>\';$(this).html(html);}});$(".morelink").on("click", function(){if($(this).hasClass("less")) {$(this).removeClass("less");$(this).html(moretext);} else {$(this).addClass("less");$(this).html(lesstext);}$(this).parent().prev().toggle();$(this).prev().toggle();return false;});});</' + 'script>';
-
-                		},
-                		position: {
-                			viewport: $(window),
-                			my: 'top center',
-                			at: 'bottom center'
-                		},
-                		style: {
-                			classes: 'qtip-bootstrap',
-                			tip: {
-                				width: 16,
-                				height: 8
-                			}
-                		},
-                	});
-
-                	for (i = 0; i < queryNodeIdArray.length; ++i) {
-
-                		var queryNodeId = queryNodeIdArray[i];
-                		var selectID = '#' + queryNodeId
-                		
-                		cy.$(selectID).style({'background-color': "{{ query_node_color }}" });
-                		
-                	}
-            	}
-            
-        });
-
-
-        
-        $("#validated_checkbox").change(function() {
-            if(!this.checked) {
-               	 cy.edges().each(function(i, ele){
-          			if(ele.attr('highest_publication_status' ) == 'validated'){
-          				
-          				ele.remove();
-          				Id = ele.attr('id');
-        				$("#" + Id).detach().appendTo("#hide_rows");
-        				reloadPageSize();
-          			}
-                  });
-    
-      			cy.nodes().each(function(j, ele_node){
-     				if(ele_node.degree() == 0){
-    
-     					ele_node.remove();
-     				}
-     			});
-
-    			$("#node_number").html( cy.nodes().length );
-    			$("#edge_number").html( cy.edges().length );
-    			$("#interaction_status").html( getInteractionStatusSummary());
-    			var nodeGOEnrichment = [];
-    			cy.nodes().each(function(j, ele_node){
-    				
-    				nodeGOEnrichment.push(ele_node.attr('gene_name'));
-        			  				
-    			});
-
-    			updateGOEnrichment(nodeGOEnrichment);
-    			updateUnpublished(cy.edges());
-    			updateDownloads();
-    			
-    	    	cy.layout({ 
-    	    		name: Layout,
-    	    		avoidOverlap: true,
-    	    		equidistant: true,
-    	    		minNodeSpacing: 50,
-    	    	});
-            }
-            if(this.checked) {
-
-                    nodeClone.each(function(i, ele){
-
-                    	var nodeCloneId = ele.attr('id');
-                    	
-						if(checkNodeExists(nodeCloneId, cy.nodes()) == false){
-
-                    	  	ele.restore();
-    
-                        	ele.on("mouseover", function(){
-                        		$( '.interaction_row' ).each(function(){ $(ele).css('background', '#ffffff');});
-    
-                        	    timer = setTimeout(function(){
-                            		cy.nodes().style({ 'opacity' : 0.2});
-                            		cy.edges().style({ 'opacity' : 0.2});
-                            		ele.style({ 'opacity' : 1});
-                            		ele.neighborhood().style({ 'opacity' : 1});
-                        	    }, 700);
-    
-                        	}).on("mouseout", function(){
-                        	    clearTimeout(timer);
-                        		cy.nodes().style({ 'opacity' : 1});
-                        		cy.edges().style({ 'opacity' : 1});
-                        	    
-                        	});
-
-                    	}
-
-              	  	});
-                
-                    cy.edges().each(function(i, ele){
-            			if(ele.attr('score' ) < ScoreParameter){
-            				
-            				ele.remove();
-            			}
-                    });
-
-                   edgeClone.each(function(i, ele){
-                	   var edgeCloneId = ele.attr('id');
-
-       					if(ele.attr('score' ) >= ScoreParameter ){
-       						if(checkPublished(ele) || checkValidated(ele) || checkVerified(ele) || checkLiterature(ele)){
-       							
-       							if(checkEdgeExists(edgeCloneId, cy.edges()) == false){
-    								restoreEdge(ele);
-    	          					Id = ele.attr('id');
-    	          					$("#" + Id).detach().appendTo("#interaction_rows");
-    	          					reloadPageSize();
-    							}
-    						}
-
-    			    		
-    					}
-                   });
-
-        			cy.nodes().each(function(j, ele_node){
-        				if(ele_node.degree() == 0){
-        
-        					ele_node.remove();
-        				}
-        			});
-
-
-        			$("#node_number").html( cy.nodes().length );
-        			$("#edge_number").html( cy.edges().length );
-        			$("#interaction_status").html( getInteractionStatusSummary());
-        			var nodeGOEnrichment = [];
-        			cy.nodes().each(function(j, ele_node){
-        				
-        				nodeGOEnrichment.push(ele_node.attr('gene_name'));
-            			  				
-        			});
-
-        			updateGOEnrichment(nodeGOEnrichment);
-        			updateUnpublished(cy.edges());
-        			updateDownloads();
-        			
-        	    	cy.layout({ 
-        	    		name: Layout,
-        	    		avoidOverlap: true,
-        	    		equidistant: true,
-        	    		minNodeSpacing: 50,
-        	    	});
-
-                   	cy.$('.nodes').qtip({
-                		content: 
-                			function(){ 
-                			var proteinName = this.data('protein_name');
-                			var searchTerm = this.data('search_term');
-                			var geneName = this.data('gene_name');
-                			var proteinDescription = this.data('description');
-                			var linkArray = this.data('external_links');
-                			var returnLinks = '<div class="row">';
-
-                			$.each(linkArray, function(database, links) {
-
-                				returnLinks += '<div class="row">' + database + '</div>';
-                				returnLinks += '<div class="row">';
-                				for (i = 0; i < links.length; ++i) {
-                					link_id = links[i][0];
-                					link = links[i][1];
-                					returnLinks += '<a href="' + link + '" target="_blank">' + link_id + '</a> ';
-                				}
-                				returnLinks += '</div>';
-                			});
-                			
-                			returnLinks += '</div>';			
-                			
-                			return '<div class="container" style="padding-top: 20px; width: 100%;"><div class="row" style="margin-bottom: 20px;"><div class="col-sm-10"><h3 style="font-weight: bold; color: {{ main_color_scheme }};">' + geneName + '</h3> <div class="shadow"></div> </div></div><div class="col-sm-7"><div class="row"><h4 style="font-weight: bold; color: {{ main_color_scheme }};">Actions</h4></div><div class="row"><a href="http://interactome.dfci.harvard.edu/huri/search_results/' +  geneName + '" target="_blank">Search for ' + geneName + '</a></div><div class="row"><a href="http://interactome.dfci.harvard.edu/huri/protein_sequence/' +  geneName + '"  target="_blank">Show protein sequence</a></div><div class="row"><h4  style="font-weight: bold; color: {{ main_color_scheme }};">Description</h4></div><div class="row"><span class="more">' + proteinDescription + '</span></div></div><div class="col-sm-5"><div class="row"><h4  style="font-weight: bold; color: {{ main_color_scheme }};">Links</h4></div>' + returnLinks + '</div><script>$(document).ready(function() {var showChar = 300;var ellipsestext = "...";var moretext = "Read More";var lesstext = "Show less";$(".more").each(function() {var content = $(this).html();if(content.length > showChar) {var c = content.substr(0, showChar);var h = content.substr(showChar, content.length - showChar);var html = c + \'<span class="moreellipses">\' + ellipsestext + \'&nbsp;</span><span class="morecontent"><span>\' + h + \'</span>&nbsp;&nbsp;<a href="" class="morelink">Read More</a></span>\';$(this).html(html);}});$(".morelink").on("click", function(){if($(this).hasClass("less")) {$(this).removeClass("less");$(this).html(moretext);} else {$(this).addClass("less");$(this).html(lesstext);}$(this).parent().prev().toggle();$(this).prev().toggle();return false;});});</' + 'script>';
-
-                		},
-                		position: {
-                			viewport: $(window),
-                			my: 'top center',
-                			at: 'bottom center'
-                		},
-                		style: {
-                			classes: 'qtip-bootstrap',
-                			tip: {
-                				width: 16,
-                				height: 8
-                			}
-                		},
-                	});
-
-                	for (i = 0; i < queryNodeIdArray.length; ++i) {
-
-                		var queryNodeId = queryNodeIdArray[i];
-                		var selectID = '#' + queryNodeId
-                		
-                		cy.$(selectID).style({'background-color': "{{ query_node_color }}" });
-                		
-                	}
-            	}
-            
-        });
-
-    $("#verified_checkbox").change(function() {
-        if(!this.checked) {
-           	 cy.edges().each(function(i, ele){
-      			if(ele.attr('highest_publication_status' ) == 'verified'){
-      				
-      				ele.remove();
-      				Id = ele.attr('id');
-    				$("#" + Id).detach().appendTo("#hide_rows");
-    				reloadPageSize();
-      			}
-              });
-
-  			cy.nodes().each(function(j, ele_node){
- 				if(ele_node.degree() == 0){
-
- 					ele_node.remove();
- 				}
- 			});
- 			
-			$("#node_number").html( cy.nodes().length );
-			$("#edge_number").html( cy.edges().length );
-			$("#interaction_status").html( getInteractionStatusSummary());
-			var nodeGOEnrichment = [];
-			cy.nodes().each(function(j, ele_node){
-				
-				nodeGOEnrichment.push(ele_node.attr('gene_name'));
-    			  				
-			});
-
-			updateGOEnrichment(nodeGOEnrichment);
-			updateUnpublished(cy.edges());
-			updateDownloads();
-			
-	    	cy.layout({ 
-	    		name: Layout,
-	    		avoidOverlap: true,
-	    		equidistant: true,
-	    		minNodeSpacing: 50,
-	    	});
-        }
-        if(this.checked) {
-
-
-                nodeClone.each(function(i, ele){
-                	var nodeCloneId = ele.attr('id');
-                	
-					if(checkNodeExists(nodeCloneId, cy.nodes()) == false){
-                	  	ele.restore();
-    
-                    	ele.on("mouseover", function(){
-                    		$( '.interaction_row' ).each(function(){ $(ele).css('background', '#ffffff');});
-    
-                    	    timer = setTimeout(function(){
-                        		cy.nodes().style({ 'opacity' : 0.2});
-                        		cy.edges().style({ 'opacity' : 0.2});
-                        		ele.style({ 'opacity' : 1});
-                        		ele.neighborhood().style({ 'opacity' : 1});
-                    	    }, 700);
-    
-                    	}).on("mouseout", function(){
-                    	    clearTimeout(timer);
-                    		cy.nodes().style({ 'opacity' : 1});
-                    		cy.edges().style({ 'opacity' : 1});
-                    	    
-                    	});
-
-                	}
-
-          	  	});
-            
-                cy.edges().each(function(i, ele){
-        			if(ele.attr('score' ) < ScoreParameter){
-        				
-        				ele.remove();
-        			}
-                });
-
-               edgeClone.each(function(i, ele){
-            	   var edgeCloneId = ele.attr('id');
-
-					if(ele.attr('score' ) >= ScoreParameter ){
-						if(checkPublished(ele) || checkValidated(ele) || checkVerified(ele) || checkLiterature(ele)){
-							
-							if(checkEdgeExists(edgeCloneId, cy.edges()) == false){
-    							restoreEdge(ele);
-    	          				Id = ele.attr('id');
-    	          				$("#" + Id).detach().appendTo("#interaction_rows");
-    	          				reloadPageSize();
-							}
-						}
-
-			    		
-					}
-               });
-
-    			cy.nodes().each(function(j, ele_node){
-    				if(ele_node.degree() == 0){
-    
-    					ele_node.remove();
-    				}
-    			});
-
-
-    			$("#node_number").html( cy.nodes().length );
-    			$("#edge_number").html( cy.edges().length );
-    			$("#interaction_status").html( getInteractionStatusSummary());
-    			var nodeGOEnrichment = [];
-    			cy.nodes().each(function(j, ele_node){
-    				
-    				nodeGOEnrichment.push(ele_node.attr('gene_name'));
-        			  				
-    			});
-
-    			updateGOEnrichment(nodeGOEnrichment);
-    			updateUnpublished(cy.edges());
-    			updateDownloads();
-    		
-   
-    	    	cy.layout({ 
-    	    		name: Layout,
-    	    		avoidOverlap: true,
-    	    		equidistant: true,
-    	    		minNodeSpacing: 50,
-    	    	});
-
-               	cy.$('.nodes').qtip({
-            		content: 
-            			function(){ 
-            			var proteinName = this.data('protein_name');
-            			var searchTerm = this.data('search_term');
-            			var geneName = this.data('gene_name');
-            			var proteinDescription = this.data('description');
-            			var linkArray = this.data('external_links');
-            			var returnLinks = '<div class="row">';
-
-            			$.each(linkArray, function(database, links) {
-
-            				returnLinks += '<div class="row">' + database + '</div>';
-            				returnLinks += '<div class="row">';
-            				for (i = 0; i < links.length; ++i) {
-            					link_id = links[i][0];
-            					link = links[i][1];
-            					returnLinks += '<a href="' + link + '" target="_blank">' + link_id + '</a> ';
-            				}
-            				returnLinks += '</div>';
-            			});
-            			
-            			returnLinks += '</div>';			
-            			
-            			return '<div class="container" style="padding-top: 20px; width: 100%;"><div class="row" style="margin-bottom: 20px;"><div class="col-sm-10"><h3 style="font-weight: bold; color: {{ main_color_scheme }};">' + geneName + '</h3> <div class="shadow"></div> </div></div><div class="col-sm-7"><div class="row"><h4 style="font-weight: bold; color: {{ main_color_scheme }};">Actions</h4></div><div class="row"><a href="http://interactome.dfci.harvard.edu/huri/search_results/' +  geneName + '" target="_blank">Search for ' + geneName + '</a></div><div class="row"><a href="http://interactome.dfci.harvard.edu/huri/protein_sequence/' +  geneName + '"  target="_blank">Show protein sequence</a></div><div class="row"><h4  style="font-weight: bold; color: {{ main_color_scheme }};">Description</h4></div><div class="row"><span class="more">' + proteinDescription + '</span></div></div><div class="col-sm-5"><div class="row"><h4  style="font-weight: bold; color: {{ main_color_scheme }};">Links</h4></div>' + returnLinks + '</div><script>$(document).ready(function() {var showChar = 300;var ellipsestext = "...";var moretext = "Read More";var lesstext = "Show less";$(".more").each(function() {var content = $(this).html();if(content.length > showChar) {var c = content.substr(0, showChar);var h = content.substr(showChar, content.length - showChar);var html = c + \'<span class="moreellipses">\' + ellipsestext + \'&nbsp;</span><span class="morecontent"><span>\' + h + \'</span>&nbsp;&nbsp;<a href="" class="morelink">Read More</a></span>\';$(this).html(html);}});$(".morelink").on("click", function(){if($(this).hasClass("less")) {$(this).removeClass("less");$(this).html(moretext);} else {$(this).addClass("less");$(this).html(lesstext);}$(this).parent().prev().toggle();$(this).prev().toggle();return false;});});</' + 'script>';
-
-            		},
-            		position: {
-            			viewport: $(window),
-            			my: 'top center',
-            			at: 'bottom center'
-            		},
-            		style: {
-            			classes: 'qtip-bootstrap',
-            			tip: {
-            				width: 16,
-            				height: 8
-            			}
-            		},
-            	});
-
-            	for (i = 0; i < queryNodeIdArray.length; ++i) {
-
-            		var queryNodeId = queryNodeIdArray[i];
-            		var selectID = '#' + queryNodeId
-            		
-            		cy.$(selectID).style({'background-color': "{{ query_node_color }}" });
-            		
-            	}
-        	}
-        
-    });
-
-    $("#literature_checkbox").change(function() {
-        if(!this.checked) {
-           	 cy.edges().each(function(i, ele){
-      			if(ele.attr('highest_publication_status' ) == 'literature'){
-      				
-      				ele.remove();
-      				Id = ele.attr('id');
-    				$("#" + Id).detach().appendTo("#hide_rows");
-    				reloadPageSize();
-      			}
-              });
-
-  			cy.nodes().each(function(j, ele_node){
- 				if(ele_node.degree() == 0){
-
- 					ele_node.remove();
- 				}
- 			});
-
-			$("#node_number").html( cy.nodes().length );
-			$("#edge_number").html( cy.edges().length );
-			$("#interaction_status").html( getInteractionStatusSummary());
-			var nodeGOEnrichment = [];
-			cy.nodes().each(function(j, ele_node){
-				
-				nodeGOEnrichment.push(ele_node.attr('gene_name'));
-    			  				
-			});
-
-			updateGOEnrichment(nodeGOEnrichment);
-			updateUnpublished(cy.edges());
-			updateDownloads();
-			
-	    	cy.layout({ 
-	    		name: Layout,
-	    		avoidOverlap: true,
-	    		equidistant: true,
-	    		minNodeSpacing: 50,
-	    	});
-        }
-        if(this.checked) {
-
-                nodeClone.each(function(i, ele){
-                	var nodeCloneId = ele.attr('id');
-                	
-					if(checkNodeExists(nodeCloneId, cy.nodes()) == false){
-                	  	ele.restore();
-    
-                    	ele.on("mouseover", function(){
-                    		$( '.interaction_row' ).each(function(){ $(ele).css('background', '#ffffff');});
-    
-                    	    timer = setTimeout(function(){
-                        		cy.nodes().style({ 'opacity' : 0.2});
-                        		cy.edges().style({ 'opacity' : 0.2});
-                        		ele.style({ 'opacity' : 1});
-                        		ele.neighborhood().style({ 'opacity' : 1});
-                    	    }, 700);
-    
-                    	}).on("mouseout", function(){
-                    	    clearTimeout(timer);
-                    		cy.nodes().style({ 'opacity' : 1});
-                    		cy.edges().style({ 'opacity' : 1});
-                    	    
-                    	});
-
-                	}
-
-          	  	});
-            
-                cy.edges().each(function(i, ele){
-        			if(ele.attr('score' ) < ScoreParameter){
-        				
-        				ele.remove();
-        			}
-                });
-
-               edgeClone.each(function(i, ele){
-            	   var edgeCloneId = ele.attr('id');
-
-					if(ele.attr('score' ) >= ScoreParameter ){
-						if(checkPublished(ele) || checkValidated(ele) || checkVerified(ele) || checkLiterature(ele)){
-							
-							if(checkEdgeExists(edgeCloneId, cy.edges()) == false){
-    							restoreEdge(ele);
-    	          				Id = ele.attr('id');
-    	          				$("#" + Id).detach().appendTo("#interaction_rows");
-    	          				reloadPageSize();
-							}
-						}
-
-			    		
-					}
-               });
-
-    			cy.nodes().each(function(j, ele_node){
-    				if(ele_node.degree() == 0){
-    
-    					ele_node.remove();
-    				}
-    			});
-
-    			$("#node_number").html( cy.nodes().length );
-    			$("#edge_number").html( cy.edges().length );
-    			$("#interaction_status").html( getInteractionStatusSummary());
-    			var nodeGOEnrichment = [];
-    			cy.nodes().each(function(j, ele_node){
-    				
-    				nodeGOEnrichment.push(ele_node.attr('gene_name'));
-        			  				
-    			});
-
-    			updateGOEnrichment(nodeGOEnrichment);
-    			updateUnpublished(cy.edges());
-    			updateDownloads();
-
-    	    	cy.layout({ 
-    	    		name: Layout,
-    	    		avoidOverlap: true,
-    	    		equidistant: true,
-    	    		minNodeSpacing: 50,
-    	    	});
-
-               	cy.$('.nodes').qtip({
-            		content: 
-            			function(){ 
-            			var proteinName = this.data('protein_name');
-            			var searchTerm = this.data('search_term');
-            			var geneName = this.data('gene_name');
-            			var proteinDescription = this.data('description');
-            			var linkArray = this.data('external_links');
-            			var returnLinks = '<div class="row">';
-
-            			$.each(linkArray, function(database, links) {
-
-            				returnLinks += '<div class="row">' + database + '</div>';
-            				returnLinks += '<div class="row">';
-            				for (i = 0; i < links.length; ++i) {
-            					link_id = links[i][0];
-            					link = links[i][1];
-            					returnLinks += '<a href="' + link + '" target="_blank">' + link_id + '</a> ';
-            				}
-            				returnLinks += '</div>';
-            			});
-            			
-            			returnLinks += '</div>';			
-            			
-            			return '<div class="container" style="padding-top: 20px; width: 100%;"><div class="row" style="margin-bottom: 20px;"><div class="col-sm-10"><h3 style="font-weight: bold; color: {{ main_color_scheme }};">' + geneName + '</h3> <div class="shadow"></div> </div></div><div class="col-sm-7"><div class="row"><h4 style="font-weight: bold; color: {{ main_color_scheme }};">Actions</h4></div><div class="row"><a href="http://interactome.dfci.harvard.edu/huri/search_results/' +  geneName + '" target="_blank">Search for ' + geneName + '</a></div><div class="row"><a href="http://interactome.dfci.harvard.edu/huri/protein_sequence/' +  geneName + '"  target="_blank">Show protein sequence</a></div><div class="row"><h4  style="font-weight: bold; color: {{ main_color_scheme }};">Description</h4></div><div class="row"><span class="more">' + proteinDescription + '</span></div></div><div class="col-sm-5"><div class="row"><h4  style="font-weight: bold; color: {{ main_color_scheme }};">Links</h4></div>' + returnLinks + '</div><script>$(document).ready(function() {var showChar = 300;var ellipsestext = "...";var moretext = "Read More";var lesstext = "Show less";$(".more").each(function() {var content = $(this).html();if(content.length > showChar) {var c = content.substr(0, showChar);var h = content.substr(showChar, content.length - showChar);var html = c + \'<span class="moreellipses">\' + ellipsestext + \'&nbsp;</span><span class="morecontent"><span>\' + h + \'</span>&nbsp;&nbsp;<a href="" class="morelink">Read More</a></span>\';$(this).html(html);}});$(".morelink").on("click", function(){if($(this).hasClass("less")) {$(this).removeClass("less");$(this).html(moretext);} else {$(this).addClass("less");$(this).html(lesstext);}$(this).parent().prev().toggle();$(this).prev().toggle();return false;});});</' + 'script>';
-
-            		},
-            		position: {
-            			viewport: $(window),
-            			my: 'top center',
-            			at: 'bottom center'
-            		},
-            		style: {
-            			classes: 'qtip-bootstrap',
-            			tip: {
-            				width: 16,
-            				height: 8
-            			}
-            		},
-            	});
-
-            	for (i = 0; i < queryNodeIdArray.length; ++i) {
-
-            		var queryNodeId = queryNodeIdArray[i];
-            		var selectID = '#' + queryNodeId
-            		
-            		cy.$(selectID).style({'background-color': "{{ query_node_color }}" });
-            		
-            	}
-    		}
-   });
-
-	    	
-
-    $('table').footable();
-	$('#change-page-size').change(function (e) {
-		e.preventDefault();
-		var pageSize = $(this).val();
-		$('.footable').data('page-size', pageSize);
-		$('.footable').trigger('footable_initialized');
-	});
-
-    $('#minimize').on('click', function(){
-    	
-    	$('#summary_menu').removeClass('summary_menu_max');
-    	$('#summary_menu').addClass('summary_menu_min');
-    	$('#summary').addClass('hidden');
-    	$('#minimize').addClass('hidden');
-    	$('#maximize').removeClass('hidden');
-     });
-
-    $('#maximize').on('click', function(){
-    	$('#summary_menu').removeClass('summary_menu_min');
-        $('#summary_menu').addClass('summary_menu_max');
-    	$('#minimize').removeClass('hidden');
-    	$('#maximize').addClass('hidden');
-    	$('#summary').removeClass('hidden');
-     });
-
-});
-
-function restoreEdge(ele){
-	ele.restore();
-
-	var publicationStatus = ele.data('highest_publication_status');
-
-    if(publicationStatus == 'published'){
-    	ele.style({'line-color': "{{ published_edge_color }}" });
-    }else if(publicationStatus == 'validated'){
-    	ele.style({'line-color': "{{ validated_edge_color }}" });
-    }else if(publicationStatus == 'verified'){
-    	ele.style({'line-color': "{{ verified_edge_color }}" });
-    }else if(publicationStatus == 'literature'){
-    	ele.style({'line-color': "{{ literature_edge_color }}" });
-    }
-
-    var scoreData =  ele.data('score');
-
-	if (scoreData <= 0.20){
-		widthData = 2;
-	}else if(scoreData <= 0.40 && scoreData > 0.20){
-		widthData = 3;
-	}else if(scoreData <= 0.60 && scoreData > 0.40){
-		widthData = 4;
-	}else if(scoreData <= 0.80 && scoreData > 0.60){
-		widthData = 5;
-	}else if(scoreData <= 1 && scoreData > 0.80){
-		widthData = 6;
-	}
-
-	ele.css({ 'width': widthData });
-}
-
-
-
-
-
-
-
-
-
-
-function checkPublished(ele){
-
-	if($("#published_checkbox").is(":checked") && ele.attr('highest_publication_status' ) == 'published'){
-		return true;
-	}else{
-		return false;
-	}
-	
-}
-
-
-function checkValidated(ele){
-
-
-	if($("#validated_checkbox").is(":checked") && ele.attr('highest_publication_status' ) == 'validated'){
-		return true;
-	}else{
-		return false;
-	}
-	
-}
-
-function checkVerified(ele){
-
-	if($("#verified_checkbox").is(":checked") && ele.attr('highest_publication_status' ) == 'verified'){
-		return true;
-	}else{
-		return false;
-	}
-	
-}
-
-function checkLiterature(ele){
-
-	if($("#literature_checkbox").is(":checked") && ele.attr('highest_publication_status' ) == 'literature'){
-		return true;
-	}else{
-		return false;
-	}
-	
-}
-
-function nodeMouseOver(ele, cy){
-	$( '.interaction_row' ).each(function(){ $(this).css('background', '#ffffff');});
-	$( '.enrichment_row' ).each(function(){ $(this).css('background', '#ffffff');});
-
- 	    timer = setTimeout(function(){
-
-
- 	    	
-     		cy.nodes().style({ 'opacity' : 0.2});
-     		cy.edges().style({ 'opacity' : 0.2});
-     		ele.style({ 'opacity' : 1});
-     		ele.neighborhood().style({ 'opacity' : 1});
- 	    }, 700);
-}
-
-function nodeMouseOut(ele, cy){
-    clearTimeout(timer);
-	cy.nodes().style({ 'opacity' : 1});
-	cy.edges().style({ 'opacity' : 1});
-    
-}
-
-function getInteractionStatusSummary(){
-
-	var interaction_status = [];
-	if($("#published_checkbox").is(":checked")){interaction_status.push('Published') };
-	if($("#validated_checkbox").is(":checked")){interaction_status.push('Validated')};
-	if($("#verified_checkbox").is(":checked")){interaction_status.push('Verified')};
-	if($("#literature_checkbox").is(":checked")){interaction_status.push('Literature')}; 
-	var interaction_status_summary = interaction_status.join();
-
-	return interaction_status_summary;
-}
-
-
-function reloadPageSize(){
-
-	var current = $("#change-page-size").val();
-	$("#change-page-size").val(current).change();
-
-}
-
-
-function updateGOEnrichment(requestTerm){
-	
-   
-    
-    url = 'http://interactome.dfci.harvard.edu/huri/go_enrichment/' + requestTerm;
-
-
-
-
-    	  
-    $.getJSON(url, function(JsonData) {
-    	$("#MF_table").empty();
-    	JsonData.MF.forEach(function(MF_row, i) {
-
-    		http://amigo.geneontology.org/amigo/term/
-    			$("#MF_table").append("<tr class='enrichment_row' data='" + MF_row['list'] + "'><td><a href='http://amigo.geneontology.org/amigo/term/"+ MF_row['GO_term_code'] + "' target='_blank'>" + MF_row['GO_term_code'] + "</a></td><td>" + MF_row['GO_term'] + "</td><td>" + MF_row['p_value'] + "</td></tr>");
-    
-    	});
-    	$("#CC_table").empty();
-    	JsonData.CC.forEach(function(CC_row, i) {
-    			$("#CC_table").append("<tr class='enrichment_row' data='" + CC_row['list'] + "'><td><a href='http://amigo.geneontology.org/amigo/term/"+ CC_row['GO_term_code'] + "' target='_blank'>" + CC_row['GO_term_code'] + "</a></td><td>" + CC_row['GO_term'] + "</td><td>" + CC_row['p_value'] + "</td></tr>");
-    
-    	});
-    	$("#BP_table").empty();
-    	JsonData.BP.forEach(function(BP_row, i) {
-    			$("#BP_table").append("<tr class='enrichment_row' data='" + BP_row['list'] + "'><td><a href='http://amigo.geneontology.org/amigo/term/"+ BP_row['GO_term_code'] + "' target='_blank'>"  + BP_row['GO_term_code'] + "</a></td><td>" + BP_row['GO_term'] + "</td><td>" + BP_row['p_value'] + "</td></tr>");
-    
-    	});
-    	$("#rea_table").empty();
-    	JsonData.rea.forEach(function(rea_row, i) {
-
-
-    			var reac_id = rea_row['GO_term_code'].replace("REAC:", '');
- 
-    			$("#rea_table").append("<tr class='enrichment_row' data='" + rea_row['list'] + "'><td><a href='http://www.reactome.org/content/detail/R-HSA-"+ reac_id + "' target='_blank'>"  + rea_row['GO_term_code'] + "</a></td><td>" + rea_row['GO_term'] + "</td><td>" + rea_row['p_value'] + "</td></tr>");
-    
-    	});
-    	
-     });
-}
-
-function updateDownloads(){
-
-	var interaction_status = [];
-	var requestTerm = $("#query_parameter").html();
-	var score = $("#min_interaction_score_handle").html();
-	interaction_status.push('score=' + score)
-	if($("#published_checkbox").is(":checked")){interaction_status.push('published=true') };
-	if($("#validated_checkbox").is(":checked")){interaction_status.push('validated=true')};
-	if($("#verified_checkbox").is(":checked")){interaction_status.push('verified=true')};
-	if($("#literature_checkbox").is(":checked")){interaction_status.push('literature=true')}; 
-	var interaction_status = interaction_status.join('&');
-	var filter = $("#filter_parameter").html();
-
-	var  searchTerm = requestTerm + '?' + interaction_status + '&' + 'filter=' + filter;
-	var unpublished = $("#unpublished_dataset").html();
-
-	if(unpublished == 'true'){
-
-		route_psi_mitab = 'psi_mitab:' + searchTerm;
-		$("#psi_mitab").attr('data', route_psi_mitab );
-
-		
-		route_interaction_csv = 'interaction_csv:' + searchTerm;
-		$("#interaction_csv").attr('data', route_interaction_csv );
-
-		
-	}else{
-
-		var route_psi_mitab = Routing.generate('psi_mitab', { search_term: '' });
-		route_psi_mitab = route_psi_mitab + '/' + searchTerm;
-		$("#psi_mitab").attr('href', route_psi_mitab );
-
-		var route_interaction_csv = Routing.generate('interaction_csv', { search_term: '' });
-		route_interaction_csv = route_interaction_csv + '/' + searchTerm;
-		$("#interaction_csv").attr('href', route_interaction_csv );
-	}
-	
-	var route_interactor_csv = Routing.generate('interactor_csv', { search_term: '' });
-	route_interactor_csv = route_interactor_csv + '/' + searchTerm;
-	$("#interactor_csv").attr('href', route_interactor_csv );
-
-	var route_multi_fasta = Routing.generate('multi_fasta', { search_term: '' });
-	route_multi_fasta = route_multi_fasta + '/' + searchTerm;
-	$("#multi_fasta").attr('href', route_multi_fasta );
-
-	
-	
-	
-}
-
-function checkNodeExists(nodeCloneId, nodes){
-
-		var returnValue = null;
-	
-		nodes.each(function(j, ele_node){
-
-			var cyNodeId = ele_node.attr('id');
-
-
-			if(cyNodeId == nodeCloneId){
-
-				returnValue = true;
-				
-			}
-		});
-		
-
-		if(returnValue == null){
-			returnValue = false;
-
-		}
-
-		return returnValue;
-	
-}
-
-function checkEdgeExists(edgeCloneId, edges){
-
-	var returnValue = null;
-	
-	edges.each(function(j, ele_edge){
-
-		var cyEdgeId = ele_edge.attr('id');
-
-
-		if(cyEdgeId == edgeCloneId){
-
-			returnValue = true;
-
-			
-		}
-
-		
-	});
-	
-	if(returnValue == null){
-		returnValue = false;
-
-	}
-
-	return returnValue;
-
-}
-
-function updateUnpublished(edges){
-
-	$(".data_request_links").off('click');
-	var unpublished = false;
-	
-	edges.each(function(j, ele_edge){
-
-		var highest_publication_status = ele_edge.attr('highest_publication_status');
-
-
-		if(highest_publication_status != 'published'){
-
-			unpublished = true;
-
-			
-		}
-
-		
-	});
-
-
-	$("#unpublished_dataset").html(unpublished);
-
-	if(unpublished == true){
-		$("#psi_mitab").attr('class', 'data_request_links link');
-		$("#psi_mitab").removeAttr("href");
-		$("#interaction_csv").attr('class', 'data_request_links link');
-		$("#interaction_csv").removeAttr("href");
-
-	}else{
-		$("#psi_mitab").attr('class', 'link');
-		$("#interaction_csv").attr('class', 'link');
-	}
-	
-	$(".data_request_links").on("click", showDataRequestForm);
-
-}
-
-</script>
+<script>$(window).disablescroll("undo")</script>
 {% endblock %}

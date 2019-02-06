@@ -64,7 +64,8 @@ class AboutController extends Controller
 		        'short_title' => $short_title,
 		        'footer' => $footer,
 				'login_status' => $login_status,
-				'admin_status' => $admin_status
+				'admin_status' => $admin_status,
+				'page' => 'about'
 		));
 	
 
