@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %} 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/css/about.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/contact.css') }}">
+{% endblock %}
+{% block title %}{{ short_title }} | About{% endblock %}
+{% block nav %}
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			{% if login_status == false %}
+			<div class="navbar-header tor_ibin_header" >
+				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px; font-family: Century Gothic, sans-serif">
+				<ul class="nav navbar-nav ">
+					<li><a href="{{ path('home') }}">Home</a></li>
+					<li><a href="{{ path('search_results') }}">Search</a></li>
+					<li><a href="{{ path('download') }}">Downloads</a></li>
+					<li><a href="{{ path('about') }}">About</a></li>
+					<li><a href="{{ path('faq') }}">FAQ</a></li>
+					<li  class="active"><a href="{{ path('contact') }}">Contact</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="{{ path('user_register') }}">Register</a></li>
+					<li style=""><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+				</ul>
+    		</div>
+    		{% elseif login_status == true %}
+    				<div class="navbar-header tor_ibin_header" >
+						<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} {% if admin_status == true %}Admin{% endif %}</h5>
+        				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span>
+        				</button>
+        			</div>
+    			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
+    				<ul class="nav navbar-nav ">
+    					<li><a href="{{ path('home') }}">Home</a></li>
+    					<li><a href="{{ path('search_results') }}">Search</a></li>
+    					<li><a href="{{ path('download') }}">Downloads</a></li>
+    					<li><a href="{{ path('about') }}">About</a></li>
+    					<li><a href="{{ path('faq') }}">FAQ</a></li>
+    					<li class="active"><a href="{{ path('contact') }}">Contact</a></li>
+    					{% if admin_status == true %}
+        					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+        					<li><a href="{{ path('data_manager') }}">Data</a></li>
+        					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+        					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+    					{% endif %}
+    				</ul>
+    				<ul class="nav navbar-nav navbar-right">
+    					<li><a href="{{ path('fos_user_profile_show') }}">Profile</a></li>
+    					<li style="margin-left: 0px;"><a href="{{ path('user_logout') }}">Logout</a></li>
+    				</ul>
+    			</div>
+    		{% endif %}
+		</div>
+		<div class="shadow"></div>
+	</nav>
+{% endblock %}
+{% block content %}
+<main>
+   <div id="particles-js4" style=""></div>
+	<div id="particles-js3" style="">
+    	<div class="row" style="position: relative;">
+           <div style="position:absolute;  height:100%; margin-left: auto; margin-right: auto;left: 0; right: 0;top: 20;z-index: 100;">
+            	<div class="outer_panel"  style="overflow: auto;">
+                	<div class="container">
+                		<div class="row">
+        					<h3 style="color: {{ main_color_scheme }}">Contact</h3>
+        				</div>
+        				<div class="row">
+            	            {{ contact | raw }}
+            	        </div>
+            	    </div>
+            	</div>
+            </div>
+       </div>
+   </div>
+</main>
+<footer>
+	<div class="shadow"></div>
+	{{ footer | raw }}
+</footer>
+{% endblock %} 
+{% block javascripts %}
+<script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script src="{{ asset('assets/js/contact.js') }}"></script>
+{% endblock %}

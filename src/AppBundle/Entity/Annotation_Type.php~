@@ -1,0 +1,314 @@
+<?php
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="`annotation_type`")
+ */
+class Annotation_Type
+{
+	/**
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue(strategy="AUTO")
+	 */
+	protected $id;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Annotation", mappedBy="annotation_type", cascade={"persist"})
+	 */
+	protected $annotations;
+	
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $type;
+	
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $label;
+
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $show_in_table;
+	
+	/**
+	 * @ORM\Column(type="string", length=2000, nullable=true)
+	 */
+	protected $show_in_filter;
+	
+	/**
+	 * @ORM\Column(type="string", length=100, nullable=true)
+	 */
+	protected $filter;
+	
+	/**
+	 * @ORM\Column(type="string", length=2000, nullable=true)
+	 */
+	protected $fields;
+	
+	/**
+	 * @ORM\Column(type="string", length=2000, nullable=true)
+	 */
+	protected $boolean;
+	
+	/**
+	 * @ORM\Column(type="string", length=2000, nullable=true)
+	 */
+	protected $filter_name;
+	
+	/**
+	 * @ORM\Column(type="string", length=2000, nullable=true)
+	 */
+	protected $description;
+	
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+    	$this->annotations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Annotation_Type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set showInTable
+     *
+     * @param string $showInTable
+     *
+     * @return Annotation_Type
+     */
+    public function setShowInTable($showInTable)
+    {
+        $this->show_in_table = $showInTable;
+
+        return $this;
+    }
+
+    /**
+     * Get showInTable
+     *
+     * @return string
+     */
+    public function getShowInTable()
+    {
+        return $this->show_in_table;
+    }
+
+    /**
+     * Set showInFilter
+     *
+     * @param string $showInFilter
+     *
+     * @return Annotation_Type
+     */
+    public function setShowInFilter($showInFilter)
+    {
+        $this->show_in_filter = $showInFilter;
+
+        return $this;
+    }
+
+    /**
+     * Get showInFilter
+     *
+     * @return string
+     */
+    public function getShowInFilter()
+    {
+        return $this->show_in_filter;
+    }
+
+    /**
+     * Add annotation
+     *
+     * @param \AppBundle\Entity\Annotation $annotation
+     *
+     * @return Annotation_Type
+     */
+    public function addAnnotation(\AppBundle\Entity\Annotation $annotation)
+    {
+        $this->annotations[] = $annotation;
+
+        return $this;
+    }
+
+    /**
+     * Remove annotation
+     *
+     * @param \AppBundle\Entity\Annotation $annotation
+     */
+    public function removeAnnotation(\AppBundle\Entity\Annotation $annotation)
+    {
+        $this->annotations->removeElement($annotation);
+    }
+
+    /**
+     * Get annotations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAnnotations()
+    {
+        return $this->annotations;
+    }
+
+    /**
+     * Set boolean
+     *
+     * @param string $boolean
+     *
+     * @return Annotation_Type
+     */
+    public function setBoolean($boolean)
+    {
+        $this->boolean = $boolean;
+
+        return $this;
+    }
+
+    /**
+     * Get boolean
+     *
+     * @return string
+     */
+    public function getBoolean()
+    {
+        return $this->boolean;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     *
+     * @return Annotation_Type
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set fields
+     *
+     * @param string $fields
+     *
+     * @return Annotation_Type
+     */
+    public function setFields($fields)
+    {
+        $this->fields = $fields;
+
+        return $this;
+    }
+
+    /**
+     * Get fields
+     *
+     * @return string
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     *
+     * @return Annotation_Type
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
+    }
+
+    /**
+     * Set filter
+     *
+     * @param string $filter
+     *
+     * @return Annotation_Type
+     */
+    public function setFilter($filter)
+    {
+        $this->filter = $filter;
+
+        return $this;
+    }
+
+    /**
+     * Get filter
+     *
+     * @return string
+     */
+    public function getFilter()
+    {
+        return $this->filter;
+    }
+}

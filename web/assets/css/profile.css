@@ -1,0 +1,15 @@
+@CHARSET "ISO-8859-1";
+
+.checkbox{
+	
+	margin: 10px;
+}
+
+#new_updates{
+	
+	cursor: pointer;
+}
+#no_new_updates{
+	
+	cursor: pointer;
+}

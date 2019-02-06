@@ -1,0 +1,164 @@
+{% extends 'base.html.twig' %} 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/css/home.css') }}">
+<script src="{{ asset('assets/js/cytoscape.min.js') }}"></script>
+{% endblock %}
+{% block title %}{{ short_title }} | Home{% endblock %}
+
+{% block nav %}
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			{% if login_status == false %}
+			<div class="navbar-header tor_ibin_header" >
+				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
+				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
+				<ul class="nav navbar-nav ">
+					<li class="active"><a href="{{ path('home') }}">Home</a></li>
+					<li><a href="{{ path('search_results') }}">Search</a></li>
+					<li><a href="{{ path('download') }}">Downloads</a></li>
+					<li><a href="{{ path('about') }}">About</a></li>
+					<li><a href="{{ path('faq') }}">FAQ</a></li>
+					<li><a href="{{ path('contact') }}">Contact</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="{{ path('user_register') }}">Register</a></li>
+					<li style=""><a href="{{ path('fos_user_security_login') }}">Login</a></li>
+				</ul>
+    		</div>
+    		{% elseif login_status == true %}
+    				<div class="navbar-header tor_ibin_header" >
+						<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} {% if admin_status == true %}Admin{% endif %}</h5>
+        				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span> 
+        					<span class="icon-bar"></span>
+        				</button>
+        			</div>
+    			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 0px;">
+    				<ul class="nav navbar-nav ">
+    					<li class="active"><a href="{{ path('home') }}">Home</a></li>
+    					<li><a href="{{ path('search_results') }}">Search</a></li>
+    					<li><a href="{{ path('download') }}">Downloads</a></li>
+    					<li><a href="{{ path('about') }}">About</a></li>
+    					<li><a href="{{ path('faq') }}">FAQ</a></li>
+    					<li><a href="{{ path('contact') }}">Contact</a></li>
+    					{% if admin_status == true %}
+        					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+        					<li><a href="{{ path('data_manager') }}">Data</a></li>
+        					<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+        					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+    					{% endif %}
+    				</ul>
+    				<ul class="nav navbar-nav navbar-right">
+    					<li><a href="{{ path('fos_user_profile_show') }}">Profile</a></li>
+    					<li style="margin-left: 0px;"><a href="{{ path('user_logout') }}">Logout</a></li>
+    				</ul>
+    			</div>
+    		{% endif %}
+		</div>
+		<div class="shadow"></div>
+	</nav>
+{% endblock %}
+{% block content %}
+
+<main>
+    <div class="row" style="background-color: #EEEEEE; margin: 0px;">
+
+    <div class="carousel slide" data-ride="carousel" id="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#carousel" data-slide to="0" class="active"></li>
+            <li data-target="#carousel" data-slide to="1"></li>
+            <li data-target="#carousel" data-slide to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="item active">
+                <img class="d-block w-100" src="{{ url }}/assets/images/img_1.jpg" alt="First slide">
+            </div>
+            <div class="item">
+                <img class="d-block w-100" src="{{ url }}/assets/images/img_2.jpg" alt="First slide">
+            </div>
+            <div class="item">
+            	<img class="d-block w-100" src="{{ url }}/assets/images/img_3.jpg" alt="First slide">    
+            </div>
+        </div>
+        <a class="carousel-control left" href="#carousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="carousel-control right" href="#carousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
+    </div>
+    
+    
+    
+    
+            				           <table>
+                    					<tr>
+                        					<td><img src="{{ url }}/assets/images/cbioportal.png" alt="Third slide"></td>
+                        					<td><img src="{{ url }}/assets/images/gene_cards.png" alt="gene_cards.png"></td>
+                    					</tr>
+                    					<tr>
+                        					<td><img src="{{ url }}/assets/images/string.png" alt="string.png"></td>
+                        					<td><img src="{{ url }}/assets/images/ebi.png" alt="ebi.png"></td>
+                    					</tr>
+                                      </table>
+        				
+        					<table>
+            					<tr>
+            					<td><img src="{{ url }}/assets/images/cbioportal.png" alt="Third slide"></td>
+            					<td><img src="{{ url }}/assets/images/gene_cards.png" alt="gene_cards.png"></td>
+            					<td><img src="{{ url }}/assets/images/gene_mania.png" alt="gene_mania.png"></td></tr>
+            					
+            					
+            					
+            					
+            					<tr><td><img src="{{ url }}/assets/images/string.png" alt="string.png"></td>
+            					<td><img src="{{ url }}/assets/images/ebi.png" alt="ebi.png"></td>
+            					<td><img src="{{ url }}/assets/images/pathway_commons.png" alt="pathway_commons.png"></td></tr>
+            					
+            					
+            					
+            					
+            					
+            					
+            					
+            					<tr><td><img src="{{ url }}/assets/images/uniprot.png" alt="uniprot.png"></td>
+            					<td><img src="{{ url }}/assets/images/img_3.jpg" alt="Third slide"></td>
+            					<td><img src="{{ url }}/assets/images/ncbi.png" alt="ncbi.png"></td></tr>
+        					</table>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</main>
+<footer>
+
+
+
+
+
+
+	<div class="shadow"></div>
+	{{ footer | raw }}
+</footer>
+{% endblock %} 
+{% block javascripts %} 
+<script>
+var Url = "{{ url }}";
+</script>
+<script src="{{ asset('assets/js/cola.js') }}"></script>
+<script src="{{ asset('assets/js/cytoscape-cola.js') }}"></script>
+<script src="{{ asset('assets/js/home.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,170 @@
+{% extends 'base.html.twig' %} 
+{% block stylesheets %}
+<link rel="stylesheet"
+	href="{{ asset('assets/css/bootstrap.min.css') }}">
+<link rel="stylesheet"
+	href="{{ asset('assets/css/jquery-ui.min.css') }}">
+<link rel="stylesheet"
+	href="{{ asset('bundles/footable/css/footable.core.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/jquery.qtip.css') }}">
+<link rel="stylesheet"
+	href="{{ asset('assets/css/cytoscape.js-panzoom.css') }}">
+<link rel="stylesheet"
+	href="{{ asset('assets/css/font-awesome.min.css') }}">
+<link rel="stylesheet"
+	href="{{ asset('bundles/spectrum/spectrum.css') }}">
+
+<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/search.css') }}">
+<link rel="stylesheet"
+	href="{{ asset('assets/css/search_results.css') }}">
+<link rel='shortcut icon'
+	href='{{ asset('assets/images/tor_ibin_icon.ico') }}' />
+<script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.disablescroll.min.js') }}"></script>
+{% endblock %} 
+{% block title %}{{ short_title }} | Results{% endblock %} 
+{% block content %}
+
+<main>
+    <div class="row network_row" style="background-color: #EEEEEE;">
+    <div class='border'style="height: 800px; width:80%; overflow:  hidden; margin:20px auto 20px;">
+    	<div id='cy'style="z-index: -1;"  ></div>
+    	</div>
+    </div>
+	<div id="qtips"></div>
+		
+	<div id="network" class="border tab-pane fade in active"
+			style="padding-top: 0; max-width: 700px; margin: 20px auto;">
+
+		<div class="row " style="border-bottom: 1px solid #ccc; background-color: #F8F8F8; margin: 0px;">
+				<div id="target" class="col-sm-12" style="padding: 0px;">
+
+    				<div class="navbar-header" style="display: table; max-width: 700px;">
+    					<div style="text-align: left; display: table-cell; vertical-align: middle;">
+    						<h4 id="selected_network_table_tab" style="color: {{ main_color_scheme }}; font-weight: bold; margin-left: 16px; ">Interactions</h4>
+    					</div>
+    					<div style="text-align: right; display: table-cell;">
+        					<button type="button" class="info-navbar-toggle" data-toggle="collapse"
+        						data-target="#interaction_info">
+        						<span class="icon-bar"></span> 
+        						<span class="icon-bar"></span> 
+        						<span class="icon-bar"></span>
+        					</button>
+    					</div>
+    				</div>
+    				<div class="container-fluid" style="padding: 0px;">
+    					<div id="interaction_info" class="collapse navbar-collapse" style="padding: 0px;">
+        					<ul  class="nav navbar-nav" style="margin: 0px; background: #ffffff; border-top: 1px solid #ccc;">
+        						<li class="active"><a class="network_table_tab" data-toggle="tab" href="#interactions"><strong>pub</strong></a></li>
+        					</ul>
+    					</div>
+    				</div>
+    			</div>
+			</div>
+			<div class="tab-content" style="padding: 0px; width: 100%">
+				<div id="interactions" class="tab-pane fade in active"
+					style="padding-top: 0;">
+					<div class="row "
+						style="border-bottom: 1px solid #ccc; background-color: #F8F8F8; margin: 0px; padding: 6px;">
+						<div class="col-sm-4">
+							<div class="input-group input-group-sm"
+								style="margin-bottom: 0px; margin-top: 3px;">
+								<lable for="change-page-size"
+									style="margin-right: 10px; color: {{ main_color_scheme }};">Page
+								Size:</lable>
+								<select id="change-page-size">
+									<option value="10" selected>10</option>
+									<option value="50">50</option>
+									<option value="100">100</option>
+									<option value="10000">All</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-8"">
+							<input type="text" id="filter" placeholder="Search" />
+						</div>
+					</div>
+					<table id="search_result_table" class="footable table"
+                    	data-filter="#filter" data-filtering="true"
+                    	data-filter-minimum="3" data-sorted="true" data-limit-navigation="5"  data-paging="true"  style="max-width: 700px;">
+                    		<colgroup>
+                    			<col span="1" style="width: 10%;">
+                    			<col span="1" style="width: 60%;">
+                    			<col span="1" style="width: 10%;">
+                    			<col span="1" style="width: 10%;">
+                    			<col span="1" style="width: 10%;">
+                    			
+                    		</colgroup>
+                    		<thead>
+                    			<tr>
+                    				<th  data-sort-ignore="true">PMID</th>
+                    				<th>Title</th>
+                    				<th data-sorted="true" data-type="numeric" data-sort-initial="false">Year</th>
+                    				<th data-sorted="true" data-type="numeric">Number Cited</th>
+                    				<th data-sorted="true" data-type="numeric">Number Citing</th>
+                    				
+                    			</tr>
+                    		</thead>
+                    		<tbody  id="table" class="class="enrichment_table">
+                    		</tbody>
+                    		<tfoot>
+                    			<tr>
+                    				<td colspan="5" style="text-align: center;">
+                    					<div class="pagination pagination-centered"></div>
+                    				</td>
+                    			</tr>
+                    		</tfoot>
+                    	</table>  
+					<div id="hide_rows" hidden></div>
+					<div id="protein_qtips" hidden></div>
+				</div>
+		</div>
+
+</main>
+<footer>
+	<div class="row">
+		<div class="shadow"></div>
+	    {{ footer | raw }}
+	</div>
+</footer>
+{% endblock %} 
+{% block javascripts %}
+<script>
+var NodeArray = {{ node_array|json_encode|raw }};
+var EdgeArray = {{ edge_array|json_encode|raw }};
+var YearArray = {{ year_array|json_encode|raw }};
+</script>
+
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.ui.touch-punch.min.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('bundles/footable/demos/js/bootstrap-tab.js') }}"></script>
+<script src="{{ asset('bundles/footable/demos/js/demos.js') }}"></script>
+<script src="{{ asset('bundles/footable/js/footable.js') }}"></script>
+<script src="{{ asset('bundles/footable/js/footable.paginate.js') }}"></script>
+<script src="{{ asset('bundles/footable/js/footable.filter.js') }}"></script>
+<script src="{{ asset('bundles/footable/js/footable.sort.js') }}"></script>
+
+<script type="text/javascript" src="http://innatedb.sahmri.com/js/cytoscape/cytoscape.min.js"></script>
+<script src="{{ asset('assets/js/cytoscape-qtip.js') }}"></script>
+<script src="{{ asset('assets/js/cytoscape-panzoom.js') }}"></script>
+<script src="{{ asset('assets/js/cytoscape-expand-collapse.js') }}"></script>
+<script src="{{ asset('assets/js/cola.js') }}"></script>
+<script src="{{ asset('assets/js/cytoscape-cola.js') }}"></script>
+<script src="{{ asset('assets/js/cytoscape-euler.js') }}"></script>
+<script src="{{ asset('assets/js/jquery.qtip.min.js') }}"></script>
+<script src="{{ asset('bundles/spectrum/spectrum.js') }}"></script>
+<script src="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/Readmore.js/2.2.0/readmore.js') }}"></script>
+
+
+<script type="text/javascript" src="http://innatedb.sahmri.com/js/cytoscape/cerebral.js"></script>
+<script src="{{ asset('assets/js/layout.horizontal.js') }}"></script>
+
+
+
+<script src="{{ asset('assets/js/main.js') }}"></script>
+<script src="{{ asset('assets/js/test.js') }}"></script>
+
+{% endblock %}

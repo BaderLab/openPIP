@@ -1,0 +1,24 @@
+@CHARSET "ISO-8859-1";
+
+body{
+	background-color: #f8f8f8;
+}
+
+.outer_panel{
+	width: 94%;
+	background-color: #ffffff;
+	border: 1px solid #cccccc;
+	padding: 20px;
+	margin: 20px auto 20px;
+	
+}
+
+
+#particles-js4{height:190px; width:99%; margin: 5px auto 5px; position:absolute; background:transparent;}
+#particles-js3{height:190px; width:99%; margin: 5px auto 5px; border-left: 3px solid  #bfbfbf; border-right: 3px solid  #bfbfbf;  border-bottom: 3px solid #bfbfbf; background-image: url(../images/bg-fireworks-colour5.svg); background-repeat: no-repeat; background-size: cover;  background-attachment: fixed; background-position: 50% 50%; } 
+
+
+
+.navbar {
+    margin-bottom: 0px;
+}

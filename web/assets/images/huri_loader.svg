@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="95.857193mm"
+   height="43.579296mm"
+   viewBox="0 0 95.857194 43.579296"
+   version="1.1"
+   id="svg1588"
+   inkscape:version="0.92.3 (unknown)"
+   sodipodi:docname="huri_loader.svg">
+  <defs
+     id="defs1582" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="141.63087"
+     inkscape:cy="39.279621"
+     inkscape:document-units="mm"
+     inkscape:current-layer="g2278"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1412"
+     inkscape:window-height="955"
+     inkscape:window-x="2080"
+     inkscape:window-y="77"
+     inkscape:window-maximized="0"
+     showguides="false">
+    <sodipodi:guide
+       position="24.873704,99.335007"
+       orientation="0,1"
+       id="guide2185"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata1585">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-65.464271,-115.32642)">
+    <g
+       id="g2278">
+      <g
+         transform="translate(-7.1815481,-0.37797566)"
+         id="g2267">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:29.22666931px;line-height:1.25;font-family:KacstScreen;-inkscape-font-specification:KacstScreen;letter-spacing:0px;word-spacing:0px;fill:#e6e6e6;fill-opacity:1;stroke:none;stroke-width:1.09600008"
+           x="69.723152"
+           y="143.06564"
+           id="text817-9-5-4"
+           inkscape:export-xdpi="100"
+           inkscape:export-ydpi="100"><tspan
+             sodipodi:role="line"
+             id="tspan815-2-3-9"
+             x="69.723152"
+             y="143.06564"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Noto Sans CJK TC';-inkscape-font-specification:'Noto Sans CJK TC';letter-spacing:-2.14816022px;fill:#e6e6e6;stroke-width:1.09600008">H<tspan
+   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;letter-spacing:-2.14816022px;stroke-width:1.09600008"
+   id="tspan837-5-5">u</tspan><tspan
+   style="letter-spacing:-1.28232002px;stroke-width:1.09600008"
+   id="tspan839-6-0">RI</tspan></tspan></text>
+        <circle
+           style="fill:none;fill-opacity:1;stroke:#ececec;stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path1456"
+           cx="152.91956"
+           cy="131.28786"
+           r="14.833458" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:29.22666931px;line-height:1.25;font-family:KacstScreen;-inkscape-font-specification:KacstScreen;letter-spacing:0px;word-spacing:0px;fill:#e6e6e6;fill-opacity:1;stroke:none;stroke-width:1.09600008"
+           x="77.647163"
+           y="157.51981"
+           id="text817-9-5-4-7"
+           inkscape:export-xdpi="100"
+           inkscape:export-ydpi="100"><tspan
+             sodipodi:role="line"
+             id="tspan815-2-3-9-7"
+             x="77.647163"
+             y="157.51981"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;font-family:'Noto Sans CJK TC';-inkscape-font-specification:'Noto Sans CJK TC';letter-spacing:0px;fill:#e6e6e6;stroke-width:1.09600008">Loading Network Data</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>

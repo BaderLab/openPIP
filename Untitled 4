@@ -1,0 +1,507 @@
+	<div class="tab-content" style="padding-top: 0;">
+
+		<div id="network" class="tab-pane fade in active">
+			<div class="container">
+				<div class="row">
+					<h3 class="bold" style="color: {{ main_color_scheme }}">Interactions</h3>
+				</div>
+				<div class="row">
+					<div class="col-sm-8">
+						<div class="input-group input-group-sm">
+							<lable for="change-page-size">Page Size:</lable>
+							<select id="change-page-size">
+								<option value="10" selected>10</option>
+								<option value="50">50</option>
+								<option value="100">100</option>
+								<option value="10000">All</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<input type="text" id="filter" placeholder="Search" />
+					</div>
+				</div>
+				{% if interaction_array|length > 0 %}
+				<table id="search_result_table" class="footable table"
+					data-filter="#filter" data-filtering="true" data-filter-minimum="3">
+					<thead>
+						<tr>
+							<th>Interactor A Gene Name</th>
+							<th>Interactor B Gene Name</th>
+							<th>Dataset</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						{% for interaction in interaction_array %}
+						<tr>
+							<td><a class="interactor_qtip link">{{
+									interaction.interactor_A_array.gene_name }}</a>
+								<div class="hidden">
+									<div class="container" style="padding-top: 20px; width: 100%;">
+										<div class="row" style="margin-bottom: 20px;">
+											<div class="col-sm-8">
+												<h3 style='font-weight: bold; color:  {{ main_color_scheme }};'>{{ interaction.interactor_A_array.gene_name }}</h3>
+											</div>
+										</div>
+										<div class="col-sm-7">
+											<div class="row">
+												<h4 style='font-weight: bold; color:  {{ main_color_scheme }};'>Actions</h4>
+											</div>
+											<div class="row">
+												<a href="{{ interaction.interactor_B_array.gene_name }}"
+													target="_blank" class='link'>Search for {{
+													interaction.interactor_B_array.gene_name }}</a>
+											</div>
+											<div class="row">
+												<a
+													href="../protein_sequence/{{ interaction.interactor_B_array.gene_name }}"
+													target="_blank" class='link'>Show protein sequence</a>
+											</div>
+											<div class="row">
+												<h4 style='font-weight: bold; color:  {{ main_color_scheme }};'>Description</h4>
+											</div>
+											<div class="row">
+												<span class="more">{{
+													interaction.interactor_A_array.description }}</span>
+											</div>
+										</div>
+										<div class="col-sm-5">
+											<div class="row">
+												<h4 style='font-weight: bold; color:  {{ main_color_scheme }};'>Links</h4>
+											</div>
+											<div class="row">
+												{% for database,link_array in
+												interaction.interactor_A_array.links %}
+												<div class="row">{{ database }}</div>
+												<div class="row">
+													{% for links in link_array %} <a href="{{ links[1] }}"
+														class='link' target="_blank">{{ links[0] }}</a> {% endfor %}
+												</div>
+												{% endfor %}
+											</div>
+										</div>
+									</div>
+								</div></td>
+							<td><a class="interactor_qtip  link">{{
+									interaction.interactor_B_array.gene_name }}</a>
+								<div class="hidden">
+									<div class="container" style="padding-top: 20px; width: 100%;">
+										<div class="row" style="margin-bottom: 20px;">
+											<div class="col-sm-8">
+												<h3 style='font-weight: bold; color:  {{ main_color_scheme }};'>{{ interaction.interactor_B_array.gene_name }}</h3>
+											</div>
+										</div>
+										
+										<div class="col-sm-7">
+											<div class="row">
+												<h4 style='font-weight: bold; color:  {{ main_color_scheme }};'>Actions</h4>
+											</div>
+											<div class="row">
+												<a
+													href="{{ interaction.interactor_B_array.gene_name }}"
+													target="_blank" class='link'>Search for {{
+													interaction.interactor_B_array.gene_name }}</a>
+											</div>
+											<div class="row">
+												<a
+													href="../protein_sequence/{{ interaction.interactor_B_array.gene_name }}"
+													target="_blank" class='link'>Show protein sequence</a>
+											</div>
+
+										
+											<div class="row">
+												<h4 style='font-weight: bold; color:  {{ main_color_scheme }};'>Description</h4>
+											</div>
+											<div class="row">
+												<span class="more">{{
+													interaction.interactor_B_array.description }}</span>
+											</div>
+										</div>
+										<div class="col-sm-5">
+											<div class="row">
+												<h4 style='font-weight: bold; color:  {{ main_color_scheme }};'>Links</h4>
+											</div>
+											<div class="row">
+												{% for database,link_array in
+												interaction.interactor_B_array.links %}
+												<div class="row">{{ database }}</div>
+												<div class="row">
+													{% for links in link_array %} <a href="{{ links[1] }}"
+														class='link' target="_blank" >{{ links[0] }}</a> {% endfor %}
+												</div>
+												{% endfor %}
+											</div>
+										</div>
+									</div>
+								</div></td>
+							<td>
+							{% for dataset in interaction.dataset_array %} 
+								{% if dataset.interaction_status != 'published' %}
+							    	<a class="link reference_qtip">Unpublished Dataset</a>
+							    	<div class="hidden">
+							    		{{ dataset.description }}
+							    	</div>
+									</br>
+								{% else %}
+									<a class="link" href="http://www.ncbi.nlm.nih.gov/pubmed/{{ dataset.dataset_reference }}" target="_blank" > {{ dataset.dataset_author }} ({{ dataset.year }})</a>
+									</br>
+								{% endif %}
+							{% endfor %}
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="5">
+								<div class="pagination pagination-centered"></div>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+				{% else %}
+				<p>No Interactions Found</p>
+				{% endif %}
+			</div>
+		</div>		
+		
+		
+		<div id="downloads" class="tab-pane fade">
+			<div class="container">
+				<div class="row">
+					<h3 class="bold" style="color: {{ main_color_scheme }}">Downloads</h3>
+				</div>
+				<div class="row">
+					<h4 class="bold" style="color: {{ main_color_scheme }}">Image</h4>
+				</div>
+				<div class="row">
+					<div class="col-sm-4" style="padding-left: 0px;">
+						<strong>PNG:</strong>
+					</div>
+					<div class="col-sm-4">
+						<a id='png' class="png" href="" download>Download</a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-4" style="padding-left: 0px;">
+						<strong>JPG:</strong>
+					</div>
+					<div class="col-sm-4">
+						<a id='jpg' class="jpg" href="" download>Download</a>
+					</div>
+				</div>
+				<div class="row">
+					<h4 class="bold" style="color: {{ main_color_scheme }}">Network Data</h4>
+				</div>
+				
+				
+				{% if unpublished_dataset == true %}
+    				<div class="row">
+    					<div class="col-sm-6" style="padding-left: 0px;">
+    						<strong>PSI-MI Tab 2.7:</strong>
+    					</div>
+    					<div class="col-sm-4">
+    						<a href="{{path('psi_mitab', {'search_term': search_query })}}" class='dataset_request_links link'>Download</a>
+    					</div>
+    				</div>
+    				<div class="row">
+    					<div class="col-sm-6" style="padding-left: 0px;">
+    						<strong>CSV:</strong>
+    					</div>	
+    					<div class="col-sm-4">
+    						<a href="{{path('csv', {'search_term': search_query })}}" class='dataset_request_links link'>Download</a>
+                    	</div>
+                    </div>
+                {% else %}
+    				<div class="row">
+    					<div class="col-sm-6" style="padding-left: 0px;">
+    						<strong>PSI-MI Tab 2.7:</strong>
+    					</div>
+    					<div class="col-sm-4">
+    						<a href="{{path('psi_mitab', {'search_term': search_query })}}" class='link'>Download</a>
+    					</div>
+    				</div>
+    				<div class="row">
+    					<div class="col-sm-6" style="padding-left: 0px;">
+    						<strong>CSV:</strong>
+    					</div>	
+    					<div class="col-sm-4">
+    						<a href="{{path('csv', {'search_term': search_query })}}" class='link'>Download</a>
+                    	</div>
+                    </div>               
+                {% endif %}
+                
+                
+                <div class="row">
+                	<div class="col-sm-6" style="padding-left: 0px;">
+						<strong>Protein Sequences FASTA:</strong>
+					</div>
+					<div class="col-sm-4">
+						<a href="{{path('multi_fasta', {'search_term': search_query })}}" class='link'>Download</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="settings" class="tab-pane fade">
+			<div class="settings">
+				<div class="container">
+					<div class="row">
+						<h3 class="bold" style="color: {{ main_color_scheme }}">Settings</h3>
+					</div>
+					<div class="row" style="height: 80px; margin-top: 20px;">
+    					<div class="col-sm-8" style="padding-left: 0px;">
+    						<label for="view_settings_layout"> Layout </label></br>	
+    						<select id="view_settings_layout" style="height:30px; line-height:30px;">
+    						
+    							<option value="cose">Cose</option>
+    							<option value="concentric">Concentric</option>
+    							<option value="breadthfirst">Breadth-first</option>
+    							<option value="grid">Grid</option>
+    							<option value="circle">Circle</option>
+    							<option value="cola">Cola</option>
+    						</select>
+    					</div>
+					</div>
+					<div class="row hidden">
+						<div class="col-sm-4">
+							<label for="label_checkbox">Labels</label>
+						</div>
+						<div class="col-sm-4">
+							<input class="styled" type="checkbox"
+								name="view_settings_labels" id="view_settings_labels"
+								checked="checked" />
+						</div>
+					</div>	
+					<div class="col-sm-6 hidden">
+						<form>
+							<div class="row">
+								<label for="min_interaction_score"> Minimum Required
+									Interaction Score: </label>
+							</div>
+							<div class="row">
+								<div id="min_interaction_score">
+									<div id="min_interaction_score_handle"
+										class="ui-slider-handle"></div>
+								</div>
+							</div>
+							<div class="row">
+								<label>Publication Status: </label>
+							</div>
+							<div class="row">
+								<a id="update_data_settings" class="btn btn-success"
+									style="margin-right: 10px;" href="" > <span>Update</span></a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		
+		
+		
+		
+		Array ( 
+		
+		[0] => Array ( 
+		
+		[0] => # signf p-value T Q Q&T Q&T/Q Q&T/T term ID t type t group t name t depth Q&T list # 1 ! 2.97e-02 11 11 2 0.182 0.182 GO:0052629 MF 2 phosphatidylinositol-3,5-bisphosphate 3-phosphatase activity 1 MTMR7,MTMR6 1 ! 4.91e-02 14 11 2 0.182 0.143 GO:0052744 MF 1 phosphatidylinositol monophosphate phosphatase activity 1 MTMR7,MTMR6 1 ! 4.91e-02 14 11 2 0.182 0.143 GO:0004438 MF 1 phosphatidylinositol-3-phosphatase activity 2 MTMR7,MTMR6 #INFO: PARAMETERS: significant = 1 #INFO: PARAMETERS: sort_by_structure = 1 #INFO: PARAMETERS: user_thr = 1.00 #INFO: PARAMETERS: analytical = 1 #INFO: PARAMETERS: organism = hsapiens #INFO: User: http #INFO: Host: arak-prod #INFO: Time: 2017-1-1 23:14:49 #INFO: Version: r1709_e87_eg34 #INFO: Effective domain size for GO: 18711, threshold 2.9e-05 #INFO: #INFO: --- Gene names and descriptions #INFO: #INFO: QUERY: MTMR6 MTMR6 myotubularin related protein 6 [Source:HGNC Symbol;Acc:HGNC:7453] #INFO: QUERY: AMOTL2 AMOTL2 angiomotin like 2 [Source:HGNC Symbol;Acc:HGNC:17812] #INFO: QUERY: MTMR9 MTMR9 myotubularin related protein 9 [Source:HGNC Symbol;Acc:HGNC:14596] #INFO: QUERY: SPG21 SPG21 spastic paraplegia 21 (autosomal recessive, Mast syndrome) [Source:HGNC Symbol;Acc:HGNC:20373] #INFO: QUERY: MTMR7 MTMR7 myotubularin related protein 7 [Source:HGNC Symbol;Acc:HGNC:7454] #INFO: QUERY: NMI NMI N-myc and STAT interactor [Source:HGNC Symbol;Acc:HGNC:7854] #INFO: QUERY: EMILIN1 EMILIN1 elastin microfibril interfacer 1 [Source:HGNC Symbol;Acc:HGNC:19880] #INFO: QUERY: ZC2HC1C ZC2HC1C zinc finger C2HC-type containing 1C [Source:HGNC Symbol;Acc:HGNC:20354] #INFO: QUERY: CTAGE5 CTAGE5 CTAGE family member 5, ER export factor [Source:HGNC Symbol;Acc:HGNC:7057] #INFO: QUERY: BEX3 BEX3 brain expressed X-linked 3 [Source:HGNC Symbol;Acc:HGNC:13388] #INFO
+		[1] => 0 
+		) 
+		
+		[1] => Array ( [0] => #INFO: QUERY: BEX3 BEX3 brain expressed X-linked 3 [Source:HGNC Symbol;Acc:HGNC:13388] [1] => 1718 ) ) 
+		
+		
+		
+		
+		<div class="row result_row">
+
+	<div class="tab-content" style="padding-top: 0;">
+
+		<div id="network" class="tab-pane fade in active">
+			<div class="container">
+				<div class="row">
+					<h3 class="bold" style="color: {{ main_color_scheme }}">Interactions</h3>
+				</div>
+				<div class="row">
+					<div class="col-sm-8">
+						<div class="input-group input-group-sm">
+							<lable for="change-page-size">Page Size:</lable>
+							<select id="change-page-size">
+								<option value="10" selected>10</option>
+								<option value="50">50</option>
+								<option value="100">100</option>
+								<option value="10000">All</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<input type="text" id="filter" placeholder="Search" />
+					</div>
+				</div>
+				{% if interaction_array|length > 0 %}
+				<table id="search_result_table" class="footable table"
+					data-filter="#filter" data-filtering="true" data-filter-minimum="3">
+					<thead>
+						<tr>
+							<th>Interactor A</th>
+							<th>Interactor B</th>
+							<th>Dataset</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						{% for interaction in interaction_array %}
+						<tr>
+							<td><a class="interactor_qtip link">{{
+									interaction.interactor_A_array.gene_name }}</a>
+								<div class="hidden">
+									<div class="container" style="padding-top: 20px; width: 100%;">
+										<div class="row" style="margin-bottom: 20px;">
+											<div class="col-sm-8">
+												<h3 style='font-weight: bold; color:  {{ main_color_scheme }};'>{{ interaction.interactor_A_array.gene_name }}</h3>
+											</div>
+										</div>
+										<div class="col-sm-7">
+											<div class="row">
+												<h4 style='font-weight: bold; color:  {{ main_color_scheme }};'>Actions</h4>
+											</div>
+											<div class="row">
+												<a href="{{ interaction.interactor_B_array.gene_name }}"
+													target="_blank" class='link'>Search for {{
+													interaction.interactor_B_array.gene_name }}</a>
+											</div>
+											<div class="row">
+												<a
+													href="../protein_sequence/{{ interaction.interactor_B_array.gene_name }}"
+													target="_blank" class='link'>Show protein sequence</a>
+											</div>
+											<div class="row">
+												<h4 style='font-weight: bold; color:  {{ main_color_scheme }};'>Description</h4>
+											</div>
+											<div class="row">
+												<span class="more">{{
+													interaction.interactor_A_array.description }}</span>
+											</div>
+										</div>
+										<div class="col-sm-5">
+											<div class="row">
+												<h4 style='font-weight: bold; color:  {{ main_color_scheme }};'>Links</h4>
+											</div>
+											<div class="row">
+												{% for database,link_array in
+												interaction.interactor_A_array.links %}
+												<div class="row">{{ database }}</div>
+												<div class="row">
+													{% for links in link_array %} <a href="{{ links[1] }}"
+														class='link' target="_blank">{{ links[0] }}</a> {% endfor %}
+												</div>
+												{% endfor %}
+											</div>
+										</div>
+									</div>
+								</div></td>
+							<td><a class="interactor_qtip  link">{{
+									interaction.interactor_B_array.gene_name }}</a>
+								<div class="hidden">
+									<div class="container" style="padding-top: 20px; width: 100%;">
+										<div class="row" style="margin-bottom: 20px;">
+											<div class="col-sm-8">
+												<h3 style='font-weight: bold; color:  {{ main_color_scheme }};'>{{ interaction.interactor_B_array.gene_name }}</h3>
+											</div>
+										</div>
+										
+										<div class="col-sm-7">
+											<div class="row">
+												<h4 style='font-weight: bold; color:  {{ main_color_scheme }};'>Actions</h4>
+											</div>
+											<div class="row">
+												<a
+													href="{{ interaction.interactor_B_array.gene_name }}"
+													target="_blank" class='link'>Search for {{
+													interaction.interactor_B_array.gene_name }}</a>
+											</div>
+											<div class="row">
+												<a
+													href="../protein_sequence/{{ interaction.interactor_B_array.gene_name }}"
+													target="_blank" class='link'>Show protein sequence</a>
+											</div>
+
+										
+											<div class="row">
+												<h4 style='font-weight: bold; color:  {{ main_color_scheme }};'>Description</h4>
+											</div>
+											<div class="row">
+												<span class="more">{{
+													interaction.interactor_B_array.description }}</span>
+											</div>
+										</div>
+										<div class="col-sm-5">
+											<div class="row">
+												<h4 style='font-weight: bold; color:  {{ main_color_scheme }};'>Links</h4>
+											</div>
+											<div class="row">
+												{% for database,link_array in
+												interaction.interactor_B_array.links %}
+												<div class="row">{{ database }}</div>
+												<div class="row">
+													{% for links in link_array %} <a href="{{ links[1] }}"
+														class='link' target="_blank" >{{ links[0] }}</a> {% endfor %}
+												</div>
+												{% endfor %}
+											</div>
+										</div>
+									</div>
+								</div></td>
+							<td>
+							{% for dataset in interaction.dataset_array %} 
+								{% if dataset.interaction_status != 'published' %}
+							    	<a class="link reference_qtip">Unpublished Dataset</a>
+							    	<div class="hidden">
+							    		{{ dataset.description }}
+							    	</div>
+									</br>
+								{% else %}
+									<a class="link" href="http://www.ncbi.nlm.nih.gov/pubmed/{{ dataset.dataset_reference }}" target="_blank" > {{ dataset.dataset_author }} ({{ dataset.year }})</a>
+									</br>
+								{% endif %}
+							{% endfor %}
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="5">
+								<div class="pagination pagination-centered"></div>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+				{% else %}
+				<p>No Interactions Found</p>
+				{% endif %}
+			</div>
+		</div>
+
+
+	</div>
+</div>
+
+	<div class="col-sm-6">
+    	<div class="tab-pane fade in active">
+        	{% for go_term in go_enrichment_array %} 
+        		
+        		{{ go_term['GO_term'] }}
+        		
+        	{% endfor %}
+    	</div>
+	</div>
+		
+		
+		
+		
+		
