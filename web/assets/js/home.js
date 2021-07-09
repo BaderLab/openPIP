@@ -133,6 +133,7 @@ var allInteractionArray = '',
 	currentInteractionArray = '',
 	SearchResultsJSON = '',	
 	cy = '';
+	// Url= 'http://localhost:8000/'
 	
 
 SearchResultsJSON = sendDataRequestQuery();
