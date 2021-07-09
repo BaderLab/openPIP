@@ -40,10 +40,16 @@ class Functions
 	
 	public function mysql_connect(){
 		
-		$servername = "127.0.0.1";
+		// $servername = "127.0.0.1";
+		// $username = "root";
+		// $password = null;
+		// $dbname = "lol";
+
+		$servername = "mysql";
 		$username = "root";
-		$password = null;
-		$dbname = "HuRI";
+		$password = "secret";
+		$dbname = "huri";
+
 		/*
 		$servername = "localhost";
 		$username = "root";
