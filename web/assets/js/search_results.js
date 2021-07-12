@@ -27,7 +27,7 @@ var allInteractionArray = '',
 	//$("#node_number").html( currentProteinArray.length );
 	//$("#edge_number").html( currentInteractionArray.length );	
 
-	$("#huri_img").fadeIn(1500);
+	$("#huri_img").fadeIn(2000);
 	setTissueFilterQtips();	
 	setSearchQtips();
 	setNetworkMenuDropdowns();
