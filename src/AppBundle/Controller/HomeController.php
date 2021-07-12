@@ -33,7 +33,7 @@ class HomeController extends Controller
 	public function homeAction(Request $request)
 	{
 	    
-	    /*
+/*
 	     
 	    $dataFile = "Interactor A Gene Name,Interactor B Gene Name,Interactor A Ensembl ID,Interactor B Ensembl ID,Interactor A Uniprot ID, Interactor B Uniprot ID,Interactor A Entrez ID,Interactor B Entrez ID,Confidence Score\r\n";
 	    
@@ -260,7 +260,7 @@ class HomeController extends Controller
 	        }
 	    }
 
-/*
+	/*
 	    $query = "SELECT * FROM `annotation`";
 	    
 	      
@@ -466,7 +466,7 @@ class HomeController extends Controller
 	            }
 	        }  
 	    }
- */    /* 
+ 	*/    /* 
 	    $h3 = fopen('/home/mmee/Desktop/test_3.txt', 'w');
 	    $functions = $this->get('app.functions');
 	    $connection =  $functions->mysql_connect();
@@ -658,9 +658,9 @@ class HomeController extends Controller
     	        $em->flush();
 	        }
 	    }
-*/
+	*/
 
-/*
+	/*
 	    $this->container->get('profiler')->disable();
 	    $handle = fopen('/home/mmee/Desktop/huri_project/LitBM-17.mitab', 'r');
 	    
@@ -803,7 +803,7 @@ class HomeController extends Controller
 	        }
 	    }
 	    
-*//*
+	*//*
 
 	    $em = $this->getDoctrine()->getManager();
 		$em->getConnection()->getConfiguration()->setSQLLogger(null);
@@ -1257,7 +1257,7 @@ class HomeController extends Controller
                 }
 	        }
 	    }
-*/
+	*/
 
 	    /*
 	    $handle = fopen('/home/mmee/Desktop/huri_project/uniprot_reviewed.tab', 'r');
@@ -1459,7 +1459,7 @@ class HomeController extends Controller
     	       }
             }
         }
-	    */
+*/
 		$functions = $this->get('app.functions');
 		$counts = self::getCounts();
 		$protein_count = $counts->protein_count;
@@ -1476,6 +1476,11 @@ class HomeController extends Controller
         $logo_color_scheme = $admin_settings->getLogoColorScheme();
         $button_color_scheme = $admin_settings->getButtonColorScheme();
 		$home_page = $admin_settings->getHomePage();
+		$mission_title = $admin_settings->getMissionTitle();
+		$mission_text = $admin_settings->getMissionText();
+		$method_title = $admin_settings->getMethodTitle();
+		$method_text = $admin_settings->getMethodText();
+
 		$url = $admin_settings->getUrl();
 		$login_status = $functions->getLoginStatus();
 		$admin_status = $functions->GetAdminStatus();
@@ -1497,7 +1502,12 @@ class HomeController extends Controller
 		        'footer' => $footer,
 		        'login_status' => $login_status,
 				'admin_status' => $admin_status,
-				'page' => 'home'
+				'page' => 'home',
+				'mission_title'=> $mission_title,
+				'mission_text'=> $mission_text,
+				'method_title'=> $method_title,
+				'method_text'=> $method_text
+
 		));
 
 	}
