@@ -78,20 +78,20 @@ class FileController extends Controller
 	    	if (count($dirs) > 0) {
 	    		foreach ($dirs as $d){
 	    			$subject = $d;
-	    			// $pattern = '/[^\/]*$/';
-	    			// $matches = array();
-	    			// preg_match($pattern, $subject, $matches);
-	    			// $name = $matches[0];
-	    			// $alldirs[] = $name;
-	    			$alldirs[] = $subject;
+	    			$pattern = '/[^\/]*$/';
+	    			$matches = array();
+	    			preg_match($pattern, $subject, $matches);
+	    			$name = $matches[0];
+	    			$alldirs[] = $name;
+	    			// $alldirs[] = $subject;
 	    		}
 	    	}
-			
+			dump($alldirs);
 	    	return $alldirs;
 	    }
 
 		
-		$files_folder='../web/uploads'.$upload_directory;
+		$files_folder='../web/uploads/'.$upload_directory;
 	    
 	    $directories = listdirs('../web/uploads');
 		$files_in_directories= listfiles($files_folder);

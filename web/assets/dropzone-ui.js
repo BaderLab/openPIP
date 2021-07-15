@@ -5,6 +5,8 @@ previewNode.parentNode.removeChild(previewNode);
 
 var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
 url: "/app.php/_uploader/gallery/upload", // Set the url
+maxFilesize: 209715200,
+timeout: 18000000,
 thumbnailWidth: 80,
 thumbnailHeight: 80,
 parallelUploads: 20,
@@ -20,9 +22,9 @@ file.previewElement.querySelector(".start").onclick = function() { myDropzone.en
 });
 
 // Update the total progress bar
-// myDropzone.on("totaluploadprogress", function(progress) {
-// document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
-// });
+myDropzone.on("totaluploadprogress", function(progress) {
+document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+});
 
 // myDropzone.on("sending", function(file) {
 // // Show the total progress bar when upload starts
