@@ -86,7 +86,7 @@ class FileController extends Controller
 	    			// $alldirs[] = $subject;
 	    		}
 	    	}
-			dump($alldirs);
+			// dump($alldirs);
 	    	return $alldirs;
 	    }
 
