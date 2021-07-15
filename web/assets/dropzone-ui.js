@@ -5,6 +5,12 @@ previewNode.parentNode.removeChild(previewNode);
 
 var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
 url: "/app.php/_uploader/gallery/upload", // Set the url
+// init: function() {
+//     this.hiddenFileInput.setAttribute("webkitdirectory", true);
+// },
+// renameFilename: function (filename) {
+//     return new Date().getTime() + '_' + filename;
+// },
 maxFilesize: 209715200,
 timeout: 18000000,
 thumbnailWidth: 80,

@@ -76,6 +76,11 @@
         				    {% elseif directory == 'data' %} 
         				    {% else %}  #}
         				    	<a href="#" class='list-group-item'>{{ file }}</a> 
+								<form action={{ path('admin_deletefile', {filename: file}) }}>
+									<input type="submit" value="Delete this file" />
+								</form>
+								{# {{dump(file)}} #}
+								{# <a href="https://google.com" class="button">Go to Google</a> #}
         				    {# {% endif %}  #}
         				{% endfor %}
         			</div>
@@ -164,7 +169,7 @@
 						</div>
 					</div>
 
-					</div>
+				</div>
 
 				
 
