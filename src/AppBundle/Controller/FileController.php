@@ -12,6 +12,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Upload_Files;
 use AppBundle\Form\Upload_FilesType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 
 /**
  * File controller.
@@ -38,14 +40,16 @@ class FileController extends Controller
             // $file stores the uploaded PDF file
             /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
             $file = $product->getBrochure();
-
+			
             $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+			$fileNameOriginal = $file->getClientOriginalName();
+			// dump($fileNameOriginal);die;
 
             // Move the file to the directory where brochures are stored
             try {
                 $file->move(
                     $this->getParameter('brochures_directory'),
-                    $fileName
+                    $fileNameOriginal
                 );
             } catch (FileException $e) {
                 // ... handle exception if something happens during file upload
@@ -53,7 +57,9 @@ class FileController extends Controller
 
 		$product->setBrochure($fileName);
 
-		return $this->redirect($this->generateUrl('faq'));
+		$url_new= $this->generateUrl('file_manager', ['upload_directory' => 'gallery']);
+		$response = new RedirectResponse($url_new);
+		return $response;
         }
 
 	    function listdirs($dir) {
