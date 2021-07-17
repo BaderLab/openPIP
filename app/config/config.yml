@@ -115,7 +115,7 @@ stfalcon_tinymce:
 oneup_uploader:
     mappings:
         gallery:
-            frontend: blueimp # or any uploader you use in the frontend
+            frontend: dropzone # or any uploader you use in the frontend
 
 
     
