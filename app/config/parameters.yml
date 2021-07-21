@@ -10,6 +10,8 @@
 #     mailer_user: miles.william.mee@gmail.com
 #     mailer_password: mi135Gmail
 #     secret: ThisTokenIsNotSoSecretChangeIt
+    # brochures_directory: '%kernel.root_dir%/../web/uploads/gallery'
+
 
 
 
@@ -26,3 +28,4 @@ parameters:
     mailer_user: miles.william.mee@gmail.com
     mailer_password: mi135Gmail
     secret: ThisTokenIsNotSoSecretChangeIt
+    brochures_directory: '%kernel.root_dir%/../web/uploads/gallery'
