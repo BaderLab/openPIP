@@ -44,6 +44,8 @@
 	</nav>
 </header>
 
+
+
 <main style="background-color: #EEEEEE;">
     <div class="container file_upload_panel">   
 		<div class="row">
@@ -124,9 +126,16 @@
         					</div>
         				</div>
         			</form> #}
-					<div id='upload_panel' style="border:3px solid black; padding:30px;"></div>
+
+					{{ form_start(form) }}
+							{# ... #}
+
+							{{ form_row(form.brochure) }}
+					{{ form_end(form) }}
+
+					{# <div id='upload_panel' style="border:3px solid black; padding:30px;"></div>
 					<br>
-					<div id='upload_preview' style="border:3px solid blue; padding:300px;"></div>
+					<div id='upload_preview' style="border:3px solid blue; padding:300px;"></div> #}
         		</div>
 {# <form action="{{ oneup_uploader_endpoint('gallery') }}" class="dropzone" style="width:200px; height:200px; border:4px dashed black">
 </form> #}
