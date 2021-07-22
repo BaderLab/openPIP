@@ -29,7 +29,7 @@ class CreateFolderController extends Controller
 		// use this in windows server
 		$sp_char='\ ';
 		// use this in ubuntu server
-		// $sp_char='/ ';
+		$sp_char='/ ';
 
 		$sp_char=substr_replace($sp_char,"", -1);
 		// dump($sp_char);die;
@@ -67,7 +67,7 @@ class CreateFolderController extends Controller
 		// use this in windows server
 		$sp_char='\ ';
 		// use this in ubuntu server
-		// $sp_char='/ ';
+		$sp_char='/ ';
 
 		$sp_char=substr_replace($sp_char,"", -1);
 		// dump($sp_char);die;
