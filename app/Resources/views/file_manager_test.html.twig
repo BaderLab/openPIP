@@ -77,10 +77,15 @@
         				    	<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item active'>{{ file }}</a> 
         				    {% elseif directory == 'data' %} 
         				    {% else %}  #}
-        				    	<a href="#" class='list-group-item'>{{ file }}</a> 
+        					<div class="col-sm-9" style="padding-right: 0px; padding-left: 0px; ">
+        				    	<a href="#" class='list-group-item'>{{ file }} </a>
+							</div>
+        					<div class="col-sm-3" style="padding: 0px">
 								<form action={{ path('admin_deletefile', {dir_name: upload_directory, filename: file}) }}>
-									<input type="submit" value="Delete this file" />
+									<input type="submit" value="Delete" class="btn btn-primary" style="color: white "/>
 								</form>
+							</div>
+								
 								{# {{dump(file)}} #}
 								{# <a href="https://google.com" class="button">Go to Google</a> #}
         				    {# {% endif %}  #}
@@ -137,6 +142,11 @@
 					<br>
 					<div id='upload_preview' style="border:3px solid blue; padding:300px;"></div> #}
         		</div>
+        		{# <div class="col-sm-3" style="border: 2px solid red">
+				<h1> we can put something here	</h1>
+					<span class="glyphicon glyphicon-print"></span>
+				</div> #}
+
 {# <form action="{{ oneup_uploader_endpoint('gallery') }}" class="dropzone" style="width:200px; height:200px; border:4px dashed black">
 </form> #}
 
