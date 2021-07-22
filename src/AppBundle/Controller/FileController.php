@@ -13,6 +13,8 @@ use AppBundle\Entity\Upload_Files;
 use AppBundle\Form\Upload_FilesType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 
 
 /**
@@ -32,25 +34,37 @@ class FileController extends Controller
 	public function uploadAction($upload_directory, Request $request)
 	{
 
-		$product = new Upload_Files();
-        $form = $this->createForm(Upload_FilesType::class, $product);
+		// $product = new Upload_Files();
+        // $form = $this->createForm(Upload_FilesType::class, $product);
+		// $defaultData = array('message' => 'Type your message here');
+		$form = $this->createFormBuilder()
+			->add('brochure', FileType::class, array('label' => 'FILE UPLOAD (all format supported)', 'multiple' => true))
+			->add('save', SubmitType::class, ['label' => 'Start Upload'])
+            ->getForm();
+			// ->add('name', TextType::class)
+			// ->add('email', EmailType::class)
+			// ->add('message', TextareaType::class)
+			// ->add('send', SubmitType::class)
+			// ->getForm();
+
         $form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
             // $file stores the uploaded PDF file
             /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
-            $files = $product->getBrochure();
-			// dump($files);die;
+            // $files = $product->getBrochure();
+			// dump($request);die;
+			
+			$my_file=$request->files->get('form')['brochure'];
+			// dump($my_file);die;
 
-			foreach($files as $file)
+			foreach($my_file as $file)
 			{
 				// $path = sha1(uniqid(mt_rand(), true)).'.'.$file->guessExtension();
 				// array_push ($this->paths, $path);
 				// $file->move($this->getUploadRootDir(), $path);
 				// dump($file);die;
 				
-				
-
 				$fileNameOriginal = $file->getClientOriginalName();
 
 				$save_dir=$this->getParameter('brochures_directory').'/'.$upload_directory;
