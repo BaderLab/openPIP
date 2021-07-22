@@ -21,8 +21,8 @@ class Upload_FilesType extends AbstractType
     {
         $builder
             // ...
-            ->add('brochure', FileType::class, array('label' => 'Brochure (PDF file)'))
-            ->add('save', SubmitType::class, ['label' => 'Create Task'])
+            ->add('brochure', FileType::class, array('label' => 'FILE UPLOAD (all format supported)', 'multiple' => true))
+            ->add('save', SubmitType::class, ['label' => 'Start Upload'])
             ->getForm();
             // ...
         ;

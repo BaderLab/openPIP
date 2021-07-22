@@ -66,6 +66,13 @@
         				    	<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item'>{{ directory }}</a> 
         				    {% endif %} 
         				{% endfor %}
+						<form action={{ path('admin_createfolder', {dir_name: upload_directory}) }} >
+							<div class="form-group ">
+								{# <label for="fname">Create Folder:</label><br> #}
+								<input type="text" id="foldername" name="fname"><br>
+								<input type="submit" value="Create" class="btn btn-success" />
+							</div>
+						</form>
         			</div>
 					<div class='list-group'>
         				<span class='list-group-item list-group-item-header' style="background-color: {{ main_color_scheme }}; color: {{ header_color_scheme }}; "><b>Destination Files</b></span> 
@@ -77,13 +84,21 @@
         				    	<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item active'>{{ file }}</a> 
         				    {% elseif directory == 'data' %} 
         				    {% else %}  #}
-        					<div class="col-sm-9" style="padding-right: 0px; padding-left: 0px; ">
+        					<div class="col-sm-11" style="padding-right: 0px; padding-left: 0px; ">
         				    	<a href="#" class='list-group-item'>{{ file }} </a>
 							</div>
-        					<div class="col-sm-3" style="padding: 0px">
-								<form action={{ path('admin_deletefile', {dir_name: upload_directory, filename: file}) }}>
-									<input type="submit" value="Delete" class="btn btn-primary" style="color: white "/>
+        					<div class="col-sm-1" style="padding: 0px">
+								<form action={{ path('admin_deletefile', {dir_name: upload_directory, filename: file}) }} >
+									{# <input type="submit" value="Delete" class="btn btn-primary" /> #}
+									<input type="image" name="submit" src="{{ asset('assets/images/delete-icon-13.jpg') }}"  border="0px" alt="Submit" style="width: 30px; " />
 								</form>
+
+								{# onSubmit="return confirm('Are you sure you wish to delete?')" #}
+
+								{# <button data-dz-remove class="btn btn-danger delete">
+									<i class="glyphicon glyphicon-trash"></i>
+									<span></span>
+								</button> #}
 							</div>
 								
 								{# {{dump(file)}} #}

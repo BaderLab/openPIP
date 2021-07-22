@@ -39,24 +39,44 @@ class FileController extends Controller
 		if ($form->isSubmitted() && $form->isValid()) {
             // $file stores the uploaded PDF file
             /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
-            $file = $product->getBrochure();
+            $files = $product->getBrochure();
+			// dump($files);die;
+
+			foreach($files as $file)
+			{
+				// $path = sha1(uniqid(mt_rand(), true)).'.'.$file->guessExtension();
+				// array_push ($this->paths, $path);
+				// $file->move($this->getUploadRootDir(), $path);
+				// dump($file);die;
+				
+				
+
+				$fileNameOriginal = $file->getClientOriginalName();
+
+				$save_dir=$this->getParameter('brochures_directory').'/'.$upload_directory;
+          	 	$fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+
+				// Move the file to the directory where brochures are stored
+				try {
+					$file->move(
+						$save_dir,
+						$fileNameOriginal
+					);
+				} catch (FileException $e) {
+					// ... handle exception if something happens during file upload
+				}	
+				
+				// dump($file);die;
+
+				unset($file);
+	
+			}
+
 			
-			$save_dir=$this->getParameter('brochures_directory').'/'.$upload_directory;
-            $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
-			$fileNameOriginal = $file->getClientOriginalName();
 			// dump($fileNameOriginal);die;
 
-            // Move the file to the directory where brochures are stored
-            try {
-                $file->move(
-                    $save_dir,
-                    $fileNameOriginal
-                );
-            } catch (FileException $e) {
-                // ... handle exception if something happens during file upload
-            }	
-
-		$product->setBrochure($fileName);
+            
+		// $product->setBrochure($fileName);
 
 		$url_new= $this->generateUrl('file_manager', ['upload_directory' => $upload_directory]);
 		$response = new RedirectResponse($url_new);

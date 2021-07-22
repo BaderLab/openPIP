@@ -20,7 +20,7 @@ class Upload_Files
 	
 	
 	/**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="array")
      *
      */
     private $brochure;
