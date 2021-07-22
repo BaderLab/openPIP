@@ -2,7 +2,7 @@
 # parameters:
 #     database_host: 127.0.0.1
 #     database_port: null
-#     database_name: huri
+#     database_name: yeri
 #     database_user: root
 #     database_password: null
 #     mailer_transport: gmail
@@ -10,7 +10,7 @@
 #     mailer_user: miles.william.mee@gmail.com
 #     mailer_password: mi135Gmail
 #     secret: ThisTokenIsNotSoSecretChangeIt
-    # brochures_directory: '%kernel.root_dir%/../web/uploads/gallery'
+#     brochures_directory: '%kernel.root_dir%/../web/uploads'
 
 
 
@@ -28,4 +28,4 @@ parameters:
     mailer_user: miles.william.mee@gmail.com
     mailer_password: mi135Gmail
     secret: ThisTokenIsNotSoSecretChangeIt
-    brochures_directory: '%kernel.root_dir%/../web/uploads/gallery'
+    brochures_directory: '%kernel.root_dir%/../web/uploads'

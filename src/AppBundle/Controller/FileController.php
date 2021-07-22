@@ -41,6 +41,7 @@ class FileController extends Controller
             /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
             $file = $product->getBrochure();
 			
+			$save_dir=$this->getParameter('brochures_directory').'/'.$upload_directory;
             $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
 			$fileNameOriginal = $file->getClientOriginalName();
 			// dump($fileNameOriginal);die;
@@ -48,7 +49,7 @@ class FileController extends Controller
             // Move the file to the directory where brochures are stored
             try {
                 $file->move(
-                    $this->getParameter('brochures_directory'),
+                    $save_dir,
                     $fileNameOriginal
                 );
             } catch (FileException $e) {
@@ -57,7 +58,7 @@ class FileController extends Controller
 
 		$product->setBrochure($fileName);
 
-		$url_new= $this->generateUrl('file_manager', ['upload_directory' => 'gallery']);
+		$url_new= $this->generateUrl('file_manager', ['upload_directory' => $upload_directory]);
 		$response = new RedirectResponse($url_new);
 		return $response;
         }

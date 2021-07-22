@@ -78,7 +78,7 @@
         				    {% elseif directory == 'data' %} 
         				    {% else %}  #}
         				    	<a href="#" class='list-group-item'>{{ file }}</a> 
-								<form action={{ path('admin_deletefile', {filename: file}) }}>
+								<form action={{ path('admin_deletefile', {dir_name: upload_directory, filename: file}) }}>
 									<input type="submit" value="Delete this file" />
 								</form>
 								{# {{dump(file)}} #}
@@ -200,5 +200,8 @@
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/js/file_manager.js') }}"></script>
+	<script type='text/javascript'>
+	 console.log(Url);
+	 </script>
 
 {% endblock %}
