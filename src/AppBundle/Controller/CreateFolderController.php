@@ -30,12 +30,28 @@ class CreateFolderController extends Controller
 		$sp_char='\ ';
 		// use this in ubuntu server
 		$sp_char='/ ';
-
 		$sp_char=substr_replace($sp_char,"", -1);
-		// dump($sp_char);die;
 
-		$root=$this->getParameter('kernel.root_dir');
-		$path=$root.$sp_char."..".$sp_char."web".$sp_char."uploads".$sp_char.$dir_name;
+
+		$fname=$request->query->get('fname');
+		if(!empty($fname)){
+			// dump($fname);die;
+
+			$root=$this->getParameter('kernel.root_dir');
+			$path=$root.$sp_char."..".$sp_char."web".$sp_char."uploads".$sp_char.$fname;
+			$filesystem = new Filesystem();
+			$filesystem->mkdir($path, 0777);
+			// $filesystem->remove($path);	
+			$path=null;
+
+			$url_new= $this->generateUrl('file_manager', ['upload_directory' => $fname]);
+			$response = new RedirectResponse($url_new);
+			return $response;
+		}
+		// die;
+		
+
+		
 		
 		// $path=substr_replace($path ,"", -1);
 		// $path=$path.$dir_name.'\ ';
@@ -43,10 +59,7 @@ class CreateFolderController extends Controller
 		// $path=$path.$filename;
 		// dump($path);die;
 
-		$filesystem = new Filesystem();
-		$filesystem->mkdir($path, 0777);
-		// $filesystem->remove($path);	
-		$path=null;
+		
 
 
 		$url_new= $this->generateUrl('file_manager', ['upload_directory' => $dir_name]);
