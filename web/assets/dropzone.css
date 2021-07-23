@@ -398,12 +398,13 @@
         border-bottom: 6px solid #be2626; }
  
 .js-reference-dropzone{
-  background-color: beige;
+  /* background-color: beige; */
+  background-color: rgba(35, 255, 35, 0.096);
   /* background-image: url("https://www.example.com/image1.jpg"); */
-  border: 5px solid maroon;
-  width: 995px;
+  border: 2px solid rgb(5, 179, 98);
+  /* width: 870px; */
   /* height: 116px; */
   border-radius: 37px;
-  margin-left: 33px;
+  /* margin-left: 33px; */
 }
 }
