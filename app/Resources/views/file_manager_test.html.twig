@@ -91,162 +91,136 @@
 							<br>
 							<form action={{ path('admin_createfolder', {dir_name: upload_directory}) }} >
 								<div class="form-group ">
-									<label for="fname" style="margin-top:20px; ">Enter name to Create New Folder:</label><br>
+									<label for="fname" style="margin-top:80px; ">Enter name to Create New Folder:</label><br>
 									<input type="text" id="foldername" name="fname" style=" width: 230px; border-block-color: green;"><br>
 									<input type="submit" value="Create" class="btn btn-success" style="margin-top:5px;" />
 								</div>
 							</form>
 						
         			</div>
-					<div class='list-group'>
-        				<span class='list-group-item list-group-item-header' style="background-color: {{ main_color_scheme }}; color: {{ header_color_scheme }}; "><b>Destination Files</b></span> 
-        			
-							{# {{ dump(uploaded_files) }} #}
-						
-						{% for file in uploaded_files %} 
-        				    {# {% if directory == upload_directory %} 
-        				    	<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item active'>{{ file }}</a> 
-        				    {% elseif directory == 'data' %} 
-        				    {% else %}  #}
-        					<div class="col-sm-11" style="padding-right: 0px; padding-left: 0px; ">
-        				    	<a href="#" class='list-group-item'>{{ file }} </a>
-							</div>
-        					<div class="col-sm-1" style="padding: 0px">
-								<form action={{ path('admin_deletefile', {dir_name: upload_directory, filename: file}) }} >
-									{# <input type="submit" value="Delete" class="btn btn-primary" /> #}
-									<input type="image" name="submit" src="{{ asset('assets/images/trash-icon-2.jpg') }}"  border="0px" alt="Submit" style="width: 30px; " />
-								</form>
-
-								{# onSubmit="return confirm('Are you sure you wish to delete?')" #}
-
-								{# <button data-dz-remove class="btn btn-danger delete">
-									<i class="glyphicon glyphicon-trash"></i>
-									<span></span>
-								</button> #}
-							</div>
-								
-								{# {{dump(file)}} #}
-								{# <a href="https://google.com" class="button">Go to Google</a> #}
-        				    {# {% endif %}  #}
-        				{% endfor %}
-        			</div>
         		</div>
         		<div class="col-sm-9">
-        			{# <form id="fileupload" method="POST" enctype="multipart/form-data">
-        				<div class="row fileupload-buttonbar">
-        					<span class="btn fileinput-button"> 
-        						<i class="glyphicon glyphicon-plus"></i> 
-        						<span>Upload Folder</span> 
-        						<input type="file" name="files[]" webkitdirectory>
-        					</span> 
-        					<span class="btn fileinput-button"> 
-        						<i class="glyphicon glyphicon-plus"></i> 
-        						<span>Upload File</span> 
-        						<input type="file" name="files[]" multiple>
-        					</span>
-        					<button type="submit" class="btn btn-primary start">
-        						<i class="glyphicon glyphicon-upload"></i> 
-        						<span>Start Upload</span>
-        					</button>
-        					<button type="reset" class="btn btn-warning cancel">
-        						<i class="glyphicon glyphicon-ban-circle"></i> 
-        						<span>Cancel Upload</span>
-        					</button>
-        					<span class="fileupload-process"></span>
-        				</div>
-        				<div class="row">
-        					<div class="fileupload-progress fade">
-        						<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-        							<div class="progress-bar progress-bar-success" style="width: 0%;"></div>
-        						</div>
-        						<div class="progress-extended">&nbsp;</div>
-        					</div>
-        				</div>
-        				<div class="row">
-        					<div id='lols' class="upload_table">
-        						<table role="presentation" class="table table-striped">
-        							<tbody class="files"></tbody>
-        						</table>
-        					</div>
-        				</div>
-        			</form> #}
+					<div class="row">
+						{# WORKING FORM STARTS HERE, NATIVE SYMFONY UPLOAD #}
 
-					{{ form_start(form) }}
-							{# ... #}
+						{# {{ form_start(form) }}
+						{{ form_row(form.brochure) }}
+						{{ form_end(form) }} #}
+						
+						{# WORKING FORM ENDS #}
 
-							{{ form_row(form.brochure) }}
-					{{ form_end(form) }}
+						{# THIS IS FOR DROPZONE TEST #}
+						{# <div class="table table-striped" class="files" id="previews">
 
-					{# <div class="table table-striped" class="files" id="previews">
-
-						<div id="template" class="file-row">
-							<!-- This is used as the file preview template -->
-							<div>
-								<span class="preview"><img data-dz-thumbnail /></span>
-							</div>
-							<div>
-								<p class="name" data-dz-name></p>
-								<strong class="error text-danger" data-dz-errormessage></strong>
-							</div>
-							<div>
-								<p class="size" data-dz-size></p>
-								<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-								<div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+							<div id="template" class="file-row">
+								<!-- This is used as the file preview template -->
+								<div>
+									<span class="preview"><img data-dz-thumbnail /></span>
+								</div>
+								<div>
+									<p class="name" data-dz-name></p>
+									<strong class="error text-danger" data-dz-errormessage></strong>
+								</div>
+								<div>
+									<p class="size" data-dz-size></p>
+									<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+									<div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+									</div>
+								</div>
+								<div>
+								<button class="btn btn-primary start">
+									<i class="glyphicon glyphicon-upload"></i>
+									<span>Start</span>
+								</button>
+								<button data-dz-remove class="btn btn-warning cancel">
+									<i class="glyphicon glyphicon-ban-circle"></i>
+									<span>Cancel</span>
+								</button>
+								<button data-dz-remove class="btn btn-danger delete">
+									<i class="glyphicon glyphicon-trash"></i>
+									<span>Delete</span>
+								</button>
 								</div>
 							</div>
-							<div>
-							<button class="btn btn-primary start">
-								<i class="glyphicon glyphicon-upload"></i>
-								<span>Start</span>
-							</button>
-							<button data-dz-remove class="btn btn-warning cancel">
-								<i class="glyphicon glyphicon-ban-circle"></i>
-								<span>Cancel</span>
-							</button>
-							<button data-dz-remove class="btn btn-danger delete">
-								<i class="glyphicon glyphicon-trash"></i>
-								<span>Delete</span>
-							</button>
+
+						</div> #}
+
+
+						{# THIS CONTAINER IS FOR DROPZONE TEST #}
+						{# <div id='upload_panel' style="border:3px solid black; height:150px"></div>
+						<br>
+						<div id='upload_preview' style="border:3px solid green; padding:300px;"></div> #}
+
+						{# NOW WORKING DROPZONE FORM #}
+							
+						<form action="{{ path('upload_media', { 'dir_name': upload_directory}) }}" method="get" class="dropzone js-reference-dropzone" id="dzne">
+							<div class="fallback">
+								<input name="file" type="file" multiple />
 							</div>
+						</form>
+
+					</div>
+					<div class="row">
+						<br>
+						<div class='list-group'>
+							<span class='list-group-item list-group-item-header' style="background-color: {{ main_color_scheme }}; color: {{ header_color_scheme }}; "><b>Uploaded Files :: {{upload_directory}} </b></span> 
+						
+							{# {{ dump(uploaded_files) }} #}
+							
+							{% for file in uploaded_files %} 
+								{# {% if directory == upload_directory %} 
+									<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item active'>{{ file }}</a> 
+								{% elseif directory == 'data' %} 
+								{% else %}  #}
+								<div class="col-sm-11" style="padding-right: 0px; padding-left: 0px; ">
+									<a href="#" class='list-group-item'>{{ file }} </a>
+								</div>
+								<div class="col-sm-1" style="padding: 0px">
+									<form action={{ path('admin_deletefile', {dir_name: upload_directory, filename: file}) }} >
+										{# <input type="submit" value="Delete" class="btn btn-primary" /> #}
+										<input type="image" name="submit" src="{{ asset('assets/images/trash-icon-2.jpg') }}"  border="0px" alt="Submit" style="width: 30px; " />
+									</form>
+
+									{# onSubmit="return confirm('Are you sure you wish to delete?')" #}
+
+									{# <button data-dz-remove class="btn btn-danger delete">
+										<i class="glyphicon glyphicon-trash"></i>
+										<span></span>
+									</button> #}
+								</div>
+									
+									{# {{dump(file)}} #}
+									{# <a href="https://google.com" class="button">Go to Google</a> #}
+								{# {% endif %}  #}
+							{% endfor %}
 						</div>
 
-					</div> #}
-
-					{# <div id='upload_panel' style="border:3px solid black; height:150px"></div>
-					<br>
-					<div id='upload_preview' style="border:3px solid green; padding:300px;"></div> #}
-
-
-					 {# <form action="{{ path('admin_dropzone') }}" method="POST" enctype="multipart/form-data" class="dropzone">
-					 </form> #}
-
-					<form action="{{ path('upload_media', { 'dir_name': upload_directory}) }}" method="get" class="dropzone js-reference-dropzone" id="dzne">
-						<div class="fallback">
-							<input name="file" type="file" multiple />
-						</div>
-					</form>
+					</div>
         		</div>
+
+				{# THIS CODE IS USELESS, WAS FOR BOOTSTRAP TEST #}
         		{# <div class="col-sm-3" style="border: 2px solid red">
 				<h1> we can put something here	</h1>
 					<span class="glyphicon glyphicon-print"></span>
 				</div> #}
 
-{# <form action="{{ oneup_uploader_endpoint('gallery') }}" class="dropzone" style="width:200px; height:200px; border:4px dashed black">
-</form> #}
+				{#  ONEUP UPLOADER BUNDLE IS NOT WORKING IN THIS, MAY BE DUE TO DEPENDENCY ISSUE, NATIVE UPLOAD HANDELING IS DONE TO UPLOAD VIA DROPZONE#}
+				{# <form action="{{ oneup_uploader_endpoint('gallery') }}" class="dropzone" style="width:200px; height:200px; border:4px dashed black">
+				</form> #}
 
-{# <div id='aniket' style="width: 300px; border: 10px solid green; padding: 200px; margin: 400px;">
+				{# CONTAINERS FOR DROPZONE TEST #}
+				{# <div id='aniket' style="width: 300px; border: 10px solid green; padding: 200px; margin: 400px;">
 				</div> #}
 				{# <div class='fileinput-button' style="width: 300px; border: 10px solid green; padding: 100px; margin: 500px;">
 				</div> #}
 
-				
-
-				
-
         	</div>
     	</div>
     </div>
+
 </main>
+
+
 <footer>
 	<div class="shadow"></div>
 	{{ footer | raw }}
