@@ -31,6 +31,14 @@ function initializeDropzone() {
     var dropzone = new Dropzone(formElement, {
         paramName: 'reference',
         addRemoveLinks: true,   
+        maxFilesize: 209715200,
+        timeout: 18000000,
+        success: function (file, response, data) {
+            console.log('file upload successful...');
+        },
+        error: function (file, response) {
+        file.previewElement.classList.add("dz-error");
+        },
         init: function () {
             // Set up any event handlers
             this.on('completemultiple', function () {
