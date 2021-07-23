@@ -1,55 +1,53 @@
-var previewNode = document.querySelector("#template");
-previewNode.id = "";
-var previewTemplate = previewNode.parentNode.innerHTML;
-previewNode.parentNode.removeChild(previewNode);
-
-var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-url: "/app.php/_uploader/gallery/upload", // Set the url
-// init: function() {
-//     this.hiddenFileInput.setAttribute("webkitdirectory", true);
-// },
-// renameFilename: function (filename) {
-//     return new Date().getTime() + '_' + filename;
-// },
-maxFilesize: 209715200,
-timeout: 18000000,
-thumbnailWidth: 80,
-thumbnailHeight: 80,
-parallelUploads: 20,
-previewTemplate: previewTemplate,
-autoQueue: false, // Make sure the files aren't queued until manually added
-previewsContainer: "#upload_preview", // Define the container to display the previews
-clickable: "#upload_panel" // Define the element that should be used as click trigger to select files.
+Dropzone.autoDiscover = false;
+$(document).ready(function() {
+    initializeDropzone();
+    // var $locationSelect = $('.js-article-form-location');
+    // var $specificLocationTarget = $('.js-specific-location-target');
+    // $locationSelect.on('change', function(e) {
+    //     $.ajax({
+    //         url: $locationSelect.data('specific-location-url'),
+    //         data: {
+    //             location: $locationSelect.val()
+    //         },
+    //         success: function (html) {
+    //             if (!html) {
+    //                 $specificLocationTarget.find('select').remove();
+    //                 $specificLocationTarget.addClass('d-none');
+    //                 return;
+    //             }
+    //             // Replace the current field and show
+    //             $specificLocationTarget
+    //                 .html(html)
+    //                 .removeClass('d-none')
+    //         }
+    //     });
+    // });
 });
+function initializeDropzone() {
+    var formElement = document.querySelector('.js-reference-dropzone');
+    if (!formElement) {
+        return;
+    }
+    var dropzone = new Dropzone(formElement, {
+        paramName: 'reference',
+        addRemoveLinks: true,   
+        init: function () {
+            // Set up any event handlers
+            this.on('completemultiple', function () {
+                location.reload();
+            });
+        }
+    
+    });
 
-myDropzone.on("addedfile", function(file) {
-// Hookup the start button
-file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
-});
+    dropzone.on("complete", function (file) {
+        if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+            // alert('Your action, Refresh your page here. ');
+            location.reload();
+        }
 
-// Update the total progress bar
-myDropzone.on("totaluploadprogress", function(progress) {
-document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
-});
+        // dropzone.removeFile(file);
+        //  # remove file from the zone.
+    });
 
-// myDropzone.on("sending", function(file) {
-// // Show the total progress bar when upload starts
-// document.querySelector("#total-progress").style.opacity = "1";
-// // And disable the start button
-// file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
-// });
-
-// Hide the total progress bar when nothing's uploading anymore
-myDropzone.on("queuecomplete", function(progress) {
-document.querySelector("#total-progress").style.opacity = "0";
-});
-
-// Setup the buttons for all transfers
-// The "add files" button doesn't need to be setup because the config
-// `clickable` has already been specified.
-document.querySelector("#actions .start").onclick = function() {
-myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
-};
-document.querySelector("#actions .cancel").onclick = function() {
-myDropzone.removeAllFiles(true);
-};
+}

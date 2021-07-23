@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %} 
 {% block stylesheets %}
-
+<link rel="stylesheet" href="{{ asset('assets/dropzone.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
@@ -177,9 +177,54 @@
 							{{ form_row(form.brochure) }}
 					{{ form_end(form) }}
 
-					{# <div id='upload_panel' style="border:3px solid black; padding:30px;"></div>
+					{# <div class="table table-striped" class="files" id="previews">
+
+						<div id="template" class="file-row">
+							<!-- This is used as the file preview template -->
+							<div>
+								<span class="preview"><img data-dz-thumbnail /></span>
+							</div>
+							<div>
+								<p class="name" data-dz-name></p>
+								<strong class="error text-danger" data-dz-errormessage></strong>
+							</div>
+							<div>
+								<p class="size" data-dz-size></p>
+								<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+								<div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+								</div>
+							</div>
+							<div>
+							<button class="btn btn-primary start">
+								<i class="glyphicon glyphicon-upload"></i>
+								<span>Start</span>
+							</button>
+							<button data-dz-remove class="btn btn-warning cancel">
+								<i class="glyphicon glyphicon-ban-circle"></i>
+								<span>Cancel</span>
+							</button>
+							<button data-dz-remove class="btn btn-danger delete">
+								<i class="glyphicon glyphicon-trash"></i>
+								<span>Delete</span>
+							</button>
+							</div>
+						</div>
+
+					</div> #}
+
+					{# <div id='upload_panel' style="border:3px solid black; height:150px"></div>
 					<br>
-					<div id='upload_preview' style="border:3px solid blue; padding:300px;"></div> #}
+					<div id='upload_preview' style="border:3px solid green; padding:300px;"></div> #}
+
+
+					 {# <form action="{{ path('admin_dropzone') }}" method="POST" enctype="multipart/form-data" class="dropzone">
+					 </form> #}
+
+					<form action="{{ path('upload_media', { 'dir_name': upload_directory}) }}" method="get" class="dropzone js-reference-dropzone" id="dzne">
+						<div class="fallback">
+							<input name="file" type="file" multiple />
+						</div>
+					</form>
         		</div>
         		{# <div class="col-sm-3" style="border: 2px solid red">
 				<h1> we can put something here	</h1>
@@ -194,40 +239,7 @@
 				{# <div class='fileinput-button' style="width: 300px; border: 10px solid green; padding: 100px; margin: 500px;">
 				</div> #}
 
-				<div class="table table-striped" class="files" id="previews">
-
-					<div id="template" class="file-row">
-						<!-- This is used as the file preview template -->
-						<div>
-							<span class="preview"><img data-dz-thumbnail /></span>
-						</div>
-						<div>
-							<p class="name" data-dz-name></p>
-							<strong class="error text-danger" data-dz-errormessage></strong>
-						</div>
-						<div>
-							<p class="size" data-dz-size></p>
-							<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-							<div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-							</div>
-						</div>
-						<div>
-						<button class="btn btn-primary start">
-							<i class="glyphicon glyphicon-upload"></i>
-							<span>Start</span>
-						</button>
-						<button data-dz-remove class="btn btn-warning cancel">
-							<i class="glyphicon glyphicon-ban-circle"></i>
-							<span>Cancel</span>
-						</button>
-						<button data-dz-remove class="btn btn-danger delete">
-							<i class="glyphicon glyphicon-trash"></i>
-							<span>Delete</span>
-						</button>
-						</div>
-					</div>
-
-				</div>
+				
 
 				
 
@@ -249,8 +261,8 @@
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/js/file_manager.js') }}"></script>
-	<script type='text/javascript'>
+	{# <script type='text/javascript'>
 	 console.log(Url);
-	 </script>
+	 </script> #}
 
 {% endblock %}
