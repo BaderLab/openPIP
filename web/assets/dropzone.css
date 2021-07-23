@@ -200,7 +200,9 @@
       padding: 0;
       font: inherit;
       cursor: pointer;
-      outline: inherit; }
+      outline: inherit;
+      font-size: 24px;
+      font-family: math; }
   .dropzone .dz-preview {
     position: relative;
     display: inline-block;
@@ -394,3 +396,14 @@
         border-left: 6px solid transparent;
         border-right: 6px solid transparent;
         border-bottom: 6px solid #be2626; }
+ 
+.js-reference-dropzone{
+  background-color: beige;
+  /* background-image: url("https://www.example.com/image1.jpg"); */
+  border: 5px solid maroon;
+  width: 995px;
+  /* height: 116px; */
+  border-radius: 37px;
+  margin-left: 33px;
+}
+}
