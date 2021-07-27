@@ -199,14 +199,13 @@
 											<button type="submit" class="btnd" data-toggle="tooltip" data-placement="bottom" title="Download File"><i class="fa fa-download"></i></button>
 										</form>
 									</div>
-									<div class="col-sm-4" style="padding: 0px">
+									<div class="col-sm-4" style="padding: 0px">	
 										<form action={{ path('admin_downloadfile', {dir_name: upload_directory, filename: file}) }} >
-											{# <input type="submit" value="Download" class="btn btn-danger" /> #}
-											{# <input type="image" name="submit" src="{{ asset('assets/images/trash-icon-2.jpg') }}"  border="0px" alt="Submit" style="width: 30px; " /> #}
+											<div id="to_hide" style="display: none;">{{file}}</div>		
+											<textarea id="{{file}}" name='file_path' style="display: none;">{{kernelRootDir}}/web/uploads/{{upload_directory}}/{{file}}</textarea>	
+											<button name="{{file}}" type="button" class="btnc" onclick="copyFunction(this.name)" data-toggle="tooltip" data-placement="bottom" title="copy file path"><i class="fa fa-copy"></i></button>	
+										</form>
 											
-											<button type="submit" class="btnc" data-toggle="tooltip" data-placement="bottom" title="copy file path"><i class="fa fa-copy"></i></button>
-											
-										</form>	
 									</div>
 
 
@@ -217,7 +216,7 @@
 										<span></span>
 									</button> #}
 								</div>
-							
+								{# <input type="text" value="Hello World" id="myInput"> #}
 									
 									{# {{dump(file)}} #}
 									{# <a href="https://google.com" class="button">Go to Google</a> #}
