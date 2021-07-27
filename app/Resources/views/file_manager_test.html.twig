@@ -65,8 +65,8 @@
         								<div class="col-sm-10" style="padding-left:0px; padding-right:0px;">
 
 											<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item active' style="    border-radius: 34px;
-    margin: 2px 2px 2px 2px;
-    padding: 8px 20px 8px 21px;">{{ directory }} </a> 
+											margin: 2px 2px 2px 2px;
+											padding: 8px 20px 8px 21px;">{{ directory }} </a> 
 										</div>
 										<div class="col-sm-2" style="padding-left:0px; padding-right:0px;" >
 											<form action={{ path('admin_deletefolder', {dir_name: directory}) }} onSubmit="return confirm('Are you sure you wish to delete?')" >
@@ -81,8 +81,8 @@
         								<div class="col-sm-10" style="padding-left:0px; padding-right:0px;">
 
 											<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item' style="    border-radius: 34px;
-    margin: 2px 2px 2px 2px;
-    padding: 8px 20px 8px 21px;">{{ directory }}</a> 
+											margin: 2px 2px 2px 2px;
+											padding: 8px 20px 8px 21px;">{{ directory }}</a> 
 										</div>
 										<div class="col-sm-2" style="padding-left:0px; padding-right:0px;">
 											<form action={{ path('admin_deletefolder', {dir_name: directory}) }} onSubmit="return confirm('Are you sure you wish to delete?')" >
@@ -189,22 +189,23 @@
 										<form action={{ path('admin_deletefile', {dir_name: upload_directory, filename: file}) }} >
 											{# <input type="submit" value="Download" class="btn btn-primary" /> #}
 											{# <input type="image" name="submit" src="{{ asset('assets/images/trash-icon-2.jpg') }}"  border="0px" alt="Submit" style="width: 30px; " /> #}
-											<button type="submit" class="btnt"><i class="fa fa-trash"></i></button>
+											<button type="submit" class="btnt" data-toggle="tooltip" data-placement="bottom" title="Delete File"><i class="fa fa-trash"></i></button>
 										</form>
 									</div>
 									<div class="col-sm-4" style="padding: 0px">
 										<form action={{ path('admin_downloadfile', {dir_name: upload_directory, filename: file}) }} >
 											{# <input type="submit" value="Download" class="btn btn-primary" /> #}
 											{# <input type="image" name="submit" src="{{ asset('assets/images/trash-icon-2.jpg') }}"  border="0px" alt="Submit" style="width: 30px; " /> #}
-											<button type="submit" class="btnd"><i class="fa fa-download"></i></button>
+											<button type="submit" class="btnd" data-toggle="tooltip" data-placement="bottom" title="Download File"><i class="fa fa-download"></i></button>
 										</form>
 									</div>
 									<div class="col-sm-4" style="padding: 0px">
-									
 										<form action={{ path('admin_downloadfile', {dir_name: upload_directory, filename: file}) }} >
 											{# <input type="submit" value="Download" class="btn btn-danger" /> #}
 											{# <input type="image" name="submit" src="{{ asset('assets/images/trash-icon-2.jpg') }}"  border="0px" alt="Submit" style="width: 30px; " /> #}
-											<button type="submit" class="btnc"><i class="fa fa-copy"></i></button>
+											
+											<button type="submit" class="btnc" data-toggle="tooltip" data-placement="bottom" title="copy file path"><i class="fa fa-copy"></i></button>
+											
 										</form>	
 									</div>
 
