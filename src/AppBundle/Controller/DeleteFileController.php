@@ -7,6 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 
 /**
@@ -53,7 +55,51 @@ class DeleteFileController extends Controller
 
 	}
 
-	
+
+	/**
+	 * about
+	 * @Route("/downloadfile/{dir_name}/{filename}", name="downloadfile")
+	 * @Route("/admin/downloadfile/{dir_name}/{filename}", name="admin_downloadfile")
+	 * @Method({"GET", "POST"})
+	 */
+	public function downloadFileAction($dir_name, $filename, Request $request)
+	{	
+		// use this in windows server
+		$sp_char='\ ';
+		// use this in ubuntu server
+		// $sp_char='/ ';
+
+		$sp_char=substr_replace($sp_char,"", -1);
+		// dump($sp_char);die;
+
+		$root=$this->getParameter('kernel.root_dir');
+		$path=$root.$sp_char."..".$sp_char."web".$sp_char."uploads".$sp_char.$dir_name.$sp_char.$filename;
+		
+		// $path=substr_replace($path ,"", -1);
+		// $path=$path.$dir_name.'\ ';
+		// $path=substr_replace($path ,"", -1);
+		// $path=$path.$filename;
+		// dump($path);die;
+
+		// $filesystem = new Filesystem();
+		// $filesystem->remove($path);	
+		// $path=null;
+		// dump($path);die;
+		$response = new BinaryFileResponse($path);
+		// dump($response);die;.
+		
+		$response->setContentDisposition(
+			ResponseHeaderBag::DISPOSITION_ATTACHMENT	
+		);
+
+		// $url_new= $this->generateUrl('file_manager', ['upload_directory' => $dir_name]);
+		// $response = new RedirectResponse($url_new);
+		return $response;
+
+	}
+
+
+
 }
 
 ?>

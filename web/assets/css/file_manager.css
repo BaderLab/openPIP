@@ -9,6 +9,57 @@ main{
 
 }
 
+.btnc {
+	background-color: rgb(201, 159, 43);
+	border: none;
+	color: white;
+	padding: 5px 17px 5px 17px;
+	font-size: 16px;
+	cursor: pointer;
+	border-radius: 11px;
+	margin-top: 2px;
+	margin-left: 6px;
+  }
+  
+  /* Darker background on mouse-over */
+  .btnc:hover {
+	background-color: rgb(92, 72, 5);
+  }
+
+  .btnd {
+	background-color: rgb(27, 99, 170);
+	border: none;
+	color: white;
+	padding: 5px 17px 5px 17px;
+	font-size: 16px;
+	cursor: pointer;
+	border-radius: 11px;
+	margin-top: 2px;
+	margin-left: 6px;
+  }
+  
+  /* Darker background on mouse-over */
+  .btnd:hover {
+	background-color: rgb(5, 27, 92);
+  }
+
+  .btnt {
+	background-color: rgb(189, 34, 34);
+	border: none;
+	color: white;
+	padding: 5px 17px 5px 17px;
+	font-size: 16px;
+	cursor: pointer;
+	border-radius: 11px;
+	margin-top: 2px;
+	margin-left: 6px;
+  }
+  
+  /* Darker background on mouse-over */
+  .btnt:hover {
+	background-color: rgb(105, 3, 3);
+  }
+
 .list-group-item-header{	
 	background-color: #FFD2A0;
 	cursor: default;
