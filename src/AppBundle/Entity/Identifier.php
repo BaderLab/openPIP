@@ -106,7 +106,7 @@ class Identifier
      */
     public function setProtein(\AppBundle\Entity\Protein $protein = null)
     {
-        $this->protein = $protein;
+        $this->proteins[] = $protein;
 
         return $this;
     }
@@ -118,7 +118,7 @@ class Identifier
      */
     public function getProtein()
     {
-        return $this->protein;
+        return $this->proteins;
     }
 
     /**
