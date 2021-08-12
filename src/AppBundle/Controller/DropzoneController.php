@@ -21,6 +21,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DropzoneController extends Controller
 {
@@ -63,12 +64,13 @@ class DropzoneController extends Controller
             unset($file);
         }
 
-
-        $url_new= $this->generateUrl('file_manager', ['upload_directory' => 'gallery']);
-		$response = new RedirectResponse($url_new);
-		return $response;
+        echo '<script>console.log("upload complete");</script>';
+        // dump($output);die;
+        // $url_new= $this->generateUrl('file_manager', ['upload_directory' => 'FASTA']);
+		// $response = new RedirectResponse($url_new);
+		// return $response;
         // return data to the frontend
-        return new JsonResponse($output);
+         return new JsonResponse($output);
     }
 
 

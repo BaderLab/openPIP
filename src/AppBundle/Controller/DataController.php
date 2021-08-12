@@ -27,6 +27,11 @@ use AppBundle\Entity\Experiment;
 use AppBundle\Entity\Interaction_Category;
 use AppBundle\Entity\Annotation;
 use AppBundle\Entity\Annotation_Type;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+
 
 /**
  * Data controller.
@@ -42,6 +47,73 @@ class DataController extends Controller
 	 */
 	public function dataAction(Request $request)
 	{
+		$tform = $this->createFormBuilder()
+			->add('brochure', FileType::class, array('label' => 'FILE UPLOAD (all format supported)', 'multiple' => true))
+			// ->add('save', SubmitType::class, ['label' => 'Start Upload'])
+            ->getForm();
+
+        $tform->handleRequest($request);
+
+		if ($tform->isSubmitted() && $tform->isValid())
+		{
+            // $file stores the uploaded PDF file
+            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            // $files = $product->getBrochure();
+			// dump($request);die;
+			
+			$my_file=$request->files->get('form')['brochure'];
+			// dump($my_file);die;
+
+			foreach($my_file as $file)
+			{
+				// $path = sha1(uniqid(mt_rand(), true)).'.'.$file->guessExtension();
+				// array_push ($this->paths, $path);
+				// $file->move($this->getUploadRootDir(), $path);
+				// dump($file);die;
+				
+				$fileNameOriginal = $file->getClientOriginalName();
+
+				$save_dir=$this->getParameter('brochures_directory').'/'.'FASTA';
+          	 	// $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+
+				// Move the file to the directory where brochures are stored
+				try {
+					$file->move(
+						$save_dir,
+						$fileNameOriginal
+					);
+				} catch (FileException $e) {
+					// ... handle exception if something happens during file upload
+				}	
+				
+				// dump($file);die;
+
+				unset($file);
+	
+			}
+
+			
+			// dump($fileNameOriginal);die;
+			echo '<script>console.log("upload finished");</script>';
+            
+			// $product->setBrochure($fileName);
+
+			// $url_new= $this->generateUrl('file_manager', ['upload_directory' => 'FASTA']);
+			// $response = new RedirectResponse($url_new);
+			// return $response;
+        }
+
+		$dform = $this->createFormBuilder()
+			// ->add('brochure', FileType::class, array('label' => 'FILE UPLOAD (all format supported)', 'multiple' => true))
+			->add('save', SubmitType::class, ['label' => 'DATABASE Upload'])
+            ->getForm();
+
+        $dform->handleRequest($request);
+		if ($dform->isSubmitted())
+		{
+			self::handleData3($dform,$request);
+		}
+
 
 		$dataset_array = self::getDatasetArray();
 
@@ -60,7 +132,7 @@ class DataController extends Controller
 
 		if ($data_form->isSubmitted()) {
 
-			self::handleData3($data_form);
+			self::handleData3($data_form,$request);
 		}
 
 		$admin_settings = $this->getDoctrine()
@@ -77,6 +149,7 @@ class DataController extends Controller
 		$functions = $this->get('app.functions');
 		$login_status = $functions->getLoginStatus();
 		$admin_status = $functions->GetAdminStatus();
+		$url = $admin_settings->GetUrl();
 
 		return $this->render('data_manager.html.twig', array(
 			'update_user_form' => $update_user_form->createView(),
@@ -92,7 +165,12 @@ class DataController extends Controller
 			'title' => $title,
 			'login_status' => $login_status,
 			'admin_status' => $admin_status,
-			'page' => 'data'
+			'page' => 'data',
+			'url' => $url,
+			'tform'=> $tform->createView(),
+			'dform'=> $dform->createView()
+
+
 		));
 	}
 
@@ -116,14 +194,22 @@ class DataController extends Controller
 		}
 	}
 
-	public function handleData3($data_form)
+	public function handleData3($data_form,$request)
 		{
-
-		$handle = fopen('C:\Users\A Ranjan\Desktop\GSoC2021\data_test.psi', 'r');
+			
+		$directory = $this->getParameter('brochures_directory').'/'.'data/'.'Rolland-Vidal(Cell_2014).psi';
+		
+		$handle = fopen($directory, 'r');
 		$file_row = 0;
-		while ($file_row<30) {
+		$session = $request->getSession();
+		$session->set('file_row', $file_row);
+		$progress=$session->get('products');
+		// dump($session);die;	
+
+		while ($file_row<20) {
 			$file_data = fgetcsv($handle, 0, "\t");
 			$file_row++;
+			$session->set('file_row', $file_row);
 			if ($file_row < 3) {
 				continue;
 			}
