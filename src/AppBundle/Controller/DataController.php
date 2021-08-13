@@ -1826,7 +1826,7 @@ class DataController extends Controller
 			$name_array=explode($ps,$fpath);
 			$file_name=end($name_array);
 			$folder_name=prev($name_array);
-			$files_array[] = $folder_name. ' // 	' .$file_name;
+			$files_array[] = $folder_name. '::' .$file_name;
 			
 			
 			// dumps the absolute path

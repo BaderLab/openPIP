@@ -75,31 +75,35 @@
         		<div class="row data_upload_content" >
         			<div class="col-lg-12">
 						{{ form_start(fform) }}
-							<div id="delete_dataset" class="hidden large_2">
-								<div id="delete_dataset_form">
+							<div id="insert_database" class="hidden large_2">
+								<div id="insert_database_form">
 									<div class="row">
-									
-										<p style="margin: 20px;"><strong>Are you sure you want to delete the Dataset?</strong></p>
-										<p id="dataset_to_delete" style="margin: 20px; margin-bottom: 30px;"></p>
+										<p style="margin: 20px;"><strong>Are you sure you want to insert into database?</strong></p>
+										<p id="file_to_insert" style="margin: 20px; margin-bottom: 30px;"></p>
 									</div>
 									<div class="row">
 										<div class="col-lg-6">
-											<button type='submit' class="btn btn-danger">
-												<i class="glyphicon glyphicon-ban-circle"></i> <span>Delete Dataset</span>
+											<button type='submit' class="btn btn-success">
+												<i class="glyphicon glyphicon-cloud-upload"></i> <span>INSERT DATA</span>
 											</button>
 										</div>
 										<div class="col-lg-6">
-											<div id="cancel_delete_dataset" class="btn btn-primary">
-												<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
+											<div id="cancel_database_insert" class="btn btn-primary">
+												<i class="glyphicon glyphicon-remove"></i> <span>CANCLE</span>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="row data_upload_content">
+							<div class="row data_upload_content" id="aniket">
 								{{ form_widget(fform.files_to_insert) }}
 							</div>
 						{{ form_end(fform) }}
+						<div class="row">
+							<button id="insert_into_database" class="btn btn-success" style="margin: 20px;">
+								<i class="glyphicon glyphicon-cloud-upload"></i> <span>Insert into database</span>
+							</button>
+						</div>
 					</div>
         		</div>
             </div>
