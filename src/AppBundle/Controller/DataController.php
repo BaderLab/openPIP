@@ -30,6 +30,7 @@ use AppBundle\Entity\Annotation_Type;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Finder\Finder;
 
 
 
@@ -111,7 +112,16 @@ class DataController extends Controller
         $dform->handleRequest($request);
 		if ($dform->isSubmitted())
 		{
+			// $this->get('session')->save();
 			self::handleData3($dform,$request);
+		}
+
+		$fform = self::getFForm();
+		$fform->handleRequest($request);
+		if ($fform->isSubmitted())
+		{
+			// $this->get('session')->save();
+			// self::handleData3($dform,$request);
 		}
 
 
@@ -168,7 +178,8 @@ class DataController extends Controller
 			'page' => 'data',
 			'url' => $url,
 			'tform'=> $tform->createView(),
-			'dform'=> $dform->createView()
+			'dform'=> $dform->createView(),
+			'fform'=> $fform->createView()
 
 
 		));
@@ -195,21 +206,27 @@ class DataController extends Controller
 	}
 
 	public function handleData3($data_form,$request)
-		{
-			
+	{
+		$session = $request->getSession();
+		$session->save();
+		session_write_close();
+		// $this->getUser()->shutdown();
+		// dump($session);die;
 		$directory = $this->getParameter('brochures_directory').'/'.'data/'.'Rolland-Vidal(Cell_2014).psi';
 		
 		$handle = fopen($directory, 'r');
 		$file_row = 0;
-		$session = $request->getSession();
-		$session->set('file_row', $file_row);
-		$progress=$session->get('products');
+		// $session = $request->getSession();
+		// $session->set('file_row', $file_row);
+		// $progress=$session->get('products');
+		// $session->save();
+		// session_write_close();
 		// dump($session);die;	
 
 		while ($file_row<20) {
 			$file_data = fgetcsv($handle, 0, "\t");
 			$file_row++;
-			$session->set('file_row', $file_row);
+			// $session->set('file_row', $file_row);
 			if ($file_row < 3) {
 				continue;
 			}
@@ -261,7 +278,7 @@ class DataController extends Controller
 
 
 					$doctrine_manager = $this->getDoctrine()->getManager();
-					$doctrine_manager->getConfiguration()->setSQLLogger(null);
+					// $doctrine_manager->getConfiguration()->setSQLLogger(null);
 					// $doctrine_manager->persist($dataset);
 					// $doctrine_manager->persist($interaction_category);
 					$doctrine_manager->persist($interaction);
@@ -1791,6 +1808,46 @@ class DataController extends Controller
 			))->getForm();
 
 		return $delete_form;
+	}
+
+	public function getFForm()
+	{
+		$files_array = array();
+
+		$ps=$this->getParameter('system_path_seperator');
+		$directory = $this->getParameter('kernel.root_dir').$ps.'..'.$ps.'web'.$ps.'uploads'.$ps;
+		// dump($directory);die;
+		$finder = new Finder();
+		$finder->files()->in($directory);
+		foreach ($finder as $file) {
+
+			$fpath=$file->getRealPath();
+			// $base_name = basename($fpath); 
+			$name_array=explode($ps,$fpath);
+			$file_name=end($name_array);
+			$folder_name=prev($name_array);
+			$files_array[] = $folder_name. ' // 	' .$file_name;
+			
+			
+			// dumps the absolute path
+			// var_dump($file->getRealPath());
+		
+			// dumps the relative path to the file, omitting the filename
+			// var_dump($file->getRelativePath());
+		
+			// dumps the relative path to the file
+			// var_dump($file->getRelativePathname());
+		}
+		// dump($files_array);die;
+
+
+		$defaultData = array('message' => 'Type your message here');
+		$fform = $this->createFormBuilder($defaultData)
+			->add('files_to_insert', ChoiceType::class, array(
+				'choices' => $files_array
+			))->getForm();
+
+		return $fform;
 	}
 
 	public function getUpdateUserForm()

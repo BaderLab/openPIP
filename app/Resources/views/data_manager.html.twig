@@ -72,7 +72,36 @@
         			</div>
         		</div>
         		{{ form_end(form) }}
-        		
+        		<div class="row data_upload_content" >
+        			<div class="col-lg-12">
+						{{ form_start(fform) }}
+							<div id="delete_dataset" class="hidden large_2">
+								<div id="delete_dataset_form">
+									<div class="row">
+									
+										<p style="margin: 20px;"><strong>Are you sure you want to delete the Dataset?</strong></p>
+										<p id="dataset_to_delete" style="margin: 20px; margin-bottom: 30px;"></p>
+									</div>
+									<div class="row">
+										<div class="col-lg-6">
+											<button type='submit' class="btn btn-danger">
+												<i class="glyphicon glyphicon-ban-circle"></i> <span>Delete Dataset</span>
+											</button>
+										</div>
+										<div class="col-lg-6">
+											<div id="cancel_delete_dataset" class="btn btn-primary">
+												<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row data_upload_content">
+								{{ form_widget(fform.files_to_insert) }}
+							</div>
+						{{ form_end(fform) }}
+					</div>
+        		</div>
             </div>
             
         </div>
@@ -88,7 +117,7 @@
                     	<div id="delete_dataset_form">
     						<div class="row">
     						
-    							<p style="margin: 20px;"><strong>Are you sure you want to datele the Dataset?</strong></p>
+    							<p style="margin: 20px;"><strong>Are you sure you want to delete the Dataset?</strong></p>
     							<p id="dataset_to_delete" style="margin: 20px; margin-bottom: 30px;"></p>
     						</div>
     						<div class="row">
@@ -116,15 +145,15 @@
     			</div>
         	</div>
 			<div class="container data_upload_panel">
-				{{ form_start(tform) }}
+				{# {{ form_start(tform) }}
             	<div class="row data_upload_content" >
         			<div class="col-lg-10">
         				<div class="row" style="display: inline-block;">
-        					{# <input id="uploadFile" disabled="disabled" /> #}
-        					{# <div class="fileUpload btn btn-primary"> #}
-        						{# <i class"glyphicon glyphicon-plus"></i> <span>Choose File</span> #}
+        					<input id="uploadFile" disabled="disabled" />
+        					<div class="fileUpload btn btn-primary">
+        						<i class"glyphicon glyphicon-plus"></i> <span>Choose File</span>
         						{{ form_widget(tform.brochure, {'attr': {'class': 'upload'}}) }}
-        					{# </div> #}
+        					</div>
         				</div>
         			</div>    
             	</div>
@@ -135,10 +164,8 @@
         				</button>
         			</div>
         		</div>
-        		{{ form_end(tform) }}
-				{{ form_start(dform) }}
-					
-				{{ form_end(dform) }}
+        		{{ form_end(tform) }} #}
+				
 			</div>	
 			<form action="{{ path('upload_media', { 'dir_name': 'FASTA'}) }}" method="post" enctype="multipart/form-data">	
 				<input name="file" type="file" multiple />
@@ -181,6 +208,23 @@
     			{{ form_end(update_user_form) }}
         	</div>	
         </div>
+		<div class="col-lg-4">
+			<div class="container data_upload_panel">
+        		<div class="row">
+        			<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
+        				<h4 style="color: {{ header_color_scheme }}">Purge DB</h4>
+        			</div>
+        		</div>
+				<br>
+				<form action= {{path('purge_db')}}>
+					<input class="btn btn-danger" type="submit" value="Clean Database" />
+				</form>
+				<br>
+				{{ form_start(dform) }}
+
+				{{ form_end(dform) }}
+			</div>
+		</div>
     </div>	
 </div>
 </main>

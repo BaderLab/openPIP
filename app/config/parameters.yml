@@ -2,7 +2,7 @@
 # parameters:
 #     database_host: 127.0.0.1
 #     database_port: null
-#     database_name: yeri
+#     database_name: test2
 #     database_user: root
 #     database_password: null
 #     mailer_transport: gmail
@@ -11,6 +11,8 @@
 #     mailer_password: mi135Gmail
 #     secret: ThisTokenIsNotSoSecretChangeIt
 #     brochures_directory: '%kernel.root_dir%/../web/uploads'
+#     system_path_seperator: '\' 
+#     # use [system_path_seperator]='/' in ubuntu and '\' in windows
 
 
 
@@ -29,3 +31,5 @@ parameters:
     mailer_password: mi135Gmail
     secret: ThisTokenIsNotSoSecretChangeIt
     brochures_directory: '%kernel.root_dir%/../web/uploads'
+    system_path_seperator: '/' 
+    # use [system_path_seperator]='/' in ubuntu and '\' in windows

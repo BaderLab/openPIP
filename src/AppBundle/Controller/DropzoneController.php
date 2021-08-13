@@ -70,7 +70,7 @@ class DropzoneController extends Controller
 		// $response = new RedirectResponse($url_new);
 		// return $response;
         // return data to the frontend
-         return new JsonResponse($output);
+        return new JsonResponse($output);
     }
 
 
