@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/data_manager.css') }}">
+{# <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> #}
 
 {% endblock %}
 {% block title %}{{ short_title }} | Data{% endblock %} 
@@ -42,6 +43,14 @@
 {% endblock %}
 {% block content %}
 <main style="background-color: #EEEEEE;">
+
+{% for type, flash_messages in app.session.flashBag.all %}
+    {% for flash_message in flash_messages %}
+        <div class="flash-{{ type }} alert alert-success">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+{% endfor %}
 
 <div class="container">
 	<div class="row">
@@ -83,7 +92,7 @@
 									</div>
 									<div class="row">
 										<div class="col-lg-6">
-											<button type='submit' class="btn btn-success">
+											<button id="get_lines" type='button' class="btn btn-success">
 												<i class="glyphicon glyphicon-cloud-upload"></i> <span>INSERT DATA</span>
 											</button>
 										</div>
@@ -95,10 +104,46 @@
 									</div>
 								</div>
 							</div>
+							<div id="insert_database_next" class="hidden large_2">
+								<div id="insert_database_form">
+									<div class="row">
+										<p style="margin: 20px;"><strong>Are you sure you want to insert into database?</strong></p>
+										<p id="file_to_insert_next" style="margin: 20px; margin-bottom: 30px;"></p>
+									</div>
+									<div class="row">
+										<div class="col-lg-6">
+											<button id="final_upload_button" type='button' class="btn btn-success">
+												<i class="glyphicon glyphicon-cloud-upload"></i> <span>INSERT DATA</span>
+											</button>
+										</div>
+										<div class="col-lg-6">
+											<div id="cancel_database_insert_next" class="btn btn-primary">
+												<i class="glyphicon glyphicon-remove"></i> <span>CANCLE</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="insert_database_next_loading" class="hidden large_2">
+								<div id="insert_database_form">
+									<div class="row">
+										<p style="margin: 20px;"><strong>LOADING...</strong></p>
+										<p id="file_to_insert_next_loading" style="margin: 20px; margin-bottom: 30px;"></p>
+									</div>
+									<div class="row">
+										<!-- Image loader -->
+										<div id='loader' style='display: block;'>
+											<img src={{ asset('assets/images/particles_loading.gif') }} width='200px' height='200px'>
+										</div>
+										<!-- Image loader -->
+									</div>
+								</div>
+							</div>
 							<div class="row data_upload_content" id="aniket">
 								{{ form_widget(fform.files_to_insert) }}
 							</div>
 						{{ form_end(fform) }}
+
 						<div class="row">
 							<button id="insert_into_database" class="btn btn-success" style="margin: 20px;">
 								<i class="glyphicon glyphicon-cloud-upload"></i> <span>Insert into database</span>
@@ -109,6 +154,8 @@
             </div>
             
         </div>
+		
+		
         <div class="col-lg-4">
             <div class="container data_upload_panel">
         		<div class="row">
@@ -238,15 +285,15 @@
 </footer>
 {% endblock %} 
 {% block javascripts %}
-
+	
     <script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/js/data_manager.js') }}"></script>
 	<script> 
-		var tuna = "{{url}}";
-		console.log("url is:" +tuna);
+		var Url = "{{url}}";
+		console.log("url is:" +Url);
 	</script>
 	<script>
 		var tuna = "{{url}}";

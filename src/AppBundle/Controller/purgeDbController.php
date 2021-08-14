@@ -94,8 +94,12 @@ class purgeDbController extends Controller
 
     // return new Response('', Response::HTTP_OK);
 		
+		$this->addFlash(
+			'success',
+			'Database is now empty!'
+		);
 
-
+		// sleep(5);
 
 		$url_new= $this->generateUrl('data_manager');
 		$response = new RedirectResponse($url_new);

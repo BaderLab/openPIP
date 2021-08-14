@@ -31,6 +31,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 
 
@@ -41,6 +43,133 @@ use Symfony\Component\Finder\Finder;
  */
 class DataController extends Controller
 {
+	/**
+	 * @Route("/{folder}/{file}", name="get_lines")
+	 * @Method({"GET", "POST"})
+	 */
+	public function getlines($folder, $file, Request $request)
+	{
+		$ps=$this->getParameter('system_path_seperator');
+		$path = $this->getParameter('kernel.root_dir').$ps.'..'.$ps.'web'.$ps.'uploads'.$ps.$folder.$ps.$file;
+		$path2 = $this->getParameter('brochures_directory').'/'.$folder.'/'.$file;
+
+		$linecount = 0;
+		// dump($path);die;
+		try
+		{
+			$handle = fopen($path, "r");
+			while(!feof($handle)){
+			$line = fgets($handle);
+			$linecount++;
+			}
+			fclose($handle);
+			return new JsonResponse($linecount);
+
+		}
+		catch(Exception $e){
+			return new JsonResponse('something went wrong');
+		}
+
+		return new JsonResponse($linecount);
+
+	}
+
+	/**
+	 * @Route("/insert_data/{folder}/{file}", name="insert_data")
+	 * @Method({"GET", "POST"})
+	 */
+	public function insertAction($file, $folder)
+	{
+		$ps=$this->getParameter('system_path_seperator');
+		$path = $this->getParameter('kernel.root_dir').$ps.'..'.$ps.'web'.$ps.'uploads'.$ps.$folder.$ps.$file;
+		$path2 = $this->getParameter('brochures_directory').'/'.$folder.'/'.$file;
+		
+		$directory = $this->getParameter('brochures_directory').'/'.'data/'.'Rolland-Vidal(Cell_2014).psi';
+		// dump($directory);die;
+		$handle = fopen($path, 'r');
+		$file_row = 0;
+		// $session = $request->getSession();
+		// $session->set('file_row', $file_row);
+		// $progress=$session->get('products');
+		// $session->save();
+		// session_write_close();
+		// dump($session);die;	
+
+		while ($file_row<20) {
+			$file_data = fgetcsv($handle, 0, "\t");
+			$file_row++;
+			// $session->set('file_row', $file_row);
+			if ($file_row < 2) {
+				continue;
+			}
+			try {
+				list($interactor_A_id, $interactor_B_id, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13) = $file_data;
+				$interaction = null;
+				
+				
+				// if (true) {
+				
+				$protein_A = self::proteinHandler($interactor_A_id,null);
+				$protein_B = null;
+				if ($interactor_A_id == $interactor_B_id) {
+					$protein_B = $protein_A;
+				} else {
+					$protein_B = self::proteinHandler($interactor_B_id,null);
+				}
+
+				if (self::isNewInteraction($protein_A, $protein_B) == true) {
+					// $protein_A = self::proteinHandler($interactor_A_id,null);
+					// $protein_B = null;
+					// if ($interactor_A_id == $interactor_B_id) {
+					// 	$protein_B = $protein_A;
+					// } else {
+					// 	$protein_B = self::proteinHandler($interactor_B_id,null);
+					// }
+
+
+					$interaction = new Interaction;
+					$interaction->setInteractorA($protein_A);
+					$interaction->setInteractorB($protein_B);
+					$interaction->setRemoved(0);
+				} else {
+					$interaction = self::getInteractionByIds($interactor_A_id, $interactor_B_id);
+					// $interaction = self::getInteractionByIds($interactor_A_id, $interactor_B_id, $alt_interactor_A_id, $alt_interactor_B_id);
+				}
+
+				// $dataset = self::getDataset();
+
+				if (true) {
+
+				// if (self::assertRelationshipExistsInteractionDataset($interaction, $dataset) == false) {
+
+					// $interaction->addDataset($dataset);
+					// $dataset->addInteraction($interaction);
+					// $interaction_category = self::getInteractionCategory();
+					// $interaction->addInteractionCategory($interaction_category);
+					// $interaction_category->addInteraction($interaction);
+
+
+					$doctrine_manager = $this->getDoctrine()->getManager();
+					// $doctrine_manager->getConfiguration()->setSQLLogger(null);
+					// $doctrine_manager->persist($dataset);
+					// $doctrine_manager->persist($interaction_category);
+					$doctrine_manager->persist($interaction);
+					$doctrine_manager->flush();
+					$doctrine_manager->clear();
+					gc_collect_cycles();
+				}
+			} catch (Exception $e) {
+			}
+		}
+
+		$this->addFlash(
+            'success',
+            'Action was successful! Proteins inserted in database...'
+        );
+
+		return new JsonResponse('success followed');
+
+	}
 
 	/**
 	 * @Route("/", name="data_manager")
@@ -122,6 +251,18 @@ class DataController extends Controller
 		{
 			// $this->get('session')->save();
 			// self::handleData3($dform,$request);
+			$file_to_insert = $fform->get('files_to_insert')->getData();
+			$temp_arr=explode("::", $file_to_insert);
+			$file=$temp_arr[1];
+			$folder=$temp_arr[0];
+
+
+			return $this->redirectToRoute('insert_data', array('file' => $file, 'folder'=> $folder));
+
+			$this->addFlash(
+				'notice',
+				'Your changes were saved!'
+			);
 		}
 
 
@@ -213,7 +354,7 @@ class DataController extends Controller
 		// $this->getUser()->shutdown();
 		// dump($session);die;
 		$directory = $this->getParameter('brochures_directory').'/'.'data/'.'Rolland-Vidal(Cell_2014).psi';
-		
+		// dump($directory);die;
 		$handle = fopen($directory, 'r');
 		$file_row = 0;
 		// $session = $request->getSession();
@@ -289,6 +430,11 @@ class DataController extends Controller
 			} catch (Exception $e) {
 			}
 		}
+
+		$this->addFlash(
+            'success',
+            'Action was successful! Proteins inserted in database...'
+        );
 	}
 
 
@@ -1826,7 +1972,8 @@ class DataController extends Controller
 			$name_array=explode($ps,$fpath);
 			$file_name=end($name_array);
 			$folder_name=prev($name_array);
-			$files_array[] = $folder_name. '::' .$file_name;
+			$temp=$folder_name. '::' .$file_name;
+			$files_array[$temp] =$temp;
 			
 			
 			// dumps the absolute path
