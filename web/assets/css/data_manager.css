@@ -105,6 +105,16 @@ main{
 	margin: auto;
 }
 
+#insert_database_form_loader{
+	border: 5px solid #730303;
+    padding: 30px;
+    width: 50%;
+    background: #000;
+    z-index: 11;
+    margin: auto;
+	height: 350px;
+}
+
 .large_2{
     background-color: rgba(0,0,0,0.65);
     position:fixed;

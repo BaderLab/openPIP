@@ -286,6 +286,12 @@ class DataController extends Controller
 			self::handleData3($data_form,$request);
 		}
 
+		$counts = self::getCounts();
+		$protein_count = $counts->protein_count;
+		$organism_count = $counts->organism_count;
+		$interaction_count = $counts->interaction_count;
+		$domain_count = $counts->domain_count;	
+
 		$admin_settings = $this->getDoctrine()
 			->getRepository('AppBundle:Admin_Settings')
 			->find(1);
@@ -316,6 +322,10 @@ class DataController extends Controller
 			'title' => $title,
 			'login_status' => $login_status,
 			'admin_status' => $admin_status,
+			'protein_count' => $protein_count,
+			'organism_count' => $organism_count,
+			'interaction_count' => $interaction_count,
+			'domain_count' => $domain_count,
 			'page' => 'data',
 			'url' => $url,
 			'tform'=> $tform->createView(),
@@ -3285,6 +3295,39 @@ class DataController extends Controller
 	        
 	}
 
+	private function count($entity){
+		
+		$sql = 'SELECT COUNT(i.id) FROM AppBundle:' . $entity . ' i';		
+				$em = $this->getDoctrine()->getManager();
+		$em->getConnection()->getConfiguration()->setSQLLogger(null);
+		$em->getConnection()->getConfiguration()->setSQLLogger(null);
+		$query = $em->createQuery($sql);
+		$count = $query->getSingleScalarResult();
+		
+		return $count;
+		
+	}
+
+	private function getCounts(){
+					
+		$protein_count = self::count('Protein');			
+		$organism_count = self::count('Organism');	
+		$sql = 'SELECT COUNT(i.id) FROM AppBundle:Interaction i WHERE i.removed = 0';
+				$em = $this->getDoctrine()->getManager();
+		$em->getConnection()->getConfiguration()->setSQLLogger(null);
+		$query = $em->createQuery($sql);
+		$interaction_count = $query->getSingleScalarResult();
+		$domain_count =  self::count('Domain');
+		
+		$counts = new \stdClass();
+		
+		$counts->protein_count = $protein_count;
+		$counts->organism_count = $organism_count;
+		$counts->interaction_count = $interaction_count;
+		$counts->domain_count = $domain_count;
+		
+		return $counts;
+	}
 
 	/*
     
