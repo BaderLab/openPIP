@@ -139,6 +139,26 @@
 									</div>
 								</div>
 							</div>
+							<div id="not_psi" class="hidden large_2">
+								<div id="insert_database_form">
+									<div class="row">
+										<p style="margin: 20px;"><strong>THIS IS NOT A .PSI file</strong></p>
+										<p id="file_to_insert_next_loading" style="margin: 20px; margin-bottom: 30px;">This format is not supported</p>
+									</div>
+									<div class="row">
+										<div class="col-lg-6">
+											<button id="continue_anyway" type='button' class="btn btn-danger">
+												<i class="glyphicon glyphicon-cloud-upload"></i> <span>Continue Anyway</span>
+											</button>
+										</div>
+										<div class="col-lg-6">
+											<div id="cancel_continue_anyway" class="btn btn-success">
+												<i class="glyphicon glyphicon-remove"></i> <span>CANCLE</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div class="row data_upload_content" id="aniket">
 								{{ form_widget(fform.files_to_insert) }}
 							</div>

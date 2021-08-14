@@ -30,8 +30,27 @@ function hideInsertDatabaseForm(event){
 
 function hideInsertDatabaseFormNext(event){
 
-    $("#insert_database_next").addClass("hidden");
+    $("#insert_database_next").addClass("hidden");  
+}
+
+function continueAnyway(event){
+
+    $("#not_psi").addClass("hidden");  
     
+    var e = document.getElementById("form_files_to_insert");
+    var strUser = e.options[e.selectedIndex].text;
+    var myarr_temp = strUser.split("::");
+    var v_file=myarr_temp[1];
+    var myarr_temp2 = strUser.split(".");
+    var ext = myarr_temp2[myarr_temp2.length-1];
+    console.log(ext);
+        $("#file_to_insert").text(strUser);
+        $("#insert_database").removeClass("hidden");
+ 
+}
+function cancleContinueAnyway(event){
+
+    $("#not_psi").addClass("hidden");  
 }
 
 function showInsertDatabaseForm(event){
@@ -39,10 +58,19 @@ function showInsertDatabaseForm(event){
     // var e = $( "#form_files_to_insert" );
     var e = document.getElementById("form_files_to_insert");
     var strUser = e.options[e.selectedIndex].text;
-    console.log(strUser);
+    var myarr_temp = strUser.split("::");
+    var v_file=myarr_temp[1];
+    var myarr_temp2 = strUser.split(".");
+    var ext = myarr_temp2[myarr_temp2.length-1];
+    console.log(ext);
+    if(ext=='psi'){
+        $("#file_to_insert").text(strUser);
+        $("#insert_database").removeClass("hidden");
+    }else{
+        $("#not_psi").removeClass("hidden");
+    }
 
-    $("#file_to_insert").text(strUser);
-    $("#insert_database").removeClass("hidden");
+   
 }
 
 $("#delete_dataset_button").on("click", showDeleteDatasetForm);
@@ -51,6 +79,10 @@ $("#cancel_delete_dataset").on("click", hideDeleteDatasetForm);
 $("#insert_into_database").on("click", showInsertDatabaseForm);
 $("#cancel_database_insert").on("click", hideInsertDatabaseForm);
 $("#cancel_database_insert_next").on("click", hideInsertDatabaseFormNext);
+
+$("#continue_anyway").on("click", continueAnyway);
+$("#cancel_continue_anyway").on("click", cancleContinueAnyway);
+
 
 
 $('#get_lines').click(function() {
