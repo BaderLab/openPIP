@@ -95,7 +95,7 @@ class DataController extends Controller
 		// session_write_close();
 		// dump($session);die;	
 
-		while ($file_row<20) {
+		while ($file_row<100) {
 			$file_data = fgetcsv($handle, 0, "\t");
 			$file_row++;
 			// $session->set('file_row', $file_row);
