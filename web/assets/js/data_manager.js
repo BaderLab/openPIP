@@ -20,7 +20,6 @@ function showDeleteDatasetForm(event){
     // var dataset = $( "#form_dataset_to_delete" ).val();
     // $("#dataset_to_delete").innerHTML('dataset');
     $("#delete_dataset").removeClass("hidden");
-    console.log('hi there');
 }
 function hideInsertDatabaseForm(event){
 
@@ -82,6 +81,37 @@ $("#cancel_database_insert_next").on("click", hideInsertDatabaseFormNext);
 
 $("#continue_anyway").on("click", continueAnyway);
 $("#cancel_continue_anyway").on("click", cancleContinueAnyway);
+
+// Protein hide and show
+function showProtein(event){
+    $("#protein_s").removeClass("hidden");
+    $("#show_protein").addClass("hidden");
+    $("#hide_protein").removeClass("hidden");
+}
+function hideProtein(event){
+    $("#protein_s").addClass("hidden");
+    $("#show_protein").removeClass("hidden");
+    $("#hide_protein").addClass("hidden");
+
+}
+$("#show_protein").on("click", showProtein);
+$("#hide_protein").on("click", hideProtein);
+
+
+
+
+// Protein search button redirection
+function search_selected_protein(event){
+
+    var e = document.getElementById("form_Proteins_Inserted");
+    var selected_protein = e.options[e.selectedIndex].text;
+    // console.log(selected_protein);
+    url=Url+"app.php/search/"+selected_protein;
+    window.location.href = url;
+
+}
+$("#search_protein").on("click", search_selected_protein);
+
 
 
 // This ajax request fetches number of rows the choosen file has

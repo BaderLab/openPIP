@@ -182,7 +182,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="row data_upload_content" id="aniket">
+								<div class="row data_upload_content" >
 									{{ form_widget(fform.files_to_insert) }}
 								</div>
 							{{ form_end(fform) }}
@@ -347,8 +347,21 @@
 				</div>
 			</div>
 			<br>
-			<row>
+			<button id = "show_protein" type="button" class="btn btn-warning" style="float: right; margin: 0px 0px 15px 15px; width: 100%">
+				<i class=""></i> <span>Show Proteins</span>
+			</button>
+			<button id = "hide_protein" type="button" class="hidden btn btn-primary" style="float: right; margin: 0px 0px 15px 15px; width: 100%">
+				<i class=""></i> <span>Hide Proteins</span>
+			</button>
+			<row id="protein_s" class=" hidden">
+				{{form_start(protein_form)}}
+				{{ form_widget(protein_form)}}
+				{{form_end(protein_form)}}
+				<button id = "search_protein" type="button" class="btn btn-primary" style="float: right; margin: 0px 0px 15px 15px;">
+					<i class="glyphicon glyphicon-search"></i> <span>Search</span>
+				</button>
 			</row>
+			
 		</div>
 	</div>
 </div>

@@ -164,7 +164,7 @@ class DataController extends Controller
 
 		$this->addFlash(
             'success',
-            'Action was successful! Proteins inserted in database...'
+            'Action was successful! Proteins inserted in database...via ajax'
         );
 
 		return new JsonResponse('success followed');
@@ -245,10 +245,14 @@ class DataController extends Controller
 			self::handleData3($dform,$request);
 		}
 
+		$protein_form= self::getProteinForm();
+
+
 		$fform = self::getFForm();
 		$fform->handleRequest($request);
 		if ($fform->isSubmitted())
 		{
+
 			// $this->get('session')->save();
 			// self::handleData3($dform,$request);
 			$file_to_insert = $fform->get('files_to_insert')->getData();
@@ -265,6 +269,7 @@ class DataController extends Controller
 			);
 		}
 
+		
 
 		$dataset_array = self::getDatasetArray();
 
@@ -330,7 +335,8 @@ class DataController extends Controller
 			'url' => $url,
 			'tform'=> $tform->createView(),
 			'dform'=> $dform->createView(),
-			'fform'=> $fform->createView()
+			'fform'=> $fform->createView(),
+			'protein_form'=> $protein_form->createView()
 
 
 		));
@@ -3327,6 +3333,40 @@ class DataController extends Controller
 		$counts->domain_count = $domain_count;
 		
 		return $counts;
+	}
+
+	public function getProteinForm()
+	{
+		$protein_array=array();
+	    
+		$em = $this->getDoctrine()->getManager();
+		$em->getConnection()->getConfiguration()->setSQLLogger(null);
+		$query = $em->createQuery(
+			"SELECT i.gene_name
+				FROM AppBundle:Protein i"
+				// WHERE i.id = :id"
+			);
+		$query->setMaxResults( 1000 );
+		// $query->setParameter('id', $interaction_id);
+		$interaction_array = $query->getResult();
+
+		foreach($interaction_array as $protein){
+			$protein_array[]=$protein['gene_name'];
+		}
+		// $List = implode(';', $protein_array);
+		// return $List;
+
+		$defaultData = array('message_X' => 'Type your message here_X');
+		$protein_form = $this->createFormBuilder($defaultData)
+			->add('Proteins_Inserted', ChoiceType::class, array(
+				'label' => 'Gene Name',
+				'choices' => $protein_array,
+			))
+			// ->add('save', SubmitType::class, ['label' => 'Create Task'])
+			->getForm();
+
+		return $protein_form;
+
 	}
 
 	/*
