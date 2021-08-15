@@ -1460,6 +1460,10 @@ class HomeController extends Controller
             }
         }
 */
+
+		$rand_protein=self::getrandomprotein();
+
+
 		$functions = $this->get('app.functions');
 		$counts = self::getCounts();
 		$protein_count = $counts->protein_count;
@@ -1506,13 +1510,36 @@ class HomeController extends Controller
 				'mission_title'=> $mission_title,
 				'mission_text'=> $mission_text,
 				'method_title'=> $method_title,
-				'method_text'=> $method_text
+				'method_text'=> $method_text,
+				'rand_protein'=> $rand_protein
 
 		));
 
 	}
 	
-	
+	public function getrandomprotein()
+	{
+		$protein_array=array();
+	    
+		$em = $this->getDoctrine()->getManager();
+		$em->getConnection()->getConfiguration()->setSQLLogger(null);
+		$query = $em->createQuery(
+			"SELECT i.gene_name
+				FROM AppBundle:Protein i"
+				// WHERE i.id = :id"
+			);
+		$query->setMaxResults( 100 );
+		// $query->setParameter('id', $interaction_id);
+		$interaction_array = $query->getResult();
+
+		foreach($interaction_array as $protein){
+			$protein_array[]=$protein['gene_name'];
+		}
+		$List = implode(';', $protein_array);
+		return $List;
+
+	}
+
 	public function getInteractionById($interaction_id){
 	    
 	    		$em = $this->getDoctrine()->getManager();

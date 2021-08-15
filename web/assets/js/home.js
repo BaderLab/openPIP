@@ -166,12 +166,22 @@ $("#refresh_cy").on('click', function(){
 	
 });
 
-
+function getRandomIntInclusive(min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min + 1)) + min; // max & min both included 
+}
 
 function getQueryProtein(){	
+	// console.log(rand_protein);
+	const myArr = rand_protein.split(";");
+	// console.log(myArr);
+	var index_new=getRandomIntInclusive(0,10);
 	var proteins = ["UBE2V1","GSTO2","ZSCAN16","IMP3","ZYX","ZNF547","NMU","TBC1D3B","RIC8A","ZNF512B","MITD1","BOLA1","USP25","KIAA0907","TACO1","ZNF639","SFMBT1","PATL1","DHX15","RBM17","KRT74","KRT2","TSSC4","ZBTB33","VHL","MPPED2","UBL4A","LSM1","LSM3","TUFM","SSBP3","RNF20","ENPP7","RPL22","GOLGA6L2","SMAP2","ADAMTSL3","PPIB","RAPGEF3","POP5","USO1","CFHR5","CTAGE5","FKBP1A","ZSCAN18","PTS","SLC6A20","CETN3","PBX1","HNRNPCL1","LCOR","S100A1","SPDYE4","ATP5O","CCDC28B","ZNF341","CDK4","CCND3","ZNF503","ZNF337","GDAP1","CIAO1","CBSL","CBS","GCA","ZNF114","CCNG1","ZNF558","WASF1","CXCR2","C11orf68","PTPRN","TIMM23","CDK6","ZNF266","CALN1","ZNF232","ARNT2","NIPAL4","TRIM26","MRM3","PSPC1","SKA1","DUSP4","ZNF80","MAP1LC3B","ERCC3","MS4A4A","MYDGF","FST","CLNS1A","MCMBP","NGB","USP15","MAB21L2","ABT1","PELO","SORT1","HOXC9","MAGEA8","gene_name","HDX","SAPCD2","SMOC1","TRIM10","KRT32","ACY1","ARL6IP4","INPP5K","MAD2L1BP","SBK3","ZSCAN26","ESM1","ANKHD1","FAM221B","TRAF3IP2","CD68","ANKRD28","HOXD12","CLDN4","SH3GLB2","CCDC158","SLC22A23","LARP4","PLEKHA2","WWP1","BAIAP2L2","PCBP3","STK3","CD302","OOEP","PDCD6","APEX2","HBA1","UBA52","CAGE1","TTC25","HNF1B","AK8","COL4A3BP","SNRPF","CRLF3","TADA3","SLC25A6","SCYL1","KRTAP22-1","KCNF1","STRA8","HPRT1","JUP","SENP2","HSPD1","CCT3","CCER1","KCTD10","C3orf62","MVP","NGLY1","SLC14A2","NELFA","IER3","FAM118A","DDX17","ZNF578","TFAP4","PSMB5","TNR","PACRGL","HOXB2","SLC31A2","SETBP1","APOA5","NUDT14","ZBTB22","SLC25A48","RNF40","PKNOX1","NAXD","LRRC73","PROSER3","NDUFB11","MEAF6","ID3","KCTD21","LAPTM4B","TNFAIP3","PRC1","LGALS4","PTH1R","TSPAN18","ASZ1","CLRN2","EXOC4","ZG16","KCNIP3","MAGOH","PKD2","TAP1","CFL2","FLYWCH1","RNF115","gene_name","ZNF77","NICN1","ERH","SIVA1","CD69","JADE2","PMF1","CCDC106","LNP","HAT1","CES1","RTL8B","P2RY6","FAM46D","KIF24","HOXB6","PRAP1","MATR3","RORB","NLK","HDDC3","PIM1","SUMO3","RNF41","CCDC92","RING1","CBY1","MATR3","AOC1","ZC2HC1A","KLK8","ALKBH4","MIC13","RMDN2","SAP30BP","KRT82","OAZ3","UBE2Z","TEX9","ARHGEF9","SLC25A10","TBC1D30","RNF24","ADAM15","CDK5R1","TSFM","SERPINE1","POF1B","TINAGL1","NKD1"];
 	var index = Math.floor(Math.random() * (250 - 1 + 1)) + 1;
-	var query_protein = proteins[index];
+	var query_protein = proteins[index_new];
+	console.log(query_protein);
+
 	return query_protein;
 }
 
@@ -322,7 +332,7 @@ function sendDataRequestQuery(query_protein){
 	    dataType: 'json',
 	    async: false, 
 		success:function(result){
-			console.log('hh');
+			console.log('hh'+ result);
 	        SearchResultsJSON = JSON.parse(result);
 	        console.log(SearchResultsJSON);
 	    }
