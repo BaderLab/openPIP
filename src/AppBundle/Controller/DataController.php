@@ -95,11 +95,12 @@ class DataController extends Controller
 		// session_write_close();
 		// dump($session);die;	
 
-		while ($file_row<10) {
-			$file_data = fgetcsv($handle, 0, "\t");
+		while ($file_data = fgetcsv($handle, 0, "\t"))
+		{
+			// $file_data = fgetcsv($handle, 0, "\t");
 			$file_row++;
 			// $session->set('file_row', $file_row);
-			if ($file_row < 2) {
+			if ($file_row < 2 || empty($file_data)) {
 				continue;
 			}
 			try {

@@ -146,7 +146,7 @@ $('#get_lines').click(function() {
         console.log(data);
         $("#insert_database").addClass("hidden");
 
-        var btimestamp= Math.floor(20*2*1.1);
+        var btimestamp= Math.floor(data*2*1.1);
         var bhours = Math.floor(btimestamp / 60 / 60);
         var bminutes = Math.floor(btimestamp / 60) - (bhours * 60);
         var bformatted = bhours + ':' + bminutes + '  (HH:MM)';
