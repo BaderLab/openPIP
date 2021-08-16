@@ -161,23 +161,31 @@ $('#get_lines').click(function() {
                     alert('Error');
                 },
         'success' : function(data) {
-            next(data);
+            myObj = JSON.parse(data);
+            proteincount=myObj['proteincount'];
+            linecount=myObj['linecount'];
+            console.log(myObj);
+            next(proteincount,linecount);
+
         }
     });
 
-    function next(data){
-        console.log(data);
+    function next(proteincount, linecount){
         $("#insert_database").addClass("hidden");
 
-        var btimestamp= Math.floor(data*2*1.1);
+        var btimestamp= Math.floor(proteincount*1.6);
         var bhours = Math.floor(btimestamp / 60 / 60);
+        if(bhours<10){bhours='0'+bhours};
         var bminutes = Math.floor(btimestamp / 60) - (bhours * 60);
+        if(bminutes<10){bminutes='0'+bminutes};
         var bformatted = bhours + ':' + bminutes + '  (HH:MM)';
 
         TIME_LIMIT=btimestamp;
-        var text_v='There are '+ data + ' interactions in the file. \n Estimate time of completion is: ' + bformatted;
-        $("#file_to_insert_next").text(text_v);
-        $("#insert_interaction").text(data);
+        var text_v='There are '+ linecount + ' interactions in the file. \n Estimate time of completion is: ' + bformatted;
+        $("#file_to_insert_next_proteins").text(proteincount);
+        $("#file_to_insert_next_interactions").text(linecount);
+        $("#file_to_insert_next_est").text(bformatted);
+        $("#insert_interaction").text(linecount);
         $("#insert_est").text(bformatted);
 
         $("#insert_database_next").removeClass("hidden");

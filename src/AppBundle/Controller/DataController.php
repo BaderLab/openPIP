@@ -49,12 +49,34 @@ class DataController extends Controller
 	 */
 	public function getlines($folder, $file, Request $request)
 	{
+		$linecount = 0;
+		$proteincount = 0;
+
 		$ps=$this->getParameter('system_path_seperator');
 		$path = $this->getParameter('kernel.root_dir').$ps.'..'.$ps.'web'.$ps.'uploads'.$ps.$folder.$ps.$file;
 		$path2 = $this->getParameter('brochures_directory').'/'.$folder.'/'.$file;
 
-		$linecount = 0;
-		// dump($path);die;
+		$protein_all=array();
+
+		try{
+			$handle = fopen($path, "r");
+			while ($file_data = fgetcsv($handle, 0, "\t"))
+			{
+				try {
+					list($A, $B) = $file_data;
+					$protein_all[]=$A;
+					$protein_all[]=$B;
+				}
+				catch(Exception $e){}
+
+			}
+			$proteincount=count(array_unique($protein_all));
+		}
+		catch(Exception $e){
+			return new JsonResponse('something went wrong');
+		}
+
+		
 		try
 		{
 			$handle = fopen($path, "r");
@@ -63,14 +85,14 @@ class DataController extends Controller
 			$linecount++;
 			}
 			fclose($handle);
-			return new JsonResponse($linecount);
-
 		}
 		catch(Exception $e){
 			return new JsonResponse('something went wrong');
 		}
 
-		return new JsonResponse($linecount);
+		$result=array('proteincount'=>$proteincount, 'linecount'=>$linecount);
+		$myJSON = json_encode($result);
+		return new JsonResponse($myJSON);
 
 	}
 
