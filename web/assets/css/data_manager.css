@@ -105,6 +105,15 @@ main{
 	margin: auto;
 }
 
+#purge_db_affirm{
+	border: 1px solid #ccc;
+	padding: 20px;
+	width: 36%;
+	background: #ffffff;
+	z-index: 2;
+	margin: auto;
+}
+
 #insert_database_form_loader{
 	border: 5px solid #730303;
     padding: 30px;

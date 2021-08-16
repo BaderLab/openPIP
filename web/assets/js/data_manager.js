@@ -7,6 +7,29 @@ document.getElementById("data_file_data_file").onchange = function () {
     document.getElementById("uploadFile").value = inputValue;
 };
 
+// Functions to implement purge db validation
+
+function purgedbinitial(event){
+
+    $("#purge_db_affirm_hide").removeClass("hidden");
+    
+}
+function canclepurgedb(event){
+
+    $("#purge_db_affirm_hide").addClass("hidden");
+    
+}
+function finalpurgedb(event){
+
+    $("#delete_dataset").addClass("hidden");
+    
+}
+$("#purge_db_initial_button").on("click", purgedbinitial);
+$("#cancel_purge_db").on("click", canclepurgedb);
+$("#final_purge_db").on("click", finalpurgedb);
+
+
+
 
 // Functions to implement data upload check boxes, info and validation
 

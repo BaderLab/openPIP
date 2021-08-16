@@ -291,7 +291,28 @@
 					</div>
 					<br>
 					<form action= {{path('purge_db')}}>
-						<input class="btn btn-danger" type="submit" value="Clean Database" />
+						<div id="purge_db_affirm_hide" class="hidden large_2">
+							<div id="purge_db_affirm">
+								<div class="row">
+									<p style="margin: 20px;"><strong>Are you sure you want to delete and clear the database?</strong></p>
+									<p style="margin: 20px;"><strong>This will delete all PROTEINS, INTERACTIONS and EVERYTHING! </strong></p>
+									<p id="purge_db_insert" style="margin: 20px; margin-bottom: 30px;"></p>
+								</div>
+								<div class="row">
+									<div class="col-lg-6">
+										<button id="final_purge_db" type='submit' class="btn btn-danger">
+											<i class="glyphicon glyphicon-alert"></i> <span>DELETE DATABASE</span>
+										</button>
+									</div>
+									<div class="col-lg-6">
+										<div id="cancel_purge_db" class="btn btn-primary">
+											<i class="glyphicon glyphicon-remove"></i> <span>CANCLE</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<input id="purge_db_initial_button"class="btn btn-danger" type="button" value="Clean Database" />
 					</form>
 					<br>
 					{# {{ form_start(dform) }}
