@@ -63,7 +63,7 @@
 						</div>
 					</div>
 					{{ form_start(form) }}
-					<div class="row data_upload_content" >
+					<div class="hidden row data_upload_content" >
 						<div class="col-lg-10">
 							<div class="row" style="display: inline-block;">
 								<input id="uploadFile" disabled="disabled" />
@@ -76,7 +76,7 @@
 					</div>
 					<div class="row data_upload_content" >
 						<div class="col-lg-12">
-							<button type="submit" class="btn btn-success start" style="float: right; margin-right: 15px;">
+							<button type="submit" class="hidden btn btn-success start" style="float: right; margin-right: 15px;">
 								<i class="glyphicon glyphicon-upload"></i> <span>Upload Data</span>
 							</button>
 						</div>
@@ -238,29 +238,9 @@
 					</div>
 				</div>
 				<div class="container data_upload_panel">
-					{# {{ form_start(tform) }}
-					<div class="row data_upload_content" >
-						<div class="col-lg-10">
-							<div class="row" style="display: inline-block;">
-								<input id="uploadFile" disabled="disabled" />
-								<div class="fileUpload btn btn-primary">
-									<i class"glyphicon glyphicon-plus"></i> <span>Choose File</span>
-									{{ form_widget(tform.brochure, {'attr': {'class': 'upload'}}) }}
-								</div>
-							</div>
-						</div>    
-					</div>
-					<div class="row data_upload_content" >
-						<div class="col-lg-12">
-							<button type="submit" class="btn btn-success start" style="float: right; margin-right: 15px;">
-								<i class="glyphicon glyphicon-upload"></i> <span>Upload Data</span>
-							</button>
-						</div>
-					</div>
-					{{ form_end(tform) }} #}
 					
 				</div>	
-				<form action="{{ path('upload_media', { 'dir_name': 'FASTA'}) }}" method="post" enctype="multipart/form-data">	
+				{# <form action="{{ path('upload_media', { 'dir_name': 'FASTA'}) }}" method="post" enctype="multipart/form-data">	
 					<input name="file" type="file" multiple />
 					<button type="submit" value="Submit">Submit</button>
 				</form>
@@ -271,7 +251,7 @@
 					<div class="form-group" align="center">
 					<input type="submit" name="save" id="save" class="btn btn-info" value="Save" />
 					</div>
-				</form>
+				</form> #}
 				<div class="form-group" id="process" style="display:none;">
 					<div class="progress">
 						<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="">
@@ -314,9 +294,8 @@
 						<input class="btn btn-danger" type="submit" value="Clean Database" />
 					</form>
 					<br>
-					{{ form_start(dform) }}
-
-					{{ form_end(dform) }}
+					{# {{ form_start(dform) }}
+					{{ form_end(dform) }} #}
 				</div>
 			</div>
 		</div>
@@ -381,63 +360,6 @@
 	<script> 
 		var Url = "{{url}}";
 		console.log("url is:" +Url);
-	</script>
-	<script>
-		var tuna = "{{url}}";
-		$(document).ready(function(){
-		
-		$('#sample_form').on('submit', function(event){
-		event.preventDefault();
-		var count_error = 0;
-
-		
-		if(count_error == 0)
-		{
-			console.log('hi i am triggering ajax');
-			$.ajax({
-			url:tuna+"app_dev.php/admin/media/upload/process/FASTA",
-			method:"POST",
-			data:$(this).serialize(),
-			beforeSend:function()
-			{
-			$('#save').attr('disabled', 'disabled');
-			$('#process').css('display', 'block');
-			},
-			success:function(data)
-			{
-			var percentage = 0;
-
-			var timer = setInterval(function(){
-			percentage = percentage + 20;
-			progress_bar_process(percentage, timer);
-			}, 1000);
-			}
-			})
-		}
-		else
-		{
-			return false;
-		}
-		});
-
-		function progress_bar_process(percentage, timer)
-		{
-		$('.progress-bar').css('width', percentage + '%');
-		if(percentage > 100)
-		{
-			clearInterval(timer);
-			$('#sample_form')[0].reset();
-			$('#process').css('display', 'none');
-			$('.progress-bar').css('width', '0%');
-			$('#save').attr('disabled', false);
-			$('#success_message').html("<div class='alert alert-success'>Data Saved</div>");
-			setTimeout(function(){
-			$('#success_message').html('');
-			}, 5000);
-		}
-		}
-
-		});
 	</script>
 
 

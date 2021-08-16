@@ -95,7 +95,7 @@ class DataController extends Controller
 		// session_write_close();
 		// dump($session);die;	
 
-		while ($file_row<100) {
+		while ($file_row<10) {
 			$file_data = fgetcsv($handle, 0, "\t");
 			$file_row++;
 			// $session->set('file_row', $file_row);
@@ -164,7 +164,7 @@ class DataController extends Controller
 
 		$this->addFlash(
             'success',
-            'Action was successful! Proteins inserted in database...via ajax'
+            'Action was successful! Proteins inserted in database... :)'
         );
 
 		return new JsonResponse('success followed');
@@ -177,98 +177,25 @@ class DataController extends Controller
 	 */
 	public function dataAction(Request $request)
 	{
-		$tform = $this->createFormBuilder()
-			->add('brochure', FileType::class, array('label' => 'FILE UPLOAD (all format supported)', 'multiple' => true))
-			// ->add('save', SubmitType::class, ['label' => 'Start Upload'])
-            ->getForm();
+		
 
-        $tform->handleRequest($request);
+		// $dform = $this->createFormBuilder()
+		// 	// ->add('brochure', FileType::class, array('label' => 'FILE UPLOAD (all format supported)', 'multiple' => true))
+		// 	->add('save', SubmitType::class, ['label' => 'DATABASE Upload'])
+        //     ->getForm();
 
-		if ($tform->isSubmitted() && $tform->isValid())
-		{
-            // $file stores the uploaded PDF file
-            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
-            // $files = $product->getBrochure();
-			// dump($request);die;
-			
-			$my_file=$request->files->get('form')['brochure'];
-			// dump($my_file);die;
-
-			foreach($my_file as $file)
-			{
-				// $path = sha1(uniqid(mt_rand(), true)).'.'.$file->guessExtension();
-				// array_push ($this->paths, $path);
-				// $file->move($this->getUploadRootDir(), $path);
-				// dump($file);die;
-				
-				$fileNameOriginal = $file->getClientOriginalName();
-
-				$save_dir=$this->getParameter('brochures_directory').'/'.'FASTA';
-          	 	// $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
-
-				// Move the file to the directory where brochures are stored
-				try {
-					$file->move(
-						$save_dir,
-						$fileNameOriginal
-					);
-				} catch (FileException $e) {
-					// ... handle exception if something happens during file upload
-				}	
-				
-				// dump($file);die;
-
-				unset($file);
-	
-			}
-
-			
-			// dump($fileNameOriginal);die;
-			echo '<script>console.log("upload finished");</script>';
-            
-			// $product->setBrochure($fileName);
-
-			// $url_new= $this->generateUrl('file_manager', ['upload_directory' => 'FASTA']);
-			// $response = new RedirectResponse($url_new);
-			// return $response;
-        }
-
-		$dform = $this->createFormBuilder()
-			// ->add('brochure', FileType::class, array('label' => 'FILE UPLOAD (all format supported)', 'multiple' => true))
-			->add('save', SubmitType::class, ['label' => 'DATABASE Upload'])
-            ->getForm();
-
-        $dform->handleRequest($request);
-		if ($dform->isSubmitted())
-		{
-			// $this->get('session')->save();
-			self::handleData3($dform,$request);
-		}
+        // $dform->handleRequest($request);
+		// if ($dform->isSubmitted())
+		// {
+		// 	// $this->get('session')->save();
+		// 	self::handleData3($dform,$request);
+		// }
 
 		$protein_form= self::getProteinForm();
 
-
 		$fform = self::getFForm();
 		$fform->handleRequest($request);
-		if ($fform->isSubmitted())
-		{
-
-			// $this->get('session')->save();
-			// self::handleData3($dform,$request);
-			$file_to_insert = $fform->get('files_to_insert')->getData();
-			$temp_arr=explode("::", $file_to_insert);
-			$file=$temp_arr[1];
-			$folder=$temp_arr[0];
-
-
-			return $this->redirectToRoute('insert_data', array('file' => $file, 'folder'=> $folder));
-
-			$this->addFlash(
-				'notice',
-				'Your changes were saved!'
-			);
-		}
-
+		self::FFormHandler($fform);
 		
 
 		$dataset_array = self::getDatasetArray();
@@ -333,13 +260,35 @@ class DataController extends Controller
 			'domain_count' => $domain_count,
 			'page' => 'data',
 			'url' => $url,
-			'tform'=> $tform->createView(),
-			'dform'=> $dform->createView(),
+			// 'dform'=> $dform->createView(),
 			'fform'=> $fform->createView(),
 			'protein_form'=> $protein_form->createView()
 
 
 		));
+	}
+
+	public function FFormHandler($fform)
+	{
+		if ($fform->isSubmitted())
+		{
+
+			// $this->get('session')->save();
+			// self::handleData3($dform,$request);
+			$file_to_insert = $fform->get('files_to_insert')->getData();
+			$temp_arr=explode("::", $file_to_insert);
+			$file=$temp_arr[1];
+			$folder=$temp_arr[0];
+
+
+			return $this->redirectToRoute('insert_data', array('file' => $file, 'folder'=> $folder));
+
+			$this->addFlash(
+				'notice',
+				'Your changes were saved!'
+			);
+		}
+
 	}
 
 	public function deleteFormHandler($delete_form)

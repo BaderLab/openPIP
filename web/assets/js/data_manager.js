@@ -146,7 +146,7 @@ $('#get_lines').click(function() {
         console.log(data);
         $("#insert_database").addClass("hidden");
 
-        var btimestamp= Math.floor(100*2*1.1);
+        var btimestamp= Math.floor(20*2*1.1);
         var bhours = Math.floor(btimestamp / 60 / 60);
         var bminutes = Math.floor(btimestamp / 60) - (bhours * 60);
         var bformatted = bhours + ':' + bminutes + '  (HH:MM)';
@@ -162,7 +162,8 @@ $('#get_lines').click(function() {
     }
 });
 
-
+var start_time=null;
+var request_time = null;
 
 // This ajax request uploads data
 
@@ -185,6 +186,7 @@ $('#final_upload_button').click(function() {
         beforeSend: function() {
                     // alert(1);
                     startTimer();
+                    start_time = new Date().getTime();
                 },
         async: true,
         error: function() {
@@ -192,7 +194,13 @@ $('#final_upload_button').click(function() {
                 },
         'success' : function(data) {
             // alert('yay');
-            location.reload();
+            // location.reload();
+            request_time = new Date().getTime() - start_time;
+            request_time= Math.floor(request_time/1000);
+            console.log("time taken is: "+request_time+ " seconds");
+            start_time=null;
+            request_time=null;
+
         },
         complete:function(data){
             // Hide image container
