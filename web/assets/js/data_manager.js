@@ -225,12 +225,13 @@ $('#final_upload_button').click(function() {
                 },
         'success' : function(data) {
             // alert('yay');
-            // location.reload();
             request_time = new Date().getTime() - start_time;
             request_time= Math.floor(request_time/1000);
             console.log("time taken is: "+request_time+ " seconds");
             start_time=null;
             request_time=null;
+            location.reload();
+
 
         },
         complete:function(data){
