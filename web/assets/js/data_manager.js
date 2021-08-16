@@ -186,6 +186,7 @@ $('#get_lines').click(function() {
         $("#file_to_insert_next_interactions").text(linecount);
         $("#file_to_insert_next_est").text(bformatted);
         $("#insert_interaction").text(linecount);
+        $("#insert_protein").text(proteincount);
         $("#insert_est").text(bformatted);
 
         $("#insert_database_next").removeClass("hidden");
