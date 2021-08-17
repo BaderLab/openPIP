@@ -1,0 +1,6 @@
+FROM mysql:8.0.0
+LABEL Name=mylabel Version=0.0.1
+COPY ./db/. /docker-entrypoint-initdb.d
+ENV MYSQL_ROOT_PASSWORD='secret' 
+ENV MYSQL_TCP_PORT=3306
+ENV MYSQL_DATABASE=huri

@@ -1,0 +1,98 @@
+version: '3.8'
+
+volumes:
+  datafiles:
+
+services:
+  mysql:
+    image: mysql:8.0.0
+    container_name: mysql8
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_TCP_PORT=3306
+      - MYSQL_DATABASE=huri
+    volumes:
+      - datafiles:/var/lib/mysql
+      - ./db:/db
+    restart: always
+
+  website:
+    container_name: php72
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - mysql
+    volumes:
+      - ./openPIP:/var/www/html
+    
+
+
+
+# tests ----------------------
+
+
+
+
+# mysql:
+  #   container_name: mysql8-pl
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile-mysql
+  #   # environment:
+  #   #   - MYSQL_ROOT_PASSWORD=secret
+  #   #   - MYSQL_TCP_PORT=3306
+  #   # volumes:
+  #   #   - datafiles:/var/lib/mysql
+  #   restart: always
+
+  # mysql:
+    # image: mysql:8.0.0
+    # image: mysql:5.7
+
+    # container_name: mysql8
+    # environment:
+    #   - MYSQL_ROOT_PASSWORD=secret
+    #   - MYSQL_TCP_PORT=3306
+    # command: --init-file /data/application/init.sql
+    # volumes:
+    #     - ./db/init.sql:/data/application/init.sql
+    # # volumes:
+    # #   - datafiles:/var/lib/mysql
+    # # restart: always
+
+# website:
+#     container_name: php72
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     # environment:
+#     #   - MYSQL_DBHOST=mysql
+#     #   - MYSQL_DBPORT=3306
+#     #   - MYSQL_DBUSER=root
+#     #   - MYSQL_DBPASS=secret
+#     #   #- MYSQL_DBNAME=
+#     ports:
+#       - 9091:80
+#       - 9092:443
+#     depends_on:
+#       - mysql
+#     volumes:
+#       # - ./app/:/var/www/html/app/cache/dev
+#       - ./openPIP:/var/www/html
+#       # - vol1:/var/www/html/app/cache/dev
+#       # - vol2:/var/www/html/app/cache/prod
+#       # - vol3:/var/www/html/app/logs
+
+# volumes:
+#   code: ./openPIP/
+
+# volumes:
+#   datafiles:
+#   # vol1:
+#   # vol2:
+#   # vol3:
+#   # vol4:
