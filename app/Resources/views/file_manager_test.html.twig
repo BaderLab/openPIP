@@ -28,10 +28,12 @@
 				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
 				<ul class="nav navbar-nav ">
 					<li><a href="{{ path('admin_home') }}">Home</a></li>
-					<li><a href="{{ path('admin_search') }}">Search</a></li>
+					<li><a href="{{ path('search_results') }}">Search</a></li>
 					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
 					<li><a href="{{ path('admin_about') }}">About</a></li>
-					<li><a href="{{ path('admin_documentation') }}">Documentation</a></li>
+					<li><a href="{{ path('faq') }}">FAQ</a></li>
+					<li><a href="{{ path('contact') }}">Contact</a></li>
+					{# <li><a href="{{ path('admin_documentation') }}">Documentation</a></li> #}
 					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
 					<li><a href="{{ path('data_manager') }}">Data</a></li>
 					<li class="active"><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
