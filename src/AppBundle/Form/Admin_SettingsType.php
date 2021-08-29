@@ -31,12 +31,12 @@ class Admin_SettingsType extends AbstractType
             ->add('short_title', 'text', array('label' => 'Short Title', 'attr' => array('style' => "width: 200px;")))
             ->add('url', 'text', array('label' => 'Url', 'attr' => array('style' => "width: 300px;")))
             ->add('version', 'text', array('label' => 'Version', 'attr' => array('style' => "width: 300px;")))
-            ->add('home_page', 'textarea', array('label' => 'Home Page', 'attr' => array('class' => 'tinymce', 'style' => "height: 400px;")))
+            // ->add('home_page', 'textarea', array('label' => 'Home Page', 'attr' => array('class' => 'tinymce', 'style' => "height: 400px;")))
             
-            ->add('mission_title', 'text', array('label' => 'Mission Title', 'attr' => array('style' => "width: 200px;")))
-            ->add('mission_text', 'textarea', array('label' => 'Mission Text', 'attr' => array('class' => 'tinymce', 'style' => "height: 400px;")))
-            ->add('method_title', 'text', array('label' => 'Method Title', 'attr' => array('style' => "width: 200px;")))
-            ->add('method_text', 'textarea', array('label' => 'Method Text', 'attr' => array('class' => 'tinymce', 'style' => "height: 400px;")))
+            ->add('mission_title', 'text', array('label' => 'Top Section Title', 'attr' => array('style' => "width: 200px;")))
+            ->add('mission_text', 'textarea', array('label' => 'Top SectionText', 'attr' => array('class' => 'tinymce', 'style' => "height: 400px;")))
+            ->add('method_title', 'text', array('label' => 'Bottom Section Title', 'attr' => array('style' => "width: 200px;")))
+            ->add('method_text', 'textarea', array('label' => 'Bottom Section Text', 'attr' => array('class' => 'tinymce', 'style' => "height: 400px;")))
 
             ->add('about', 'textarea', array('attr' => array('label' => 'About', 'class' => 'tinymce', 'style' => "height: 400px;")))
             ->add('faq', 'textarea', array('attr' => array('label' => 'FAQ', 'class' => 'tinymce', 'style' => "height: 400px;")))
