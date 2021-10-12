@@ -1,4 +1,4 @@
-# compose_PIP
+# compose_PIP : INSTALLATION GUIDE FOR OPEN-PIP
 --------packager for openPIP---------
 
 Required and tested on:
