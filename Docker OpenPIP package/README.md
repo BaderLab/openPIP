@@ -1,3 +1,4 @@
+
 # compose_PIP : INSTALLATION GUIDE FOR OPEN-PIP
 --------packager for openPIP---------
 
@@ -56,6 +57,7 @@ Hurray! The server is now running on localhost:80
 
 
 1.
+
 In Case if this error occurs:
 `RuntimeException: Unable to create the cache directory`
 Run:
@@ -70,6 +72,7 @@ Run:
 ====
 
 2.
+
 In Case `bootstrap.php.cache` is missing
 Run:
   - composer run-script post-update-cmd
@@ -78,7 +81,9 @@ Run:
  
 ====
 
+
 3. If you are having trouble in deleting files from server: deletefilecontroller:
+
     make sure you have replaced '\' in path with '/', in ubuntu.
 
 
