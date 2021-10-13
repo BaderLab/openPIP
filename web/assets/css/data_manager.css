@@ -96,6 +96,34 @@ main{
 	margin: auto;
 }
 
+#insert_database_form{
+	border: 1px solid #ccc;
+	padding: 20px;
+	width: 36%;
+	background: #ffffff;
+	z-index: 2;
+	margin: auto;
+}
+
+#purge_db_affirm{
+	border: 1px solid #ccc;
+	padding: 20px;
+	width: 36%;
+	background: #ffffff;
+	z-index: 2;
+	margin: auto;
+}
+
+#insert_database_form_loader{
+	border: 5px solid #730303;
+    padding: 30px;
+    width: 61%;
+    background: #000;
+    z-index: 11;
+    margin: auto;
+	height: 367px;
+}
+
 .large_2{
     background-color: rgba(0,0,0,0.65);
     position:fixed;
@@ -107,3 +135,66 @@ main{
     height: 100%;
     z-index: 1;
 }
+
+
+/* CSS for timer and loading clock */
+/* body {
+	font-family: sans-serif;
+	display: grid;
+	height: 100vh;
+	place-items: center;
+  } */
+  
+  .base-timer {
+	position: relative;
+	width: 300px;
+	height: 300px;
+  }
+  
+  .base-timer__svg {
+	transform: scaleX(-1);
+  }
+  
+  .base-timer__circle {
+	fill: none;
+	stroke: none;
+  }
+  
+  .base-timer__path-elapsed {
+	stroke-width: 7px;
+	stroke: grey;
+  }
+  
+  .base-timer__path-remaining {
+	stroke-width: 7px;
+	stroke-linecap: round;
+	transform: rotate(90deg);
+	transform-origin: center;
+	transition: 1s linear all;
+	fill-rule: nonzero;
+	stroke: currentColor;
+  }
+  
+  .base-timer__path-remaining.green {
+	color: rgb(65, 184, 131);
+  }
+  
+  .base-timer__path-remaining.orange {
+	color: orange;
+  }
+  
+  .base-timer__path-remaining.red {
+	color: red;
+  }
+  
+  .base-timer__label {
+	position: absolute;
+	width: 300px;
+	height: 300px;
+	top: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 48px;
+	color: whitesmoke;
+  }

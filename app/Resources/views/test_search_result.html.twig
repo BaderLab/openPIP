@@ -16,7 +16,8 @@
     {% endstylesheets %} 
     <link rel='shortcut icon' href='{{ asset('assets/images/tor_ibin_icon.ico') }}' />
 {% endblock %} 
-{% block title %}{{ short_title }} | Results{% endblock %} 
+{% block title %}{{ short_title }} | Results{% endblock %}
+{% block main_title %}{{ title }}{% endblock %} 
 {% block content %}
 <header>
 	<nav class="navbar navbar-default main_header" style="background-color: {{ main_color_scheme }};">

@@ -5,18 +5,21 @@
 {% endblock %}
 {% block title %}{{ short_title }} | Home{% endblock %}
 
+{% block main_title %}{{ title }}{% endblock %}
+
 {% block nav %}
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			{% if login_status == false %}
 			<div class="navbar-header tor_ibin_header" >
+				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
 				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
 					<span class="icon-bar"></span> 
 					<span class="icon-bar"></span> 
 					<span class="icon-bar"></span>
 				</button>
 			</div>
-			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 20px;  font-family: Century Gothic, sans-serif">
+			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 20px; ">
 				<ul class="nav navbar-nav ">
 					<li class="active"><a href="{{ path('home') }}">Home</a></li>
 					<li><a href="{{ path('search_results') }}">Search</a></li>
@@ -32,13 +35,14 @@
     		</div>
     		{% elseif login_status == true %}
     				<div class="navbar-header tor_ibin_header" >
+						<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }}</h5>
         				<button type="button" class="navbar-toggle right" data-toggle="collapse" data-target="#myNavbar" style="margin-left: 30px;" >
         					<span class="icon-bar"></span> 
         					<span class="icon-bar"></span> 
         					<span class="icon-bar"></span>
         				</button>
         			</div>
-    			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 20px;">
+    			<div id="myNavbar" class="collapse navbar-collapse" style="padding-left: 20px; " >
     				<ul class="nav navbar-nav ">
     					<li class="active"><a href="{{ path('home') }}">Home</a></li>
     					<li><a href="{{ path('search_results') }}">Search</a></li>
@@ -74,7 +78,8 @@
     				<div style="position:relative;width: 396px;margin:auto;">	
     					<div style="margin:auto; text-align:center; padding-left:10px;">	
     						<div style="color: {{ main_color_scheme }}; font-size: 100px;  text-align:center;">				
-    			        	<span class='unselectable' style='font-family: "Noto Sans", "Noto Sans CJK TC", sans-serif;'>H</span><span class='unselectable' style='font-family: "Ubuntu", sans-serif;'>u</span><span class='unselectable' style='font-family: "Noto Sans", "Noto Sans CJK TC", sans-serif;'>RI</span>
+    			        	{# <span class='unselectable' style='font-family: "Noto Sans", "Noto Sans CJK TC", sans-serif;'>H</span><span class='unselectable' style='font-family: "Ubuntu", sans-serif;'>u</span><span class='unselectable' style='font-family: "Noto Sans", "Noto Sans CJK TC", sans-serif;'>RI</span> #}
+							{{ short_title }}
     						 </div>
     			        </div>
                    </div>
@@ -99,9 +104,9 @@
     			<div class="col-sm-6 col-md-6 col-lg-6">
     				<div id="mission_div" style="hight:400px; max-width: 500px;">
     					<div class="row" style="margin-bottom:20px; padding-bottom:20px;">
-    						<h4 style="color:#a51c30; margin-bottom:10px; font-family: 'Gotham HTF', sans-serif;">Mission</h4>
+    						<h4 style="color:#a51c30; margin-bottom:10px; font-family: 'Gotham HTF', sans-serif;">{{mission_title | raw}}</h4>
     						<p style="font-family: 'Gotham HTF', sans-serif; font-size: 18px">
-    							The Center for Cancer Systems Biology at Dana-Farber Cancer Institute is generating the first complete reference map of the human protein-protein interactome network. All pairwise combinations of human protein-coding genes are systematically being interrogated to identify which are involved in binary protein-protein interactions. 
+    							{{mission_text | raw}}
     						</p>
     					</div>
     					<div class="row" style="border-top: 1px solid #cccccc; width:96%; margin: 10px auto 10px;"></div>
@@ -196,12 +201,9 @@
     	        <div class="row" style="border-top: 1px solid #cccccc; width:96%; margin: 40px auto 40px;"></div>
     	             <div class="row" style="" >
         		         <div id="method_div" style="margin:auto;">
-        		         <h4 style="color:#a51c30; margin-bottom:10px; font-family: 'Gotham HTF', sans-serif;">Method</h4>
-            				<p style="font-family: 'Gotham HTF', sans-serif; font-size: 18px">
-            					Pairwise combinations of human protein-coding genes are tested systematically using high throughput yeast two-hybrid screens to detect protein-protein interactions. The quality of these interactions are further validated in multiple orthogonal assays. Currently 75309 PPIs involving 11999 proteins have been identified using this framework.
-        					</p>
+        		         <h4 style="color:#a51c30; margin-bottom:10px; font-family: 'Gotham HTF', sans-serif;">{{method_title | raw}}</h4>
         					<p style="font-family: 'Gotham HTF', sans-serif; font-size: 18px">
-        					    In addition to systematically identifying PPIs experimentally, HuRI also includes PPIs of comparable high quality extracted from literature. This subset of literature-curated PPIs currently comprises 12589 PPIs. 
+        					    {{method_text | raw}}
                             </p>
         				</div>
         			</div>
@@ -222,6 +224,7 @@
 {% block javascripts %} 
 <script>
 var Url = "{{ url }}";
+var rand_protein = "{{rand_protein}}";
 </script>
 <script src="{{ asset('assets/js/cola.js') }}"></script>
 <script src="{{ asset('assets/js/cytoscape-cola.js') }}"></script>

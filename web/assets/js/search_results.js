@@ -17,7 +17,7 @@ var allInteractionArray = '',
 	ScoreParameter = '',
 	removedProteins = [],
 	cy = '';
-	
+	// Url= 'http://localhost:8000/'
 	//$("#search_term_summary").html(queryParameters.SearchTermSummary);
 	//$("#proteins_found_summary").html(found_protein_summary);
 	//$("#proteins_not_found_summary").html(unfound_protein_summary);
@@ -27,7 +27,7 @@ var allInteractionArray = '',
 	//$("#node_number").html( currentProteinArray.length );
 	//$("#edge_number").html( currentInteractionArray.length );	
 
-	$("#huri_img").fadeIn(1500);
+	$("#huri_img").fadeIn(2000);
 	setTissueFilterQtips();	
 	setSearchQtips();
 	setNetworkMenuDropdowns();
@@ -703,14 +703,13 @@ function getFASTAFile(){
 function setFilterEvents(){
 	$('#filter_update').on('click', function(){
 		$("#overlay_network_loader_image").show();
-
 		$("#overlay_network_table").show();
-		/*
 		updateCytoscapeNetwork();
 		$("#overlay_network_loader_image").fadeOut( "fast", function() {});
 		$("#overlay_network_table").fadeOut( "fast", function() {});
-		 $('#interaction_info').collapse("hide");
-		*/
+		$('#interaction_info').collapse("hide");
+		$('#collapse_menu').collapse("hide");
+	
 	});
 }
 
@@ -972,12 +971,14 @@ function setNetworkTableCollapseEvents(){
 function sendDataRequestQuery(){
 	
 	SearchResultsJSONt = '';
-
+	
 	//console.log(queryParameters.SearchTermParameter);
 	//console.log(queryParameters.SearchTermParameter);
 	//console.log(queryParameters.FilterParameter);
 	//console.log(queryParameters.SearchTermArray);
-	
+	console.log('Please check Url redirection here for any errors');
+	// Url='http://localhost:8000/'
+	console.log(Url);
 	$.ajax({
 	    type: "GET",
 	    url:  Url + "app.php/search_results_interactions",
@@ -998,7 +999,7 @@ function sendDataRequestQuery(){
 	        SearchResultsJSONt = JSON.parse(result);
 	    }
 	});
-	
+	console.log('wrapping up ajax');
 	return SearchResultsJSONt;
 	
 }

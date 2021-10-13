@@ -1,112 +1,371 @@
- {% extends 'base.html.twig' %} 
+{% extends 'base.html.twig' %} 
 {% block stylesheets %}
 
 <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/css/data_manager.css') }}">
+{# <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> #}
 
 {% endblock %}
 {% block title %}{{ short_title }} | Data{% endblock %} 
+{% block main_title %}{{ title }}{% endblock %}
+{% block nav %}	
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header tor_ibin_header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		<div id="myNavbar" class="collapse navbar-collapse">
+			<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
+			<ul class="nav navbar-nav ">
+				<li><a href="{{ path('admin_home') }}">Home</a></li>
+				<li><a href="{{ path('admin_search') }}">Search</a></li>
+				<li><a href="{{ path('admin_download') }}">Downloads</a></li>
+				<li><a href="{{ path('about') }}">About</a></li>
+				<li><a href="{{ path('contact') }}">Contact</a></li>
+				<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+				<li class="active"><a href="{{ path('data_manager') }}">Data</a></li>
+				<li><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+				<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{{ path('user_logout') }}">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="shadow"></div>
+</nav>
+{% endblock %}
 {% block content %}
 <main style="background-color: #EEEEEE;">
 
-<div class="container">
-	<div class="row">
-    	<div class="col-lg-6">
-            <div class="container data_upload_panel">
-        		<div class="row">
-        			<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
-        				<h4 style="color: {{ header_color_scheme }}">Upload Data</h4>
-        			</div>
-        		</div>
-        		{{ form_start(form) }}
-            	<div class="row data_upload_content" >
-        			<div class="col-lg-10">
-        				<div class="row" style="display: inline-block;">
-        					<input id="uploadFile" disabled="disabled" />
-        					<div class="fileUpload btn btn-primary">
-        						<i class="glyphicon glyphicon-plus"></i> <span>Choose File</span>
-        						{{ form_widget(form.data_file, {'attr': {'class': 'upload'}}) }}
-        					</div>
-        				</div>
-        			</div>    
-            	</div>
-            	<div class="row data_upload_content" >
-        			<div class="col-lg-12">
-                		<button type="submit" class="btn btn-success start" style="float: right; margin-right: 15px;">
-        					<i class="glyphicon glyphicon-upload"></i> <span>Upload Data</span>
-        				</button>
-        			</div>
-        		</div>
-        		{{ form_end(form) }}
-        		
-            </div>
-            
+{% for type, flash_messages in app.session.flashBag.all %}
+    {% for flash_message in flash_messages %}
+        <div class="flash-{{ type }} alert alert-success">
+            {{ flash_message }}
         </div>
-        <div class="col-lg-4">
-            <div class="container data_upload_panel">
-        		<div class="row">
-        			<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
-        				<h4 style="color: {{ header_color_scheme }}">Delete Dataset</h4>
-        			</div>
-        		</div>
-        		{{ form_start(delete_form) }}
-            		<div id="delete_dataset" class="hidden large_2">
-                    	<div id="delete_dataset_form">
-    						<div class="row">
-    						
-    							<p style="margin: 20px;"><strong>Are you sure you want to datele the Dataset?</strong></p>
-    							<p id="dataset_to_delete" style="margin: 20px; margin-bottom: 30px;"></p>
-    						</div>
-    						<div class="row">
-            					<div class="col-lg-6">
-            			      		<button type='submit' class="btn btn-danger">
-                						<i class="glyphicon glyphicon-ban-circle"></i> <span>Delete Dataset</span>
-                					</button>
-            					</div>
-            					<div class="col-lg-6">
-                					<div id="cancel_delete_dataset" class="btn btn-primary">
-                						<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
-                					</div>
-            					</div>
-        					</div>
-                    	</div>
-                    </div>
-            		<div class="row data_upload_content">
-            			 {{ form_widget(delete_form.dataset_to_delete) }}
-            		</div>
-        		{{ form_end(delete_form) }}
-        		<div class="row">
-    	      		<button id="delete_dataset_button" class="btn btn-danger" style="margin: 20px;">
-    					<i class="glyphicon glyphicon-ban-circle"></i> <span>Delete Dataset</span>
-    				</button>
-    			</div>
-        	</div>	
-        </div>
-    </div>
-    <div class="row" style="margin-top: 15px;">
-        <div class="col-lg-6">
-            <div class="container data_upload_panel">
-        		<div class="row">
-        			<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
-        				<h4 style="color: {{ header_color_scheme }}">Update Users</h4>
-        			</div>
-        		</div>
-        		{{ form_start(update_user_form) }}
-            		<div class="row data_upload_content">
-            			 {{ form_widget(update_user_form.dataset) }}
-            		</div>
+    {% endfor %}
+{% endfor %}
 
-        		<div class="row">
-    	      		<button id="update_user_button"  type="submit" class="btn btn-primary" style="margin: 20px;">
-    					<i class="glyphicon glyphicon-upload"></i> <span>Update Users</span>
-    				</button>
-    			</div>
-    			{{ form_end(update_user_form) }}
-        	</div>	
-        </div>
-    </div>	
+<div class="container">
+	<div class="col-lg-10">
+		<div class="row">
+			<div class="col-lg-8" style="padding: 0px 0px;">
+				<div class="container data_upload_panel">
+					<div class="row">
+						<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
+							<h4 style="color: {{ header_color_scheme }}">Upload Data</h4>
+						</div>
+					</div>
+					{{ form_start(form) }}
+					<div class="hidden row data_upload_content" >
+						<div class="col-lg-10">
+							<div class="row" style="display: inline-block;">
+								<input id="uploadFile" disabled="disabled" />
+								<div class="fileUpload btn btn-primary">
+									<i class="glyphicon glyphicon-plus"></i> <span>Choose File</span>
+									{{ form_widget(form.data_file, {'attr': {'class': 'upload'}}) }}
+								</div>
+							</div>
+						</div>    
+					</div>
+					<div class="row data_upload_content" >
+						<div class="col-lg-12">
+							<button type="submit" class="hidden btn btn-success start" style="float: right; margin-right: 15px;">
+								<i class="glyphicon glyphicon-upload"></i> <span>Upload Data</span>
+							</button>
+						</div>
+					</div>
+					{{ form_end(form) }}
+					<div class="row data_upload_content" >
+						<div class="col-lg-12">
+							{{ form_start(fform) }}
+								<div id="insert_database" class="hidden large_2">
+									<div id="insert_database_form">
+										<div class="row">
+											<p style="margin: 20px;"><strong>Are you sure you want to insert into database?</strong></p>
+											<p id="file_to_insert" style="margin: 20px; margin-bottom: 30px;"></p>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<button id="get_lines" type='button' class="btn btn-success">
+													<i class="glyphicon glyphicon-cloud-upload"></i> <span>INSERT DATA</span>
+												</button>
+											</div>
+											<div class="col-lg-6">
+												<div id="cancel_database_insert" class="btn btn-primary">
+													<i class="glyphicon glyphicon-remove"></i> <span>CANCLE</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="insert_database_next" class="hidden large_2">
+									<div id="insert_database_form">
+										<div class="row">
+											<p style="margin: 20px;"><strong>Are you sure you want to insert into database?</strong></p>
+											<p style="margin: 20px;"><strong>No. of Proteins: <u id="file_to_insert_next_proteins"></u></strong></p>
+											<p style="margin: 20px;"><strong>No. of Interactions: <u id="file_to_insert_next_interactions"></u></strong></p>
+											<p style="margin: 20px;"><strong>Estimated time: <u id="file_to_insert_next_est"></u></strong></p>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<button id="final_upload_button" type='button' class="btn btn-success">
+													<i class="glyphicon glyphicon-cloud-upload"></i> <span>INSERT DATA</span>
+												</button>
+											</div>
+											<div class="col-lg-6">
+												<div id="cancel_database_insert_next" class="btn btn-primary">
+													<i class="glyphicon glyphicon-remove"></i> <span>CANCLE</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="insert_database_next_loading" class="hidden large_2">
+									<div id="insert_database_form_loader">
+										<div class="col-sm-5">
+											<div class="row">
+												<p style="margin: -19px; color: white; font-size:large;"><strong>UPLOADING...</strong></p>
+											</div>
+											<div class="row">
+												<div class="col-sm-6">
+													<div class="row">
+														<p id="file_to_insert_next_loading" style="margin-top: 20px;margin-bottom: 15px;color: white;font-family: monospace;">
+														<u>INTERACTIONS:</u>
+														</p>
+														<p style="margin-top: 5px; color: white;"><u id='insert_interaction'> 222</u> from <u id='insert_protein'></u> proteins.</p>
+													</div>
+												</div>
+												<div class="col-sm-6">
+													<p id="file_to_insert_next_loading" style="margin-top: 20px;margin-bottom: 15px;color: white;font-family: monospace;;">
+														<u>EST:</u>
+													</p>
+														<p id='insert_est' style="margin-top: 5px; color: white;"> 44:55:5 </p>
+												</div>
+											</div>
+											<div class="row">
+												<!-- Image loader -->
+												<div id='loader' style='display: block;'>
+													<img src={{ asset('assets/images/particles_loading.gif') }} width='200px' height='200px'>
+												</div>
+												<!-- Image loader -->
+											</div>
+										</div>
+										<div class="col-sm-7">
+											<row>
+												<div id="app" style="margin-left: 12px;"></div>
+											</row>
+										</div>
+									</div>
+								</div>
+								<div id="not_psi" class="hidden large_2">
+									<div id="insert_database_form">
+										<div class="row">
+											<p style="margin: 20px;"><strong>THIS IS NOT A .PSI file</strong></p>
+											<p id="file_to_insert_next_loading" style="margin: 20px; margin-bottom: 30px;">This format is not supported</p>
+										</div>
+										<div class="row">
+											<div class="col-lg-6">
+												<button id="continue_anyway" type='button' class="btn btn-danger">
+													<i class="glyphicon glyphicon-cloud-upload"></i> <span>Continue Anyway</span>
+												</button>
+											</div>
+											<div class="col-lg-6">
+												<div id="cancel_continue_anyway" class="btn btn-success">
+													<i class="glyphicon glyphicon-remove"></i> <span>CANCLE</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row data_upload_content" >
+									{{ form_widget(fform.files_to_insert) }}
+								</div>
+							{{ form_end(fform) }}
+
+							<div class="row">
+								<button id="insert_into_database" class="btn btn-success" style="margin: 20px;">
+									<i class="glyphicon glyphicon-cloud-upload"></i> <span>Insert into database</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>		
+			
+			<div class="col-lg-4" style="padding: 0px 0px;">
+				<div class="container data_upload_panel">
+					<div class="row">
+						<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
+							<h4 style="color: {{ header_color_scheme }}">Delete Dataset</h4>
+						</div>
+					</div>
+					{{ form_start(delete_form) }}
+						<div id="delete_dataset" class="hidden large_2">
+							<div id="delete_dataset_form">
+								<div class="row">
+								
+									<p style="margin: 20px;"><strong>Are you sure you want to delete the Dataset?</strong></p>
+									<p id="dataset_to_delete" style="margin: 20px; margin-bottom: 30px;"></p>
+								</div>
+								<div class="row">
+									<div class="col-lg-6">
+										<button type='submit' class="btn btn-danger">
+											<i class="glyphicon glyphicon-ban-circle"></i> <span>Delete Dataset</span>
+										</button>
+									</div>
+									<div class="col-lg-6">
+										<div id="cancel_delete_dataset" class="btn btn-primary">
+											<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row data_upload_content">
+							{{ form_widget(delete_form.dataset_to_delete) }}
+						</div>
+					{{ form_end(delete_form) }}
+					<div class="row">
+						<button id="delete_dataset_button" class="btn btn-danger" style="margin: 20px;">
+							<i class="glyphicon glyphicon-ban-circle"></i> <span>Delete Dataset</span>
+						</button>
+					</div>
+				</div>
+				<div class="container data_upload_panel">
+					
+				</div>	
+				{# <form action="{{ path('upload_media', { 'dir_name': 'FASTA'}) }}" method="post" enctype="multipart/form-data">	
+					<input name="file" type="file" multiple />
+					<button type="submit" value="Submit">Submit</button>
+				</form>
+				<form method="post" id="sample_form" enctype="multipart/form-data">
+					<div class="form-group">
+						<input name="file" type="file" multiple />
+					</div>
+					<div class="form-group" align="center">
+					<input type="submit" name="save" id="save" class="btn btn-info" value="Save" />
+					</div>
+				</form> #}
+				<div class="form-group" id="process" style="display:none;">
+					<div class="progress">
+						<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="">
+						</div>
+					</div>
+				</div>
+			</div>
+	
+		</div>
+		<div class="row" style="margin-top: 15px;">
+			<div class="col-lg-8" style="padding: 0px 0px;">
+				<div class="container data_upload_panel">
+					<div class="row">
+						<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
+							<h4 style="color: {{ header_color_scheme }}">Update Users</h4>
+						</div>
+					</div>
+					{{ form_start(update_user_form) }}
+						<div class="row data_upload_content">
+							{{ form_widget(update_user_form.dataset) }}
+						</div>
+
+					<div class="row">
+						<button id="update_user_button"  type="submit" class="btn btn-primary" style="margin: 20px;">
+							<i class="glyphicon glyphicon-upload"></i> <span>Update Users</span>
+						</button>
+					</div>
+					{{ form_end(update_user_form) }}
+				</div>	
+			</div>
+			<div class="col-lg-4" style="padding: 0px 0px;">
+				<div class="container data_upload_panel">
+					<div class="row">
+						<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
+							<h4 style="color: {{ header_color_scheme }}">Purge DB</h4>
+						</div>
+					</div>
+					<br>
+					<form action= {{path('purge_db')}}>
+						<div id="purge_db_affirm_hide" class="hidden large_2">
+							<div id="purge_db_affirm">
+								<div class="row">
+									<p style="margin: 20px;"><strong>Are you sure you want to delete and clear the database?</strong></p>
+									<p style="margin: 20px;"><strong>This will delete all PROTEINS, INTERACTIONS and EVERYTHING! </strong></p>
+									<p id="purge_db_insert" style="margin: 20px; margin-bottom: 30px;"></p>
+								</div>
+								<div class="row">
+									<div class="col-lg-6">
+										<button id="final_purge_db" type='submit' class="btn btn-danger">
+											<i class="glyphicon glyphicon-alert"></i> <span>DELETE DATABASE</span>
+										</button>
+									</div>
+									<div class="col-lg-6">
+										<div id="cancel_purge_db" class="btn btn-primary">
+											<i class="glyphicon glyphicon-remove"></i> <span>CANCLE</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<input id="purge_db_initial_button"class="btn btn-danger" type="button" value="Clean Database" />
+					</form>
+					<br>
+					{# {{ form_start(dform) }}
+					{{ form_end(dform) }} #}
+				</div>
+			</div>
+		</div>
+	</div>	
+	<div class="col-lg-2">
+		<div class="col-lg-12" style="padding: 0px 0px;">
+			<div class="container data_upload_panel">
+				<div class="row">
+					<div class="data_upload_header" style="background-color: {{ main_color_scheme }}; height: 149px;">
+						<div style="color: {{ header_color_scheme }}; text-align: center;   padding: 16px; font-size: initial;">
+							<i class="glyphicon glyphicon-asterisk" style="font-size: 40px;"></i> <span></span>
+							<h3><u>{{ protein_count }}</u></h3>
+							<p>Proteins<p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="container data_upload_panel">
+				<div class="row">
+					<div class="data_upload_header" style="background-color: {{ main_color_scheme }}; height: 149px;">
+						<div style="color: {{ header_color_scheme }}; text-align: center;   padding: 16px; font-size: initial;">
+							<i class="glyphicon glyphicon-retweet" style="font-size: 40px;"></i> <span></span>
+							<h3><u>{{ interaction_count }}</u></h3>
+							<p>Interactions<p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<button id = "show_protein" type="button" class="btn btn-warning" style="float: right; margin: 0px 0px 15px 15px; width: 100%">
+				<i class=""></i> <span>Show Proteins</span>
+			</button>
+			<button id = "hide_protein" type="button" class="hidden btn btn-primary" style="float: right; margin: 0px 0px 15px 15px; width: 100%">
+				<i class=""></i> <span>Hide Proteins</span>
+			</button>
+			<row id="protein_s" class=" hidden">
+				{{form_start(protein_form)}}
+				{{ form_widget(protein_form)}}
+				{{form_end(protein_form)}}
+				<button id = "search_protein" type="button" class="btn btn-primary" style="float: right; margin: 0px 0px 15px 15px;">
+					<i class="glyphicon glyphicon-search"></i> <span>Search</span>
+				</button>
+			</row>
+			
+		</div>
+	</div>
 </div>
 </main>
 <footer>
@@ -115,11 +374,16 @@
 </footer>
 {% endblock %} 
 {% block javascripts %}
-
+	
     <script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/js/data_manager.js') }}"></script>
+	<script> 
+		var Url = "{{url}}";
+		console.log("url is:" +Url);
+	</script>
+
 
 {% endblock %}

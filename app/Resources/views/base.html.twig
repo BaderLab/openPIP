@@ -65,8 +65,12 @@
 				stroke="{{logo_color_scheme}}" stroke-linecap="butt"
 				stroke-width="1.07676673" fill="none" /> </g> </svg>
 		<div style="padding: 12px;">
-			<h3 style="color: {{ header_color_scheme }}; font-weight: bold;  font-family: 'Ubuntu', sans-serif;">
+			{# <h3 style="color: {{ header_color_scheme }}; font-weight: bold;  font-family: 'Ubuntu', sans-serif;">
 				H<span style="font-family: Ubuntu;">u</span>RI: The Human Reference Protein Interactome Mapping Project
+				{% block main_title %}{% endblock %}
+			</h3> #}
+			<h3 style="color: {{ header_color_scheme }}; font-weight: bold;  font-family: 'Ubuntu', sans-serif;">
+				{% block main_title %}{% endblock %}
 			</h3>
 		</div>
 	</nav>

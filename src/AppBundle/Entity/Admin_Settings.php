@@ -48,6 +48,26 @@ class Admin_Settings
     protected $home_page;
 
     /**
+     * @ORM\Column(name="`mission_title`", type="text", length=100, nullable=true)
+     */
+    protected $mission_title;
+
+    /**
+     * @ORM\Column(name="`mission_text`", type="text", length=8000, nullable=true)
+     */
+    protected $mission_text;
+    
+    /**
+     * @ORM\Column(name="`method_title`", type="text", length=100, nullable=true)
+     */
+    protected $method_title;
+
+    /**
+     * @ORM\Column(name="`method_text`", type="text", length=8000, nullable=true)
+     */
+    protected $method_text;
+
+    /**
      * @ORM\Column(name="`about`", type="text", length=5000, nullable=true)
      */
     protected $about;
@@ -808,5 +828,85 @@ class Admin_Settings
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Get mission_title
+     */ 
+    public function getMissionTitle()
+    {
+        return $this->mission_title;
+    }
+
+    /**
+     * Set mission_title
+     *
+     * @return  self
+     */ 
+    public function setMissionTitle($mission_title)
+    {
+        $this->mission_title = $mission_title;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of mission_text
+     */ 
+    public function getMissionText()
+    {
+        return $this->mission_text;
+    }
+
+    /**
+     * Set the value of mission_text
+     *
+     * @return  self
+     */ 
+    public function setMissionText($mission_text)
+    {
+        $this->mission_text = $mission_text;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of method_title
+     */ 
+    public function getMethodTitle()
+    {
+        return $this->method_title;
+    }
+
+    /**
+     * Set the value of method_title
+     *
+     * @return  self
+     */ 
+    public function setMethodTitle($method_title)
+    {
+        $this->method_title = $method_title;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of method_text
+     */ 
+    public function getMethodText()
+    {
+        return $this->method_text;
+    }
+
+    /**
+     * Set the value of method_text
+     *
+     * @return  self
+     */ 
+    public function setMethodText($method_text)
+    {
+        $this->method_text = $method_text;
+
+        return $this;
     }
 }

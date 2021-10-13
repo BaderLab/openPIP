@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="{{ asset('assets/css/admin_settings.css') }}">
 {% endblock %} 
 {% block title %}{{ short_title }} | Admin Settings{% endblock %}
+{% block main_title %}{{ title }}{% endblock %}
 
 {% block content %}
 <header>
@@ -64,8 +65,6 @@
     	<div class="row tab-panel" style="min-width: 580px;">
     		<div class="tab-content">
     		    <div id="global_settings" class="tab-pane fade in active">
-    		    
-    		    
     				<div class="container">
         				<div class="row">
         					<div class="container admin_settings_panel">
@@ -168,8 +167,48 @@
     		
     			<div id="home_page" class="tab-pane fade">
     				<div class="container">
-    					<div class="row">{{ form_label(form.home_page) }} {{ form_widget(form.home_page) }}</div>
+						<div class="row">
+        					<div class="container admin_settings_panel">
+    				    		<div class="row" style="margin-top: 0px;">
+                        			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
+                        				<h4 style="color: {{ header_color_scheme }}">Home Page Context</h4>
+                        			</div>
+                        		</div>
+                        		<div class="row admin_settings_content">
+                					<div class="row">{{ form_label(form.home_page) }} {{ form_widget(form.home_page) }}</div>
+                				</div>
+                			</div>	
+                		</div>
+						
+						<div class="row">
+        					<div class="container admin_settings_panel">
+    				    		<div class="row" style="margin-top: 0px;">
+                        			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
+                        				<h4 style="color: {{ header_color_scheme }}">Mission Context</h4>
+                        			</div>
+                        		</div>
+                        		<div class="row admin_settings_content">
+                					<div class="row">{{ form_label(form.mission_title) }} {{ form_widget(form.mission_title) }}</div>
+                				</div>
+								<div class="row admin_settings_content">
+                					<div class="row">{{ form_label(form.mission_text) }} {{ form_widget(form.mission_text) }}</div>
+                				</div>
+								<div class="row" style="margin-top: 0px;">
+                        			<div class="admin_settings_header" style="background-color: {{ main_color_scheme }}">
+                        				<h4 style="color: {{ header_color_scheme }}">Method Context</h4>
+                        			</div>
+                        		</div>
+								<div class="row admin_settings_content">
+                					<div class="row">{{ form_label(form.method_title) }} {{ form_widget(form.method_title) }}</div>
+                				</div>
+								<div class="row admin_settings_content">
+                					<div class="row">{{ form_label(form.method_text) }} {{ form_widget(form.method_text) }}</div>
+                				</div>
+
+                			</div>	
+                		</div>
     				</div>
+					
     			</div>
     			<div id="search" class="tab-pane fade">
     				<div class="container">

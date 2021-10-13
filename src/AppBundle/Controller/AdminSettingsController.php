@@ -138,6 +138,10 @@ class AdminSettingsController extends Controller
             $title = $admin_settings->getTitle();
             $url =  $admin_settings->getUrl();
             $home_page = $admin_settings->getHomePage();
+            $mission_title = $admin_settings->getMissionTitle();
+            $mission_text = $admin_settings->getMissionText();
+            $method_title = $admin_settings->getMethodTitle();
+            $method_text = $admin_settings->getMethodText();
             $about = $admin_settings->getAbout();
             $faq = $admin_settings->getFaq();
             $contact = $admin_settings->getContact();

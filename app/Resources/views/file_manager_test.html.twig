@@ -1,0 +1,271 @@
+{% extends 'base.html.twig' %} 
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/dropzone.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/file_manager.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/css/font-awesome.min.css') }}">
+
+
+{% endblock %} 
+{% block title %}{{ short_title }} | File{% endblock %} 
+{% block main_title %}{{ title }}{% endblock %}
+{% block content %}
+<header>
+	<div id="upload_directory" hidden>{{ upload_directory }}</div>
+	
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header tor_ibin_header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"data-target="#myNavbar">
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span> 
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div id="myNavbar" class="collapse navbar-collapse">
+				<h5 class="nav-header" style="color: {{ main_color_scheme }}">{{ short_title }} Admin</h5>
+				<ul class="nav navbar-nav ">
+					<li><a href="{{ path('admin_home') }}">Home</a></li>
+					<li><a href="{{ path('admin_search') }}">Search</a></li>
+					<li><a href="{{ path('admin_download') }}">Downloads</a></li>
+					<li><a href="{{ path('admin_about') }}">About</a></li>
+					<li><a href="{{ path('admin_documentation') }}">Documentation</a></li>
+					<li><a href="{{ path('announcement_manager') }}">Announcements</a></li>
+					<li><a href="{{ path('data_manager') }}">Data</a></li>
+					<li class="active"><a href="{{ path('file_manager', {'upload_directory': 'FASTA'}) }}">Files</a></li>
+					<li><a href="{{ path('admin_settings') }}">Settings</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="{{ path('user_logout') }}">Logout</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="shadow"></div>
+	</nav>
+</header>
+
+
+
+<main style="background-color: #EEEEEE;">
+    <div class="container file_upload_panel">   
+		<div class="row">
+			<div class="file_upload_header" style="background-color: {{ main_color_scheme }}">
+				<h4 style="color: {{ header_color_scheme }}">Upload Files</h4>
+			</div>
+		</div>
+    	<div class="row file_upload_content">
+        	<div class="row">
+        		<div class="col-sm-3">
+        			<div class='list-group'>
+        				<span class='list-group-item list-group-item-header' style="background-color: {{ main_color_scheme }}; color: {{ header_color_scheme }}; "><b>Destination Folders</b></span> 
+        				{% for directory in directories %} 
+									{% if directory == upload_directory %} 
+        								<div class="col-sm-10" style="padding-left:0px; padding-right:0px;">
+
+											<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item active' style="    border-radius: 34px;
+											margin: 2px 2px 2px 2px;
+											padding: 8px 20px 8px 21px;">{{ directory }} </a> 
+										</div>
+										<div class="col-sm-2" style="padding-left:0px; padding-right:0px;" >
+											<form action={{ path('admin_deletefolder', {dir_name: directory}) }} onSubmit="return confirm('Are you sure you wish to delete?')" >
+												{# <input type="submit" value="Delete" class="btn btn-primary" /> #}
+												{# <input type="image" name="submit" src="{{ asset('assets/images/trash-icon.jpg') }}"  border="0px" alt="Submit" style="width: 25px; margin-top:4px; "  /> #}
+												<button type="submit" class="btnt"><i class="fa fa-trash"></i></button>
+
+											</form>	
+										</div>
+									{% elseif directory == 'data' %} 
+									{% else %} 
+        								<div class="col-sm-10" style="padding-left:0px; padding-right:0px;">
+
+											<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item' style="    border-radius: 34px;
+											margin: 2px 2px 2px 2px;
+											padding: 8px 20px 8px 21px;">{{ directory }}</a> 
+										</div>
+										<div class="col-sm-2" style="padding-left:0px; padding-right:0px;">
+											<form action={{ path('admin_deletefolder', {dir_name: directory}) }} onSubmit="return confirm('Are you sure you wish to delete?')" >
+												{# <input type="submit" value="Delete" class="btn btn-primary" /> #}
+												{# <input type="image" name="submit" src="{{ asset('assets/images/trash-icon.jpg') }}"  border="0px" alt="Submit" style="width: 25px; margin-top:4px; "  /> #}
+												<button type="submit" class="btnt"><i class="fa fa-trash"></i></button>
+											</form>
+										</div>
+									{% endif %} 
+        					
+							
+        				{% endfor %}
+						
+							<br>
+							<br>
+							<form action={{ path('admin_createfolder', {dir_name: upload_directory}) }} >
+								<div class="form-group ">
+									<label for="fname" style="margin-top:80px; ">Enter name to Create New Folder:</label><br>
+									<input type="text" id="foldername" name="fname" style=" width: 230px; border-block-color: green;"><br>
+									<input type="submit" value="Create" class="btn btn-success" style="margin-top:5px;" />
+								</div>
+							</form>
+						
+        			</div>
+        		</div>
+        		<div class="col-sm-9">
+					<div class="row">
+						{# WORKING FORM STARTS HERE, NATIVE SYMFONY UPLOAD #}
+
+						{# {{ form_start(form) }}
+						{{ form_row(form.brochure) }}
+						{{ form_end(form) }} #}
+						
+						{# WORKING FORM ENDS #}
+
+						{# THIS IS FOR DROPZONE TEST #}
+						{# <div class="table table-striped" class="files" id="previews">
+
+							<div id="template" class="file-row">
+								<!-- This is used as the file preview template -->
+								<div>
+									<span class="preview"><img data-dz-thumbnail /></span>
+								</div>
+								<div>
+									<p class="name" data-dz-name></p>
+									<strong class="error text-danger" data-dz-errormessage></strong>
+								</div>
+								<div>
+									<p class="size" data-dz-size></p>
+									<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+									<div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+									</div>
+								</div>
+								<div>
+								<button class="btn btn-primary start">
+									<i class="glyphicon glyphicon-upload"></i>
+									<span>Start</span>
+								</button>
+								<button data-dz-remove class="btn btn-warning cancel">
+									<i class="glyphicon glyphicon-ban-circle"></i>
+									<span>Cancel</span>
+								</button>
+								<button data-dz-remove class="btn btn-danger delete">
+									<i class="glyphicon glyphicon-trash"></i>
+									<span>Delete</span>
+								</button>
+								</div>
+							</div>
+
+						</div> #}
+
+
+						{# THIS CONTAINER IS FOR DROPZONE TEST #}
+						{# <div id='upload_panel' style="border:3px solid black; height:150px"></div>
+						<br>
+						<div id='upload_preview' style="border:3px solid green; padding:300px;"></div> #}
+
+						{# NOW WORKING DROPZONE FORM #}
+							
+						<form action="{{ path('upload_media', { 'dir_name': upload_directory}) }}" method="get" class="dropzone js-reference-dropzone" id="dzne">
+							<div class="fallback">
+								<input name="file" type="file" multiple />
+							</div>
+						</form>
+
+					</div>
+					<div class="row">
+						<br>
+						<div class='list-group'>
+							<span class='list-group-item list-group-item-header' style="background-color: {{ main_color_scheme }}; color: {{ header_color_scheme }}; "><b>Uploaded Files :: {{upload_directory}} </b></span> 
+						
+							{# {{ dump(uploaded_files) }} #}
+							
+							{% for file in uploaded_files %} 
+								{# {% if directory == upload_directory %} 
+									<a href="{{ path('file_manager', {'upload_directory': directory}) }}" class='list-group-item active'>{{ file }}</a> 
+								{% elseif directory == 'data' %} 
+								{% else %}  #}
+								<div class="col-sm-10" style="padding-right: 0px; padding-left: 0px; ">
+									<a href="#" class='list-group-item'>{{ file }} </a>
+								</div>
+								<div class="col-sm-2" style="padding: 0px">
+									<div class="col-sm-4" style="padding: 0px">
+										<form action={{ path('admin_deletefile', {dir_name: upload_directory, filename: file}) }} >
+											{# <input type="submit" value="Download" class="btn btn-primary" /> #}
+											{# <input type="image" name="submit" src="{{ asset('assets/images/trash-icon-2.jpg') }}"  border="0px" alt="Submit" style="width: 30px; " /> #}
+											<button type="submit" class="btnt" data-toggle="tooltip" data-placement="bottom" title="Delete File"><i class="fa fa-trash"></i></button>
+										</form>
+									</div>
+									<div class="col-sm-4" style="padding: 0px">
+										<form action={{ path('admin_downloadfile', {dir_name: upload_directory, filename: file}) }} >
+											{# <input type="submit" value="Download" class="btn btn-primary" /> #}
+											{# <input type="image" name="submit" src="{{ asset('assets/images/trash-icon-2.jpg') }}"  border="0px" alt="Submit" style="width: 30px; " /> #}
+											<button type="submit" class="btnd" data-toggle="tooltip" data-placement="bottom" title="Download File"><i class="fa fa-download"></i></button>
+										</form>
+									</div>
+									<div class="col-sm-4" style="padding: 0px">	
+										<form action={{ path('admin_downloadfile', {dir_name: upload_directory, filename: file}) }} >
+											<div id="to_hide" style="display: none;">{{file}}</div>		
+											<textarea id="{{file}}" name='file_path' style="display: none;">{{kernelRootDir}}/web/uploads/{{upload_directory}}/{{file}}</textarea>	
+											<button name="{{file}}" type="button" class="btnc" onclick="copyFunction(this.name)" data-toggle="tooltip" data-placement="bottom" title="copy file path"><i class="fa fa-copy"></i></button>	
+										</form>
+											
+									</div>
+
+
+									{# onSubmit="return confirm('Are you sure you wish to delete?')" #}
+
+									{# <button data-dz-remove class="btn btn-danger delete">
+										<i class="glyphicon glyphicon-trash"></i>
+										<span></span>
+									</button> #}
+								</div>
+								{# <input type="text" value="Hello World" id="myInput"> #}
+									
+									{# {{dump(file)}} #}
+									{# <a href="https://google.com" class="button">Go to Google</a> #}
+								{# {% endif %}  #}
+							{% endfor %}
+						</div>
+
+					</div>
+        		</div>
+
+				{# THIS CODE IS USELESS, WAS FOR BOOTSTRAP TEST #}
+        		{# <div class="col-sm-3" style="border: 2px solid red">
+				<h1> we can put something here	</h1>
+					<span class="glyphicon glyphicon-print"></span>
+				</div> #}
+
+				{#  ONEUP UPLOADER BUNDLE IS NOT WORKING IN THIS, MAY BE DUE TO DEPENDENCY ISSUE, NATIVE UPLOAD HANDELING IS DONE TO UPLOAD VIA DROPZONE#}
+				{# <form action="{{ oneup_uploader_endpoint('gallery') }}" class="dropzone" style="width:200px; height:200px; border:4px dashed black">
+				</form> #}
+
+				{# CONTAINERS FOR DROPZONE TEST #}
+				{# <div id='aniket' style="width: 300px; border: 10px solid green; padding: 200px; margin: 400px;">
+				</div> #}
+				{# <div class='fileinput-button' style="width: 300px; border: 10px solid green; padding: 100px; margin: 500px;">
+				</div> #}
+
+        	</div>
+    	</div>
+    </div>
+
+</main>
+
+
+<footer>
+	<div class="shadow"></div>
+	{{ footer | raw }}
+</footer>
+{% endblock %} 
+{% block javascripts %}
+
+    <script src="{{ asset('assets/dropzone.js') }}"></script>
+    <script src="{{ asset('assets/dropzone-ui.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-2.1.4.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="{{ asset('assets/js/file_manager.js') }}"></script>
+	{# <script type='text/javascript'>
+	 console.log(Url);
+	 </script> #}
+
+{% endblock %}
