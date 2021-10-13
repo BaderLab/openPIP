@@ -28,6 +28,8 @@ services:
       - mysql
     volumes:
       - ./openPIP:/var/www/html
+    restart: always
+
     
 
 
@@ -96,3 +98,4 @@ services:
 #   # vol2:
 #   # vol3:
 #   # vol4:
+

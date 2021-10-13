@@ -1,4 +1,26 @@
 
+$(document).ready(function() {
+
+    var path_getLine = Url + 'app.php/download';
+    console.log(path_getLine);
+
+    $.ajax({
+        'url' : path_getLine,
+        'type' : 'GET',
+        beforeSend: function() {
+                    // alert(1);
+                },
+        error: function() {
+                    alert('Error');
+                },
+        'success' : function(data) {
+			console.log('success fetching session, redirect_search_fix');
+
+        }
+    });
+
+
+});
 
 particlesJS(
 		"particles-js1", 
@@ -332,7 +354,7 @@ function sendDataRequestQuery(query_protein){
 	    dataType: 'json',
 	    async: false, 
 		success:function(result){
-			console.log('hh'+ result);
+			// console.log('hh'+ result);
 	        SearchResultsJSON = JSON.parse(result);
 	        console.log(SearchResultsJSON);
 	    }
