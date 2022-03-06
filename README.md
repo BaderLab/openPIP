@@ -28,3 +28,6 @@ The Open-source Protein Interaction Platform (openPIP) is a customizable web por
 2. Follow `Docker OpenPIP Package/README.md` folder in this repo for installation guide.
 [CLICK HERE](https://github.com/aniket328/openPIP/blob/dev10.0/Docker%20OpenPIP%20package/README.md)
 
+## openPIP webpage: 
+openPIP was developed at Bader Lab at the University of Toronto. The openPIP webpage is here(http://baderlab.org/Software/openPIP).
+
