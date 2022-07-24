@@ -1,5 +1,5 @@
 
-# compose_PIP : INSTALLATION GUIDE FOR OPEN-PIP
+# INSTALLATION GUIDE FOR OPEN-PIP : composePIP 
 ## Packager for openPIP
 
 Required and tested on: *@ Docker version 20.10.7 and docker-compose version 1.29.2*
@@ -12,11 +12,12 @@ Required and tested on: *@ Docker version 20.10.7 and docker-compose version 1.2
 *Reference:* https://docs.docker.com/engine/install/ubuntu/ <br>
 **STEP 2:** Install Docker compose <br>
 *Reference:* https://docs.docker.com/compose/install/ <br>
+
+
+***Source Code***
 <br>
 **STEP 3:** Clone OpenPIP repo from GitHub <br>
 >git clone https://github.com/BaderLab/openPIP.git 
-
-<br>
 
 **STEP 4:** Inside OpenPIP folder run script `start.sh` <br>
 >chmod 777 ./start.sh && ./start.sh
