@@ -33,7 +33,66 @@ class HomeController extends Controller
 	public function homeAction(Request $request)
 	{
 	    
-			/*
+			
+
+		$rand_protein=self::getrandomprotein();
+		// var_dump($rand_protein);
+		// die();
+
+		$functions = $this->get('app.functions');
+		$counts = self::getCounts();
+		$protein_count = $counts->protein_count;
+		$organism_count = $counts->organism_count;
+		$interaction_count = $counts->interaction_count;
+		$domain_count = $counts->domain_count;	
+		$announcements = self::getAnnouncements();
+		$admin_settings =  $functions->getAdminSettings();	
+		$title = $admin_settings->getTitle();
+		$short_title = $admin_settings->getShortTitle();
+		$footer = $admin_settings->getFooter();
+		$main_color_scheme = $admin_settings->getMainColorScheme();
+        $header_color_scheme = $admin_settings->getHeaderColorScheme();
+        $logo_color_scheme = $admin_settings->getLogoColorScheme();
+        $button_color_scheme = $admin_settings->getButtonColorScheme();
+		$home_page = $admin_settings->getHomePage();
+		$mission_title = $admin_settings->getMissionTitle();
+		$mission_text = $admin_settings->getMissionText();
+		$method_title = $admin_settings->getMethodTitle();
+		$method_text = $admin_settings->getMethodText();
+
+		$url = $admin_settings->getUrl();
+		$login_status = $functions->getLoginStatus();
+		$admin_status = $functions->GetAdminStatus();
+
+		return $this->render('home2.html.twig', array(
+		        'announcements' => $announcements,
+		        'protein_count' => $protein_count,
+		        'organism_count' => $organism_count,
+		        'interaction_count' => $interaction_count,
+		        'domain_count' => $domain_count,
+		        'title' => $title,
+		        'url' => $url,
+		        'home_page' => $home_page,
+		        'main_color_scheme' => $main_color_scheme,
+                'header_color_scheme' => $header_color_scheme,
+                'logo_color_scheme' => $logo_color_scheme,
+                'button_color_scheme' => $button_color_scheme,
+		        'short_title' => $short_title,
+		        'footer' => $footer,
+		        'login_status' => $login_status,
+				'admin_status' => $admin_status,
+				'page' => 'home',
+				'mission_title'=> $mission_title,
+				'mission_text'=> $mission_text,
+				'method_title'=> $method_title,
+				'method_text'=> $method_text,
+				'rand_protein'=> $rand_protein
+
+		));
+
+
+
+		/*
 					
 					$dataFile = "Interactor A Gene Name,Interactor B Gene Name,Interactor A Ensembl ID,Interactor B Ensembl ID,Interactor A Uniprot ID, Interactor B Uniprot ID,Interactor A Entrez ID,Interactor B Entrez ID,Confidence Score\r\n";
 					
@@ -1461,61 +1520,6 @@ class HomeController extends Controller
 					}
 			*/
 
-		$rand_protein=self::getrandomprotein();
-		// var_dump($rand_protein);
-		// die();
-
-		$functions = $this->get('app.functions');
-		$counts = self::getCounts();
-		$protein_count = $counts->protein_count;
-		$organism_count = $counts->organism_count;
-		$interaction_count = $counts->interaction_count;
-		$domain_count = $counts->domain_count;	
-		$announcements = self::getAnnouncements();
-		$admin_settings =  $functions->getAdminSettings();	
-		$title = $admin_settings->getTitle();
-		$short_title = $admin_settings->getShortTitle();
-		$footer = $admin_settings->getFooter();
-		$main_color_scheme = $admin_settings->getMainColorScheme();
-        $header_color_scheme = $admin_settings->getHeaderColorScheme();
-        $logo_color_scheme = $admin_settings->getLogoColorScheme();
-        $button_color_scheme = $admin_settings->getButtonColorScheme();
-		$home_page = $admin_settings->getHomePage();
-		$mission_title = $admin_settings->getMissionTitle();
-		$mission_text = $admin_settings->getMissionText();
-		$method_title = $admin_settings->getMethodTitle();
-		$method_text = $admin_settings->getMethodText();
-
-		$url = $admin_settings->getUrl();
-		$login_status = $functions->getLoginStatus();
-		$admin_status = $functions->GetAdminStatus();
-
-		return $this->render('home2.html.twig', array(
-		        'announcements' => $announcements,
-		        'protein_count' => $protein_count,
-		        'organism_count' => $organism_count,
-		        'interaction_count' => $interaction_count,
-		        'domain_count' => $domain_count,
-		        'title' => $title,
-		        'url' => $url,
-		        'home_page' => $home_page,
-		        'main_color_scheme' => $main_color_scheme,
-                'header_color_scheme' => $header_color_scheme,
-                'logo_color_scheme' => $logo_color_scheme,
-                'button_color_scheme' => $button_color_scheme,
-		        'short_title' => $short_title,
-		        'footer' => $footer,
-		        'login_status' => $login_status,
-				'admin_status' => $admin_status,
-				'page' => 'home',
-				'mission_title'=> $mission_title,
-				'mission_text'=> $mission_text,
-				'method_title'=> $method_title,
-				'method_text'=> $method_text,
-				'rand_protein'=> $rand_protein
-
-		));
-
 	}
 	
 	public function getrandomprotein()
@@ -1833,3 +1837,7 @@ class HomeController extends Controller
 }
 
 ?>
+
+
+
+
