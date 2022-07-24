@@ -11,7 +11,7 @@ $(document).ready(function() {
                     // alert(1);
                 },
         error: function() {
-                    alert('Error');
+                    
                 },
         'success' : function(data) {
 			console.log('success fetching session, redirect_search_fix');
