@@ -18,11 +18,25 @@ STEP 2: Install Docker compose <br>
 *Reference:* https://docs.docker.com/compose/install/ <br>
 <br>
 STEP 3: Clone OpenPIP repo from GitHub <br>
-```git clone https://github.com/aniket328/openPIP.git``` <br>
-and switch to branch `dev10.0`
+```git clone https://github.com/BaderLab/openPIP.git``` <br>
+<br>
+STEP 4: Inside OpenPIP folder click ```start.sh``` <br>
+
+<br>
+:tada: Hurray! The server is now running on ```localhost:80``` :rocket: :rocket:
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
 
 
-STEP 4: 
+
+----------- TROUBLESHOOTING -------------
+
+
+START.SH: 
 
   1. get superuser access: ```sudo su```
   2. run this command inside openPIP folder:
@@ -33,7 +47,7 @@ STEP 4:
  (this may take few minutes)
  <br>
 
-STEP 5: populate database with `admin_settings` and `users` to establish connection.
+START.SH: populate database with `admin_settings` and `users` to establish connection.
 
   
     1. Exec into mysql container running:
@@ -47,13 +61,8 @@ STEP 5: populate database with `admin_settings` and `users` to establish connect
     3. RUN Command: 
         `source /db/init_new.sql`
   
-<br>
-Hurray! The server is now running on localhost:80
-<br><br>
-<br><br>
 
------------ ERRORS and Solutions -------------
-
+-------- ERRORS and Solutions ---------
 
 
 1.
@@ -87,5 +96,5 @@ Run:
     make sure you have replaced '\' in path with '/', in ubuntu.
 
 
---------
+-------- 
 
