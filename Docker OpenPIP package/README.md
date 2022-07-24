@@ -1,31 +1,29 @@
 
 # compose_PIP : INSTALLATION GUIDE FOR OPEN-PIP
---------packager for openPIP---------
+## Packager for openPIP
 
-Required and tested on:
+Required and tested on: *@ Docker version 20.10.7 and docker-compose version 1.29.2*
 
-***@** Docker version 20.10.7*
+## STEPS:
 
-***&** docker-compose version 1.29.2*
-
-
------------ STEPS -------------------
-
-***Prerequisites* <br>**
-STEP 1: Install Docker Engine <br>
+***Prerequisites***
+<br>
+**STEP 1:** Install Docker Engine <br>
 *Reference:* https://docs.docker.com/engine/install/ubuntu/ <br>
-STEP 2: Install Docker compose <br>
+**STEP 2:** Install Docker compose <br>
 *Reference:* https://docs.docker.com/compose/install/ <br>
 <br>
-STEP 3: Clone OpenPIP repo from GitHub <br>
-```git clone https://github.com/BaderLab/openPIP.git``` <br>
-<br>
-STEP 4: Inside OpenPIP folder click ```start.sh``` <br>
+**STEP 3:** Clone OpenPIP repo from GitHub <br>
+> git clone https://github.com/BaderLab/openPIP.git 
 
 <br>
-:tada: Hurray! The server is now running on ```localhost:80``` :rocket: :rocket:
+**STEP 4:** Inside OpenPIP folder run script `start.sh` <br>
+> chmod 777 ./start.sh && ./start.sh
+
+<br>
+Hurray! The server is now running on <br>  [localhost80](http://localhost:80/app.php)  
 <br><br>
-<br><br>
+:tada: :tada: :rocket: :rocket: 
 <br><br>
 <br><br>
 <br><br>
@@ -33,7 +31,8 @@ STEP 4: Inside OpenPIP folder click ```start.sh``` <br>
 
 
 
------------ TROUBLESHOOTING -------------
+
+## TROUBLESHOOTING:
 
 
 START.SH: 
@@ -62,7 +61,6 @@ START.SH: populate database with `admin_settings` and `users` to establish conne
         `source /db/init_new.sql`
   
 
--------- ERRORS and Solutions ---------
 
 
 1.
