@@ -25,7 +25,7 @@ Required and tested on: *@ Docker version 20.10.7 and docker-compose version 1.2
 
 Hurray! :tada: :tada: The server is now running on <br>  
 
-:rocket: [localhost:80](http://localhost:7070/app.php)  :rocket: 
+:rocket: [localhost:80](http://localhost:80/app.php)  :rocket: 
 
 <br><br>
  
