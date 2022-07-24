@@ -14,16 +14,21 @@ Required and tested on: *@ Docker version 20.10.7 and docker-compose version 1.2
 *Reference:* https://docs.docker.com/compose/install/ <br>
 <br>
 **STEP 3:** Clone OpenPIP repo from GitHub <br>
-> git clone https://github.com/BaderLab/openPIP.git 
+>git clone https://github.com/BaderLab/openPIP.git 
 
 <br>
+
 **STEP 4:** Inside OpenPIP folder run script `start.sh` <br>
-> chmod 777 ./start.sh && ./start.sh
+>chmod 777 ./start.sh && ./start.sh
 
 <br>
-Hurray! The server is now running on <br>  [localhost80](http://localhost:80/app.php)  
+
+Hurray! :tada: :tada: The server is now running on <br>  
+
+:rocket: [localhost:80](http://localhost:7070/app.php)  :rocket: 
+
 <br><br>
-:tada: :tada: :rocket: :rocket: 
+ 
 <br><br>
 <br><br>
 <br><br>
