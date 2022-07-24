@@ -63,10 +63,10 @@ class HController extends Controller
     }
 
 
-    /*
-					
-					
-					$h = fopen('/home/mmee/Desktop/file.txt', 'w');
+    public function postHAction(Request $request)
+	{
+
+        $h = fopen('/home/mmee/Desktop/file.txt', 'w');
 					fwrite($h, $dataFile);
 					
 					
@@ -185,10 +185,12 @@ class HController extends Controller
 						}
 						
 					}
-					
-					*/
-				/*
-					$h2 = fopen('/home/mmee/Desktop/test_2.sql', 'w');
+    }
+
+
+    public function preHAction(Request $request)
+    {
+        $h2 = fopen('/home/mmee/Desktop/test_2.sql', 'w');
 					$functions = $this->get('app.functions');
 					$connection =  $functions->mysql_connect();
 					
@@ -250,7 +252,14 @@ class HController extends Controller
 						}
 					}
 
-				/*
+    }
+
+    /*
+					
+					
+					
+					
+				
 					$query = "SELECT * FROM `annotation`";
 					
 					
@@ -456,6 +465,11 @@ class HController extends Controller
 							}
 						}  
 					}
+
+
+
+
+
 				*/    /* 
 					$h3 = fopen('/home/mmee/Desktop/test_3.txt', 'w');
 					$functions = $this->get('app.functions');
