@@ -1042,7 +1042,9 @@ function setUpdateQuery(){
 		$("#overlay_network_loader_image").css('visibility', 'visible');
 		$("#overlay_network_table").show();
 		
-		searchOrganism = 0
+		searchOrganism=$("#form_organism_select").val();
+		console.log({searchOrganism})
+		// searchOrganism = 0
 		searchQuery = $("#search_identifier").val();
 		searchQueryArray = searchQuery.split(/[;,\s\t\n]/);	
 		searchQueryArray = searchQueryArray.filter(function(value) {return value !== ''});

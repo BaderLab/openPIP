@@ -26,6 +26,8 @@ use AppBundle\Utils\Functions;
 use AppBundle\Entity\Interaction_Category;
 use AppBundle\Entity\Interaction_Network;
 use AppBundle\Entity\Annotation_Type;
+use Symfony\Component\Finder\Finder;
+
 
 /**
  * Search controller.
@@ -42,6 +44,11 @@ class SearchController extends Controller
 	 */
 	public function searchAction($search_term, Request $request)
 	{
+
+		// SELECT count(*) FROM `interaction_organism` WHERE organism_id = 3
+		$organismForm = self::getOrganismForm();
+		$organismForm->handleRequest($request);
+		self::OrganismFormHandler($organismForm);
 
 		$interaction_categories_array = self::getInteractionCategories();
 		$query_parameters = '';
@@ -139,12 +146,171 @@ class SearchController extends Controller
 				'query_parameters' => $query_parameters,
 				'login_status' => $login_status,
 				'admin_status' => $admin_status,
+				'organism_form'=> $organismForm->createView(),
 				'page' => 'search'
 				
 		));
 		
 	}
+
+	public function getOrganismForm()
+	{
+
+
+		$functions = $this->get('app.functions');		
+		$connection =  $functions->mysql_connect();
+		
+		// $interactor_id_string = join(',', $interactor_array);
+		// $interactor_id_string = "'" . str_replace(",", "','", $interactor_id_string) . "'";
+		
+		$query = "SELECT id, common_name FROM organism;";
+
+		$result = $connection->query($query);
+		mysqli_close($connection);
+		$organism_arrays = array();
+		if($result){
+			while($row = $result->fetch_assoc()) {
+				$organism_arrays[] = $row;
+			}
+		}
+
+		$organism_array = array();
+		foreach ($organism_arrays as $organism) {
+
+			$id = $organism['id'];
+			$common_name = $organism['common_name'];
+			$name=$id.". "."$common_name";
+			$organism_array[] = $name;
+		}
+		
+		// if($interaction_array){
+		// 	return $interaction_array;
+		// }else{
+		// 	return false;
+		// }
+		// $encoded = json_encode($organism_array, JSON_UNESCAPED_UNICODE);
+		// var_dump($encoded);die;
+
+		// dump($files_array);die;
+
+
+		$defaultData = array('message' => 'Type your message here');
+		$organismForm = $this->createFormBuilder($defaultData)
+			->add('organism_select', ChoiceType::class, array(
+				'choices' => $organism_array
+			))->getForm();
+
+		return $organismForm;
+	}
 	
+
+	public function OrganismFormHandler($organismform)
+	{
+		if ($organismform->isSubmitted())
+		{
+
+			// $this->get('session')->save();
+			// self::handleData3($dform,$request);
+			$file_to_insert = $organismform->get('files_to_insert')->getData();
+			$temp_arr=explode("::", $file_to_insert);
+			$file=$temp_arr[1];
+			$folder=$temp_arr[0];
+
+
+			return $this->redirectToRoute('insert_data', array('file' => $file, 'folder'=> $folder));
+
+			$this->addFlash(
+				'notice',
+				'Your changes were saved!'
+			);
+		}
+
+	}
+
+	/**
+	 * Info organism
+	 *
+	 * @Route("/info_organism/{id}", name="info_organism", options={"expose": true})
+	 * @Method({"GET", "POST"})
+	 */
+	public function getOrganismInfo($id)
+	{
+
+		$organism_array = array();
+
+
+		$functions = $this->get('app.functions');		
+		$connection =  $functions->mysql_connect();
+		$query = "SELECT * FROM organism WHERE id = $id;";
+		$result = $connection->query($query);
+		$organism_arrays = array();
+		if($result){
+			while($row = $result->fetch_assoc()) {
+				$organism_arrays[] = $row;
+			}
+		}
+
+		$organism_array['id'] = $organism_arrays[0]['id'];
+		$organism_array['common_name'] = $organism_arrays[0]['common_name'];
+		$organism_array['scientific_name'] = $organism_arrays[0]['scientific_name'];
+		$organism_array['taxid_id'] = $organism_arrays[0]['taxid_id'];
+		$organism_array['description'] = $organism_arrays[0]['description'];
+		$organism_array['class'] = $organism_arrays[0]['class'];
+
+		$query = "SELECT count(*) FROM interaction_organism WHERE organism_id = $id;";
+		$result = $connection->query($query);
+
+		$organism_array['interaction_count'] = $result->fetch_assoc()['count(*)'];
+		
+		
+		$interactions = array();
+		$query = "SELECT interaction_id FROM interaction_organism WHERE organism_id = $id;";
+		$result = $connection->query($query);
+		if($result){
+			while($row = $result->fetch_assoc()) {
+				$interactions[] = $row['interaction_id'];
+			}
+		}
+		// remove_duplicate($interactions);
+		$interactions = array_unique($interactions);
+		$interactions_string = join(',', $interactions);
+		$interactions_string = "'" . str_replace(",", "','", $interactions_string) . "'";
+		$query = "SELECT interactor_A, interactor_B FROM interaction WHERE id IN ($interactions_string) ;";
+		$result = $connection->query($query);
+		$interactors = array();
+		if($result){
+			while($row = $result->fetch_assoc()) {
+				$interactors[] = $row['interactor_A'];
+				$interactors[] = $row['interactor_B'];
+			}
+		}
+		$interactors = array_unique($interactors);
+		$interactors_count = count($interactors);
+
+		$organism_array['protein_count'] = $interactors_count;
+
+		$interactors_string = join(',', $interactors);
+		$interactors_string = "'" . str_replace(",", "','", $interactors_string) . "'";
+		$query = "SELECT gene_name FROM protein WHERE id IN ($interactors_string) ;";
+		$result = $connection->query($query);
+
+		$gene_names = array();
+		if($result){
+			while($row = $result->fetch_assoc()) {
+				$gene_names[] = $row['gene_name'];
+			}
+		}
+		$gene_names = array_unique($gene_names);
+
+		$organism_array['gene_names'] = $gene_names;
+		// var_dump($interactors);
+		mysqli_close($connection);
+		
+		
+		$encoded = json_encode($organism_array, JSON_UNESCAPED_UNICODE);
+		return new Response($encoded);
+	}
+
 	/**
 	 * Search Results
 	 *

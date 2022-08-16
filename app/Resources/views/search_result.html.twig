@@ -234,7 +234,17 @@
     					<div id="cy-nav" class="collapse navbar-collapse"
     						style="padding-left: 0px;">
     						<ul id="cy_nav_menu_list" class="nav navbar-nav cy-nav">
-    							<li id="search_dropdown_toggle_li" class="dropdown network_dropdown"><a id="search_dropdown_toggle" href="#">Search <span class="caret"></span></a>
+    							<li id="organism_select_li" class="dropdown network_dropdown"><a id="organism_select_toggle" href="#">Select organism: </a>
+    							</li>
+								<li id="organism_select_form_li" class="dropdown network_dropdown">
+									{{ form_start(organism_form) }}
+										{{ form_widget(organism_form.organism_select) }}
+									{{ form_end(organism_form) }}
+								</li>
+								<li id="organism_info_li" class="dropdown network_dropdown">
+									<button type="button" class="btn btn-info">Info</button>
+								</li>
+								<li id="search_dropdown_toggle_li" class="dropdown network_dropdown"><a id="search_dropdown_toggle" href="#">Search <span class="caret"></span></a>
     								<ul id="search_tab" class="dropdown-menu">
     									<li style="padding: 20px 0px 10px 0px; min-width: 400px;" class="search_box">
     										<div class="container">
