@@ -967,6 +967,33 @@ function setNetworkTableCollapseEvents(){
 	});
 }
 
+$("#organism_info_li").on('click', function(){
+	id=$("#form_organism_select").val();
+	// console.log({id});
+	res=getOrganismInfo(id);
+	// res=JSON.parse(res);
+	// res = JSON.stringify(res, null, 4);
+	// console.log({res});
+	$('#OrganismInfoModalBody').html(res);
+
+	// console.log(res['gene_names']);
+})
+
+function getOrganismInfo(OrganismId){
+	OrganismInfo="";
+
+	$.ajax({
+		type: "GET",
+		url: Url + "app.php/info_organism/"+OrganismId,
+		dataType: "text",
+		async: false,
+		success: function(data){
+			OrganismInfo = data;
+		}
+	});
+	// console.log(OrganismInfo);
+	return OrganismInfo;
+}
 
 function sendDataRequestQuery(){
 	

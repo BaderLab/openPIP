@@ -305,10 +305,22 @@ class SearchController extends Controller
 		$organism_array['gene_names'] = $gene_names;
 		// var_dump($interactors);
 		mysqli_close($connection);
+
+		$res = "<b>Organism id: </b>".$organism_array['id']."<br>";
+		$res .= "<b>Name:</b> ".$organism_array['common_name']."<br>";
+		$res .= "<b>Scientific name: </b>".$organism_array['scientific_name']."<br>";
+		$res .= "<b>Taxid id: </b>".$organism_array['taxid_id']."<br>";
+		$res .= "<b>Description: </b><br>".$organism_array['description']."<br>";
+		$res .= "<b>Class: </b>".$organism_array['class']."<br>";
+		$res .= "<b>Interaction count:</b> ".$organism_array['interaction_count']."<br>";
+		$res .= "<b>Protein count:</b> ".$organism_array['protein_count']."<br>";
+		$res .= "<b>Gene names: </b><br>".join(', ', $organism_array['gene_names'])."<br>";
+
 		
 		
 		$encoded = json_encode($organism_array, JSON_UNESCAPED_UNICODE);
-		return new Response($encoded);
+		return new Response($res);
+		// return new Response($encoded);
 	}
 
 	/**
