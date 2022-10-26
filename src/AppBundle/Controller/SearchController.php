@@ -26,6 +26,8 @@ use AppBundle\Utils\Functions;
 use AppBundle\Entity\Interaction_Category;
 use AppBundle\Entity\Interaction_Network;
 use AppBundle\Entity\Annotation_Type;
+use Symfony\Component\Finder\Finder;
+
 
 /**
  * Search controller.
@@ -42,6 +44,11 @@ class SearchController extends Controller
 	 */
 	public function searchAction($search_term, Request $request)
 	{
+
+		// SELECT count(*) FROM `interaction_organism` WHERE organism_id = 3
+		$organismForm = self::getOrganismForm();
+		$organismForm->handleRequest($request);
+		self::OrganismFormHandler($organismForm);
 
 		$interaction_categories_array = self::getInteractionCategories();
 		$query_parameters = '';
@@ -139,12 +146,183 @@ class SearchController extends Controller
 				'query_parameters' => $query_parameters,
 				'login_status' => $login_status,
 				'admin_status' => $admin_status,
+				'organism_form'=> $organismForm->createView(),
 				'page' => 'search'
 				
 		));
 		
 	}
+
+	public function getOrganismForm()
+	{
+
+
+		$functions = $this->get('app.functions');		
+		$connection =  $functions->mysql_connect();
+		
+		// $interactor_id_string = join(',', $interactor_array);
+		// $interactor_id_string = "'" . str_replace(",", "','", $interactor_id_string) . "'";
+		
+		$query = "SELECT id, common_name FROM organism;";
+
+		$result = $connection->query($query);
+		mysqli_close($connection);
+		$organism_arrays = array();
+		if($result){
+			while($row = $result->fetch_assoc()) {
+				$organism_arrays[] = $row;
+			}
+		}
+
+		$organism_array = array();
+		foreach ($organism_arrays as $organism) {
+
+			$id = $organism['id'];
+			$common_name = $organism['common_name'];
+			$name=$id.". "."$common_name";
+			$organism_array[] = $name;
+		}
+		
+		// if($interaction_array){
+		// 	return $interaction_array;
+		// }else{
+		// 	return false;
+		// }
+		// $encoded = json_encode($organism_array, JSON_UNESCAPED_UNICODE);
+		// var_dump($encoded);die;
+
+		// dump($files_array);die;
+
+
+		$defaultData = array('message' => 'Type your message here');
+		$organismForm = $this->createFormBuilder($defaultData)
+			->add('organism_select', ChoiceType::class, array(
+				'choices' => $organism_array
+			))->getForm();
+
+		return $organismForm;
+	}
 	
+
+	public function OrganismFormHandler($organismform)
+	{
+		if ($organismform->isSubmitted())
+		{
+
+			// $this->get('session')->save();
+			// self::handleData3($dform,$request);
+			$file_to_insert = $organismform->get('files_to_insert')->getData();
+			$temp_arr=explode("::", $file_to_insert);
+			$file=$temp_arr[1];
+			$folder=$temp_arr[0];
+
+
+			return $this->redirectToRoute('insert_data', array('file' => $file, 'folder'=> $folder));
+
+			$this->addFlash(
+				'notice',
+				'Your changes were saved!'
+			);
+		}
+
+	}
+
+	/**
+	 * Info organism
+	 *
+	 * @Route("/info_organism/{id}", name="info_organism", options={"expose": true})
+	 * @Method({"GET", "POST"})
+	 */
+	public function getOrganismInfo($id)
+	{
+
+		$organism_array = array();
+
+
+		$functions = $this->get('app.functions');		
+		$connection =  $functions->mysql_connect();
+		$query = "SELECT * FROM organism WHERE id = $id;";
+		$result = $connection->query($query);
+		$organism_arrays = array();
+		if($result){
+			while($row = $result->fetch_assoc()) {
+				$organism_arrays[] = $row;
+			}
+		}
+
+		$organism_array['id'] = $organism_arrays[0]['id'];
+		$organism_array['common_name'] = $organism_arrays[0]['common_name'];
+		$organism_array['scientific_name'] = $organism_arrays[0]['scientific_name'];
+		$organism_array['taxid_id'] = $organism_arrays[0]['taxid_id'];
+		$organism_array['description'] = $organism_arrays[0]['description'];
+		$organism_array['class'] = $organism_arrays[0]['class'];
+
+		$query = "SELECT count(*) FROM interaction_organism WHERE organism_id = $id;";
+		$result = $connection->query($query);
+
+		$organism_array['interaction_count'] = $result->fetch_assoc()['count(*)'];
+		
+		
+		$interactions = array();
+		$query = "SELECT interaction_id FROM interaction_organism WHERE organism_id = $id;";
+		$result = $connection->query($query);
+		if($result){
+			while($row = $result->fetch_assoc()) {
+				$interactions[] = $row['interaction_id'];
+			}
+		}
+		// remove_duplicate($interactions);
+		$interactions = array_unique($interactions);
+		$interactions_string = join(',', $interactions);
+		$interactions_string = "'" . str_replace(",", "','", $interactions_string) . "'";
+		$query = "SELECT interactor_A, interactor_B FROM interaction WHERE id IN ($interactions_string) ;";
+		$result = $connection->query($query);
+		$interactors = array();
+		if($result){
+			while($row = $result->fetch_assoc()) {
+				$interactors[] = $row['interactor_A'];
+				$interactors[] = $row['interactor_B'];
+			}
+		}
+		$interactors = array_unique($interactors);
+		$interactors_count = count($interactors);
+
+		$organism_array['protein_count'] = $interactors_count;
+
+		$interactors_string = join(',', $interactors);
+		$interactors_string = "'" . str_replace(",", "','", $interactors_string) . "'";
+		$query = "SELECT gene_name FROM protein WHERE id IN ($interactors_string) ;";
+		$result = $connection->query($query);
+
+		$gene_names = array();
+		if($result){
+			while($row = $result->fetch_assoc()) {
+				$gene_names[] = $row['gene_name'];
+			}
+		}
+		$gene_names = array_unique($gene_names);
+
+		$organism_array['gene_names'] = $gene_names;
+		// var_dump($interactors);
+		mysqli_close($connection);
+
+		$res = "<b>Organism id: </b>".$organism_array['id']."<br>";
+		$res .= "<b>Name:</b> ".$organism_array['common_name']."<br>";
+		$res .= "<b>Scientific name: </b>".$organism_array['scientific_name']."<br>";
+		$res .= "<b>Taxid id: </b>".$organism_array['taxid_id']."<br>";
+		$res .= "<b>Description: </b><br>".$organism_array['description']."<br>";
+		$res .= "<b>Class: </b>".$organism_array['class']."<br>";
+		$res .= "<b>Interaction count:</b> ".$organism_array['interaction_count']."<br>";
+		$res .= "<b>Protein count:</b> ".$organism_array['protein_count']."<br>";
+		$res .= "<b>Gene names: </b><br>".join(', ', $organism_array['gene_names'])."<br>";
+
+		
+		
+		$encoded = json_encode($organism_array, JSON_UNESCAPED_UNICODE);
+		return new Response($res);
+		// return new Response($encoded);
+	}
+
 	/**
 	 * Search Results
 	 *
@@ -157,6 +335,8 @@ class SearchController extends Controller
 		$search_term = $request->get('search_term_parameter');
 		$filter_parameter = $request->get('filter_parameter');
 		$search_term_array = $request->get('search_term_array');
+		$search_organism = $request->get('search_organism');
+		// print($search_organism);
 
 
 		
@@ -180,6 +360,7 @@ class SearchController extends Controller
 		$query_parameters->setSearchTermParameter($search_term);
 		$query_parameters->setFilterParameter($filter_parameter);
 		$query_parameters->setSearchTermArray($search_term_array);
+		$query_parameters->setSearchOrganism($search_organism);
 		
 		if($query_interactor == 'interactor'){	    
 		    $query_parameters->setFilterParameter("query_query");    
@@ -268,17 +449,19 @@ class SearchController extends Controller
 	    
 	    $filter_parameter = $query_parameters->getFilterParameter();
 	    $search_term_array = $query_parameters->getSearchTermArray();
+		$search_organism = $query_parameters->getSearchOrganism();
 	    
 	    $node_array = array();
 	    $edge_array = array();
 	    
-	    
+	    // getting protein name from gene name
 	    $query_array = self::getProteinQueryArray($search_term_array); 
 	    $query_protein_array = $query_array[0];
 	    $query_protein_id_array = $query_array[1];
 	    
-	    $interactor_array = self::getInteractorArray($query_protein_id_array, $filter_parameter);   
-	    $interaction_array = self::getInteractionArray($interactor_array, $query_protein_array, $filter_parameter);
+	    $interactor_array = self::getInteractorArray($query_protein_id_array, $filter_parameter, $search_organism);   
+	    $interaction_array = self::getInteractionArray($interactor_array, $query_protein_array, $filter_parameter,$search_organism);
+		// var_dump($interaction_array);
 
 	    $node_array = self::interactorNodeHandeler($interactor_array, $query_protein_array);
 	    
@@ -352,14 +535,14 @@ class SearchController extends Controller
 	    return array($query_protein_array, $query_protein_id_array, $found_proteins_string, $not_found_proteins_string);
 	}
 	
-	public function getInteractorArray($query_protein_id_array, $filter_parameter){
+	public function getInteractorArray($query_protein_id_array, $filter_parameter, $search_organism){
 	    $interactor_array = array();
 
 	    $functions = $this->get('app.functions');
 
 	    if($filter_parameter == 'None' || $filter_parameter == 'query_interactor'){
-	        $interactions = self::getInteractionsForList($query_protein_id_array);
-	        
+	        $interactions = self::getInteractionsForList($query_protein_id_array, $search_organism);
+	        // var_dump($interactions);
 	        if($interactions){
 	            foreach($interactions as $interaction){
 	                $interactor_array[] = $interaction['interactor_A'];
@@ -377,21 +560,21 @@ class SearchController extends Controller
 	}
 	
 	
-	public function getInteractionArray($interactor_array, $query_protein_array, $filter_parameter){
+	public function getInteractionArray($interactor_array, $query_protein_array, $filter_parameter, $search_organism){
 	    
 	    $interaction_array = false;
 	    
 	    if($filter_parameter == 'query_interactor'){
-	        $interaction_array = self::getQueryInteractorInteractionsAmongList($query_protein_array, $interactor_array);
+	        $interaction_array = self::getQueryInteractorInteractionsAmongList($query_protein_array, $interactor_array, $search_organism);
 	    }else{
-	        $interaction_array = self::getInteractionsAmongList($interactor_array);        
+	        $interaction_array = self::getInteractionsAmongList($interactor_array,$search_organism);        
 	    }
 	    
 	    return $interaction_array;
 	}
 	
 	
-	public function getInteractionsAmongList($interactor_array){
+	public function getInteractionsAmongList($interactor_array,$search_organism){
 		
 		$functions = $this->get('app.functions');		
 		$connection =  $functions->mysql_connect();
@@ -399,8 +582,8 @@ class SearchController extends Controller
 		$interactor_id_string = join(',', $interactor_array);
 		$interactor_id_string = "'" . str_replace(",", "','", $interactor_id_string) . "'";
 		
-		$query = "SELECT * FROM `interaction` WHERE `removed` = 0 AND (interactor_A IN ($interactor_id_string) AND interactor_B IN ($interactor_id_string))";
-		
+		$query = "SELECT interaction.id, interaction.score, interaction.removed, interaction.binding_start, interaction.binding_end, interaction.interactor_A, interaction.interactor_B FROM `interaction` inner join interaction_organism on interaction.id = interaction_organism.interaction_id WHERE interaction.removed = 0 AND interaction_organism.organism_id=$search_organism AND ((interaction.interactor_A IN ($interactor_id_string) AND interaction.interactor_B IN ($interactor_id_string)))";
+		// var_dump($query);
 		$result = $connection->query($query);
 		mysqli_close($connection);
 		$interaction_array = array();
@@ -417,7 +600,7 @@ class SearchController extends Controller
 		}
 	}
 		
-	public function getQueryInteractorInteractionsAmongList($query_protein_array, $interactor_array){
+	public function getQueryInteractorInteractionsAmongList($query_protein_array, $interactor_array,$search_organism){
 		
 		$functions = $this->get('app.functions');
 		$connection =  $functions->mysql_connect();
@@ -430,8 +613,9 @@ class SearchController extends Controller
 		$query_protein_id_string = join(',', $query_protein_id_array);
 		$query_protein_id_string = "'" . str_replace(",", "','", $query_protein_id_string) . "'";
 		
-		$query = "SELECT * FROM `interaction` WHERE removed = 0 AND (`interactor_A` IN ($interactor_id_string) AND `interactor_B` IN ($query_protein_id_string)) OR (`interactor_A` IN ($query_protein_id_string) AND `interactor_B` IN ($interactor_id_string))";
-		
+		$query = "SELECT interaction.id, interaction.score, interaction.removed, interaction.binding_start, interaction.binding_end, interaction.interactor_A, interaction.interactor_B FROM interaction inner join interaction_organism on interaction.id = interaction_organism.interaction_id WHERE interaction.removed = 0 AND interaction_organism.organism_id=$search_organism AND ((`interaction.interactor_A` IN ($interactor_id_string) AND `interaction.interactor_B` IN ($query_protein_id_string)) OR (`interaction.interactor_A` IN ($query_protein_id_string) AND `interaction.interactor_B` IN ($interactor_id_string)))";
+		// var_dump($query);
+		// print($query);
 		$result = $connection->query($query);
 		mysqli_close($connection);
 		
@@ -449,7 +633,7 @@ class SearchController extends Controller
 		}
 	}
 	
-	public function getInteractionsForList($interactor_array){
+	public function getInteractionsForList($interactor_array, $search_organism){
 		
 		$functions = $this->get('app.functions');
 		$connection =  $functions->mysql_connect();
@@ -458,6 +642,10 @@ class SearchController extends Controller
 		$interactor_id_string = "'" . str_replace(",", "','", $interactor_id_string) . "'";
 		
 		$query = "SELECT * FROM `interaction` WHERE  removed = 0 AND (`interactor_A` IN ($interactor_id_string)) OR (`interactor_B` IN ($interactor_id_string))";
+
+		$query="SELECT interaction.id, interaction.score, interaction.removed, interaction.binding_start, interaction.binding_end, interaction.interactor_A, interaction.interactor_B FROM interaction inner join interaction_organism on interaction.id = interaction_organism.interaction_id WHERE  interaction.removed = 0 AND interaction_organism.organism_id=$search_organism AND ((interaction.interactor_A IN ($interactor_id_string)) OR (interaction.interactor_B IN ($interactor_id_string)))";
+		// var_dump($query);
+		
 		$result = $connection->query($query);
 		mysqli_close($connection);
 		
@@ -467,6 +655,8 @@ class SearchController extends Controller
 				$interaction_array[] = $row;
 			}
 		}
+		// var_dump($interaction_array);
+
 		
 		if($interaction_array){
 			return $interaction_array;

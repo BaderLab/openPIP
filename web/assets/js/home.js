@@ -11,7 +11,7 @@ $(document).ready(function() {
                     // alert(1);
                 },
         error: function() {
-                    alert('Error');
+                    
                 },
         'success' : function(data) {
 			console.log('success fetching session, redirect_search_fix');
@@ -347,7 +347,8 @@ function sendDataRequestQuery(query_protein){
 			'query_id_array' : "",
 			'search_term_parameter' : search_term,
 			'filter_parameter' : "None",
-			'search_term_array' : search_term_array
+			'search_term_array' : search_term_array,
+			'search_organism' : 0
 			
 	        },
 	    crossDomain: true,

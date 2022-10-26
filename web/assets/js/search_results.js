@@ -967,6 +967,33 @@ function setNetworkTableCollapseEvents(){
 	});
 }
 
+$("#organism_info_li").on('click', function(){
+	id=$("#form_organism_select").val();
+	// console.log({id});
+	res=getOrganismInfo(id);
+	// res=JSON.parse(res);
+	// res = JSON.stringify(res, null, 4);
+	// console.log({res});
+	$('#OrganismInfoModalBody').html(res);
+
+	// console.log(res['gene_names']);
+})
+
+function getOrganismInfo(OrganismId){
+	OrganismInfo="";
+
+	$.ajax({
+		type: "GET",
+		url: Url + "app.php/info_organism/"+OrganismId,
+		dataType: "text",
+		async: false,
+		success: function(data){
+			OrganismInfo = data;
+		}
+	});
+	// console.log(OrganismInfo);
+	return OrganismInfo;
+}
 
 function sendDataRequestQuery(){
 	
@@ -990,7 +1017,8 @@ function sendDataRequestQuery(){
 			'search_term_parameter' : queryParameters.SearchTermParameter,
 			'filter_parameter' : queryParameters.FilterParameter,
 			'search_term_array' : queryParameters.SearchTermArray,
-			
+			'search_organism' : queryParameters.searchOrganism,
+
 	        },
 	    crossDomain: true,
 	    dataType: 'json',
@@ -1041,15 +1069,19 @@ function setUpdateQuery(){
 		$("#overlay_network_loader_image").css('visibility', 'visible');
 		$("#overlay_network_table").show();
 		
+		searchOrganism=$("#form_organism_select").val();
+		console.log({searchOrganism})
+		// searchOrganism = 0
 		searchQuery = $("#search_identifier").val();
 		searchQueryArray = searchQuery.split(/[;,\s\t\n]/);	
 		searchQueryArray = searchQueryArray.filter(function(value) {return value !== ''});
 		searchQueryString =  searchQueryArray.join(',');
-		console.log(searchQueryString);
+		// console.log(searchQueryString);
 		queryParameters.FilterParameter = getFilterParameter();
 		queryParameters.queryProteinIdArray = queryProteinIdArray;
 		queryParameters.SearchTermParameter = searchQueryString;
 		queryParameters.SearchTermArray = searchQueryArray;
+		queryParameters.searchOrganism = searchOrganism
 		
 		$('#interactions_tab').trigger('click');
 		SearchResultsJSON = sendDataRequestQuery();

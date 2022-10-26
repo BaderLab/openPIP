@@ -17,6 +17,7 @@ use AppBundle\Entity\External_Link;
 use AppBundle\Entity\Support_Information;
 use AppBundle\Entity\Interaction_Support_Information;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use AppBundle\Form\Data_FileType;
 use AppBundle\Form\DataType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -214,7 +215,15 @@ class DataController extends Controller
 		// 	self::handleData3($dform,$request);
 		// }
 
+		$organismForm = self::getOrganismForm2();
+		$organismForm->handleRequest($request);
+		// self::OrganismFormHandler($organismForm);
+
 		$protein_form= self::getProteinForm();
+		
+		// $organism_form= self::getOrganismForm();
+		// $organism_form->handleRequest($request);
+		// self::OrganismFormHandler($organism_form);
 
 		$fform = self::getFForm();
 		$fform->handleRequest($request);
@@ -285,10 +294,68 @@ class DataController extends Controller
 			'url' => $url,
 			// 'dform'=> $dform->createView(),
 			'fform'=> $fform->createView(),
+			'organism_form'=> $organismForm->createView(),
 			'protein_form'=> $protein_form->createView()
 
-
 		));
+	}
+
+	public function OrganismFormHandler($organism_form){
+		if ($organism_form->isSubmitted()){
+			$organism_name = $organism_form->get('Name')->getData();
+			$organism_taxid = $organism_form->get('Taxonomy')->getData();
+			$organism_scientific_name = $organism_form->get('Scientific_Name')->getData();
+			$organism_description = $organism_form->get('Description')->getData();
+			$organism_class = $organism_form->get('Class')->getData();
+			// var_dump($organism_name);die;
+
+			// $functions = $this->get('app.functions');
+			// $connection =  $functions->mysql_connect();
+
+			// $query = "select * from organism where name = ";
+			// $query = $query . "'" . $organism_name . "'";
+			// var_dump($query);
+			// $result = $connection->query($query);
+			// if ($result) {
+			// 	$this->addFlash(
+			// 				'notice',
+			// 				'Organism already exists!'
+			// 			);
+			// 	// while ($row = $result->fetch_assoc()) {
+			// 	// 	$interaction_array[] = $row['id'];
+			// 	// }
+			// }
+			// mysqli_close($connection);
+
+			// $em = $this->getDoctrine()->getManager();
+
+			// $query = 'select * from organism where name = ';
+			// $query = $query . "'" . $organism_name . "'";
+			// var_dump($query);die;
+
+			// $results = $query->getResult();
+			
+			// if ($results) {
+			// 	$this->addFlash(
+			// 		'notice',
+			// 		'Organism already exists!'
+			// 	);
+			// 	// while ($row = $result->fetch_assoc()) {
+			// 	// 	$interaction_array[] = $row['id'];
+			// 	// }
+			// }
+			
+			// $organism = new Organism();
+			// $organism->setOrganismName($organism_name);
+			// $em = $this->getDoctrine()->getManager();
+			// $em->persist($organism);
+			// $em->flush();
+
+			// $this->addFlash(
+			// 	'notice',
+			// 	'Your changes were saved!'
+			// );
+		}
 	}
 
 	public function FFormHandler($fform)
@@ -299,6 +366,8 @@ class DataController extends Controller
 			// $this->get('session')->save();
 			// self::handleData3($dform,$request);
 			$file_to_insert = $fform->get('files_to_insert')->getData();
+			$organism = $fform->get('organism_select')->getData();
+			// var_dump($organism);die;
 			$temp_arr=explode("::", $file_to_insert);
 			$file=$temp_arr[1];
 			$folder=$temp_arr[0];
@@ -313,6 +382,58 @@ class DataController extends Controller
 		}
 
 	}
+
+	
+	public function getOrganismForm2()
+	{
+
+
+		$functions = $this->get('app.functions');		
+		$connection =  $functions->mysql_connect();
+		
+		// $interactor_id_string = join(',', $interactor_array);
+		// $interactor_id_string = "'" . str_replace(",", "','", $interactor_id_string) . "'";
+		
+		$query = "SELECT id, common_name FROM organism;";
+
+		$result = $connection->query($query);
+		mysqli_close($connection);
+		$organism_arrays = array();
+		if($result){
+			while($row = $result->fetch_assoc()) {
+				$organism_arrays[] = $row;
+			}
+		}
+
+		$organism_array = array();
+		foreach ($organism_arrays as $organism) {
+
+			$id = $organism['id'];
+			$common_name = $organism['common_name'];
+			$name=$id.". "."$common_name";
+			$organism_array[] = $name;
+		}
+		
+		// if($interaction_array){
+		// 	return $interaction_array;
+		// }else{
+		// 	return false;
+		// }
+		// $encoded = json_encode($organism_array, JSON_UNESCAPED_UNICODE);
+		// var_dump($encoded);die;
+
+		// dump($files_array);die;
+
+
+		$defaultData = array('message' => 'Type your message here');
+		$organismForm = $this->createFormBuilder($defaultData)
+			->add('organism_select', ChoiceType::class, array(
+				'choices' => $organism_array
+			))->getForm();
+
+		return $organismForm;
+	}
+
 
 	public function deleteFormHandler($delete_form)
 	{
@@ -1946,6 +2067,30 @@ class DataController extends Controller
 
 	public function getFForm()
 	{
+
+		$functions = $this->get('app.functions');		
+		$connection =  $functions->mysql_connect();
+		
+		$query = "SELECT id, common_name FROM organism;";
+
+		$result = $connection->query($query);
+		mysqli_close($connection);
+		$organism_arrays = array();
+		if($result){
+			while($row = $result->fetch_assoc()) {
+				$organism_arrays[] = $row;
+			}
+		}
+
+		$organism_array = array();
+		foreach ($organism_arrays as $organism) {
+
+			$id = $organism['id'];
+			$common_name = $organism['common_name'];
+			$name=$id.". "."$common_name";
+			$organism_array[] = $name;
+		}
+
 		$files_array = array();
 
 		$ps=$this->getParameter('system_path_seperator');
@@ -1979,7 +2124,9 @@ class DataController extends Controller
 		$defaultData = array('message' => 'Type your message here');
 		$fform = $this->createFormBuilder($defaultData)
 			->add('files_to_insert', ChoiceType::class, array(
-				'choices' => $files_array
+				'choices' => $files_array, 'label' => 'Select Data file'))
+			->add('organism_select', ChoiceType::class, array(
+				'choices' => $organism_array,'label' => 'Select Organism to insert data'
 			))->getForm();
 
 		return $fform;
@@ -3338,6 +3485,58 @@ class DataController extends Controller
 			->getForm();
 
 		return $protein_form;
+
+	}
+
+	public function getOrganismForm()
+	{
+		// $protein_array=array();
+	    
+		// $em = $this->getDoctrine()->getManager();
+		// $em->getConnection()->getConfiguration()->setSQLLogger(null);
+		// $query = $em->createQuery(
+		// 	"SELECT i.gene_name
+		// 		FROM AppBundle:Protein i"
+		// 		// WHERE i.id = :id"
+		// 	);
+		// $query->setMaxResults( 1000 );
+		// // $query->setParameter('id', $interaction_id);
+		// $interaction_array = $query->getResult();
+
+		// foreach($interaction_array as $protein){
+		// 	$protein_array[]=$protein['gene_name'];
+		// }
+		// // $List = implode(';', $protein_array);
+		// // return $List;
+
+		$defaultData = array('message_XX' => 'Type your message here_XX');
+		$organism_form = $this->createFormBuilder($defaultData)
+			->add('Name', TextType::class, array(
+				'label' => 'Name',
+			))
+			->add('Taxonomy', TextType::class, array(
+				'label' => 'Taxonomy ID (optional)',
+				'required'   => false,
+			))
+			->add('Class', TextType::class, array(
+				'label' => 'Class (optional)',
+				'required'   => false,
+			))
+			->add('Scientific_Name', TextType::class, array(
+				'label' => 'Scientific Name (optional)',
+				'required'   => false,
+			))
+			->add('Description', TextType::class, array(
+				'label' => 'Description (optional)',
+				'required'   => false,
+			))
+			->add('save', SubmitType::class, ['label' => 'Create Organism',
+			// 'options' => ['class' => 'btn btn-success'],
+			])
+			// ->add('save', SubmitType::class, ['label' => 'Create Task'])
+			->getForm();
+
+		return $organism_form;
 
 	}
 

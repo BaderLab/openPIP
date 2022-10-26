@@ -234,7 +234,20 @@
     					<div id="cy-nav" class="collapse navbar-collapse"
     						style="padding-left: 0px;">
     						<ul id="cy_nav_menu_list" class="nav navbar-nav cy-nav">
-    							<li id="search_dropdown_toggle_li" class="dropdown network_dropdown"><a id="search_dropdown_toggle" href="#">Search <span class="caret"></span></a>
+    							<li id="organism_select_li" class="dropdown network_dropdown"><a id="organism_select_toggle" href="#">Select organism: </a>
+    							</li>
+								<li id="organism_select_form_li" class="dropdown network_dropdown">
+									{{ form_start(organism_form) }}
+										{{ form_widget(organism_form.organism_select) }}
+									{{ form_end(organism_form) }}
+								</li>
+								<li id="organism_info_li">
+									<!-- Button trigger modal -->
+										<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#OrganismInfoModal">
+										Info
+									</button>
+								</li>
+								<li id="search_dropdown_toggle_li" class="dropdown network_dropdown"><a id="search_dropdown_toggle" href="#">Search <span class="caret"></span></a>
     								<ul id="search_tab" class="dropdown-menu">
     									<li style="padding: 20px 0px 10px 0px; min-width: 400px;" class="search_box">
     										<div class="container">
@@ -568,10 +581,31 @@
     						</ul>
     					</div>
     				</div>
+				
     			</nav>
     		</div>
-
     </div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="OrganismInfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h3 class="modal-title" id="exampleModalLabel">Organism Info</h3>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body" id="OrganismInfoModalBody">
+			...
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+		</div>
+	</div>
+	</div>
+	
         <div class="row network_row" >
         		<div>
         			<div id='cy'><div id="no_interactions_found" class="hidden" style="text-align: center; z-index:1000;"><img id="huri_img" width=314 height=188 src="{{ url }}assets/images/huri_image2.png" style="display:none;"/></div></div>			
