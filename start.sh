@@ -1,4 +1,5 @@
 #!/bin/bash
+
 sudo su << SuperUser
 PATH=$PATH:/snap/bin
 chown -R www-data:www-data app/logs &&\
