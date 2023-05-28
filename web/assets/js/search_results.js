@@ -814,13 +814,13 @@ function createInteractionTable(){
 						    '<tr style="height:32px;">' +
 						       '<td style="padding-right:40px;">' +
 								'<a href="https://www.ncbi.nlm.nih.gov/gene/' + protein.protein_entrez_id + '" class="link" target="_blank">' +
-								'<img height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle;" src="' + Url + 'assets/images/ncbi.png"/>' +
+								'<img height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle;" src="' + Url + 'assets/images/ncbi.svg"/>' +
 								'<strong style="color: #666666">NCBI Gene</strong>' +
 								'</a>' +
 						        '</td>' +
 						        '<td>' +
 								'<a href="https://www.proteinatlas.org/' + protein.protein_ensembl_id + '-' + protein.protein_gene_name + '" class="link" target="_blank">' +
-								'<img height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle;" src="' + Url + 'assets/images/hpa.png"/>' +
+								'<img height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle;" src="' + Url + 'assets/images/hpa.svg"/>' +
 								'<strong style="color: #666666">Human Protein Atlas</strong></div><div class="row" style="padding-left: 30px;">' +
 								'</a>' +
 						        '</td>' +
@@ -828,13 +828,13 @@ function createInteractionTable(){
 						    '<tr style="height:32px;">' +
 						        '<td>' +
 								'<a href="http://www.ensembl.org/id/' + protein.protein_ensembl_id + '" class="link" target="_blank">' +
-								'<img height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle;" src="' + Url + 'assets/images/ensembl.png"/>' +
+								'<img height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle;" src="' + Url + 'assets/images/ensembl.svg"/>' +
 								'<strong style="color: #666666">Ensembl</strong>' +
 								'</a>' +
 						        '</td>' +
 						        '<td>' +
 								'<a href="https://www.genecards.org/cgi-bin/carddisp.pl?gene=' + protein.protein_gene_name + '" class="link" target="_blank">' +
-								'<img height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle;" src="' + Url + 'assets/images/gene_cards.png"/>' +
+								'<img height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle;" src="' + Url + 'assets/images/gene_cards.svg"/>' +
 								'<strong style="color: #666666">Gene Cards</strong></div><div class="row" style="padding-left: 30px;">' +
 								'</a>' +
 						        '</td>' +
@@ -842,15 +842,11 @@ function createInteractionTable(){
 						    '<tr style="height:32px;">' +
 						        '<td>' +
 						        	'<a href="http://www.uniprot.org/uniprot/' + protein.protein_uniprot_id + '" class="link" target="_blank">' +
-									'<img height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle;" src="' + Url + 'assets/images/uniprot.png"/>' +
+									'<img height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle;" src="' + Url + 'assets/images/uniprot.svg"/>' +
 									'<strong style="color: #666666">Uniprot</strong>' +
 									'</a>' +
 								'</td>' +
 						        '<td>' +
-					        	'<a style="display:none;" href="https://www.yeastgenome.org/locus/' + protein.protein_ensembl_id + '" class="link" target="_blank">' +
-								'<img height="20" width="20" style="margin: 2px 10px 0px 5px; vertical-align:middle;" src="' + Url + 'assets/images/sgd.png"/>' +
-								'<strong style="color: #666666">SGD</strong>' +
-								'</a>' +
 								'</td>' +
 							'</tr>' +
 						'</table>'+
@@ -3013,46 +3009,53 @@ function updateExternalLinks(){
 	var stringUrl = 'http://string-db.org/newstring_cgi/show_network_section.pl?identifiers=';
 	var reactomeUrl = "";
 	var pathwayCommonsUrl = "http://www.pathwaycommons.org/pcviz/#pathsbetween/";
-	var davidUrl = "https://david.ncifcrf.gov/api.jsp?type=ENTREZ_GENE_ID&ids=";
-	var gProfiler = "http://biit.cs.ut.ee/gprofiler/index.cgi?organism=hsapiens&query=";
+	var davidUrl = "http://david.abcc.ncifcrf.gov/api.jsp?type=ENTREZ_GENE_ID&ids=";
+	var gProfiler = "https://biit.cs.ut.ee/gprofiler/gost?organism=hsapiens&query=";
 	var intAct = "http://www.ebi.ac.uk/intact/query/";
 	var complexPortal = "http://www.ebi.ac.uk/complexportal/complex/search?query=";
 	var cBioPortal = "http://www.cbioportal.org/ln?q=";
-
-
-	$.each(currentProteinArray, function(i, protein){ 
-		geneManiaUrl = geneManiaUrl + protein.protein_gene_name + '%7C'; 
-		stringUrl =  stringUrl + protein.protein_gene_name + '%0D';
-		reactomeUrl = reactomeUrl + protein.protein_gene_name + ',';
-		pathwayCommonsUrl = pathwayCommonsUrl + protein.protein_gene_name + ',';
-		davidUrl = davidUrl + protein.protein_entrez_id + ',';
-		gProfiler =  gProfiler + protein.protein_gene_name + ' ';
-		complexPortal = complexPortal + protein.protein_gene_name + '%20';
-		cBioPortal = cBioPortal + protein.protein_gene_name + '%20';
+	var genelist = "https://www.gene-list.com/search/";
+	var drugstone = "https://drugst.one/standalone?nodes=";
 		
-		if($.inArray( +protein.protein_id, queryProteinIdArray ) != -1){
-			intAct = intAct +  protein.protein_gene_name + '%20';
-			
-		}
-
+	var geneArray = [];
+	$.each(currentProteinArray, function(i, protein){ 
+		geneArray.push(protein.protein_gene_name); 
+		if($.inArray( +protein.protein_id, queryProteinIdArray ) != -1){intAct = intAct +  protein.protein_gene_name + '%20';}
 	});
-
-
+	geneArray.sort();
+	$.each(geneArray, function(i, gene){ 
+		geneManiaUrl = geneManiaUrl + gene + '%7C'; 
+		stringUrl =  stringUrl + gene + '%0D';
+		reactomeUrl = reactomeUrl + gene + ',';
+		pathwayCommonsUrl = pathwayCommonsUrl + gene + ',';
+		gProfiler =  gProfiler + gene + ' ';
+		complexPortal = complexPortal + gene + '%20';
+		genelist = genelist + gene + ',';	
+		drugstone = drugstone + gene + ',';	
+	});
+	drugstone = drugstone.slice(0, -1);
+	drugstone = drugstone + "&edges=";
+	for (i = 0; i <  currentInteractionArray.length; ++i) {
+		var sourceGeneName = currentInteractionArray[i]['interactor_A']['protein_gene_name'];
+		var targetGeneName = currentInteractionArray[i]['interactor_B']['protein_gene_name'];
+		drugstone = drugstone + sourceGeneName + '%20' + targetGeneName + ',';	
+	}
+	drugstone = drugstone.slice(0, -1);
+	drugstone = drugstone + "&autofillEdges=false";
 	
 	stringUrl =  stringUrl + '&species=9606';
-	davidUrl = davidUrl + '&tool=summary';
 	
-
-	$("#gene_mania_link_li").html('<a href="' + geneManiaUrl + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/gene_mania.png"/><div style="padding: 3px 5px;">GeneMania</div></div></a>');
-	$("#string_link_li").html('<a href="' + stringUrl + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/string.png"/><div style="padding: 3px 5px;">STRING</div></div></a>');
-	$("#reactome_link_li").html('<a id="reactome_link" style="cursor: pointer; padding: 0px;" data="' + reactomeUrl + '"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/reactome.png"/><div style="padding: 3px 5px;">Reactome</div></div></a>');
-	$("#pathway_commons_link_li").html('<a href="' + pathwayCommonsUrl + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/pathway_commons.png"/><div style="padding: 3px 5px;">Pathway Commons</div></div></a>');
-	$("#david_link_li").html('<a href="' + davidUrl + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/david.png"/><div style="padding: 3px 5px;">DAVID</div></div></a>');
-	$("#gprofiler_link_li").html('<a href="' + gProfiler + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/gprofiler.png"/><div style="padding: 3px 5px;">gProfiler</div></div></a>');
-	$("#cbioportal_link_li").html('<a href="' + cBioPortal + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/cbioportal.png"/><div style="padding: 3px 5px;">cBioPortal</div></div></a>');
-	$("#intact_link_li").html('<a href="' + intAct + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/ebi.png"/><div style="padding: 3px 5px;">IntAct (Query)</div></div></a>');
-	$("#complex_portal_link_li").html('<a href="' + complexPortal + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/ebi.png"/><div style="padding: 3px 5px;">Complex Portal</div></div></a>');
-
+	$("#genelist_link_li").html('<a href="' + genelist + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/genelist.svg"/><div style="padding: 3px 5px;">GeneList</div></div></a>');
+	$("#gene_mania_link_li").html('<a href="' + geneManiaUrl + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/gene_mania.svg"/><div style="padding: 3px 5px;">GeneMania</div></div></a>');
+	$("#string_link_li").html('<a href="' + stringUrl + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/string.svg"/><div style="padding: 3px 5px;">STRING</div></div></a>');
+	$("#reactome_link_li").html('<a id="reactome_link" style="cursor: pointer; padding: 0px;" data="' + reactomeUrl + '"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/reactome.svg"/><div style="padding: 3px 5px;">Reactome</div></div></a>');
+	$("#pathway_commons_link_li").html('<a href="' + pathwayCommonsUrl + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/pathway_commons.svg"/><div style="padding: 3px 5px;">Pathway Commons</div></div></a>');
+	$("#david_link_li").html('<a href="' + davidUrl + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/david.svg"/><div style="padding: 3px 5px;">DAVID</div></div></a>');
+	$("#gprofiler_link_li").html('<a href="' + gProfiler + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/gprofiler.svg"/><div style="padding: 3px 5px;">gProfiler</div></div></a>');
+	$("#cbioportal_link_li").html('<a href="' + cBioPortal + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/cbioportal.svg"/><div style="padding: 3px 5px;">cBioPortal</div></div></a>');
+	$("#intact_link_li").html('<a href="' + intAct + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/ebi.svg"/><div style="padding: 3px 5px;">IntAct (Query)</div></div></a>');
+	$("#complex_portal_link_li").html('<a href="' + complexPortal + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/complexportal.svg"/><div style="padding: 3px 5px;">Complex Portal</div></div></a>');
+	$("#drugstone_link_li").html('<a href="' + drugstone + '" style="padding: 0px;" target="_blank"><div style="display:inline-flex; width: 100%;"><img height="20" width="20" style="margin: 2px 5px 0px 5px; vertical-align:middle;" src="' + Url + '/assets/images/drugstone.svg"/><div style="padding: 3px 5px;">Drugst.One</div></div></a>');
 
 	setReactomeLinkClickEvent();
 }
