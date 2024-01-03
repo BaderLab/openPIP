@@ -1,4 +1,4 @@
-FROM php:7.2.0-apache
+FROM php:7.4.0-apache
 
 #Install git and MySQL extensions for PHP
 
@@ -11,10 +11,13 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/web
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-COPY ./openPIP/. /var/www/html/
+COPY ../. /var/www/html/
 
 EXPOSE 80/tcp
 EXPOSE 443/tcp
+
+RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 777  /var/www/html
 
 
 RUN apt-get update && \
@@ -24,8 +27,9 @@ RUN apt-get update && \
     wget \
     git \
     nano \
+    vim \
     iputils-ping \
-    mysql-client \
+    default-mysql-client \
     locales \
     imagemagick \
     graphicsmagick \
@@ -34,8 +38,8 @@ RUN apt-get update && \
     libxml2-dev libfreetype6-dev \
     libjpeg62-turbo-dev \
     libmcrypt-dev \
-    libpng-dev && \
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+    libpng-dev libzip-dev && \
+    docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
     docker-php-ext-install -j$(nproc) mysqli soap gd zip opcache && \
     echo 'always_populate_raw_post_data = -1\nmax_execution_time = 240\nmemory_limit = -1\nmax_input_vars = 1500\nupload_max_filesize = 200M\npost_max_size = 300M' > /usr/local/etc/php/conf.d/typo3.ini && \
 # Configure bash
