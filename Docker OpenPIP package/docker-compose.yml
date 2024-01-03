@@ -27,7 +27,7 @@ services:
     depends_on:
       - mysql
     volumes:
-      - ../:/var/www/html
+      - ./openPIP:/var/www/html
     restart: always
 
     
