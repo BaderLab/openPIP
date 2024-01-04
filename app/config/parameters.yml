@@ -22,7 +22,7 @@
 parameters:
     database_host: mysql
     database_port: 3306
-    database_name: huri
+    database_name: 
     database_user: root
     database_password: secret
     mailer_transport: gmail
