@@ -2,7 +2,10 @@ FROM php:7.2.0-apache
 
 #Install git and MySQL extensions for PHP
 
+RUN rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
+
 RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
+
 RUN apt-get update && apt-get install -y git
 RUN docker-php-ext-install pdo pdo_mysql mysqli
 RUN a2enmod rewrite
@@ -10,6 +13,7 @@ RUN a2enmod rewrite
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/web
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+
 
 COPY ./openPIP/. /var/www/html/
 

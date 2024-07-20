@@ -1,47 +1,28 @@
 
-# INSTALLATION GUIDE FOR OPEN-PIP : composePIP 
-## Packager for openPIP
+# compose_PIP : INSTALLATION GUIDE FOR OPEN-PIP
+--------packager for openPIP---------
 
-Required and tested on: *@ Docker version 20.10.7 and docker-compose version 1.29.2*
+Required and tested on:
 
-## STEPS:
+***@** Docker version 20.10.7*
 
-***Prerequisites***
-<br>
-**STEP 1:** Install Docker Engine <br>
+***&** docker-compose version 1.29.2*
+
+
+----------- STEPS -------------------
+
+***Prerequisites* <br>**
+STEP 1: Install Docker Engine <br>
 *Reference:* https://docs.docker.com/engine/install/ubuntu/ <br>
-**STEP 2:** Install Docker compose <br>
+STEP 2: Install Docker compose <br>
 *Reference:* https://docs.docker.com/compose/install/ <br>
-
-
-***Source Code***
 <br>
-**STEP 3:** Clone OpenPIP repo from GitHub <br>
->git clone https://github.com/BaderLab/openPIP.git 
-
-**STEP 4:** Inside OpenPIP folder run script `start.sh` <br>
->chmod 777 ./start.sh && ./start.sh
-
-<br>
-
-Hurray! :tada: :tada: The server is now running on <br>  
-
-:rocket: [localhost:80](http://localhost:80/app.php)  :rocket: 
-
-<br><br>
- 
-<br><br>
-<br><br>
-<br><br>
-<br><br>
+STEP 3: Clone OpenPIP repo from GitHub <br>
+```git clone https://github.com/aniket328/openPIP.git``` <br>
+and switch to branch `dev10.0`
 
 
-
-
-## TROUBLESHOOTING:
-
-
-START.SH: 
+STEP 4: 
 
   1. get superuser access: ```sudo su```
   2. run this command inside openPIP folder:
@@ -52,7 +33,7 @@ START.SH:
  (this may take few minutes)
  <br>
 
-START.SH: populate database with `admin_settings` and `users` to establish connection.
+STEP 5: populate database with `admin_settings` and `users` to establish connection.
 
   
     1. Exec into mysql container running:
@@ -66,6 +47,12 @@ START.SH: populate database with `admin_settings` and `users` to establish conne
     3. RUN Command: 
         `source /db/init_new.sql`
   
+<br>
+Hurray! The server is now running on localhost:80
+<br><br>
+<br><br>
+
+----------- ERRORS and Solutions -------------
 
 
 
@@ -100,5 +87,5 @@ Run:
     make sure you have replaced '\' in path with '/', in ubuntu.
 
 
--------- 
+--------
 

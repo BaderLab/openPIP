@@ -8,8 +8,6 @@ class QueryParameters
 	protected $search_term_parameter;
 	
 	protected $search_term_summary;
-
-	protected $search_organism;
 	
 	protected $category_summary;
 	
@@ -43,15 +41,6 @@ class QueryParameters
 	protected $annotation_parameter_array;
 	
 	protected $annotation_parameter_summary;
-
-
-	public function getSearchOrganism() {
-		return $this->search_organism;
-	}
-
-	public function setSearchOrganism($search_organism) {
-		$this->search_organism = $search_organism;
-	}
 	
 	public function getFilterParameter() {
 		return $this->filter_parameter;
