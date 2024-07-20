@@ -59,89 +59,6 @@
 			<div class="col-lg-8" style="padding: 0px 0px;">
 				<div class="container data_upload_panel">
 					<div class="row">
-						<div class="data_upload_header" style="background-color: {{ main_color_scheme }}" >
-							<h4 style="color: {{ header_color_scheme }}">Add Organism</h4>
-						</div>
-					</div>
-					
-					<div class="row data_upload_content" >
-						<div class="col-lg-12">		
-
-							<form action={{ path('admin_createOrganism') }} >
-								<div class="form-group">
-									<label for="organism_name">Name</label>
-									<input type="text" class="form-control" name="organism_name" id="organism_name" aria-describedby="Organism_Help" placeholder="Enter Organism Name" required>
-									<small id="emailHelp" class="form-text text-muted">A new organism will be created with this name.</small>
-								</div>
-								<div class="form-group">
-									<label for="organism_name">Taxonomy ID (optional)</label>
-									<input type="text" class="form-control" name="tax_id" id="tax_id" aria-describedby="Taxid_Help" placeholder="Enter Taxonomy ID">
-								</div>
-								<div class="form-group">
-									<label for="organism_name">Class (optional)</label>
-									<input type="text" class="form-control" name="organism_class" id="organism_class" aria-describedby="Class_Help" placeholder="Enter Organism Class">
-								</div>
-								<div class="form-group">
-									<label for="organism_name">Scientific Name (optional)</label>
-									<input type="text" class="form-control" name="scientific_name" id="scientific_name" aria-describedby="Scientific_Help" placeholder="Enter Scientific Name">
-								</div>
-								<div class="form-group">
-									<label for="organism_name">Description (optional)</label>
-									<input type="text" class="form-control" name="organism_description" id="organism_description" aria-describedby="organism_description" placeholder="Enter Description">
-								</div>
-								<button type="submit" class="btn btn-success">Create</button>
-							</form>					
-												
-						</div>
-					</div>
-				</div>
-				
-			</div>		
-			
-			<div class="col-lg-4" style="padding: 0px 0px;">
-				<div class="container data_upload_panel">
-					<div class="row">
-						<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
-							<h4 style="color: {{ header_color_scheme }}">Delete Organism</h4>
-						</div>
-					</div>
-					
-						{{form_start(organism_form)}}
-						{{form_end(organism_form)}}
-					<div class="row">
-						<button id="delete_dataset_button" class="btn btn-danger" style="margin: 20px;">
-							<i class="glyphicon glyphicon-ban-circle"></i> <span>Delete Organism</span>
-						</button>
-					</div>
-				</div>
-				<div class="container data_upload_panel">
-					
-				</div>	
-				{# <form action="{{ path('upload_media', { 'dir_name': 'FASTA'}) }}" method="post" enctype="multipart/form-data">	
-					<input name="file" type="file" multiple />
-					<button type="submit" value="Submit">Submit</button>
-				</form>
-				<form method="post" id="sample_form" enctype="multipart/form-data">
-					<div class="form-group">
-						<input name="file" type="file" multiple />
-					</div>
-					<div class="form-group" align="center">
-					<input type="submit" name="save" id="save" class="btn btn-info" value="Save" />
-					</div>
-				</form> #}
-				<div class="form-group" id="process" style="display:none;">
-					<div class="progress">
-						<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="">
-						</div>
-					</div>
-				</div>
-			</div>
-		</div><br>
-		
-		<div class="row">
-			<div class="col-lg-8" style="padding: 0px 0px;">
-				<div class="container data_upload_panel">
-					<div class="row">
 						<div class="data_upload_header" style="background-color: {{ main_color_scheme }}">
 							<h4 style="color: {{ header_color_scheme }}">Upload Data</h4>
 						</div>
@@ -269,7 +186,7 @@
 									</div>
 								</div>
 								<div class="row data_upload_content" >
-									{{ form_widget(fform) }}
+									{{ form_widget(fform.files_to_insert) }}
 								</div>
 							{{ form_end(fform) }}
 
@@ -345,6 +262,7 @@
 					</div>
 				</div>
 			</div>
+	
 		</div>
 		<div class="row" style="margin-top: 15px;">
 			<div class="col-lg-8" style="padding: 0px 0px;">

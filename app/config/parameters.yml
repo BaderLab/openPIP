@@ -7,8 +7,8 @@
 #     database_password: null
 #     mailer_transport: gmail
 #     mailer_host: null
-#     mailer_user:
-#     mailer_password: 
+#     mailer_user: miles.william.mee@gmail.com
+#     mailer_password: mi135Gmail
 #     secret: ThisTokenIsNotSoSecretChangeIt
 #     brochures_directory: '%kernel.root_dir%/../web/uploads'
 #     system_path_seperator: '\' 
@@ -22,13 +22,13 @@
 parameters:
     database_host: mysql
     database_port: 3306
-    database_name: 
+    database_name: huri
     database_user: root
     database_password: secret
     mailer_transport: gmail
     mailer_host: null
-    mailer_user:
-    mailer_password:
+    mailer_user: miles.william.mee@gmail.com
+    mailer_password: mi135Gmail
     secret: ThisTokenIsNotSoSecretChangeIt
     brochures_directory: '%kernel.root_dir%/../web/uploads'
     system_path_seperator: '/' 

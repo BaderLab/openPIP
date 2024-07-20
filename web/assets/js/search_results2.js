@@ -1776,7 +1776,7 @@ function updateExternalLinks(){
 	var stringUrl = 'http://string-db.org/newstring_cgi/show_network_section.pl?identifiers=';
 	var reactomeUrl = "";
 	var pathwayCommonsUrl = "http://www.pathwaycommons.org/pcviz/#pathsbetween/";
-	var davidUrl = "https://david.ncifcrf.gov/api.jsp?type=ENTREZ_GENE_ID&ids=";
+	var davidUrl = "http://david.abcc.ncifcrf.gov/api.jsp?type=ENTREZ_GENE_ID&ids=";
 	var gProfiler = "http://biit.cs.ut.ee/gprofiler/index.cgi?organism=hsapiens&query=";
 	var intAct = "http://www.ebi.ac.uk/intact/query/";
 	var complexPortal = "http://www.ebi.ac.uk/complexportal/complex/search?query=";

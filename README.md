@@ -28,11 +28,12 @@ The Open-source Protein Interaction Platform (openPIP) is a customizable web por
 2. Give suitable permissions to`.sh` files (`chmod +x start.sh` and `chmod +x populate_db.sh`)
 3. To run the server : ./start.sh
 4. To populate database :
-    * Copy the huri_19_09_22.sql file inside the `openPIP` folder or any other .sql file through which you want to populate the database.
+    * unzip Docker OpenPIP package/db/dev10.0_huri.zip
+    * Copy the dev10.0_huri.sql file inside the `openPIP` folder or any other .sql file through which you want to populate the database.
     * `./populate_db.sh`
     * `mysql -uroot --password=secret` (inside the docker container cli)
-    * `source huri_19_09_22.sql` (inside mysql cli)
+    * `USE huri;`(inside mysql cli)
+    * `source dev10.0_huri.sql` (inside mysql cli)
 
 ## openPIP webpage: 
 openPIP was developed at Bader Lab at the University of Toronto. The openPIP webpage is here(http://baderlab.org/Software/openPIP).
-
