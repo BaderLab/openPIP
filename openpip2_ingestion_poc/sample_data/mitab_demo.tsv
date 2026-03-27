@@ -1,0 +1,8 @@
+# valid row
+uniprotkb:P12345	uniprotkb:Q99999	-	-	geneA	geneB	psi-mi:"MI:0018"(two hybrid)|psi-mi:"MI:0407"(direct interaction)	Doe et al. (2023)	pubmed:12345678	taxid:9606(human)	taxid:9606(human)	psi-mi:"MI:0915"(physical association)	psi-mi:"MI:0469"(IntAct)	intact:EBI-123456	intact-miscore:0.78
+# invalid: missing method
+uniprotkb:P11111	uniprotkb:Q22222	-	-	geneC	geneD	-	Roe et al. (2022)	pubmed:22222222	taxid:9606(human)	taxid:9606(human)	psi-mi:"MI:0915"(physical association)	psi-mi:"MI:0469"(IntAct)	intact:EBI-777777	intact-miscore:0.32
+# invalid: malformed identifier
+P33333	uniprotkb:Q44444	-	-	geneE	geneF	psi-mi:"MI:0018"(two hybrid)	Moe et al. (2021)	pubmed:33333333	taxid:9606(human)	taxid:9606(human)	psi-mi:"MI:0915"(physical association)	psi-mi:"MI:0469"(IntAct)	intact:EBI-999999	intact-miscore:0.61
+# valid row
+uniprotkb:P55555	uniprotkb:Q66666	-	-	geneG	geneH	psi-mi:"MI:0407"(direct interaction)	Noe et al. (2020)	pubmed:44444444	taxid:9606(human)	taxid:9606(human)	psi-mi:"MI:0915"(physical association)	psi-mi:"MI:0469"(IntAct)	intact:EBI-888888	intact-miscore:0.81

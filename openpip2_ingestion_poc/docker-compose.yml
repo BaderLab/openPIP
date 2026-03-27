@@ -1,0 +1,100 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: openpip_poc
+      POSTGRES_USER: openpip
+      POSTGRES_PASSWORD: openpip
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openpip -d openpip_poc"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: openpip
+      MINIO_ROOT_PASSWORD: openpipminio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://openpip:openpip@postgres:5432/openpip_poc
+      REDIS_URL: redis://redis:6379/0
+      STORAGE_ROOT: /data/uploads
+      PARSER_VERSION: psi_mitab_core15_v1
+      LOGTO_ISSUER: http://logto.local
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: openpip
+      MINIO_SECRET_KEY: openpipminio
+    ports:
+      - "8000:8000"
+    volumes:
+      - upload_data:/data/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_started
+
+  worker:
+    build: .
+    command: ["arq", "app.worker.WorkerSettings"]
+    environment:
+      DATABASE_URL: postgresql://openpip:openpip@postgres:5432/openpip_poc
+      REDIS_URL: redis://redis:6379/0
+      STORAGE_ROOT: /data/uploads
+      PARSER_VERSION: psi_mitab_core15_v1
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: openpip
+      MINIO_SECRET_KEY: openpipminio
+    volumes:
+      - upload_data:/data/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      NEXT_PUBLIC_API_BASE: http://api:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
+  upload_data:
+  minio_data:

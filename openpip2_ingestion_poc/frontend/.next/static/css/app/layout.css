@@ -1,0 +1,319 @@
+/*!*************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!./app/globals.css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************/
+:root {
+  --bg: #eef2f6;
+  --panel: #ffffff;
+  --text: #1b2633;
+  --muted: #637184;
+  --accent: #1f4f94;
+  --accent-soft: #e2ebfa;
+  --line: #d7dee8;
+  --warn: #b85042;
+  --ok: #2e7d32;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 400px at 50% -220px, #dfe9fb 0%, transparent 75%),
+    linear-gradient(180deg, #f7f9fc 0%, var(--bg) 100%);
+}
+
+a { color: inherit; text-decoration: none; }
+main { max-width: 1520px; margin: 0 auto; padding: 0; }
+
+.grid {
+  display: grid;
+  grid-gap: 16px;
+  gap: 16px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 6px 24px rgba(25, 38, 56, 0.05);
+}
+
+.badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 12px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.progress {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: #ebefea;
+  overflow: hidden;
+}
+
+.progress > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #4db6ac);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  text-align: left;
+  padding: 7px 8px;
+  border-bottom: 1px solid #e8ede6;
+  font-size: 12px;
+}
+
+.dashboard-shell {
+  display: grid;
+  grid-gap: 0;
+  gap: 0;
+  min-height: 100vh;
+}
+
+.top-brand {
+  background: linear-gradient(90deg, #1f4d92 0%, #255da9 100%);
+  color: #fff;
+  padding: 10px 18px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  grid-gap: 16px;
+  gap: 16px;
+  border-radius: 0 0 10px 10px;
+}
+
+.brand-mark {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.2px;
+}
+
+.brand-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.auth-links {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.main-tabs {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-top: 0;
+  background: #f2f5f8;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+}
+
+.main-tabs a {
+  padding: 11px 16px;
+  font-size: 14px;
+  border-right: 1px solid #dde3ea;
+  color: #4b5a6a;
+  font-weight: 600;
+}
+
+.main-tabs a.active {
+  background: #fff;
+  color: #1b2735;
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+.workspace {
+  margin: 18px 24px;
+  padding: 0;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #dbe2ea;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f8 100%);
+  padding: 8px 12px;
+}
+
+.toolbar-row a {
+  color: #4c5a69;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.toolbar-row a:hover {
+  background: #eaf1f8;
+  border-color: #d3deeb;
+}
+
+.toolbar-row .spacer {
+  flex: 1 1;
+}
+
+.network-shell {
+  display: grid;
+  grid-template-columns: 44px 1fr 280px;
+  grid-gap: 0;
+  gap: 0;
+  min-height: 610px;
+}
+
+.network-controls {
+  border-right: 1px solid var(--line);
+  background: #fafbfc;
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  grid-gap: 8px;
+  gap: 8px;
+  padding-top: 12px;
+}
+
+.zoom-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid #ccd6e1;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 16px;
+  color: #46515d;
+  cursor: pointer;
+}
+
+.zoom-track {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  width: 20px;
+  height: 130px;
+}
+
+.network-canvas {
+  height: 610px;
+  background: #f8f9fb;
+}
+
+.network-sidebar {
+  border-left: 1px solid var(--line);
+  background: #fbfcfe;
+  padding: 12px;
+}
+
+.network-sidebar h3 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #4b5a6a;
+}
+
+.network-sidebar p,
+.network-sidebar li {
+  font-size: 11px;
+  margin: 4px 0;
+}
+
+.control-stack {
+  display: grid;
+  grid-gap: 8px;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.compact-input {
+  width: 100%;
+  border: 1px solid #d1dbe7;
+  border-radius: 8px;
+  padding: 7px 8px;
+  font-size: 12px;
+  background: #fff;
+}
+
+.compact-btn {
+  border: 1px solid #ced9e6;
+  background: linear-gradient(180deg, #ffffff 0%, #f4f7fb 100%);
+  color: #29405e;
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.compact-btn.active {
+  background: linear-gradient(180deg, #2d68b7 0%, #23579e 100%);
+  border-color: #1d4b8b;
+  color: #fff;
+}
+
+.layout-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 6px;
+  gap: 6px;
+}
+
+.legend-list {
+  padding-left: 14px;
+  margin: 8px 0 0;
+}
+
+.lower-grid {
+  margin: 0 24px 24px;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-gap: 14px;
+  gap: 14px;
+}
+
+.lower-grid .card h2 {
+  margin: 0 0 10px;
+  font-size: 15px;
+}
+
+.lower-grid input,
+.lower-grid select,
+.lower-grid button {
+  font-size: 12px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  border: 1px solid #d5dee7;
+}
+
+.lower-grid button {
+  background: linear-gradient(180deg, #2d68b7 0%, #23579e 100%);
+  color: #fff;
+  border-color: #1d4b8b;
+  font-weight: 700;
+}
+
+@media (max-width: 1200px) {
+  .brand-title { font-size: 14px; }
+  .main-tabs a { font-size: 13px; padding: 9px 11px; }
+  .lower-grid { grid-template-columns: 1fr; }
+  .network-shell { grid-template-columns: 44px 1fr; }
+  .network-sidebar { display: none; }
+}
+
